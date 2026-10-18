@@ -22,7 +22,11 @@
   --ink:#ecebe8; --muted:#a4a19b; --dim:#6f6d69;
   --acc:#e77a43; --acc2:#f4a774; --acc-ink:#1c0f07; --grad:linear-gradient(135deg,#f7ad78 0%,#e77a43 48%,#b9512a 100%);
   --hot:#ff8a4c; --hot-glow:rgba(255,128,64,.55);
-  --new:#ecebe8; --cook:#9fb0c2; --ready:#ff8a4c; --late:#ff5a48;
+  --new:#ecebe8; --cook:#8fa6bd; --ready:#ff8a4c; --late:#ff5a48; --acc-st:#e3ab5c; --served:#6f6d69;
+  /* palette from the graphite/copper reference: copper, sunset peach, brass, steel blue, silver, dusk rose */
+  --c1:#e77a43; --c2:#8fa6bd; --c3:#d9a65a; --c4:#c08f86; --c5:#c4c7cc; --c6:#f2b28c;
+  /* 8 clearly different table colours (copper, steel blue, brass, teal, dusk rose, plum, sage, peach) */
+  --t1:#e77a43; --t2:#6f97c9; --t3:#d9a94f; --t4:#4fa59f; --t5:#d07a8a; --t6:#9a80c4; --t7:#8fae7f; --t8:#f2b28c;
   --paper:#26262a; --paper2:#2f2f34; --paper-ink:#ecebe8; --paper-dim:#8f8c86; --paper-line:rgba(255,255,255,.07);
   --shadow:0 18px 40px -18px rgba(0,0,0,.75),0 1px 0 rgba(255,255,255,.045) inset;
   --glow:radial-gradient(1100px 520px at 88% -12%,rgba(231,122,67,.10),transparent 60%),radial-gradient(900px 520px at -10% 110%,rgba(184,187,193,.05),transparent 60%);
@@ -35,7 +39,11 @@ body[data-skin="light"]{
   --ink:#2d2d2d; --muted:#5b4e43; --dim:#8b7e70;
   --acc:#b8683f; --acc2:#b88b60; --acc-ink:#fbf7f0; --grad:linear-gradient(135deg,#d39271 0%,#b8683f 50%,#8f4a2a 100%);
   --hot:#c0623a; --hot-glow:rgba(192,98,58,.38);
-  --new:#4b3e33; --cook:#6f7d64; --ready:#c0623a; --late:#97362a;
+  --new:#4b3e33; --cook:#6f7d64; --ready:#c0623a; --late:#97362a; --acc-st:#a8794e; --served:#afa091;
+  /* Japandi swatches: terracotta, olive, sage, natural wood, slate, soft terracotta */
+  --c1:#b8683f; --c2:#7f8a74; --c3:#b88b60; --c4:#6f7774; --c5:#d39a7c; --c6:#6e7550;
+  /* Japandi-toned but distinct: terracotta, sage, slate blue, ochre, dusty rose, eucalyptus, plum, natural wood */
+  --t1:#c0623a; --t2:#7f9470; --t3:#5f7a93; --t4:#c9973a; --t5:#c27f86; --t6:#4f8a83; --t7:#8a6a8f; --t8:#a07850;
   --paper:#f8f4ec; --paper2:#ede5d8; --paper-ink:#2d2d2d; --paper-dim:#857868; --paper-line:#ddd3c4;
   --shadow:0 18px 40px -24px rgba(75,62,51,.35),0 1px 0 rgba(255,255,255,.7) inset;
   --glow:radial-gradient(1100px 520px at 90% -10%,rgba(127,138,116,.16),transparent 60%),radial-gradient(900px 520px at -10% 110%,rgba(184,139,96,.14),transparent 60%);
@@ -324,6 +332,81 @@ tr.blk td{opacity:.6}
 .jstate .dot{width:34px;height:34px;border-radius:50%;background:var(--grad);box-shadow:0 0 18px var(--hot-glow)}
 .jstate.bad .dot{background:var(--late);box-shadow:none}
 .single .pane.join{max-width:460px}
+
+/* ---- colour variety (palette per skin) ---- */
+.st-accepted{color:var(--acc-st)}.st-served{color:var(--served)}
+.pill.st-accepted{background:color-mix(in srgb,var(--acc-st) 13%,transparent)}
+.pill.st-cooking{background:color-mix(in srgb,var(--cook) 15%,transparent)}
+.pill.st-ready{background:color-mix(in srgb,var(--ready) 15%,transparent)}
+.pill.st-late{background:color-mix(in srgb,var(--late) 14%,transparent)}
+.pill.st-served{background:color-mix(in srgb,var(--served) 12%,transparent)}
+.oc.s-accepted::before{background:var(--acc-st)}
+.oc.s-new{background:linear-gradient(90deg,color-mix(in srgb,var(--new) 6%,var(--card)),var(--card) 38%)}
+.oc.s-accepted{background:linear-gradient(90deg,color-mix(in srgb,var(--acc-st) 10%,var(--card)),var(--card) 40%)}
+.oc.s-cooking{background:linear-gradient(90deg,color-mix(in srgb,var(--cook) 12%,var(--card)),var(--card) 40%)}
+.oc.s-ready{background:linear-gradient(90deg,color-mix(in srgb,var(--ready) 13%,var(--card)),var(--card) 45%)}
+.tabs button[data-wt="new"].on{border-color:var(--new);box-shadow:inset 0 -2px 0 var(--new)}
+.tabs button[data-wt="mine"].on{border-color:var(--acc-st);box-shadow:inset 0 -2px 0 var(--acc-st)}
+.tabs button[data-wt="ready"].on{border-color:var(--ready);box-shadow:inset 0 -2px 0 var(--ready)}
+.tabs button[data-wt="tables"].on{border-color:var(--c2);box-shadow:inset 0 -2px 0 var(--c2)}
+.tabs button[data-wt]::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:7px;vertical-align:1px;background:var(--line2)}
+.tabs button[data-wt="new"]::before{background:var(--new)}.tabs button[data-wt="mine"]::before{background:var(--acc-st)}
+.tabs button[data-wt="ready"]::before{background:var(--ready)}.tabs button[data-wt="tables"]::before{background:var(--c2)}
+.kpis .kpi:nth-child(6n+1){--k:var(--c1)}.kpis .kpi:nth-child(6n+2){--k:var(--c3)}.kpis .kpi:nth-child(6n+3){--k:var(--c4)}
+.kpis .kpi:nth-child(6n+4){--k:var(--c2)}.kpis .kpi:nth-child(6n+5){--k:var(--c6)}.kpis .kpi:nth-child(6n){--k:var(--c5)}
+.kpi{border-top:2px solid color-mix(in srgb,var(--k) 70%,transparent);background:linear-gradient(180deg,color-mix(in srgb,var(--k) 9%,var(--card2)),var(--card))}
+.kpi::after{background:var(--k);box-shadow:0 0 10px color-mix(in srgb,var(--k) 60%,transparent)}
+.bars .bar:nth-child(6n+1) i{background:linear-gradient(90deg,color-mix(in srgb,var(--c1) 55%,transparent),var(--c1))}
+.bars .bar:nth-child(6n+2) i{background:linear-gradient(90deg,color-mix(in srgb,var(--c3) 55%,transparent),var(--c3))}
+.bars .bar:nth-child(6n+3) i{background:linear-gradient(90deg,color-mix(in srgb,var(--c4) 55%,transparent),var(--c4))}
+.bars .bar:nth-child(6n+4) i{background:linear-gradient(90deg,color-mix(in srgb,var(--c2) 55%,transparent),var(--c2))}
+.bars .bar:nth-child(6n+5) i{background:linear-gradient(90deg,color-mix(in srgb,var(--c6) 55%,transparent),var(--c6))}
+.bars .bar:nth-child(6n) i{background:linear-gradient(90deg,color-mix(in srgb,var(--c5) 55%,transparent),var(--c5))}
+.hours i{background:linear-gradient(to top,var(--c4),var(--c3) 45%,var(--c1))!important}
+.av{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;margin-right:8px;font-size:11px;font-weight:800;color:#fff;background:var(--c);vertical-align:middle;box-shadow:0 0 0 2px color-mix(in srgb,var(--c) 25%,transparent)}
+.kc .ki .stn.sk{color:var(--c3);border-color:color-mix(in srgb,var(--c3) 50%,transparent)}.kc .ki .stn.sb{color:var(--c4);border-color:color-mix(in srgb,var(--c4) 50%,transparent)}
+.card h3{position:relative;padding-left:14px}
+.card h3::before{content:"";position:absolute;left:0;top:50%;width:6px;height:6px;margin-top:-3px;border-radius:2px;transform:rotate(45deg);background:var(--c1)}
+.two .card:nth-child(2) h3::before,.card:nth-of-type(3n+2) h3::before{background:var(--c3)}
+.card:nth-of-type(3n) h3::before{background:var(--c4)}
+.tc{border-top:2px solid color-mix(in srgb,var(--c2) 55%,var(--line))}
+.toast.b{border-left-color:var(--cook)}
+html:has(body[data-skin="light"]){background:#ede6db}
+
+/* per-table colour (same table = same colour on every screen) */
+.oc[style*="--tc"]{background:linear-gradient(180deg,color-mix(in srgb,var(--tc) 7%,var(--card)),var(--card) 70%);border-color:color-mix(in srgb,var(--tc) 22%,var(--line))}
+.oc .oh{margin:-14px -16px 0 -20px;padding:13px 16px 12px 20px;background:linear-gradient(90deg,color-mix(in srgb,var(--tc,var(--acc)) 26%,transparent),color-mix(in srgb,var(--tc,var(--acc)) 6%,transparent));border-bottom:1px dashed color-mix(in srgb,var(--tc,var(--acc)) 30%,var(--line))}
+.oc .oh .tb{color:color-mix(in srgb,var(--tc,var(--ink)) 45%,var(--ink))}
+.oc.late{border-color:var(--late)}
+.kc .kh,.kc.slow .kh,.kc.ready .kh{background:linear-gradient(90deg,color-mix(in srgb,var(--tc,var(--cook)) 24%,transparent),color-mix(in srgb,var(--tc,var(--cook)) 5%,transparent))}
+.kc{border-top:3px solid var(--tc,var(--paper-line))}
+.tc[style*="--tc"]{background:linear-gradient(160deg,color-mix(in srgb,var(--tc) 20%,var(--card2)),color-mix(in srgb,var(--tc) 5%,var(--card)) 70%);border-top:3px solid var(--tc)}
+.tc .tn{color:color-mix(in srgb,var(--tc,var(--ink)) 40%,var(--ink))}
+.oc::before{top:0;bottom:0;width:4px;border-radius:0;z-index:1}
+body[data-skin="light"] .tc[style*="--tc"]{background:linear-gradient(160deg,color-mix(in srgb,var(--tc) 52%,var(--card)),color-mix(in srgb,var(--tc) 18%,var(--card)) 80%)}
+body[data-skin="light"] .oc .oh{background:linear-gradient(90deg,color-mix(in srgb,var(--tc,var(--acc)) 55%,transparent),color-mix(in srgb,var(--tc,var(--acc)) 16%,transparent))}
+body[data-skin="light"] .kc .kh,body[data-skin="light"] .kc.slow .kh,body[data-skin="light"] .kc.ready .kh{background:linear-gradient(90deg,color-mix(in srgb,var(--tc,var(--cook)) 50%,transparent),color-mix(in srgb,var(--tc,var(--cook)) 12%,transparent))}
+.oc[style*="--tc"]::before{background:var(--tc)!important;box-shadow:0 0 10px color-mix(in srgb,var(--tc) 45%,transparent)!important;width:5px}
+
+/* owner section switch: big segmented control */
+.otabs{display:flex;gap:6px;padding:6px;background:var(--card);border:1px solid var(--line2);border-radius:18px;box-shadow:var(--shadow);max-width:520px}
+.otabs button{flex:1;display:flex;align-items:center;justify-content:center;gap:9px;border:0;border-radius:13px;padding:13px 18px;font-weight:700;font-size:14.5px;letter-spacing:.02em;color:var(--muted);background:transparent;position:relative;overflow:hidden;isolation:isolate;transition:color .2s,background .2s}
+.otabs button svg{width:19px;height:19px;flex:none}
+.otabs button:hover{color:var(--ink);background:var(--card2)}
+.otabs button.on{color:var(--acc-ink);background:var(--grad);box-shadow:0 0 0 1px rgba(255,190,150,.35),0 10px 26px -8px var(--hot-glow)}
+.otabs button.on::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.45) 50%,transparent 70%);transform:translateX(-120%);pointer-events:none}
+@media (prefers-reduced-motion:no-preference){.otabs button.on{animation:glow 3s ease-in-out infinite}.otabs button.on::after{animation:shine 3.2s ease-in-out infinite}}
+.otabs .cnt2{background:var(--late);color:#fff}
+.otabs button.on .cnt2{background:#fff;color:var(--late)}
+/* kitchen: header always in table colour; lateness = red timer badge + red outline */
+.kc.slow{border-color:color-mix(in srgb,var(--late) 55%,var(--paper-line));box-shadow:0 0 0 1px color-mix(in srgb,var(--late) 35%,transparent),var(--shadow)}
+.kc.slow .kh .tm{color:#fff;background:var(--late);border-radius:999px;padding:3px 10px;font-size:13px}
+.kc.ready .kh .tm{color:var(--acc-ink);background:var(--grad);border-radius:999px;padding:3px 10px}
+/* kitchen: header always in the table colour; lateness = red frame + red timer, ready = copper glow */
+.kc .kh,.kc.slow .kh,.kc.ready .kh{background:linear-gradient(90deg,color-mix(in srgb,var(--tc,var(--cook)) 26%,transparent),color-mix(in srgb,var(--tc,var(--cook)) 6%,transparent))}
+body[data-skin="light"] .kc .kh,body[data-skin="light"] .kc.slow .kh,body[data-skin="light"] .kc.ready .kh{background:linear-gradient(90deg,color-mix(in srgb,var(--tc,var(--cook)) 50%,transparent),color-mix(in srgb,var(--tc,var(--cook)) 12%,transparent))}
+.kc.slow{border-color:var(--late);box-shadow:0 0 0 1px var(--late),var(--shadow)}
+.kc.slow .kh .tm{color:#fff;background:var(--late);border-radius:999px;padding:3px 10px;font-size:13px}
 </style>
 
 <header class="top">
@@ -602,7 +685,7 @@ function oCard(o,mode){const l=ST.lang;const mineO=o.waiter===ST.me;
   if(["cooking","ready"].includes(o.status)&&o.bill&&ST.bills[o.bill]&&!ST.bills[o.bill].closed)actions=`<button class="btn ghost sm" type="button" data-a="bill" data-id="${o.bill}">${esc(t("bill"))}</button>`+actions;
   const lateAttr=o.status==="new"?`data-late="${o.createdAt}"`:"";
   const timeRef=o.status==="new"?o.createdAt:o.status==="accepted"?o.acceptedAt:o.status==="cooking"?o.sentAt:o.status==="ready"?o.readyAt:o.servedAt;
-  return `<article class="oc s-${o.status}${forMe(o)?"":" other"}${o.status==="new"&&Date.now()-o.createdAt>NEW_LATE_MS?" late":""}" ${lateAttr}>
+  return `<article style="--tc:var(--t${(((+o.table||1)-1)%8+8)%8+1})" class="oc s-${o.status}${forMe(o)?"":" other"}${o.status==="new"&&Date.now()-o.createdAt>NEW_LATE_MS?" late":""}" ${lateAttr}>
     <div class="oh"><span class="tb">${esc(t("table"))} ${o.table}</span><span class="no">#${o.no}</span>${ownPill}${o.round>1?`<span class="pill rnd">${esc(t("addMore"))} · ${o.round}</span>`:""}<span class="pill st-${o.status}">${esc(stLabel(o.status))}</span>${o.status==="new"?`<span class="pill st-late latepill" ${Date.now()-o.createdAt>NEW_LATE_MS?"":"hidden"}>${esc(t("late"))}</span>`:""}${o.escalated&&o.status==="ready"?`<span class="pill st-late">${esc(t("tAll"))}</span>`:""}<span class="tm" data-since="${timeRef}">${since(timeRef)}</span></div>
     <div class="meta">${esc(t("guestLang"))}: ${esc(LANGNAME[o.lang]||o.lang)}${o.waiter?` · ${esc(t("by"))}: ${esc(wname(o.waiter))}`:""}${o.src==="waiter"?" · ✎":""}${o.bill&&ST.bills[o.bill]&&!ST.bills[o.bill].closed&&billOrders(o.bill).length>1?` · ${esc(t("billTotal"))}: <b>${vnd(billTotal(o.bill))}</b>`:""}</div>
     ${orderLines(o)}${wishHTML(o,l)}${o.comment?`<div class="cmt">${esc(o.comment)}</div>`:""}
@@ -632,7 +715,7 @@ function bindActions(el){el.querySelectorAll("[data-a]").forEach(b=>b.onclick=()
   else if(a==="bill")openBillSheet(id)
   else if(a==="moreB"){const os=billOrders(id);openEditor(null,os[os.length-1])}})}
 function tCard(b){const os=billOrders(b.id);const sum=billTotal(b.id);const pend=os.filter(o=>o.status!=="served").length;
-  return `<button type="button" class="tc${b.req?" req":""}" data-a="bill" data-id="${b.id}">${b.req?`<span class="breq">${esc(t("billReq"))} · ${esc(t("pay_"+b.req.pay))}</span>`:""}<span class="tn">${esc(t("table"))} ${b.table}</span><span class="dim">${os.length} ${esc(t("rounds"))} · ${esc(wname(os.find(o=>o.waiter)?.waiter))}</span><span class="tsum">${vnd(sum)}</span><span class="tst">${os.map(o=>`<i class="d-${o.status}" title="#${o.no}"></i>`).join("")}${pend?`<small>${esc(t("unserved"))}: ${pend}</small>`:""}</span></button>`}
+  return `<button type="button" style="--tc:var(--t${(((+b.table||1)-1)%8+8)%8+1})" class="tc${b.req?" req":""}" data-a="bill" data-id="${b.id}">${b.req?`<span class="breq">${esc(t("billReq"))} · ${esc(t("pay_"+b.req.pay))}</span>`:""}<span class="tn">${esc(t("table"))} ${b.table}</span><span class="dim">${os.length} ${esc(t("rounds"))} · ${esc(wname(os.find(o=>o.waiter)?.waiter))}</span><span class="tsum">${vnd(sum)}</span><span class="tst">${os.map(o=>`<i class="d-${o.status}" title="#${o.no}"></i>`).join("")}${pend?`<small>${esc(t("unserved"))}: ${pend}</small>`:""}</span></button>`}
 function aggItems(os){const m={};os.forEach(o=>o.items.forEach(i=>{const k=i.mid+"|"+(i.note||"");m[k]=m[k]||{mid:i.mid,note:i.note,qty:0};m[k].qty+=i.qty}));return Object.values(m)}
 function openBillSheet(bid){const b=ST.bills[bid];if(!b)return;const os=billOrders(bid);const items=aggItems(os);const sum=billTotal(bid);const pend=os.filter(o=>o.status!=="served").length;
   $("sheetIn").innerHTML=`<div class="row"><h2>${esc(t("billT"))} ${b.table}</h2><span class="sp"></span><button class="btn ghost sm" type="button" id="bX">${esc(t("cancel"))}</button></div>${b.req?`<div class="reqbar"><b>${esc(t("billReqS"))}</b><span>${esc(t("pay_"+b.req.pay))} · ${new Date(b.req.at).toLocaleTimeString("vi-VN",{hour:"2-digit",minute:"2-digit"})}</span></div>`:""}
@@ -685,9 +768,9 @@ function rKitchen(el){const f=ST.ktab;const L=live();
   const cooking=L.filter(o=>o.status==="cooking"&&filt(o)).sort((a,b)=>a.sentAt-b.sentAt);
   const ready=L.filter(o=>o.status==="ready"&&filt(o));
   const card=o=>{const its=o.items.map((i,k)=>[i,k]).filter(([i])=>f==="all"||M[i.mid].st===(f==="bar"?"b":"k"));
-    return `<article class="kc ${o.status==="ready"?"ready":""}" ${o.status==="cooking"?`data-slow="${o.sentAt}"`:""}>
+    return `<article style="--tc:var(--t${(((+o.table||1)-1)%8+8)%8+1})" class="kc ${o.status==="ready"?"ready":""}" ${o.status==="cooking"?`data-slow="${o.sentAt}"`:""}>
     <div class="kh"><span class="tb">${esc(t("table"))} ${o.table}</span><span>#${o.no}</span><span class="tm" ${o.status==="cooking"?`data-mmss="${o.sentAt}"`:""}>${o.status==="cooking"?mmss(o.sentAt):"✓"}</span></div>
-    <div class="kb">${its.map(([i,k])=>`<button type="button" class="ki ${i.done?"done":""}" data-ki="${o.id}" data-k="${k}" ${o.status!=="cooking"?"disabled":""}><span class="q">${i.qty}×</span><span><b>${esc(pn(i.mid))}</b>${f==="all"?`<span class="stn">${esc(M[i.mid].st==="b"?t("bar"):t("kit"))}</span>`:""}${i.added?` <span class="badge-new">+</span>`:""}${i.note?`<span class="note">⚠ ${esc(i.note)}</span>`:""}${sn(i.mid)?`<span class="sub">${esc(sn(i.mid))}</span>`:""}</span></button>`).join("")}
+    <div class="kb">${its.map(([i,k])=>`<button type="button" class="ki ${i.done?"done":""}" data-ki="${o.id}" data-k="${k}" ${o.status!=="cooking"?"disabled":""}><span class="q">${i.qty}×</span><span><b>${esc(pn(i.mid))}</b>${f==="all"?`<span class="stn ${M[i.mid].st==="b"?"sb":"sk"}">${esc(M[i.mid].st==="b"?t("bar"):t("kit"))}</span>`:""}${i.added?` <span class="badge-new">+</span>`:""}${i.note?`<span class="note">⚠ ${esc(i.note)}</span>`:""}${sn(i.mid)?`<span class="sub">${esc(sn(i.mid))}</span>`:""}</span></button>`).join("")}
     ${o.wishes&&o.wishes.length?`<div class="kw">⚠ ${o.wishes.map(k=>{const w=WISH.find(x=>x.k===k);return w?esc(w[ST.lang]):""}).join(" · ")}</div>`:""}
     ${o.comment?`<div class="kcm">${esc(o.comment)}</div>`:""}</div>
     <div class="kf"><span class="meta">${esc(wname(o.waiter))}</span><span class="sp"></span>${o.status==="cooking"?`<button class="btn green sm" type="button" data-kr="${o.id}">${esc(t("kDone"))}</button>`:`<span class="meta">${esc(t("kReady"))} · <span data-since="${o.readyAt}">${since(o.readyAt)}</span></span>`}</div></article>`};
@@ -701,7 +784,7 @@ function rKitchen(el){const f=ST.ktab;const L=live();
 
 /* --- owner --- */
 function rOwnerWrap(el){const pend=ST.staff.filter(x=>x.status==="pending").length;
-  el.innerHTML=`<div class="tabs"><button type="button" data-ot="stats" class="${ST.otab!=="staff"?"on":""}">${esc(t("oStats"))}</button><button type="button" data-ot="staff" class="${ST.otab==="staff"?"on":""}">${esc(t("oStaff"))}${pend?` <span class="cnt2">${pend}</span>`:""}</button></div><div id="ownIn" style="display:flex;flex-direction:column;gap:12px"></div>`;
+  el.innerHTML=`<div class="otabs"><button type="button" data-ot="stats" class="${ST.otab!=="staff"?"on":""}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>${esc(t("oStats"))}</button><button type="button" data-ot="staff" class="${ST.otab==="staff"?"on":""}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8M18.5 14.8c1.6.8 2.6 2.5 3 5.2"/></svg>${esc(t("oStaff"))}${pend?` <span class="cnt2">${pend}</span>`:""}</button></div><div id="ownIn" style="display:flex;flex-direction:column;gap:12px"></div>`;
   el.querySelectorAll("[data-ot]").forEach(b=>b.onclick=()=>{ST.otab=b.dataset.ot;save();render()});
   (ST.otab==="staff"?rStaff:rOwner)(el.querySelector("#ownIn"))}
 const ROLE_OPTS=["waiter","kitchen","manager"];
@@ -759,10 +842,10 @@ function rOwner(el){const all=ST.orders.filter(o=>o.status==="served");const ope
     <div class="kpi"><small>${esc(t("oCook"))}</small><b>${mean(cookT).toFixed(1)} ${esc(t("min"))}</b><span>${esc(t("sCooking"))} → ${esc(t("sReady"))}</span></div>
    </div>
    <div class="card"><h3>${esc(t("oWaiters"))}</h3><div class="tbl"><table><tr><th>${esc(t("oName"))}</th><th>${esc(t("oShift"))}</th><th>${esc(t("oOrd"))}</th><th>${esc(t("oRevS"))}</th><th>${esc(t("oAvgS"))}</th><th>${esc(t("oAcc"))}</th><th>${esc(t("oLate"))}</th></tr>
-     ${per.map(p=>`<tr><td><b>${esc(p.w.name)}</b></td><td>${ST.shift[p.w.id]?'<span class="pill st-ready">●</span>':'<span class="dim">—</span>'}</td><td>${p.n}</td><td>${vnd(p.r)}</td><td>${short(p.avg)}</td><td>${p.n?Math.round(p.acc)+" "+esc(t("sec")):"—"}</td><td>${p.late?`<span class="pill st-late">${p.late}</span>`:"0"}</td></tr>`).join("")}</table></div></div>
+     ${per.map((p,pi)=>`<tr><td><span class="av" style="--c:var(--c${pi%6+1})">${esc(p.w.name[0])}</span><b>${esc(p.w.name)}</b></td><td>${ST.shift[p.w.id]?'<span class="pill st-ready">●</span>':'<span class="dim">—</span>'}</td><td>${p.n}</td><td>${vnd(p.r)}</td><td>${short(p.avg)}</td><td>${p.n?Math.round(p.acc)+" "+esc(t("sec")):"—"}</td><td>${p.late?`<span class="pill st-late">${p.late}</span>`:"0"}</td></tr>`).join("")}</table></div></div>
    <div class="two">
     <div class="card"><h3>${esc(t("oTop"))}</h3><div class="bars">${top.map(([k,v])=>`<div class="bar"><span>${esc(nm(k,ST.lang==="ru"?"ru":"vi"))}</span><i style="width:${Math.max(4,v/topMax*100)}%"></i><span>${v}</span></div>`).join("")}</div></div>
-    <div class="card"><h3>${esc(t("oLang"))}</h3><div class="bars">${lgs.map(([k,v])=>`<div class="bar"><span>${esc(LANGNAME[k]||k)}</span><i style="width:${Math.max(4,v/lgMax*100)}%;background:linear-gradient(90deg,var(--dim),var(--silver))"></i><span>${Math.round(v/all.length*100)}%</span></div>`).join("")}</div></div>
+    <div class="card"><h3>${esc(t("oLang"))}</h3><div class="bars">${lgs.map(([k,v])=>`<div class="bar"><span>${esc(LANGNAME[k]||k)}</span><i style="width:${Math.max(4,v/lgMax*100)}%"></i><span>${Math.round(v/all.length*100)}%</span></div>`).join("")}</div></div>
    </div>
    <div class="card"><h3>${esc(t("oHours"))}</h3><div class="hours">${Object.entries(hrs).map(([h,v])=>`<div title="${h}:00 · ${vnd(v)}"><i style="height:${v/hMax*100}%"></i><small>${h}</small></div>`).join("")}</div></div>
    <div class="card"><h3>${esc(t("oSettings"))}</h3><div class="radio">${nopt.map(([k,a,b])=>`<label><input type="radio" name="notify" value="${k}" ${ST.notify===k?"checked":""}><span><b>${esc(a)}</b><br><span class="dim">${esc(b)}</span></span></label>`).join("")}</div></div>`;
