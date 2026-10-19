@@ -1,0 +1,788 @@
+<title>Café Chez Oanh Menu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Montserrat:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: "safari lounge at night" — one dark warm world (deliberately single-theme, like the room under the wicker lamps).
+   Lion-painting hero → food/drinks switch → photo category cards → sticky chip rail → dish rows → floating order bar → paper ticket for the waiter */
+:root{
+  color-scheme:dark;
+  --bg:#13100c; --bg-2:#1b1611; --card:#211b15; --line:#3a2f24; --ink:#f3ead9; --muted:#b3a58f; --dim:#857862;
+  --amber:#e39a3b; --amber-2:#f2b65c; --teal:#3db3ad; --teal-ink:#7fd6d0; --paper:#fbf6ea; --paper-ink:#211a12;
+  --f-display:"Cormorant Garamond",Georgia,"Times New Roman",serif;
+  --f-body:"Montserrat",system-ui,-apple-system,"Segoe UI","Apple SD Gothic Neo","Malgun Gothic","PingFang SC","Microsoft YaHei",sans-serif;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{background:var(--bg)}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:14.5px;line-height:1.45;-webkit-font-smoothing:antialiased;padding-bottom:100px}
+button{font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:2px solid var(--amber-2);outline-offset:2px}
+.wrap{max-width:720px;margin:0 auto;padding-inline:16px}
+.eyebrow{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--amber);font-weight:600}
+.zebra{height:10px;background:repeating-linear-gradient(105deg,var(--ink) 0 3px,transparent 3px 9px,var(--ink) 9px 11px,transparent 11px 19px);opacity:.10;
+  -webkit-mask:linear-gradient(90deg,transparent,#000 20%,#000 80%,transparent);mask:linear-gradient(90deg,transparent,#000 20%,#000 80%,transparent)}
+
+/* hero */
+.hero{position:relative;min-height:520px;display:flex;align-items:flex-end;overflow:hidden;isolation:isolate}
+.hero .bg{position:absolute;inset:0;background:center 20%/cover no-repeat;z-index:-2;transform:scale(1.02)}
+.hero::before{content:"";position:absolute;inset:0;z-index:-1;background:
+  linear-gradient(180deg,rgba(19,16,12,.35) 0%,rgba(19,16,12,.15) 30%,rgba(19,16,12,.85) 72%,var(--bg) 100%),
+  radial-gradient(90% 60% at 80% 20%,rgba(227,154,59,.18),transparent 60%)}
+.hero .top{position:absolute;top:0;left:0;right:0;padding-top:14px}
+.hero .top .wrap{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.open{white-space:nowrap;display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;background:rgba(19,16,12,.6);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(243,234,217,.18);padding:7px 11px;border-radius:999px}
+.open i{width:8px;height:8px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 3px rgba(61,179,173,.25)}
+.open.closed i{background:#d0533b;box-shadow:0 0 0 3px rgba(208,83,59,.25)}
+.langbtn{position:fixed;top:calc(env(safe-area-inset-top,0px) + 10px);right:max(12px,calc((100vw - 720px)/2 + 12px));z-index:25;display:inline-flex;align-items:center;gap:7px;border:0;background:linear-gradient(180deg,var(--amber-2),var(--amber));color:#1d140a;border-radius:999px;padding:9px 14px 9px 11px;font-size:13.5px;font-weight:800;letter-spacing:.02em;box-shadow:0 6px 20px rgba(0,0,0,.45),0 0 0 3px rgba(19,16,12,.55)}
+.langbtn svg{width:17px;height:17px}
+.langbtn .fl{font-size:17px;line-height:1}
+.langbtn .cv{width:12px;height:12px;opacity:.8}
+.rail .wrap{padding-right:108px}
+.rw .harr.r{right:104px}
+.hero .top .wrap{padding-right:min(46vw,230px)}
+.langbtn.compact{padding:8px 11px 8px 10px;top:calc(env(safe-area-inset-top,0px) + 7px)}
+.langbtn.compact #langName .ln{display:none}
+@media (prefers-reduced-motion:no-preference){.langbtn.hint{animation:lb 1.6s ease-in-out 2}@keyframes lb{50%{transform:scale(1.08)}}}
+.hero .txt{padding-block:84px 26px;width:100%}
+.hero h1{margin:8px 0 0;font-family:var(--f-display);font-weight:600;font-size:clamp(46px,13vw,76px);line-height:.9;letter-spacing:-.01em;text-wrap:balance}
+.hero h1 em{display:block;font-style:italic;font-weight:500;color:var(--amber-2);font-size:.6em;margin-top:6px}
+.orn{display:flex;align-items:center;gap:10px;margin:16px 0 12px;color:var(--amber)}
+.orn::before,.orn::after{content:"";height:1px;width:56px;background:currentColor;opacity:.6}
+.orn svg{width:14px;height:14px}
+.hero p{margin:0;max-width:44ch;color:var(--muted);font-size:13.5px}
+.facts{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.fact{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:rgba(33,27,21,.75);border-radius:12px;padding:8px 11px;font-size:12.5px;color:var(--ink);text-align:left}
+.fact svg{width:15px;height:15px;color:var(--amber);flex:none}
+.fact.addr{text-decoration:none;flex-basis:100%}
+.fact small{display:block;color:var(--dim);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase}
+
+/* group switch */
+.groups{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:5px;border:1px solid var(--line);border-radius:16px;background:var(--bg-2);margin-top:22px}
+.groups button{border:0;background:transparent;border-radius:12px;padding:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:12.5px;color:var(--muted)}
+.groups button.on{background:var(--amber);color:#1d140a}
+
+.cats{display:flex;gap:10px;overflow-x:auto;padding:16px 16px 4px;scroll-snap-type:x proximity;scrollbar-width:none;max-width:720px;margin:0 auto}
+.cats::-webkit-scrollbar{display:none}
+.cat{flex:none;width:128px;height:150px;scroll-snap-align:start;position:relative;border-radius:16px;overflow:hidden;text-decoration:none;color:var(--ink);border:1px solid var(--line);background:var(--card)}
+.cat img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.cat::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 35%,rgba(10,8,6,.92))}
+.cat span{position:absolute;left:10px;right:10px;bottom:9px;z-index:1;font-family:var(--f-display);font-weight:600;font-size:17px;line-height:1.05}
+
+/* rail */
+.rail{position:sticky;top:env(safe-area-inset-top,0px);z-index:6;background:rgba(19,16,12,.93);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line);margin-top:14px}
+.rail .wrap{display:flex;gap:6px;overflow-x:auto;padding-block:10px;scrollbar-width:none}
+.rail .wrap::-webkit-scrollbar{display:none}
+.rail a{flex:none;text-decoration:none;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:7px 13px;font-size:12.5px;font-weight:600;white-space:nowrap}
+.rail a.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+
+.tools{display:flex;gap:8px;align-items:center;padding-block:16px 0}
+.search{flex:1;min-width:0;border:1px solid var(--line);background:var(--bg-2);border-radius:12px;padding:11px 12px;font:inherit;color:var(--ink)}
+.search::placeholder{color:var(--dim)}
+.cur{flex:none;border:1px solid var(--line);background:var(--bg-2);border-radius:12px;padding:11px 8px;font:inherit;color:var(--ink)}
+.rate{font-size:11.5px;color:var(--dim);padding-top:7px}
+
+/* sections */
+section.s{padding-block:34px 4px;scroll-margin-top:64px}
+.sh{position:relative;padding-left:2px}
+.sh .vi{display:inline-block;position:relative;font-size:10.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#1d140a;padding:4px 14px 4px 10px;
+  background:var(--amber);clip-path:polygon(2% 12%,98% 0,100% 55%,96% 100%,0 92%,3% 50%)}
+section.s h2{margin:10px 0 0;font-family:var(--f-display);font-weight:600;font-size:34px;line-height:1;text-wrap:balance}
+.sh .cnt{color:var(--dim);font-size:12px;margin-top:6px}
+.note{margin-top:12px;font-size:12.5px;color:var(--muted);border-left:2px solid var(--teal);padding:2px 0 2px 10px}
+ul.items{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:2px}
+li.it{display:grid;grid-template-columns:1fr;gap:14px;padding:14px 0;border-bottom:1px solid var(--line)}
+li.it.hasph{grid-template-columns:96px 1fr}
+li.it.extra{padding:9px 0}
+li.it.extra .nm{font-weight:500;font-size:13.5px;color:var(--muted)}
+li.it.incart .nm{color:var(--amber-2)}
+.it .txt{min-width:0;display:flex;flex-direction:column}
+.it .nm{font-weight:600;font-size:15px;line-height:1.3}
+.it .orig{font-size:12px;color:var(--teal-ink);margin-top:3px;font-style:italic;font-family:var(--f-display);font-size:14.5px;line-height:1.2}
+.ph{width:96px;height:96px;border-radius:14px;overflow:hidden;border:1px solid var(--line);padding:0;background:var(--card);align-self:start;position:relative}
+.ph img{width:100%;height:100%;object-fit:cover;display:block}
+.tag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);margin-left:6px;vertical-align:1px}
+
+.opts{margin-top:auto;padding-top:9px;display:grid;gap:7px}
+.opt{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.pv{display:flex;flex-direction:column;font-variant-numeric:tabular-nums;min-width:0}
+.pv .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--dim);font-weight:600}
+.pv .main{font-weight:700;font-size:15px;color:var(--amber-2)}
+.pv .sub{font-size:11.5px;color:var(--dim)}
+.pv .ask{font-size:12.5px;color:var(--muted);font-style:italic}
+.add{flex:none;width:36px;height:36px;border-radius:50%;border:1px solid var(--amber);background:transparent;color:var(--amber-2);display:grid;place-items:center}
+.add:hover{background:var(--amber);color:#1d140a}
+.add svg,.step button svg{width:17px;height:17px}
+.step{flex:none;display:flex;align-items:center;gap:2px;background:var(--amber);color:#1d140a;border-radius:999px;padding:3px}
+.step button{width:30px;height:30px;border-radius:50%;border:0;background:rgba(0,0,0,.12);color:#1d140a;display:grid;place-items:center}
+.step b{min-width:22px;text-align:center;font-variant-numeric:tabular-nums}
+.empty{padding:30px 0;color:var(--muted);text-align:center}
+
+/* atmosphere */
+.atmo{margin-top:40px}
+.atmo h3{font-family:var(--f-display);font-weight:600;font-size:32px;margin:8px 0 0;line-height:1}
+.atmo h3 em{color:var(--amber-2);font-weight:500}
+.atmo p{color:var(--muted);margin:10px 0 0;max-width:52ch;font-size:13.5px}
+.gal{display:grid;grid-template-columns:1.25fr 1fr;grid-template-rows:150px 150px;gap:8px;margin-top:16px}
+.gal img{width:100%;height:100%;object-fit:cover;border-radius:14px;display:block;border:1px solid var(--line)}
+.gal .a{grid-row:1/3}
+.pano{margin-top:8px;height:120px}
+.pano img{width:100%;height:100%;object-fit:cover;border-radius:14px;border:1px solid var(--line);display:block}
+.quote{margin-top:22px;font-family:var(--f-display);font-style:italic;font-size:19px;line-height:1.35;color:var(--ink);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:16px 0}
+
+footer{padding-block:28px 24px;color:var(--muted);font-size:12.5px;line-height:1.6}
+footer .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-top:12px}
+footer b{color:var(--ink);font-weight:600}
+footer .small{color:var(--dim);font-size:11.5px;margin-top:18px}
+
+/* order bar */
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:15;padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));pointer-events:none}
+.bar button{pointer-events:auto;max-width:688px;margin:0 auto;width:100%;display:flex;align-items:center;gap:12px;border:0;border-radius:18px;padding:12px 14px;background:var(--amber);color:#1d140a;box-shadow:0 12px 34px rgba(0,0,0,.55);text-align:left}
+.bar .q{flex:none;min-width:30px;height:30px;padding:0 8px;border-radius:999px;background:#1d140a;color:var(--amber-2);display:grid;place-items:center;font-weight:700;font-variant-numeric:tabular-nums}
+.bar .mid{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.2}
+.bar .mid small{opacity:.75;font-size:11.5px;font-weight:600}
+.bar .mid b{font-variant-numeric:tabular-nums;font-size:16px}
+.bar .go{flex:none;max-width:45%;text-align:right;font-weight:700;font-size:13px;display:flex;align-items:center;gap:4px}
+
+/* overlays */
+.gate{position:fixed;inset:0;z-index:40;display:flex;flex-direction:column;justify-content:flex-end;overflow:auto;isolation:isolate;
+  padding:calc(24px + env(safe-area-inset-top,0px)) 20px calc(26px + env(safe-area-inset-bottom,0px));background:var(--bg)}
+.gate .bg{position:absolute;inset:0;background:center 15%/cover no-repeat;z-index:-2}
+.gate::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(19,16,12,.2),rgba(19,16,12,.7) 45%,var(--bg) 80%)}
+.gate .in{max-width:440px;width:100%;margin:0 auto}
+.gate h2{font-family:var(--f-display);font-weight:600;font-size:54px;margin:8px 0 0;line-height:.92}
+.gate h2 em{display:block;color:var(--amber-2);font-weight:500;font-size:.6em}
+.gate p{margin:12px 0 18px;color:var(--muted);font-size:13px}
+.gate .opts2{display:grid;gap:8px}
+.gate button{display:flex;justify-content:space-between;align-items:center;background:rgba(33,27,21,.8);border:1px solid var(--line);color:var(--ink);border-radius:14px;padding:14px 16px;font-size:16px;font-weight:600;text-align:left}
+.gate button span{font-size:12px;font-weight:500;color:var(--dim);font-variant-numeric:tabular-nums}
+.gate button.sel{border-color:var(--amber);color:var(--amber-2)}
+
+.lb{position:fixed;inset:0;z-index:50;background:rgba(8,6,4,.92);display:flex;align-items:center;justify-content:center;padding:20px}
+.lb figure{margin:0;max-width:520px;width:100%}
+.lb img{width:100%;max-height:70vh;object-fit:contain;border-radius:18px;display:block}
+.lb figcaption{color:var(--ink);text-align:center;margin-top:12px;font-weight:600}
+.lb figcaption small{display:block;color:var(--dim);font-weight:400;font-size:11.5px;margin-top:6px}
+
+.sheet{position:fixed;inset:0;z-index:30;background:rgba(5,4,3,.6);display:flex;align-items:flex-end;justify-content:center}
+.sheet .panel{width:100%;max-width:720px;max-height:92vh;overflow:auto;background:var(--bg-2);border-top:1px solid var(--line);border-radius:22px 22px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom,0px))}
+.sheet .hd{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.sheet h3{margin:0;font-family:var(--f-display);font-weight:600;font-size:30px}
+.x{border:1px solid var(--line);background:var(--card);width:36px;height:36px;border-radius:50%;display:grid;place-items:center}
+.x svg{width:18px;height:18px}
+.lines{list-style:none;margin:10px 0 0;padding:0}
+.lines li{display:grid;grid-template-columns:1fr auto;gap:10px;padding-block:10px;border-bottom:1px solid var(--line);align-items:center}
+.lines .ln{min-width:0}
+.lines .ln b{display:block;font-size:14px;font-weight:600}
+.lines .ln small{color:var(--dim);font-size:12px}
+.wish{margin-top:14px}
+.wish .lbl{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);font-weight:600}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:7px 12px;font-size:12.5px;color:var(--muted)}
+.chip[aria-pressed="true"]{border-color:var(--teal);color:var(--teal-ink);background:rgba(61,179,173,.12)}
+.tot{display:flex;justify-content:space-between;align-items:baseline;padding-top:14px;font-variant-numeric:tabular-nums}
+.tot b{font-size:22px;color:var(--amber-2)}
+.tot small{display:block;text-align:right;color:var(--dim);font-size:12px}
+.row{display:flex;gap:8px;margin-top:16px}
+.btn{flex:1;border:0;border-radius:14px;padding:14px;font-weight:700;background:var(--amber);color:#1d140a}
+.btn.ghost{flex:none;background:var(--card);border:1px solid var(--line);color:var(--ink);font-weight:600}
+.hint{font-size:12px;color:var(--dim);margin-top:10px}
+
+.toast{position:fixed;left:50%;bottom:calc(90px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:60;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-weight:600;font-size:13px}
+
+/* waiter ticket: light paper so it reads anywhere */
+.waiter{position:fixed;inset:0;z-index:35;background:#0b0907;overflow:auto;padding:calc(16px + env(safe-area-inset-top,0px)) 14px calc(20px + env(safe-area-inset-bottom,0px))}
+.ticket{max-width:520px;margin:0 auto;background:var(--paper);color:var(--paper-ink);border-radius:16px;padding:22px 20px 18px;position:relative}
+.ticket::after{content:"";position:absolute;left:0;right:0;bottom:-10px;height:12px;background:radial-gradient(circle at 8px -2px,transparent 8px,var(--paper) 8.5px) 0 0/16px 12px repeat-x}
+.ticket .b2{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px dashed #d6ccb6;padding-bottom:12px;gap:10px}
+.ticket .b2 b{font-family:var(--f-display);font-weight:700;font-size:24px;color:#8a4f12}
+.ticket .b2 span{font-size:12px;color:#6d6252;text-align:right}
+.ticket h4{margin:14px 0 2px;font-size:21px;letter-spacing:.05em}
+.ticket .sub{color:#6d6252;font-size:12.5px}
+.tbl{display:flex;align-items:center;gap:10px;margin-top:12px;flex-wrap:wrap}
+.tbl label{font-weight:700;font-size:15px;white-space:nowrap}
+.tbl input{width:90px;border:2px solid var(--paper-ink);border-radius:10px;padding:8px 10px;font:inherit;font-size:20px;font-weight:700;color:var(--paper-ink);background:#fff;text-align:center;color-scheme:light}
+.tlines{list-style:none;margin:14px 0 0;padding:0}
+.tlines li{display:grid;grid-template-columns:42px 1fr auto;gap:8px;padding-block:10px;border-bottom:1px solid #e6dcc6;align-items:start;font-variant-numeric:tabular-nums}
+.tlines .qq{font-size:22px;font-weight:700;line-height:1.1}
+.tlines .vn{font-size:17px;font-weight:700;line-height:1.25}
+.tlines .tr{font-size:12px;color:#6d6252;margin-top:2px}
+.tlines .pp{font-size:13.5px;font-weight:600;white-space:nowrap}
+.twish{margin-top:12px;padding:10px 12px;background:#efe6d2;border-radius:10px;font-weight:700;font-size:15px}
+.twish small{display:block;font-weight:500;font-size:12px;color:#6d6252}
+.ttot{display:flex;justify-content:space-between;align-items:baseline;padding-top:14px;font-variant-numeric:tabular-nums}
+.ttot span{font-weight:700;font-size:16px}
+.ttot b{font-size:26px}
+.ttot small{display:block;text-align:right;color:#6d6252;font-size:13px;font-weight:500}
+.tnote{margin-top:10px;font-size:12.5px;color:#6d6252}
+.wback{max-width:520px;margin:22px auto 0}
+/* shimmering primary actions */
+.bar #barBtn,.btn:not(.ghost),.btn-gold,.pays button{position:relative;overflow:hidden;isolation:isolate}
+.bar #barBtn,.btn:not(.ghost),.btn-gold{background:linear-gradient(115deg,#f7c978 0%,#e8a145 42%,#cf7f2a 100%);box-shadow:inset 0 1px 0 rgba(255,236,200,.55),0 0 0 1px rgba(255,200,120,.25),0 10px 28px rgba(227,154,59,.38);animation:glow 3.4s ease-in-out infinite}
+.bar #barBtn::after,.btn:not(.ghost)::after,.btn-gold::after,.billb::after,.pays button::after{content:"";position:absolute;top:-30%;bottom:-30%;left:-70%;width:42%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.6),transparent);transform:skewX(-22deg);animation:sweep 3.4s ease-in-out infinite;pointer-events:none;z-index:-1}
+.billb::after,.pays button::after{background:linear-gradient(100deg,transparent,rgba(242,182,92,.28),transparent)}
+@keyframes sweep{0%,52%{left:-70%}100%{left:140%}}
+@keyframes glow{0%,100%{box-shadow:inset 0 1px 0 rgba(255,236,200,.55),0 0 0 1px rgba(255,200,120,.25),0 10px 28px rgba(227,154,59,.32)}50%{box-shadow:inset 0 1px 0 rgba(255,236,200,.7),0 0 0 1px rgba(255,214,150,.5),0 12px 38px rgba(242,182,92,.6)}}
+.bar #barBtn:active,.btn:active,.billb:active,.pays button:active{transform:scale(.97)}
+.add{transition:transform .15s,box-shadow .2s,background .2s}
+.add:hover,.add:focus-visible{box-shadow:0 0 0 4px rgba(227,154,59,.18),0 0 18px rgba(242,182,92,.45)}
+.add:active{transform:scale(.88);background:var(--amber);color:#1d140a}
+.barin{max-width:688px;margin:0 auto;display:flex;gap:10px;pointer-events:auto}
+.bar .barin button{margin:0}
+.bar #barBtn{flex:1}
+.bar .billb{flex:none;width:auto;display:flex;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden;isolation:isolate;color:var(--amber-2);font-weight:700;font-size:13.5px;padding:12px 16px;border:1.5px solid transparent;background:linear-gradient(#1f1912,#1f1912) padding-box,linear-gradient(115deg,#f7c978,#e39a3b,#6b4115,#e39a3b,#f7c978) border-box;background-size:100% 100%,300% 100%;animation:bd 5s linear infinite}
+.bar .billb.solo{flex:1}
+.bar .billb.sent{color:var(--muted);animation:none;background:linear-gradient(#1f1912,#1f1912) padding-box,linear-gradient(var(--line),var(--line)) border-box}
+.bar .billb.sent::after{display:none}
+@keyframes bd{to{background-position:0 0,300% 0}}
+.pays{display:grid;gap:10px}
+.pays button{display:flex;align-items:center;gap:14px;width:100%;text-align:left;padding:16px;border-radius:14px;border:1px solid var(--line);background:var(--bg-2);color:var(--ink);font-weight:700;font-size:15px}
+.pays button span{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:rgba(227,154,59,.14);color:var(--amber-2);flex:none}
+.pays button:hover{border-color:var(--amber)}
+.done{position:fixed;inset:0;z-index:40;display:grid;place-items:center;padding:20px;background:rgba(10,8,6,.72);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.dcard{width:min(420px,100%);text-align:center;background:linear-gradient(180deg,#2a2118,#1b1611);border:1px solid rgba(227,154,59,.45);border-radius:22px;padding:28px 22px 20px;box-shadow:0 30px 80px rgba(0,0,0,.6);animation:pop .3s ease-out}
+.dcard .ok{width:58px;height:58px;margin:0 auto 12px;border-radius:50%;display:grid;place-items:center;font-size:28px;font-weight:800;color:#1d140a;background:linear-gradient(135deg,#f7c978,#d9852c);box-shadow:0 0 0 8px rgba(227,154,59,.14),0 0 34px rgba(242,182,92,.5)}
+.dcard small{display:block;letter-spacing:.2em;text-transform:uppercase;color:var(--amber);font-size:11px;font-weight:600}
+.dcard b{display:block;font-family:var(--f-display);font-size:30px;margin:4px 0 6px;color:var(--ink)}
+.dcard p{color:var(--muted);margin:0 0 18px;line-height:1.5}
+.dcard .btn{width:100%}
+@keyframes pop{from{transform:scale(.92);opacity:0}}
+@media (prefers-reduced-motion:reduce){.bar #barBtn,.btn,.btn-gold,.billb,.dcard{animation:none!important}.bar #barBtn::after,.btn::after,.btn-gold::after,.billb::after,.pays button::after{display:none}}
+.wback button{width:100%;border:1px solid rgba(243,234,217,.3);background:transparent;color:var(--ink);border-radius:14px;padding:13px;font-weight:600}
+@media (prefers-reduced-motion:no-preference){
+  .ph img,.cat img{transition:transform .35s}.ph:hover img,.cat:hover img{transform:scale(1.06)}
+  .bar button{animation:rise .25s ease-out}@keyframes rise{from{transform:translateY(20px);opacity:.4}}
+  .hero .bg{animation:drift 18s ease-in-out infinite alternate}@keyframes drift{to{transform:scale(1.08) translateY(-8px)}}
+}
+
+/* ---------- v2 flourishes ---------- */
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:100;opacity:.06;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.hero{min-height:600px}
+.hero h1{font-size:clamp(54px,15vw,92px)}
+.hero .bg{filter:saturate(1.05) contrast(1.05)}
+.cta{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+.btn-gold{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(180deg,var(--amber-2),var(--amber));color:#1d140a;border:0;border-radius:4px;padding:13px 20px;font-weight:700;font-size:12px;letter-spacing:.16em;text-transform:uppercase;text-decoration:none;box-shadow:0 8px 24px rgba(227,154,59,.28)}
+.btn-line{display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--ink);border:1px solid rgba(243,234,217,.5);border-radius:4px;padding:12px 18px;font-weight:600;font-size:12px;letter-spacing:.16em;text-transform:uppercase;text-decoration:none}
+.orn2{display:flex;align-items:center;gap:10px;color:var(--amber);margin-top:12px}
+.orn2::before,.orn2::after{content:"";height:1px;flex:0 0 46px;background:linear-gradient(90deg,transparent,currentColor)}
+.orn2::after{background:linear-gradient(90deg,currentColor,transparent)}
+.orn2 i{width:7px;height:7px;border:1px solid currentColor;transform:rotate(45deg)}
+.feat{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:30px;padding-block:20px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.feat div{text-align:center;min-width:0}
+.feat svg{width:30px;height:30px;color:var(--amber);stroke-width:1.3}
+.feat b{display:block;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;margin-top:8px;color:var(--ink)}
+.feat span{display:block;font-size:11.5px;color:var(--dim);margin-top:4px;line-height:1.35}
+.sig{margin-top:34px}
+.sig h3{margin:8px 0 0;font-family:var(--f-display);font-weight:600;font-size:36px;line-height:1}
+.sig h3 em{color:var(--amber-2);font-weight:500}
+.sigwrap{position:relative;margin:0 -16px}
+.sigrow{display:flex;gap:12px;overflow-x:auto;overflow-y:hidden;padding:16px 16px 6px;scroll-snap-type:x mandatory;scroll-padding-left:16px;scrollbar-width:none;-webkit-overflow-scrolling:touch;touch-action:pan-x pan-y;overscroll-behavior-x:contain;cursor:grab}
+.sigrow.drag{cursor:grabbing;scroll-snap-type:none}
+.sigrow.drag *{pointer-events:none}
+.sarr{position:absolute;top:calc(16px + min(78vw,300px)*.375 - 21px);width:42px;height:42px;border-radius:50%;border:1px solid var(--amber);background:rgba(19,16,12,.82);color:var(--amber-2);display:grid;place-items:center;z-index:5;backdrop-filter:blur(4px)}
+.sarr svg{width:18px;height:18px}.sarr.l{left:10px}.sarr.r{right:10px}.sarr[disabled]{opacity:0;pointer-events:none}
+.sdots{display:flex;gap:6px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+.sdots button{width:7px;height:7px;padding:0;border:0;border-radius:50%;background:var(--line)}
+.sdots button.on{background:var(--amber);width:20px;border-radius:4px}
+.sigrow::-webkit-scrollbar{display:none}
+.scard{flex:0 0 78%;max-width:300px;scroll-snap-align:start;background:linear-gradient(180deg,#241d16,#1a1510);border:1px solid var(--line);border-radius:6px;overflow:hidden;position:relative}
+.scard::after{content:"";position:absolute;inset:6px;border:1px solid rgba(227,154,59,.22);border-radius:3px;pointer-events:none}
+.scard .im{display:block;width:100%;aspect-ratio:4/3;border:0;padding:0;background:var(--card);overflow:hidden}
+.scard .im img{width:100%;height:100%;object-fit:cover;display:block}
+.scard .bd{padding:14px 16px 16px}
+.scard .t{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.scard .t b{font-family:var(--f-display);font-weight:600;font-size:20px;line-height:1.1}
+.scard .t span{color:var(--amber-2);font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums}
+.scard p{margin:6px 0 0;font-size:12px;color:var(--dim);font-style:italic}
+.scard .add{position:absolute;right:16px;bottom:16px;background:var(--bg);z-index:3}
+.scard .step{position:absolute;right:16px;bottom:16px;z-index:3}
+.scard .bd{padding-right:64px!important}
+.scard .t{flex-direction:column;align-items:flex-start!important;gap:4px!important}
+.dots{display:flex;gap:6px;justify-content:center;margin-top:10px}
+.dots i{width:6px;height:6px;border-radius:50%;background:var(--line)}
+.dots i:first-child{background:var(--amber)}
+.cat{width:140px;height:176px;border-radius:6px}
+.cat::before{content:"";position:absolute;inset:6px;border:1px solid rgba(243,234,217,.28);border-radius:3px;z-index:2;pointer-events:none}
+.cat span{text-align:center;bottom:16px;font-size:18px;letter-spacing:.02em;text-shadow:0 2px 10px rgba(0,0,0,.8)}
+.sh{display:grid;grid-template-columns:1fr auto;align-items:end;gap:12px}
+.sh .tt{min-width:0}
+.medals{display:flex;padding-right:4px}
+.medals img{width:56px;height:56px;border-radius:50%;object-fit:cover;border:2px solid var(--amber);box-shadow:0 0 0 3px var(--bg),0 6px 16px rgba(0,0,0,.5);margin-left:-16px;background:var(--card)}
+.medals img:first-child{margin-left:0}
+section.s h2{font-size:38px}
+li.it.big{grid-template-columns:1fr;gap:0;padding:0;border:1px solid var(--line);border-radius:6px;overflow:hidden;margin:10px 0;background:linear-gradient(180deg,#221b14,#191410);position:relative}
+li.it.big::after{content:"";position:absolute;inset:6px;border:1px solid rgba(227,154,59,.18);border-radius:3px;pointer-events:none}
+li.it.big .ph{width:100%;height:auto;aspect-ratio:16/10;border:0;border-radius:0}
+li.it.big .txt{padding:14px 16px 16px;position:relative;z-index:1}
+li.it.big .nm{font-family:var(--f-display);font-size:21px;font-weight:600;line-height:1.15}
+li.it.extra .lead{display:flex;align-items:baseline;gap:8px;min-width:0}
+li.it.extra .lead span{min-width:0;color:var(--muted);font-size:13.5px}
+li.it.extra .lead i{flex:1;border-bottom:1px dotted var(--dim);transform:translateY(-4px);min-width:16px}
+li.it.extra .lead b{color:var(--amber-2);white-space:nowrap;font-variant-numeric:tabular-nums}
+li.it.extra{grid-template-columns:1fr auto;align-items:center;border-bottom:0}
+.atmo .gal img,.pano img{border-radius:6px}
+@media (min-width:640px){.scard{flex-basis:300px}}
+
+.hwrap{position:relative;max-width:720px;margin:0 auto}
+.harr{position:absolute;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;border:1px solid var(--amber);background:rgba(19,16,12,.9);color:var(--amber-2);display:grid;place-items:center;z-index:4;box-shadow:0 4px 14px rgba(0,0,0,.5)}
+.harr svg{width:16px;height:16px}.harr.l{left:4px}.harr.r{right:4px}.harr[disabled]{opacity:0;pointer-events:none}
+.cw .harr{top:calc(16px + 88px)}
+.rw .harr{width:30px;height:30px}
+.cats,#railIn{cursor:grab;overscroll-behavior-x:contain}
+.hdrag{cursor:grabbing!important;scroll-snap-type:none!important}.hdrag *{pointer-events:none}
+.totop{position:fixed;right:16px;bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:14;display:flex;align-items:center;gap:6px;height:44px;padding:0 14px 0 12px;border-radius:999px;border:1px solid var(--amber);background:rgba(19,16,12,.92);color:var(--amber-2);font-weight:700;font-size:12px;letter-spacing:.08em;text-transform:uppercase;box-shadow:0 8px 24px rgba(0,0,0,.5);backdrop-filter:blur(6px)}
+.totop svg{width:18px;height:18px}
+body.hasbar .totop{bottom:calc(88px + env(safe-area-inset-bottom,0px))}
+</style>
+
+<div class="gate" id="gate" hidden>
+  <div class="bg" id="gateBg"></div>
+  <div class="in">
+    <div class="eyebrow">Phan Thiết · Hàm Tiến</div>
+    <h2>Café Chez Oanh<em>Sofa Café</em></h2>
+    <p id="gateP"></p>
+    <div class="opts2" id="gateOpts"></div>
+  </div>
+</div>
+
+<button class="langbtn" id="langBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 3 2.5 15 0 18M12 3c-2.5 3-2.5 15 0 18"/></svg><span class="fl" id="langFlag"></span><span id="langName"></span><svg class="cv" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 9l6 6 6-6"/></svg></button>
+<header class="hero">
+  <div class="bg" id="heroBg"></div>
+  <div class="top"><div class="wrap">
+    <span class="open" id="open"><i></i><span id="openT"></span></span>
+  </div></div>
+  <div class="wrap txt">
+    <div class="eyebrow">by La Marina Boutique Hotel &amp; Spa</div>
+    <h1>Café Chez Oanh<em>Sofa Café</em></h1>
+    <div class="orn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.6 7.4H22l-6 4.6 2.3 7.5L12 17l-6.3 4.5L8 14 2 9.4h7.4z"/></svg></div>
+    <p id="tagline"></p>
+    <div class="facts">
+      <a class="fact addr" href="https://www.google.com/maps/search/?api=1&amp;query=Cafe+Chez+Oanh+246%2F8+Nguy%E1%BB%85n+%C4%90%C3%ACnh+Chi%E1%BB%83u+H%C3%A0m+Ti%E1%BA%BFn+Phan+Thi%E1%BA%BFt" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0119 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><div><small id="fAddr"></small>246/8 Nguyễn Đình Chiểu, Hàm Tiến, Phan Thiết</div></a>
+      <div class="fact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><div><small id="fHours"></small>7:00 – 22:00</div></div>
+      <button class="fact" type="button" id="wifiBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 8.5a15 15 0 0120 0M5 12a10 10 0 0114 0M8.5 15.5a5 5 0 017 0"/><circle cx="12" cy="19" r="1.2" fill="currentColor"/></svg><div><small>Wi-Fi · CAFE CHEZ OANH</small><span id="wifiPw">marina12345</span></div></button>
+    </div>
+    <div class="cta"><a class="btn-gold" href="#menuTop" id="ctaMenu"></a><a class="btn-line" href="#atmo" id="ctaRoom"></a></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="feat">
+    <div><svg viewBox="0 0 32 32" fill="none" stroke="currentColor"><path d="M6 13h20l-2 13H8z"/><path d="M11 13l5-7 5 7"/><path d="M12 18v4M16 18v4M20 18v4"/></svg><b id="f1t"></b><span id="f1s"></span></div>
+    <div><svg viewBox="0 0 32 32" fill="none" stroke="currentColor"><circle cx="16" cy="18" r="9"/><path d="M16 13v5l3 2M13 4h6M16 4v5"/></svg><b id="f2t"></b><span>7:00 – 22:00</span></div>
+    <div><svg viewBox="0 0 32 32" fill="none" stroke="currentColor"><path d="M16 27c-6 0-9-5-9-10 0-4 3-7 6-7 1.5 0 2.3.6 3 .6s1.5-.6 3-.6c3 0 6 3 6 7 0 5-3 10-9 10z"/><path d="M16 10c0-3 2-5 4-6"/></svg><b id="f3t"></b><span id="f3s"></span></div>
+  </div>
+  <div class="sig" id="sigBox">
+    <div class="eyebrow" id="sigE"></div>
+    <h3 id="sigH"></h3>
+    <div class="orn2"><i></i></div>
+    <div class="sigwrap"><div class="sigrow" id="sigRow"></div>
+      <button class="sarr l" type="button" id="sPrev" aria-label="‹"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 6l-6 6 6 6"/></svg></button>
+      <button class="sarr r" type="button" id="sNext" aria-label="›"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 6l6 6-6 6"/></svg></button></div>
+    <div class="sdots" id="sDots"></div>
+  </div>
+  <div class="groups" role="tablist" id="menuTop">
+    <button type="button" id="gFood" role="tab"></button>
+    <button type="button" id="gDrinks" role="tab"></button>
+  </div>
+</main>
+<div class="hwrap cw"><div class="cats" id="cats"></div><button class="harr l" type="button" aria-label="‹"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 6l-6 6 6 6"/></svg></button><button class="harr r" type="button" aria-label="›"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 6l6 6-6 6"/></svg></button></div>
+<nav class="rail"><div class="hwrap rw"><div class="wrap" id="railIn"></div><button class="harr l" type="button" aria-label="‹"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 6l-6 6 6 6"/></svg></button><button class="harr r" type="button" aria-label="›"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 6l6 6-6 6"/></svg></button></div></nav>
+<main class="wrap">
+  <div class="tools">
+    <input class="search" id="q" type="search" autocomplete="off">
+    <select class="cur" id="cur" aria-label="Currency"></select>
+  </div>
+  <div class="rate" id="rate"></div>
+  <div id="menu"></div>
+
+  <div class="atmo" id="atmo">
+    <div class="zebra"></div>
+    <div class="eyebrow" style="margin-top:22px" id="aEy"></div>
+    <h3 id="aH"></h3>
+    <p id="aP"></p>
+    <div class="gal">
+      <img class="a" id="gI1" alt="">
+      <img id="gI2" alt="">
+      <img id="gI3" alt="">
+    </div>
+    <div class="pano"><img id="gI4" alt=""></div>
+    <div class="quote" id="quote"></div>
+  </div>
+</main>
+<footer class="wrap">
+  <div class="cols">
+    <div><b>Café Chez Oanh (Sofa Café)</b><br>246/8 Nguyễn Đình Chiểu,<br>Hàm Tiến, TP Phan Thiết</div>
+    <div><b id="ftH"></b><br>7:00 – 22:00<br>Tel: <span style="user-select:all">0252 374 3848</span></div>
+    <div><b>Wi-Fi</b><br>CAFE CHEZ OANH<br><span style="user-select:all">marina12345</span></div>
+  </div>
+  <div class="small" id="foot"></div>
+</footer>
+
+<div class="bar" id="bar" hidden><div class="barin"><button type="button" class="billb" id="billBtn" hidden><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></svg><span id="billT"></span></button><button type="button" id="barBtn"><span class="q" id="barQ">0</span><span class="mid"><small id="barL"></small><b id="barT"></b></span><span class="go"><span id="barGo"></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 6l6 6-6 6"/></svg></span></button></div></div>
+
+<div class="sheet" id="sheet" hidden><div class="panel">
+  <div class="hd"><h3 id="sheetH"></h3><button class="x" type="button" id="sheetX" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <ul class="lines" id="lines"></ul>
+  <div class="wish"><div class="lbl" id="wishL"></div><div class="chips" id="chips"></div></div>
+  <div class="tot"><span id="totL"></span><div><b id="totV"></b><small id="totC"></small></div></div>
+  <div class="hint" id="extraHint"></div>
+  <div class="row"><button class="btn ghost" type="button" id="clearBtn"></button><button class="btn" type="button" id="waiterBtn"></button></div>
+  <div class="hint" id="sheetHint"></div>
+</div></div>
+
+<div class="waiter" id="waiter" hidden>
+  <div class="ticket">
+    <div class="b2"><b>Chez Oanh</b><span id="tDate"></span></div>
+    <h4>ĐƠN GỌI MÓN</h4>
+    <div class="sub" id="tSub"></div>
+    <div class="tbl"><label for="tableNo">Bàn số</label><input id="tableNo" inputmode="numeric" maxlength="4" autocomplete="off"><span class="sub" id="tblHint"></span></div>
+    <ul class="tlines" id="tlines"></ul>
+    <div class="twish" id="twish" hidden></div>
+    <div class="ttot"><span>Tổng cộng</span><div><b id="tTot"></b><small id="tTotC"></small></div></div>
+    <div class="tnote" id="tExtra"></div>
+  </div>
+  <div class="wback"><button type="button" id="wBack"></button></div>
+</div>
+
+<div class="sheet" id="pay" hidden><div class="panel">
+  <div class="hd"><h3 id="payH"></h3><button class="x" type="button" id="payX" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <p class="hint" id="payS" style="margin:0 0 14px;font-size:13.5px;color:var(--muted)"></p>
+  <div class="pays" id="pays"></div>
+</div></div>
+<div class="done" id="done" hidden><div class="dcard"><span class="ok">✓</span><small id="doneT"></small><b id="doneH"></b><p id="doneS"></p><button class="btn" type="button" id="doneOk"></button></div></div>
+<div class="lb" id="lb" hidden><figure><img id="lbImg" alt=""><figcaption><span id="lbCap"></span><small id="lbNote"></small></figcaption></figure></div>
+<div class="toast" id="toast" hidden></div>
+<button class="totop" type="button" id="toTop" hidden aria-label="Up"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 15l6-6 6 6"/></svg><span id="toTopT"></span></button>
+
+<script>
+const DATA=__DATA__;
+/* photos: inline in the single-file build; on the website they arrive in chunk files (ph1.js…) after the text is already on screen */
+const BL="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+const PHS=__PH__;Object.entries(__AMB__).forEach(([k,v])=>{PHS["amb_"+k]=v});
+const PH=new Proxy(PHS,{get:(o,k)=>typeof k!=="string"?undefined:(o[k]||BL+"#"+k)});
+const AMB=new Proxy({},{get:(o,k)=>typeof k!=="string"?undefined:PH["amb_"+k]});
+window.__ph=o=>{Object.assign(PHS,o);document.querySelectorAll("img").forEach(i=>{const s=i.getAttribute("src")||"";if(s.startsWith(BL)){const k=s.slice(BL.length+1);if(PHS[k])i.src=PHS[k]}})};
+const CATPH=__CATPH__;
+const GEN=new Set(__GEN__);
+// Approximate rates: units of currency per 1 dong. Update by hand.
+const RATES={VND:1,RUB:1/308,USD:1/26300,KRW:1/18.9,CNY:1/3700};
+const RATE_DATE="13.10.2026";
+const CUR={VND:{s:"₫",d:0,step:1000},RUB:{s:"₽",d:0,step:10},USD:{s:"$",d:2,step:.1},KRW:{s:"₩",d:0,step:100},CNY:{s:"¥",d:1,step:.5}};
+const LANGS=[{k:"ru",n:"Русский",c:"RUB"},{k:"en",n:"English",c:"USD"},{k:"vi",n:"Tiếng Việt",c:"VND"},{k:"ko",n:"한국어",c:"KRW"},{k:"zh",n:"中文",c:"CNY"}];
+const IDX={en:0,vi:1,ru:2,ko:3,zh:4};
+const WISH=[
+ {k:"nosugar",vi:"Không đường",ru:"Без сахара",en:"No sugar",ko:"설탕 빼기",zh:"不加糖"},
+ {k:"noice",vi:"Không đá",ru:"Без льда",en:"No ice",ko:"얼음 빼기",zh:"不加冰"},
+ {k:"nomilk",vi:"Không sữa",ru:"Без молока",en:"No milk",ko:"우유 빼기",zh:"不加奶"},
+ {k:"nochili",vi:"Không cay / không ớt",ru:"Не остро, без чили",en:"Not spicy, no chili",ko:"맵지 않게",zh:"不辣"},
+ {k:"nocilantro",vi:"Không rau mùi",ru:"Без кинзы",en:"No coriander",ko:"고수 빼기",zh:"不要香菜"},
+ {k:"together",vi:"Mang ra cùng lúc",ru:"Подать всё вместе",en:"Serve all together",ko:"한꺼번에 주세요",zh:"一起上菜"},
+];
+const T={
+ ru:{top:"Наверх",ctaMenu:"Смотреть меню",ctaRoom:"Атмосфера",f1t:"С рынка",f1s:"Готовим после заказа",f2t:"Весь день",f3t:"Healthy",f3s:"Боулы, фреши, смузи",sigE:"Фирменное",sigH:"Завтраки <em>весь день</em>",ph2:"Иллюстрация блюда по описанию из меню, подача в кафе может отличаться",addr:"Адрес · открыть карту",tag:"Кафе в джунглях Хамтьена: домашняя еда из продуктов с утреннего рынка, кофе, свежие соки и коктейли. Закажите прямо с телефона — официант подтвердит заказ у стола.",
+   hours:"Открыто ежедневно",open:"Сейчас открыто",closed:"Сейчас закрыто",food:"Еда",drinks:"Напитки",search:"Найти блюдо или напиток",
+   S:"мал.",B:"бол.",N:"обычный",ask:"Цену уточните у официанта",none:"Ничего не нашлось",rate:"Курс ≈ ",ratenote:"Пересчёт примерный, оплата в донгах.",
+   items:n=>n+" "+pl(n,["позиция","позиции","позиций"]),dishes:"",order:"Мой заказ",showW0:"Показать официанту",showW:"Заказать",scan:"Чтобы заказывать с телефона, отсканируйте QR-код на столе.",bill:"Рассчитать",billSent:"Счёт запрошен",payH:"Попросить счёт",payS:"Как будете платить? Официант подойдёт к столу.",pCash:"Наличные",pCard:"Карта",pQr:"Перевод по QR",doneH:"Заказ отправлен",doneS:"Официант уже видит его и подтвердит у стола. Дозаказать можно в любой момент — просто добавьте блюда.",billH:"Счёт запрошен",billS:"Официант скоро подойдёт к столу.",ok:"Хорошо",tableL:"Стол",total:"Итого",clear:"Очистить",clearSure:"Точно очистить?",
+   wHint:"Заказ сразу придёт официанту, он подтвердит его у стола.",wHint0:"Заказ никуда не отправляется: откройте экран для официанта и покажите телефон.",back:"Вернуться к меню",tblHint:"номер стола, если знаете",
+   tSub:"Заказ гостя. Под названием — перевод.",extra:n=>"+ "+n+" "+pl(n,["позиция","позиции","позиций"])+" без цены (уточнит официант)",add:"Добавить",
+   wish:"Пожелания",copied:"Пароль Wi-Fi скопирован",copyFail:"Пароль: marina12345",
+   aEy:"Атмосфера",aH:"Львы, зебры <em>и диваны</em>",aP:"Соломенные навесы, плетёные лампы, бирюзовые ставни и большие картины с саванной. Зал внутри и тенистая терраса с качелями.",
+   quote:"«Вся еда готовится дома из продуктов с рынка, купленных утром. Мы начинаем резать и готовить, когда вы заказываете, поэтому придётся немного подождать. Спасибо за терпение!»",
+   foot:"Фото блюд взяты из меню кафе и слегка обработаны (свет, цвет, резкость); часть фото завтраков — иллюстрации по описанию. Подача может отличаться. Цены по меню; актуальные уточняйте у персонала.",
+   ph:"Фото из меню кафе, подача может отличаться",pick:"Выберите язык",
+   notes:{sauce:"Соус на выбор: шоколад, карамель, мёд или сгущённое молоко.",fries:"Сэндвичи и бургеры подаются с картофелем фри.",
+     pasta:"Свежая домашняя паста. Выберите форму: спагетти, чёрные спагетти (с чернилами каракатицы), тальятелле, чёрные тальятелле или ньокки. Цена зависит от соуса.",
+     steak:"Рыбу и соус можно поменять. Прожарка стейка: с кровью, средняя или полная.",rice:"Подаётся с белым или чесночным рисом. Рыбу можно заменить: люциан, сибас, барракуда, кобия.",
+     lunch:"Сытный обед на горячей сковороде: чесночный рис, соус терияки и овощной суп.",veg:"Вегетарианские блюда.",
+     sugar:"Скажите, если нужно без сахара или без льда.",milk:"Скажите, если нужно без молока, без сахара или без льда.",
+     own:"Соберите свой сок: апельсин, ананас, яблоко, маракуйя, свёкла, арбуз, огурец, лайм, морковь, томат, сельдерей, имбирь, мёд. Смузи: манго, банан, маракуйя, клубника, яблоко, ананас, мёд."}},
+ en:{top:"Top",ctaMenu:"Explore menu",ctaRoom:"The room",f1t:"Market fresh",f1s:"Cooked to order",f2t:"All day",f3t:"Healthy",f3s:"Bowls, juices, smoothies",sigE:"Signature",sigH:"All-day <em>breakfast</em>",ph2:"Illustration based on the menu description; plating may vary",addr:"Address · open map",tag:"A jungle-lounge café in Ham Tien: homemade food from the morning market, coffee, fresh juices and cocktails. Order right from your phone; the waiter confirms it at your table.",
+   hours:"Open daily",open:"Open now",closed:"Closed now",food:"Food",drinks:"Drinks",search:"Search food or drinks",
+   S:"small",B:"big",N:"normal",ask:"Ask staff for the price",none:"Nothing found",rate:"Rate ≈ ",ratenote:"Approximate; you pay in dong.",
+   items:n=>n+(n===1?" item":" items"),dishes:"",order:"My order",showW0:"Show to waiter",showW:"Order",scan:"To order from your phone, scan the QR code on your table.",bill:"Get the bill",billSent:"Bill requested",payH:"Ask for the bill",payS:"How would you like to pay? The waiter will come to your table.",pCash:"Cash",pCard:"Card",pQr:"QR bank transfer",doneH:"Order sent",doneS:"The waiter can already see it and will confirm it at your table. Add more dishes any time.",billH:"Bill requested",billS:"The waiter will come to your table shortly.",ok:"OK",tableL:"Table",total:"Total",clear:"Clear",clearSure:"Clear everything?",
+   wHint:"Your order goes straight to the waiter, who confirms it at your table.",wHint0:"Nothing is sent anywhere: open the waiter screen and show your phone.",back:"Back to menu",tblHint:"table number, if you know it",
+   tSub:"Guest order. Translation under each line.",extra:n=>"+ "+n+" item"+(n>1?"s":"")+" without a listed price (ask staff)",add:"Add",
+   wish:"Requests",copied:"Wi-Fi password copied",copyFail:"Password: marina12345",
+   aEy:"The room",aH:"Lions, zebras <em>and sofas</em>",aP:"Thatched roofs, wicker lamps, turquoise shutters and big savanna paintings. An indoor lounge and a shady terrace with a swing.",
+   quote:"“All the food is homemade and fresh from the market every day. We start cutting and cooking when you order, so it takes a while. Thank you for your patience.”",
+   foot:"Dish photos are taken from the café's menu and lightly retouched; some breakfast photos are illustrations based on the description. Plating may vary. Prices as on the menu; please confirm with staff.",
+   ph:"Photo from the café menu; plating may vary",pick:"Choose your language",
+   notes:{sauce:"Swap the sauce: chocolate, caramel, honey or condensed milk.",fries:"Sandwiches and burgers are served with French fries.",
+     pasta:"100% fresh homemade pasta. Choose spaghetti, black spaghetti (squid ink), tagliatelle, black tagliatelle or gnocchi. Price depends on the sauce.",
+     steak:"You can swap the fish and the sauce. Steak: rare, medium or well-done.",rice:"Served with steamed or garlic rice. Fish can be swapped: red snapper, seabass, barracuda, cobia.",
+     lunch:"Rich meal in a hot pan with garlic rice, teriyaki sauce and vegetable soup.",veg:"Vegetarian dishes.",
+     sugar:"Tell us if you would like no sugar or no ice.",milk:"Tell us if you would like no milk, no sugar or no ice.",
+     own:"Design your own: orange, pineapple, apple, passion fruit, beetroot, watermelon, cucumber, lime, carrot, tomato, celery, ginger, honey. Blends: mango, banana, passion fruit, strawberry, apple, pineapple, honey."}},
+ vi:{top:"Lên đầu",ctaMenu:"Xem thực đơn",ctaRoom:"Không gian",f1t:"Từ chợ",f1s:"Nấu khi gọi món",f2t:"Cả ngày",f3t:"Healthy",f3s:"Ngũ cốc, nước ép, sinh tố",sigE:"Đặc biệt",sigH:"Điểm tâm <em>cả ngày</em>",ph2:"Hình minh họa theo mô tả món, cách trình bày có thể khác",addr:"Địa chỉ · mở bản đồ",tag:"Món ăn nhà làm từ chợ mỗi sáng, cà phê, nước ép và cocktail. Gọi món ngay trên điện thoại, nhân viên sẽ xác nhận tại bàn.",
+   hours:"Mở cửa hằng ngày",open:"Đang mở cửa",closed:"Đã đóng cửa",food:"Món ăn",drinks:"Đồ uống",search:"Tìm món",
+   S:"nhỏ",B:"lớn",N:"thường",ask:"Hỏi nhân viên",none:"Không tìm thấy món",rate:"",ratenote:"",
+   items:n=>n+" món",dishes:"",order:"Món đã chọn",showW0:"Đưa cho nhân viên",showW:"Gọi món",scan:"Để gọi món bằng điện thoại, hãy quét mã QR trên bàn.",bill:"Thanh toán",billSent:"Đã gọi thanh toán",payH:"Gọi thanh toán",payS:"Bạn muốn thanh toán bằng cách nào? Nhân viên sẽ đến bàn.",pCash:"Tiền mặt",pCard:"Thẻ",pQr:"Chuyển khoản QR",doneH:"Đã gửi đơn",doneS:"Nhân viên đã nhận đơn và sẽ xác nhận tại bàn. Bạn có thể gọi thêm bất cứ lúc nào.",billH:"Đã gọi thanh toán",billS:"Nhân viên sẽ đến bàn ngay.",ok:"OK",tableL:"Bàn",total:"Tổng cộng",clear:"Xóa hết",clearSure:"Xóa tất cả?",
+   wHint:"Đơn được gửi ngay cho nhân viên, nhân viên sẽ xác nhận tại bàn.",wHint0:"Đơn không được gửi đi. Hãy mở màn hình này và đưa cho nhân viên.",back:"Quay lại thực đơn",tblHint:"",
+   tSub:"Đơn của khách.",extra:n=>"+ "+n+" món chưa có giá (hỏi nhân viên)",add:"Thêm",
+   wish:"Yêu cầu",copied:"Đã sao chép mật khẩu Wi-Fi",copyFail:"Mật khẩu: marina12345",
+   aEy:"Không gian",aH:"Sư tử, ngựa vằn <em>và sofa</em>",aP:"Mái lá, đèn mây, cửa chớp xanh ngọc và những bức tranh thảo nguyên lớn. Phòng trong nhà và hiên mát có xích đu.",
+   quote:"“Tất cả các món ăn đều được làm tại nhà và tươi mới từ chợ mỗi ngày. Chúng tôi bắt đầu cắt và nấu khi bạn gọi món, vì vậy sẽ mất một chút thời gian. Cảm ơn sự kiên nhẫn của bạn.”",
+   foot:"Hình ảnh lấy từ thực đơn của quán, chỉnh nhẹ ánh sáng, màu và độ nét; cách trình bày có thể khác. Giá theo thực đơn, vui lòng xác nhận với nhân viên.",
+   ph:"Hình từ thực đơn của quán",pick:"Chọn ngôn ngữ",
+   notes:{sauce:"Sốt đi kèm tự chọn: sô cô la, caramel, mật ong, sữa đặc.",fries:"Phục vụ kèm khoai tây chiên.",
+     pasta:"Mì tươi làm tại nhà: spaghetti, mì đen, tagliatelle, tagliatelle đen, gnocchi. Giá theo sốt.",
+     steak:"Có thể đổi loại cá và sốt. Bò: chín tái, chín vừa, chín kỹ.",rice:"Kèm cơm trắng hoặc cơm tỏi. Có thể đổi cá: diêu hồng, chẽm, nhồng, bóp.",
+     lunch:"Cơm chảo nóng với cơm tỏi, sốt teriyaki và canh rau.",veg:"Món chay.",
+     sugar:"Vui lòng nói nếu muốn không đường hoặc không đá.",milk:"Vui lòng nói nếu muốn không sữa, không đường hoặc không đá.",
+     own:"Tự chọn nguyên liệu: cam, thơm, táo, chanh dây, củ dền, dưa hấu, dưa leo, chanh, cà rốt, cà chua, cần tây, gừng, mật ong."}},
+ ko:{top:"맨 위",ctaMenu:"메뉴 보기",ctaRoom:"분위기",f1t:"시장 직송",f1s:"주문 후 조리",f2t:"하루 종일",f3t:"헬시",f3s:"볼, 주스, 스무디",sigE:"시그니처",sigH:"올데이 <em>브런치</em>",ph2:"메뉴 설명을 바탕으로 한 일러스트, 실제와 다를 수 있음",addr:"주소 · 지도 열기",tag:"함띠엔의 정글 라운지 카페. 아침 시장 재료로 만든 집밥, 커피, 생과일 주스와 칵테일. 휴대폰으로 바로 주문하면 직원이 테이블에서 확인합니다.",
+   hours:"매일 영업",open:"영업 중",closed:"영업 종료",food:"음식",drinks:"음료",search:"메뉴 검색",
+   S:"소",B:"대",N:"보통",ask:"가격은 직원에게 문의",none:"검색 결과가 없습니다",rate:"환율 ≈ ",ratenote:"참고용이며 결제는 동으로 합니다.",
+   items:n=>n+"개",dishes:"",order:"내 주문",showW0:"직원에게 보여주기",showW:"주문하기",scan:"휴대폰으로 주문하려면 테이블의 QR 코드를 스캔하세요.",bill:"계산하기",billSent:"계산 요청됨",payH:"계산 요청",payS:"결제 방법을 선택하세요. 직원이 테이블로 갑니다.",pCash:"현금",pCard:"카드",pQr:"QR 계좌이체",doneH:"주문 완료",doneS:"직원이 주문을 받았고 테이블에서 확인합니다. 언제든 추가 주문할 수 있어요.",billH:"계산 요청됨",billS:"직원이 곧 테이블로 갑니다.",ok:"확인",tableL:"테이블",total:"합계",clear:"비우기",clearSure:"모두 비울까요?",
+   wHint:"주문이 바로 직원에게 전달되며, 직원이 테이블에서 확인합니다.",wHint0:"주문은 전송되지 않습니다. 직원 화면을 열어 휴대폰을 보여 주세요.",back:"메뉴로 돌아가기",tblHint:"테이블 번호 (알면)",
+   tSub:"손님 주문. 각 줄 아래는 번역.",extra:n=>"+ 가격 문의 메뉴 "+n+"개",add:"추가",
+   wish:"요청 사항",copied:"Wi-Fi 비밀번호 복사됨",copyFail:"비밀번호: marina12345",
+   aEy:"분위기",aH:"사자, 얼룩말 <em>그리고 소파</em>",aP:"초가 지붕, 라탄 조명, 청록색 덧문과 커다란 사바나 그림. 실내 라운지와 그네가 있는 그늘진 테라스.",
+   quote:"“모든 음식은 매일 시장에서 산 신선한 재료로 직접 만듭니다. 주문 후 손질과 조리를 시작하므로 시간이 조금 걸립니다. 기다려 주셔서 감사합니다.”",
+   foot:"음식 사진은 카페 메뉴판 사진을 조명·색감·선명도만 살짝 보정했습니다. 실제 플레이팅은 다를 수 있습니다. 가격은 직원에게 확인해 주세요.",
+   ph:"카페 메뉴판 사진, 실제와 다를 수 있음",pick:"언어를 선택하세요",
+   notes:{sauce:"소스 선택: 초콜릿, 캐러멜, 꿀, 연유.",fries:"샌드위치와 버거는 감자튀김과 함께 나갑니다.",
+     pasta:"100% 수제 생면: 스파게티, 블랙 스파게티(오징어 먹물), 탈리아텔레, 블랙 탈리아텔레, 뇨키. 가격은 소스에 따라 다릅니다.",
+     steak:"생선과 소스 변경 가능. 스테이크 굽기: 레어, 미디엄, 웰던.",rice:"흰쌀밥 또는 마늘밥과 함께. 생선 변경 가능: 도미, 농어, 꼬치고기, 코비아.",
+     lunch:"마늘밥, 데리야키 소스, 채소 수프가 함께 나오는 철판 런치.",veg:"채식 메뉴.",
+     sugar:"설탕이나 얼음을 빼고 싶으면 말씀해 주세요.",milk:"우유, 설탕, 얼음을 빼고 싶으면 말씀해 주세요.",
+     own:"나만의 주스: 오렌지, 파인애플, 사과, 패션프루트, 비트, 수박, 오이, 라임, 당근, 토마토, 셀러리, 생강, 꿀."}},
+ zh:{top:"顶部",ctaMenu:"查看菜单",ctaRoom:"环境",f1t:"市场新鲜",f1s:"现点现做",f2t:"全天供应",f3t:"健康",f3s:"麦片碗、果汁、果昔",sigE:"招牌",sigH:"全天 <em>早餐</em>",ph2:"根据菜单描述制作的示意图，实物可能不同",addr:"地址 · 打开地图",tag:"咸田的丛林风沙发咖啡馆：每天早市新鲜食材的家常菜、咖啡、鲜榨果汁和鸡尾酒。用手机直接下单，服务员会到桌确认。",
+   hours:"每天营业",open:"营业中",closed:"已打烊",food:"餐食",drinks:"饮品",search:"搜索菜品或饮品",
+   S:"小",B:"大",N:"普通",ask:"价格请咨询服务员",none:"未找到",rate:"汇率 ≈ ",ratenote:"仅供参考，以越南盾结算。",
+   items:n=>n+" 项",dishes:"",order:"我的点单",showW0:"给服务员看",showW:"下单",scan:"想用手机下单，请扫描桌上的二维码。",bill:"结账",billSent:"已请求结账",payH:"请求结账",payS:"请选择付款方式，服务员会到桌。",pCash:"现金",pCard:"刷卡",pQr:"二维码转账",doneH:"订单已发送",doneS:"服务员已收到订单，会到桌确认。随时可以加点。",billH:"已请求结账",billS:"服务员马上到您桌前。",ok:"好的",tableL:"桌",total:"合计",clear:"清空",clearSure:"确定清空？",
+   wHint:"订单会直接发给服务员，服务员会到桌确认。",wHint0:"订单不会被发送。打开服务员页面，把手机给服务员看。",back:"返回菜单",tblHint:"桌号（如知道）",
+   tSub:"客人点单，每行下方为翻译。",extra:n=>"+ "+n+" 项待询价",add:"添加",
+   wish:"特别要求",copied:"已复制 Wi-Fi 密码",copyFail:"密码：marina12345",
+   aEy:"环境",aH:"狮子、斑马 <em>和沙发</em>",aP:"茅草屋顶、藤编吊灯、青绿色百叶窗和大幅草原油画。室内沙发区和带秋千的阴凉露台。",
+   quote:"“所有菜品每天用市场新鲜食材现做。点单后才开始切配和烹饪，需要稍等片刻。感谢您的耐心。”",
+   foot:"菜品图片来自店内菜单，仅轻微调整光线、色彩与清晰度，实际摆盘可能不同。价格请以店内为准。",
+   ph:"图片来自店内菜单，实物可能不同",pick:"请选择语言",
+   notes:{sauce:"可换酱：巧克力、焦糖、蜂蜜或炼乳。",fries:"三明治和汉堡配炸薯条。",
+     pasta:"100%手工鲜意面：意大利面、墨鱼汁黑意面、宽面、黑宽面或土豆团子。价格按酱料计。",
+     steak:"鱼和酱料可更换。牛排熟度：一分、五分、全熟。",rice:"配白米饭或蒜香饭。鱼可更换：红鲷鱼、鲈鱼、梭鱼、军曹鱼。",
+     lunch:"铁板午餐，配蒜香饭、照烧汁和蔬菜汤。",veg:"素食。",
+     sugar:"如需不加糖或不加冰，请告知。",milk:"如需不加奶、不加糖或不加冰，请告知。",
+     own:"自选果汁：橙子、菠萝、苹果、百香果、甜菜、西瓜、黄瓜、青柠、胡萝卜、番茄、芹菜、姜、蜂蜜。"}}
+};
+function pl(n,f){const a=n%10,b=n%100;return f[(a===1&&b!==11)?0:(a>=2&&a<=4&&(b<12||b>14))?1:2]}
+const VILBL={S:"nhỏ",B:"lớn",N:"thường"};
+const ICON={plus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
+ minus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14"/></svg>'};
+let lang=null,cur=null,group="food",cart={},wish={};
+const ls={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const SEC=Object.fromEntries(DATA.map(s=>[s.id,s]));
+try{cart=JSON.parse(ls.get("co_cart")||"{}")||{}}catch(e){cart={}}
+try{wish=JSON.parse(ls.get("co_wish")||"{}")||{}}catch(e){wish={}}
+const save=()=>{ls.set("co_cart",JSON.stringify(cart));ls.set("co_wish",JSON.stringify(wish))};
+
+$("heroBg").style.backgroundImage=`url(${AMB.lion})`;$("gateBg").style.backgroundImage=`url(${AMB.lion})`;
+$("gI1").src=AMB.interior;$("gI2").src=AMB.terrace;$("gI3").src=AMB.impala;$("gI4").src=AMB.zebras;
+
+const fmtVND=v=>v.toLocaleString("vi-VN")+" ₫";
+function fmt(v,c){const m=CUR[c];let x=v*RATES[c];x=Math.max(m.step,Math.round(x/m.step)*m.step);
+  const loc={RUB:"ru-RU",USD:"en-US",KRW:"ko-KR",CNY:"zh-CN"}[c]||"en-US";
+  const s=x.toLocaleString(loc,{minimumFractionDigits:m.d,maximumFractionDigits:m.d});
+  return c==="USD"?"$"+s:c==="CNY"?"¥"+s:s+" "+m.s}
+const opts=it=>Array.isArray(it[5])?it[5]:[[null,it[5]]];
+const optLabel=(o,l)=>o[0]===null?"":(typeof o[0]==="string"?(l==="vi"?VILBL[o[0]]:T[l][o[0]]):o[0][l]);
+const isExtra=it=>/^(Extra|Bruschetta extra)/.test(it[0]);
+const moneyLine=sum=>cur==="VND"?"":"≈ "+fmt(sum,cur);
+
+function ctrl(key){const q=cart[key]||0;
+  return q?`<div class="step"><button type="button" data-k="${key}" data-d="-1" aria-label="−">${ICON.minus}</button><b>${q}</b><button type="button" data-k="${key}" data-d="1" aria-label="+">${ICON.plus}</button></div>`
+          :`<button class="add" type="button" data-k="${key}" data-d="1" aria-label="${esc(T[lang].add)}">${ICON.plus}</button>`}
+function optsHTML(s,i,it,t){const os=opts(it);
+  return `<div class="opts">`+os.map((o,oi)=>{const key=s.id+"|"+i+"|"+oi,x=o[1],lab=optLabel(o,lang);let pv;
+    const lbl=lab?`<span class="lbl">${esc(lab)}</span>`:"";
+    if(x===null)pv=`${lbl}<span class="ask">${esc(t.ask)}</span>`;
+    else pv=cur==="VND"?`${lbl}<span class="main">${fmtVND(x)}</span>`:`${lbl}<span class="main">${fmtVND(x)}</span><span class="sub">≈ ${fmt(x,cur)}</span>`;
+    return `<div class="opt"><div class="pv">${pv}</div>${ctrl(key)}</div>`}).join("")+`</div>`}
+
+function renderSig(){const li=IDX[lang],t=T[lang],out=[];
+  DATA.forEach(s=>s.items.forEach((it,i)=>{if(it[6]&&GEN.has(it[6])&&typeof it[5]==="number")out.push([s,it,i])}));
+  $("sigBox").hidden=!out.length;$("sigE").textContent=t.sigE;$("sigH").innerHTML=t.sigH;
+  $("sigRow").innerHTML=out.map(([s,it,i])=>`<div class="scard"><button class="im" type="button" data-ph="${it[6]}" data-cap="${esc(it[li])}"><img loading="lazy" src="${PH[it[6]]}" alt="${esc(it[li])}"></button>${ctrl(s.id+"|"+i+"|0")}<div class="bd"><div class="t"><b>${esc(it[li])}</b><span>${Math.round(it[5]/1000)}k ₫</span></div><p>${esc(lang==="vi"?it[0]:it[1])}${cur==="VND"?"":" · ≈ "+fmt(it[5],cur)}</p></div></div>`).join("");
+  $("sDots").innerHTML=out.map((_,k)=>`<button type="button" aria-label="${k+1}"></button>`).join("");requestAnimationFrame(sigSync)}
+function sigSync(){const r=$("sigRow"),c=r.querySelector(".scard");if(!c)return;const w=c.offsetWidth+12,i=Math.round(r.scrollLeft/w);
+  $("sPrev").disabled=r.scrollLeft<8;$("sNext").disabled=r.scrollLeft+r.clientWidth>=r.scrollWidth-8;
+  [...$("sDots").children].forEach((d,k)=>d.classList.toggle("on",k===i))}
+function sigGo(i){const r=$("sigRow"),c=r.querySelector(".scard");if(c)r.scrollTo({left:i*(c.offsetWidth+12),behavior:"smooth"})}
+function renderCats(){
+  $("cats").innerHTML=DATA.filter(s=>s.g===group).map(s=>{const p=CATPH[s.id];
+    return `<a class="cat" href="#${s.id}">${p?`<img src="${PH[p]}" alt="">`:""}<span>${esc(s.n[lang])}</span></a>`}).join("")}
+function render(){
+  const t=T[lang],li=IDX[lang],q=$("q").value.trim().toLowerCase();
+  document.documentElement.lang=lang;
+  $("tagline").textContent=t.tag;$("langName").innerHTML=lang.toUpperCase()+"<span class=\"ln\"> · "+esc(LANGS.find(l=>l.k===lang).n)+"</span>";$("langFlag").textContent={ru:"🇷🇺",en:"🇬🇧",vi:"🇻🇳",ko:"🇰🇷",zh:"🇨🇳"}[lang]||"";$("langBtn").setAttribute("aria-label","Language: "+LANGS.find(l=>l.k===lang).n);$("fHours").textContent=t.hours;$("fAddr").textContent=t.addr;$("ftH").textContent=t.hours;
+  $("gFood").textContent=t.food;$("gDrinks").textContent=t.drinks;
+  $("gFood").classList.toggle("on",group==="food");$("gDrinks").classList.toggle("on",group==="drinks");
+  $("gFood").setAttribute("aria-selected",group==="food");$("gDrinks").setAttribute("aria-selected",group==="drinks");
+  $("q").placeholder=t.search;
+  $("rate").textContent=cur==="VND"?"":`${t.rate}1 ${CUR[cur].s} = ${Math.round(1/RATES[cur]).toLocaleString("vi-VN")} ₫ · ${RATE_DATE}. ${t.ratenote}`;
+  $("foot").textContent=t.foot;$("aEy").textContent=t.aEy;$("aH").innerHTML=t.aH;$("aP").textContent=t.aP;$("quote").textContent=t.quote;
+  openState();renderCats();renderSig();
+  $("ctaMenu").textContent=t.ctaMenu;$("toTopT").textContent=t.top;$("ctaRoom").textContent=t.ctaRoom;
+  $("f1t").textContent=t.f1t;$("f1s").textContent=t.f1s;$("f2t").textContent=t.f2t;$("f3t").textContent=t.f3t;$("f3s").textContent=t.f3s;
+  let rail="",html="";
+  DATA.filter(s=>q||s.g===group).forEach(s=>{
+    const items=s.items.map((it,i)=>[it,i]).filter(([it])=>!q||it.slice(0,5).join(" ").toLowerCase().includes(q));
+    if(!items.length)return;
+    const title=s.n[lang];
+    rail+=`<a href="#${s.id}" data-id="${s.id}">${esc(title)}</a>`;
+    const md=[...new Set(s.items.map(x=>x[6]).filter(Boolean))].sort((a,b)=>GEN.has(b)-GEN.has(a)).slice(0,3);
+    html+=`<section class="s" id="${s.id}"><div class="sh"><div class="tt"><span class="vi">${esc(lang==="vi"?s.n.en:s.n.vi)}</span><h2>${esc(title)}</h2><div class="orn2"><i></i></div></div><div class="medals">${md.map(p=>`<img src="${PH[p]}" alt="">`).join("")}</div></div>`;
+    if(s.note&&t.notes[s.note])html+=`<div class="note">${esc(t.notes[s.note])}</div>`;
+    html+=`<ul class="items">`+items.map(([it,i])=>{
+      const name=it[li],orig=lang==="vi"?it[0]:it[1],ph=it[6];
+      const inc=Object.keys(cart).some(k=>k.startsWith(s.id+"|"+i+"|"));
+      if(isExtra(it)&&!Array.isArray(it[5])){const p=it[5];return `<li class="it extra${inc?" incart":""}"><div class="lead"><span>${esc(name)}</span><i></i><b>${p===null?"—":fmtVND(p)}</b></div>${ctrl(s.id+"|"+i+"|0")}</li>`}
+      const big=ph&&GEN.has(ph);
+      return `<li class="it${ph?" hasph":""}${big?" big":""}${isExtra(it)?" extra":""}${inc?" incart":""}">`+
+        (ph?`<button class="ph" type="button" data-ph="${ph}" data-cap="${esc(name)}"><img loading="lazy" src="${PH[ph]}" alt="${esc(name)}"></button>`:"")+
+        `<div class="txt"><div class="nm">${esc(name)}</div>${isExtra(it)?"":`<div class="orig">${esc(orig)}</div>`}${optsHTML(s,i,it,t)}</div></li>`}).join("")+`</ul></section>`;
+  });
+  $("railIn").innerHTML=rail;
+  $("menu").innerHTML=html||`<div class="empty">${esc(t.none)}</div>`;
+  renderBar();spy();
+}
+function openState(){const now=new Date(),h=(now.getUTCHours()+7)%24;const o=h>=7&&h<22;
+  $("open").classList.toggle("closed",!o);$("openT").textContent=(o?T[lang].open:T[lang].closed)}
+
+function lines(){return Object.entries(cart).filter(([,q])=>q>0).map(([k,q])=>{const [sid,i,oi]=k.split("|");const s=SEC[sid];if(!s)return null;
+  const it=s.items[+i];if(!it)return null;const o=opts(it)[+oi];if(!o)return null;return {k,q,it,o,p:o[1]}}).filter(Boolean)}
+function totals(){const L=lines();let sum=0,n=0,extra=0;L.forEach(l=>{n+=l.q;if(l.p===null)extra++;else sum+=l.p*l.q});return {L,sum,n,extra}}
+function renderBar(){const t=T[lang],{sum,n}=totals();const bs=billState();
+  $("bar").hidden=!n&&!bs;document.body.classList.toggle("hasbar",!!(n||bs));$("barBtn").hidden=!n;
+  $("billBtn").hidden=!bs;if(bs){$("billBtn").classList.toggle("solo",!n);$("billBtn").classList.toggle("sent",bs==="sent");$("billT").textContent=bs==="sent"?t.billSent:t.bill}
+  if(!n)return;
+  $("barQ").textContent=n;$("barL").textContent=t.items(n)+(cur==="VND"?"":" · "+moneyLine(sum));
+  $("barT").textContent=fmtVND(sum);$("barGo").textContent=TABLE()?t.showW:t.showW0}
+function renderSheet(){const t=T[lang],li=IDX[lang],{L,sum,extra}=totals();
+  if(!L.length){$("sheet").hidden=true;return}
+  $("sheetH").textContent=t.order;$("totL").textContent=t.total;$("wishL").textContent=t.wish;
+  $("lines").innerHTML=L.map(l=>{const lab=optLabel(l.o,lang);
+    return `<li><div class="ln"><b>${esc(l.it[li])}${lab?" · "+esc(lab):""}</b><small>${l.p===null?esc(t.ask):fmtVND(l.p)+(cur==="VND"?"":" · ≈ "+fmt(l.p,cur))}</small></div>${ctrl(l.k)}</li>`}).join("");
+  $("chips").innerHTML=WISH.map(w=>`<button type="button" class="chip" data-w="${w.k}" aria-pressed="${!!wish[w.k]}">${esc(w[lang])}</button>`).join("");
+  $("totV").textContent=fmtVND(sum);$("totC").textContent=moneyLine(sum);
+  $("extraHint").textContent=extra?t.extra(extra):"";
+  $("clearBtn").textContent=t.clear;$("clearBtn").dataset.arm="";
+  $("waiterBtn").textContent=TABLE()?t.showW:t.showW0;$("sheetHint").textContent=TABLE()?t.wHint:t.wHint0+" "+t.scan}
+let wake=null;
+async function openWaiter(){const t=T[lang],li=IDX[lang],{L,sum,extra}=totals();
+  const d=new Date();$("tDate").textContent=d.toLocaleDateString("vi-VN")+" · "+d.toLocaleTimeString("vi-VN",{hour:"2-digit",minute:"2-digit"});
+  $("tSub").textContent=t.tSub;$("tblHint").textContent=t.tblHint;
+  $("tlines").innerHTML=L.map(l=>{const vl=optLabel(l.o,"vi"),gl=optLabel(l.o,lang);
+    return `<li><span class="qq">${l.q}×</span><div><div class="vn">${esc(l.it[1])}${vl?" ("+esc(vl)+")":""}</div>${lang!=="vi"?`<div class="tr">${esc(l.it[li])}${gl?" · "+esc(gl):""}</div>`:""}</div><span class="pp">${l.p===null?"—":fmtVND(l.p*l.q)}</span></li>`}).join("");
+  const ws=WISH.filter(w=>wish[w.k]);
+  $("twish").hidden=!ws.length;
+  $("twish").innerHTML=ws.map(w=>esc(w.vi)).join(" · ")+(lang!=="vi"&&ws.length?`<small>${ws.map(w=>esc(w[lang])).join(" · ")}</small>`:"");
+  $("tTot").textContent=fmtVND(sum);$("tTotC").textContent=moneyLine(sum);
+  $("tExtra").textContent=extra?("+ "+extra+" món chưa có giá, hỏi giá"+(lang!=="vi"?" · "+t.extra(extra):"")):"";
+  $("wBack").textContent=t.back;
+  $("sheet").hidden=true;$("waiter").hidden=false;$("waiter").scrollTop=0;
+  try{wake=await navigator.wakeLock?.request("screen")}catch(e){}}
+function closeWaiter(){$("waiter").hidden=true;try{wake&&wake.release()}catch(e){};wake=null}
+
+function bump(k,d){cart[k]=Math.max(0,(cart[k]||0)+d);if(!cart[k])delete cart[k];save();
+  const y=window.scrollY;render();window.scrollTo(0,y);if(!$("sheet").hidden)renderSheet()}
+document.addEventListener("click",e=>{const b=e.target.closest("button[data-k]");if(b){bump(b.dataset.k,+b.dataset.d);return}
+  const w=e.target.closest("button[data-w]");if(w){wish[w.dataset.w]=!wish[w.dataset.w];save();w.setAttribute("aria-pressed",!!wish[w.dataset.w])}});
+$("barBtn").addEventListener("click",()=>{renderSheet();$("sheet").hidden=false});
+$("sheetX").addEventListener("click",()=>{$("sheet").hidden=true});
+$("sheet").addEventListener("click",e=>{if(e.target===$("sheet"))$("sheet").hidden=true});
+$("clearBtn").addEventListener("click",e=>{const b=e.currentTarget;
+  if(!b.dataset.arm){b.dataset.arm="1";b.textContent=T[lang].clearSure;return}
+  cart={};wish={};save();$("sheet").hidden=true;render()});
+/* table comes only from the QR on the table: ?t=5 ; remembered for 5 hours */
+(function(){const qt=(new URLSearchParams(location.search).get("t")||((location.hash.match(/^#t=?(\d+)/)||[])[1])||"").replace(/\D/g,"");
+  if(qt)ls.set("co_tbl",JSON.stringify({t:+qt,at:Date.now()}))})();
+function TABLE(){try{const x=JSON.parse(ls.get("co_tbl")||"null");if(x&&x.t&&Date.now()-x.at<5*3600e3)return x.t}catch(e){}return 0}
+function inbox(msg){let q=[];try{q=JSON.parse(ls.get("co_inbox")||"[]")}catch(e){}if(!Array.isArray(q))q=[];
+  q.push(Object.assign({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),table:TABLE(),lang,at:Date.now()},msg));ls.set("co_inbox",JSON.stringify(q));
+  try{const c=new BroadcastChannel("co_inbox");c.postMessage(1);c.close()}catch(e){}}
+function billState(){const tb=TABLE();if(!tb)return "";let o={};try{o=JSON.parse(ls.get("co_guest")||"{}")}catch(e){}
+  if(o.t!==tb||!o.ord||Date.now()-o.ord>6*3600e3)return "";return o.bill&&Date.now()-o.bill<3*60e3?"sent":"on"}
+function guestMark(k){let o={};try{o=JSON.parse(ls.get("co_guest")||"{}")}catch(e){}const tb=TABLE();if(o.t!==tb)o={t:tb};o[k]=Date.now();ls.set("co_guest",JSON.stringify(o))}
+function done(h,s){const t=T[lang];$("doneT").textContent=t.tableL+" "+TABLE();$("doneH").textContent=h;$("doneS").textContent=s;$("doneOk").textContent=t.ok;$("done").hidden=false}
+function sendOrder(){const t=T[lang],{L}=totals();if(!L.length)return;
+  const nm=(l,i,lg)=>{const x=optLabel(l.o,lg);return l.it[i]+(x?" ("+x+")":"")};
+  const items=L.map(l=>({key:l.k.replace(/\|/g,"_"),q:l.q,vi:nm(l,1,"vi"),ru:nm(l,2,"ru"),en:nm(l,0,"en"),p:l.p||0,st:SEC[l.k.split("|")[0]].g==="drinks"?"b":"k"}));
+  const ws=WISH.filter(w=>wish[w.k]).map(w=>({k:w.k,vi:w.vi,ru:w.ru,en:w.en}));
+  inbox({type:"order",items,wishes:ws});guestMark("ord");
+  cart={};wish={};save();$("sheet").hidden=true;render();done(t.doneH,t.doneS)}
+function openPay(){const t=T[lang];if(billState()==="sent"){done(t.billH,t.billS);return}
+  $("payH").textContent=t.payH;$("payS").textContent=t.payS;
+  const ic={cash:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/></svg>',card:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>',qr:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3zM20 14v7M14 20h3"/></svg>'};
+  $("pays").innerHTML=[["cash",t.pCash],["card",t.pCard],["qr",t.pQr]].map(([k,n])=>`<button type="button" data-pay="${k}"><span>${ic[k]}</span>${esc(n)}</button>`).join("");
+  $("pay").hidden=false}
+$("pays").addEventListener("click",e=>{const b=e.target.closest("[data-pay]");if(!b)return;inbox({type:"bill",pay:b.dataset.pay});guestMark("bill");$("pay").hidden=true;renderBar();done(T[lang].billH,T[lang].billS)});
+$("billBtn").addEventListener("click",openPay);
+$("payX").addEventListener("click",()=>{$("pay").hidden=true});
+$("pay").addEventListener("click",e=>{if(e.target===$("pay"))$("pay").hidden=true});
+$("doneOk").addEventListener("click",()=>{$("done").hidden=true});
+$("done").addEventListener("click",e=>{if(e.target===$("done"))$("done").hidden=true});
+setInterval(()=>{if(TABLE())renderBar()},30000);
+$("waiterBtn").addEventListener("click",()=>TABLE()?sendOrder():openWaiter());
+$("wBack").addEventListener("click",closeWaiter);
+$("tableNo").addEventListener("input",e=>ls.set("co_table",e.target.value));
+$("tableNo").value=ls.get("co_table")||"";
+let tt;function toast(m){$("toast").textContent=m;$("toast").hidden=false;clearTimeout(tt);tt=setTimeout(()=>$("toast").hidden=true,2200)}
+$("wifiBtn").addEventListener("click",()=>{try{navigator.clipboard.writeText("marina12345").then(()=>toast(T[lang].copied),()=>toast(T[lang].copyFail))}catch(e){toast(T[lang].copyFail)}});
+function setGroup(g){group=g;$("q").value="";render();window.scrollTo({top:$("cats").offsetTop-10,behavior:"smooth"})}
+$("gFood").addEventListener("click",()=>setGroup("food"));$("gDrinks").addEventListener("click",()=>setGroup("drinks"));
+
+function setLang(k){lang=k;ls.set("co_lang",k);cur=LANGS.find(l=>l.k===k).c;ls.set("co_cur",cur);
+  $("cur").value=cur;$("gate").hidden=true;render()}
+function openGate(){
+  $("gateOpts").innerHTML=LANGS.map(l=>`<button type="button" data-l="${l.k}" class="${l.k===lang?"sel":""}"><span style="display:flex;gap:10px;align-items:center;font-size:16px;font-weight:600;color:inherit;opacity:1"><span style="font-size:20px">${({ru:"🇷🇺",en:"🇬🇧",vi:"🇻🇳",ko:"🇰🇷",zh:"🇨🇳"})[l.k]}</span>${l.n}</span><span>${l.c==="VND"?"₫":"₫ → "+CUR[l.c].s}</span></button>`).join("");
+  $("gateP").textContent=lang?T[lang].pick:"Выберите язык · Choose language · Chọn ngôn ngữ · 언어 선택 · 选择语言";
+  $("gate").hidden=false}
+$("gateOpts").addEventListener("click",e=>{const b=e.target.closest("button[data-l]");if(b)setLang(b.dataset.l)});
+$("langBtn").addEventListener("click",openGate);
+$("cur").innerHTML=Object.keys(CUR).map(c=>`<option value="${c}">${c} ${CUR[c].s}</option>`).join("");
+$("cur").addEventListener("change",e=>{cur=e.target.value;ls.set("co_cur",cur);render()});
+$("q").addEventListener("input",render);
+$("menu").addEventListener("click",e=>{const b=e.target.closest(".ph");if(!b)return;$("lbImg").src=PH[b.dataset.ph];$("lbCap").textContent=b.dataset.cap;$("lbNote").textContent=GEN.has(b.dataset.ph)?T[lang].ph2:T[lang].ph;$("lb").hidden=false});
+$("lb").addEventListener("click",()=>{$("lb").hidden=true});
+function hscroll(r,wrap){let down=false,sx=0,sl=0,moved=false;
+  const [L,R]=wrap.querySelectorAll(".harr");
+  const sync=()=>{L.disabled=r.scrollLeft<6;R.disabled=r.scrollLeft+r.clientWidth>=r.scrollWidth-6};
+  r.addEventListener("scroll",()=>requestAnimationFrame(sync),{passive:true});
+  new MutationObserver(()=>requestAnimationFrame(sync)).observe(r,{childList:true});window.addEventListener("resize",sync);
+  L.addEventListener("click",()=>r.scrollBy({left:-r.clientWidth*.75,behavior:"smooth"}));
+  R.addEventListener("click",()=>r.scrollBy({left:r.clientWidth*.75,behavior:"smooth"}));
+  r.addEventListener("pointerdown",e=>{if(e.pointerType!=="mouse")return;down=true;moved=false;sx=e.clientX;sl=r.scrollLeft});
+  window.addEventListener("pointermove",e=>{if(!down)return;const dx=e.clientX-sx;if(Math.abs(dx)>5){moved=true;r.classList.add("hdrag")}r.scrollLeft=sl-dx});
+  window.addEventListener("pointerup",()=>{if(!down)return;down=false;setTimeout(()=>r.classList.remove("hdrag"),0)});
+  r.addEventListener("click",e=>{if(moved){e.stopPropagation();e.preventDefault();moved=false}},true);
+  r.addEventListener("wheel",e=>{if(e.shiftKey&&Math.abs(e.deltaY)>Math.abs(e.deltaX)){r.scrollLeft+=e.deltaY;e.preventDefault()}},{passive:false});
+  sync()}
+hscroll($("cats"),document.querySelector(".cw"));hscroll($("railIn"),document.querySelector(".rw"));
+window.addEventListener("scroll",()=>{$("toTop").hidden=window.scrollY<700;$("langBtn").classList.toggle("compact",window.scrollY>300)},{passive:true});
+$("toTop").addEventListener("click",()=>window.scrollTo({top:0,behavior:"smooth"}));
+(function(){const r=$("sigRow");let down=false,sx=0,sl=0,moved=false;
+  r.addEventListener("scroll",()=>requestAnimationFrame(sigSync),{passive:true});
+  r.addEventListener("pointerdown",e=>{if(e.pointerType!=="mouse")return;down=true;moved=false;sx=e.clientX;sl=r.scrollLeft});
+  window.addEventListener("pointermove",e=>{if(!down)return;const dx=e.clientX-sx;if(Math.abs(dx)>5){moved=true;r.classList.add("drag")}r.scrollLeft=sl-dx});
+  window.addEventListener("pointerup",()=>{if(!down)return;down=false;r.classList.remove("drag");if(moved){const c=r.querySelector(".scard");if(c)sigGo(Math.round(r.scrollLeft/(c.offsetWidth+12)))}});
+  r.addEventListener("click",e=>{if(moved){e.stopPropagation();e.preventDefault();moved=false}},true);
+  r.addEventListener("wheel",e=>{if(Math.abs(e.deltaY)>Math.abs(e.deltaX)&&e.shiftKey){r.scrollLeft+=e.deltaY;e.preventDefault()}},{passive:false});
+  const step=d=>{const c=r.querySelector(".scard");if(c)sigGo(Math.round(r.scrollLeft/(c.offsetWidth+12))+d)};
+  $("sPrev").addEventListener("click",()=>step(-1));$("sNext").addEventListener("click",()=>step(1));
+  $("sDots").addEventListener("click",e=>{const b=e.target.closest("button");if(b)sigGo([...$("sDots").children].indexOf(b))});
+  window.addEventListener("resize",sigSync)})();
+$("sigRow").addEventListener("click",e=>{const b=e.target.closest(".im");if(!b)return;$("lbImg").src=PH[b.dataset.ph];$("lbCap").textContent=b.dataset.cap;$("lbNote").textContent=GEN.has(b.dataset.ph)?T[lang].ph2:T[lang].ph;$("lb").hidden=false});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){$("lb").hidden=true;$("sheet").hidden=true;closeWaiter();if(lang)$("gate").hidden=true}});
+let io;
+function spy(){if(io)io.disconnect();if(!("IntersectionObserver" in window))return;
+  io=new IntersectionObserver(es=>{es.forEach(en=>{if(en.isIntersecting){const id=en.target.id;
+    document.querySelectorAll(".rail a").forEach(a=>{const on=a.dataset.id===id;a.classList.toggle("on",on);
+      if(on){const r=a.parentElement;r.scrollTo({left:a.offsetLeft-r.clientWidth/2+a.clientWidth/2,behavior:"smooth"})}})}})},{rootMargin:"-80px 0px -70% 0px"});
+  document.querySelectorAll("section.s").forEach(s=>io.observe(s))}
+(function init(){const l=ls.get("co_lang"),c=ls.get("co_cur");
+  if(l&&T[l]){lang=l;cur=(c&&CUR[c])?c:LANGS.find(x=>x.k===l).c;$("cur").value=cur;render()}
+  else{lang="ru";cur="RUB";$("cur").value=cur;render();lang=null;openGate();lang="ru"}})();
+</script>

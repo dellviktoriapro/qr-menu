@@ -1,0 +1,16 @@
+const {chromium}=require('playwright');
+(async()=>{const b=await chromium.launch();const errs=[];const c=await b.newContext({locale:'ru-RU',viewport:{width:1440,height:900}});const p=await c.newPage();p.on('pageerror',e=>errs.push(e.message));
+await p.goto('file://'+process.cwd()+'/prev.html');await p.waitForTimeout(300);
+await p.click('#splitBtn');
+const acceptLast=async()=>{await p.click('#pb-waiter [data-wt="new"]');const id=(await p.$$eval('#pb-waiter [data-a="accept"]',bs=>bs.map(b=>b.dataset.id))).pop();await p.click(`#pb-waiter [data-a="accept"][data-id="${id}"]`)};
+await p.click('#simBtn');await acceptLast();await p.click('#pb-waiter [data-a="kitchen"]');
+await p.click('#sim2Btn');await acceptLast();
+await p.waitForTimeout(200);await p.screenshot({path:'b1.png'});
+await p.click('#pb-waiter [data-wt="tables"]');await p.waitForTimeout(200);await p.screenshot({path:'b2.png'});
+const info=await p.evaluate(()=>Object.values(ST.bills).filter(b=>!b.closed).map(b=>[b.table,billOrders(b.id).map(o=>o.round),billTotal(b.id)]));
+await p.click('#pb-waiter .tc >> nth=0');await p.waitForTimeout(200);await p.screenshot({path:'b3.png'});
+await p.click('#bClose');await p.click('#bClose');await p.waitForTimeout(300);
+const after=await p.evaluate(()=>Object.values(ST.bills).filter(b=>!b.closed).map(b=>b.table));
+await p.click('#roles [data-role="owner"]');await p.waitForTimeout(200);await p.screenshot({path:'b4.png'});
+const m=await b.newPage({viewport:{width:390,height:844}});await m.goto('file://'+process.cwd()+'/prev.html');await m.waitForTimeout(200);
+console.log(info,after,errs,await m.evaluate(()=>document.documentElement.scrollWidth));await b.close()})();

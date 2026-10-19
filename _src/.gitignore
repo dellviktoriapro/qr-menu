@@ -1,0 +1,8 @@
+__pycache__/
+demo/tpl.html
+demo/demo.html
+chez/chez-oanh-menu.html
+lam-tong/lam-tong-menu.html
+tables-qr/tables.html
+tables-qr/*.pdf
+node_modules/

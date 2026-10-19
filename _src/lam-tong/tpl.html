@@ -1,0 +1,408 @@
+<title>Lam Tong Menu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Yeseva+One&family=Commissioner:wght@400;500;600;700;800&display=swap">
+<style>
+/* Layout: phone-first menu. Lacquer-green header → photo category strip → sticky chip rail → dish rows → floating order bar → waiter ticket */
+:root{
+  --bg:#f5f1e6; --paper:#fffdf8; --ink:#1b261d; --muted:#6b7266; --line:#e4ddcb;
+  --leaf:#24683a; --leaf-2:#1a4f2b; --chili:#c73a1e; --gold:#f0b429; --chip:#ebe4d2; --ticket:#fffef9;
+  --shadow:0 6px 20px rgba(28,40,24,.13);
+  --f-display:"Yeseva One",Georgia,"Times New Roman",serif;
+  --f-body:"Commissioner",system-ui,-apple-system,"Segoe UI","Apple SD Gothic Neo","Malgun Gothic","PingFang SC","Microsoft YaHei",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#111611; --paper:#192019; --ink:#ecebe1; --muted:#9ca395; --line:#2b342b;
+  --leaf:#1f5a32; --leaf-2:#153f23; --chili:#ff7b5e; --gold:#f5c04a; --chip:#232b23; --ticket:#fffef9;
+  --shadow:0 6px 20px rgba(0,0,0,.4); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111611; --paper:#192019; --ink:#ecebe1; --muted:#9ca395; --line:#2b342b;
+  --leaf:#1f5a32; --leaf-2:#153f23; --chili:#ff7b5e; --gold:#f5c04a; --chip:#232b23; --ticket:#fffef9;
+  --shadow:0 6px 20px rgba(0,0,0,.4); color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.4;-webkit-font-smoothing:antialiased;padding-bottom:96px}
+button{font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.wrap{max-width:700px;margin:0 auto;padding-inline:16px}
+
+/* header */
+header.top{color:#fff;position:relative;overflow:hidden;
+  background:
+   radial-gradient(120% 90% at 100% 0%,rgba(240,180,41,.22),transparent 55%),
+   radial-gradient(80% 120% at 0% 100%,rgba(0,0,0,.25),transparent 60%),
+   linear-gradient(160deg,var(--leaf),var(--leaf-2))}
+header.top::before{content:"";position:absolute;inset:0;opacity:.09;
+  background-image:repeating-linear-gradient(115deg,#fff 0 1px,transparent 1px 22px)}
+header.top::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:26px;background:var(--bg);
+  clip-path:path("M0 26 C 140 2, 300 0, 460 16 S 760 30, 1200 6 L 3000 6 L 3000 26 Z")}
+.top .wrap{position:relative;padding-block:22px 40px;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:start}
+.brand small{display:block;font-size:11px;letter-spacing:.18em;text-transform:uppercase;opacity:.8}
+.brand h1{margin:6px 0 0;font-family:var(--f-display);font-weight:400;font-size:48px;line-height:.95;color:#ffd970}
+.brand p{margin:10px 0 0;font-size:13.5px;opacity:.92;max-width:30ch}
+.langbtn{display:flex;align-items:center;gap:6px;border:1px solid rgba(255,255,255,.45);background:rgba(0,0,0,.18);color:#fff;border-radius:999px;padding:8px 12px;font-size:13px;font-weight:600;white-space:nowrap}
+.langbtn svg{width:15px;height:15px}
+
+/* category strip */
+.cats{display:flex;gap:10px;overflow-x:auto;padding:4px 16px 6px;scroll-snap-type:x proximity;scrollbar-width:none;max-width:700px;margin:0 auto}
+.cats::-webkit-scrollbar{display:none}
+.cat{flex:none;width:112px;scroll-snap-align:start;border:0;padding:0;background:none;text-align:left;text-decoration:none;color:var(--ink)}
+.cat .im{width:112px;height:84px;border-radius:16px;overflow:hidden;background:var(--chip);box-shadow:var(--shadow);display:grid;place-items:center}
+.cat .im img{width:100%;height:100%;object-fit:cover;display:block}
+.cat .im.ph0{background:linear-gradient(145deg,var(--leaf),var(--leaf-2));color:#ffd970;font-family:var(--f-display);font-size:30px}
+.cat .t{display:block;margin-top:7px;font-size:12.5px;font-weight:600;line-height:1.2}
+
+/* rail */
+.rail{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--line);margin-top:10px}
+.rail .wrap{display:flex;gap:6px;overflow-x:auto;padding-block:10px;scrollbar-width:none}
+.rail .wrap::-webkit-scrollbar{display:none}
+.rail a{flex:none;text-decoration:none;color:var(--ink);background:var(--chip);border-radius:999px;padding:7px 13px;font-size:13px;font-weight:500;white-space:nowrap}
+.rail a.on{background:var(--ink);color:var(--bg)}
+
+.tools{display:flex;gap:8px;align-items:center;padding-block:14px 2px}
+.search{flex:1;min-width:0;border:1px solid var(--line);background:var(--paper);border-radius:12px;padding:11px 12px;font:inherit;color:var(--ink)}
+.cur{flex:none;border:1px solid var(--line);background:var(--paper);border-radius:12px;padding:11px 8px;font:inherit;color:var(--ink)}
+.rate{font-size:12px;color:var(--muted);padding-top:6px}
+
+/* sections */
+section.s{padding-block:26px 4px;scroll-margin-top:62px}
+.sh{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+section.s h2{margin:0;font-family:var(--f-display);font-weight:400;font-size:28px;line-height:1.05;text-wrap:balance}
+.sh .cnt{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+section.s .vi{color:var(--chili);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;margin-top:5px}
+.note{margin-top:10px;font-size:13px;color:var(--muted);display:flex;gap:8px;align-items:flex-start}
+.note::before{content:"";flex:none;width:6px;height:6px;border-radius:50%;background:var(--gold);margin-top:6px}
+
+ul.items{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:10px}
+li.it{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:12px;display:grid;grid-template-columns:1fr;gap:12px}
+li.it.hasph{grid-template-columns:104px 1fr}
+li.it.incart{border-color:color-mix(in srgb,var(--leaf) 55%,var(--line));box-shadow:0 0 0 1px color-mix(in srgb,var(--leaf) 40%,transparent)}
+.it .txt{min-width:0;display:flex;flex-direction:column}
+.it .nm{font-weight:700;font-size:15.5px;line-height:1.28}
+.it .num{color:var(--muted);font-variant-numeric:tabular-nums;font-weight:500;margin-right:5px}
+.it .orig{font-size:12.5px;color:var(--muted);margin-top:3px}
+.spicy{display:inline-flex;vertical-align:-2px;margin-left:5px;color:var(--chili)}
+.spicy svg{width:15px;height:15px}
+.ph{width:104px;height:104px;border-radius:14px;overflow:hidden;border:0;padding:0;background:var(--chip);align-self:start}
+.ph img{width:100%;height:100%;object-fit:cover;display:block}
+
+.opts{margin-top:auto;padding-top:10px;display:grid;gap:8px}
+.opt{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.pv{display:flex;flex-direction:column;font-variant-numeric:tabular-nums;min-width:0}
+.pv .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:600}
+.pv .main{font-weight:800;font-size:15.5px}
+.pv .sub{font-size:12px;color:var(--muted)}
+.pv .ask{font-size:13px;color:var(--chili);font-weight:600}
+.add{flex:none;width:38px;height:38px;border-radius:50%;border:0;background:var(--leaf);color:#fff;display:grid;place-items:center;box-shadow:0 3px 10px rgba(36,104,58,.35)}
+.add svg,.step button svg{width:18px;height:18px}
+.step{flex:none;display:flex;align-items:center;gap:2px;background:var(--leaf);color:#fff;border-radius:999px;padding:3px}
+.step button{width:32px;height:32px;border-radius:50%;border:0;background:rgba(255,255,255,.14);color:#fff;display:grid;place-items:center}
+.step b{min-width:24px;text-align:center;font-variant-numeric:tabular-nums}
+.empty{padding:30px 0;color:var(--muted);text-align:center}
+footer{padding-block:30px 20px;color:var(--muted);font-size:12px;line-height:1.55}
+
+/* order bar */
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:15;padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));pointer-events:none}
+.bar button{pointer-events:auto;max-width:668px;margin:0 auto;width:100%;display:flex;align-items:center;gap:12px;border:0;border-radius:18px;padding:12px 14px;background:var(--ink);color:var(--bg);box-shadow:0 10px 30px rgba(0,0,0,.28);text-align:left}
+.bar .q{flex:none;min-width:30px;height:30px;padding:0 8px;border-radius:999px;background:var(--gold);color:#1b261d;display:grid;place-items:center;font-weight:800;font-variant-numeric:tabular-nums}
+.bar .mid{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.2}
+.bar .mid small{opacity:.7;font-size:12px}
+.bar .mid b{font-variant-numeric:tabular-nums;font-size:16px}
+.bar .go{flex:none;max-width:45%;text-align:right;font-weight:700;font-size:13.5px;display:flex;align-items:center;gap:4px}
+@media (prefers-reduced-motion:no-preference){.bar button{animation:rise .25s ease-out}@keyframes rise{from{transform:translateY(20px);opacity:.4}}}
+
+/* overlays */
+.gate{position:fixed;inset:0;z-index:40;color:#fff;display:flex;flex-direction:column;justify-content:center;padding:calc(24px + env(safe-area-inset-top,0px)) 20px calc(24px + env(safe-area-inset-bottom,0px));overflow:auto;
+  background:radial-gradient(120% 70% at 100% 0%,rgba(240,180,41,.25),transparent 55%),linear-gradient(165deg,var(--leaf),var(--leaf-2))}
+.gate .in{max-width:420px;width:100%;margin:0 auto}
+.gate small{font-size:11px;letter-spacing:.18em;text-transform:uppercase;opacity:.8}
+.gate h2{font-family:var(--f-display);font-weight:400;font-size:56px;margin:6px 0 0;color:#ffd970;line-height:.95}
+.gate p{margin:12px 0 24px;opacity:.9;font-size:14px}
+.gate .opts2{display:grid;gap:8px}
+.gate button{display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:16px;padding:15px 16px;font-size:17px;font-weight:600;text-align:left}
+.gate button span{font-size:12px;font-weight:500;opacity:.8;font-variant-numeric:tabular-nums}
+.gate button.sel{background:#fff;color:#1b261d}
+
+.lb{position:fixed;inset:0;z-index:50;background:rgba(8,12,8,.9);display:flex;align-items:center;justify-content:center;padding:20px}
+.lb figure{margin:0;max-width:560px}
+.lb img{max-width:100%;max-height:76vh;border-radius:18px;display:block}
+.lb figcaption{color:#fff;text-align:center;margin-top:12px;font-weight:600}
+
+.sheet{position:fixed;inset:0;z-index:30;background:rgba(8,12,8,.55);display:flex;align-items:flex-end;justify-content:center}
+.sheet .panel{width:100%;max-width:700px;max-height:92vh;overflow:auto;background:var(--bg);border-radius:22px 22px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom,0px))}
+.sheet .hd{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.sheet h3{margin:0;font-family:var(--f-display);font-weight:400;font-size:26px}
+.x{border:0;background:var(--chip);width:36px;height:36px;border-radius:50%;display:grid;place-items:center}
+.x svg{width:18px;height:18px}
+.lines{list-style:none;margin:12px 0 0;padding:0}
+.lines li{display:grid;grid-template-columns:1fr auto;gap:10px;padding-block:10px;border-bottom:1px solid var(--line);align-items:center}
+.lines .ln{min-width:0}
+.lines .ln b{display:block;font-size:14.5px}
+.lines .ln small{color:var(--muted);font-size:12.5px}
+.tot{display:flex;justify-content:space-between;align-items:baseline;padding-top:14px;font-variant-numeric:tabular-nums}
+.tot b{font-size:22px}
+.tot small{display:block;text-align:right;color:var(--muted);font-size:12.5px}
+.row{display:flex;gap:8px;margin-top:16px}
+.btn{flex:1;border:0;border-radius:14px;padding:14px;font-weight:700;background:var(--leaf);color:#fff}
+.btn.ghost{flex:none;background:var(--chip);color:var(--ink);font-weight:600}
+.hint{font-size:12px;color:var(--muted);margin-top:10px}
+
+/* waiter ticket: always light paper so it reads under restaurant lighting */
+.waiter{position:fixed;inset:0;z-index:35;background:#1b261d;overflow:auto;padding:calc(16px + env(safe-area-inset-top,0px)) 14px calc(20px + env(safe-area-inset-bottom,0px))}
+.ticket{max-width:520px;margin:0 auto;background:var(--ticket);color:#1b261d;border-radius:18px;padding:22px 20px 18px;position:relative}
+.ticket::after{content:"";position:absolute;left:0;right:0;bottom:-10px;height:12px;background:radial-gradient(circle at 8px -2px,transparent 8px,var(--ticket) 8.5px) 0 0/16px 12px repeat-x}
+.ticket .brand2{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px dashed #cfc8b4;padding-bottom:12px}
+.ticket .brand2 b{font-family:var(--f-display);font-weight:400;font-size:26px;color:#24683a}
+.ticket .brand2 span{font-size:12px;color:#6b7266;text-align:right}
+.ticket h4{margin:14px 0 2px;font-size:22px;letter-spacing:.04em}
+.ticket .sub{color:#6b7266;font-size:13px}
+.tbl{display:flex;align-items:center;gap:10px;margin-top:12px}
+.tbl label{font-weight:700;font-size:15px;white-space:nowrap}
+.tbl input{width:90px;border:2px solid #1b261d;border-radius:10px;padding:8px 10px;font:inherit;font-size:20px;font-weight:800;color:#1b261d;background:#fff;text-align:center}
+.tlines{list-style:none;margin:14px 0 0;padding:0}
+.tlines li{display:grid;grid-template-columns:44px 1fr auto;gap:8px;padding-block:10px;border-bottom:1px solid #e7e1d0;align-items:start;font-variant-numeric:tabular-nums}
+.tlines .qq{font-size:22px;font-weight:800;line-height:1.1}
+.tlines .vn{font-size:18px;font-weight:700;line-height:1.25}
+.tlines .tr{font-size:12.5px;color:#6b7266;margin-top:2px}
+.tlines .pp{font-size:14px;font-weight:600;white-space:nowrap}
+.ttot{display:flex;justify-content:space-between;align-items:baseline;padding-top:14px;font-variant-numeric:tabular-nums}
+.ttot span{font-weight:700;font-size:16px}
+.ttot b{font-size:26px}
+.ttot small{display:block;text-align:right;color:#6b7266;font-size:13px;font-weight:500}
+.tnote{margin-top:10px;font-size:12.5px;color:#6b7266}
+.wback{max-width:520px;margin:22px auto 0;display:flex;gap:8px}
+.wback button{flex:1;border:1px solid rgba(255,255,255,.3);background:transparent;color:#fff;border-radius:14px;padding:13px;font-weight:600}
+@media (prefers-reduced-motion:no-preference){.ph img,.cat .im img{transition:transform .3s}.ph:hover img,.cat:hover .im img{transform:scale(1.05)}}
+</style>
+
+<div class="gate" id="gate" hidden>
+  <div class="in">
+    <small>Family Restaurant · Ресторан</small>
+    <h2>Lam Tong</h2>
+    <p id="gateP"></p>
+    <div class="opts2" id="gateOpts"></div>
+  </div>
+</div>
+
+<header class="top"><div class="wrap">
+  <div class="brand"><small>Family Restaurant · Ресторан</small><h1>Lam Tong</h1><p id="tagline"></p></div>
+  <button class="langbtn" id="langBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 3 2.5 15 0 18M12 3c-2.5 3-2.5 15 0 18"/></svg><span id="langName"></span></button>
+</div></header>
+<div class="cats" id="cats"></div>
+<nav class="rail" id="rail"><div class="wrap" id="railIn"></div></nav>
+<main class="wrap">
+  <div class="tools">
+    <input class="search" id="q" type="search" autocomplete="off">
+    <select class="cur" id="cur" aria-label="Currency"></select>
+  </div>
+  <div class="rate" id="rate"></div>
+  <div id="menu"></div>
+</main>
+<footer class="wrap" id="foot"></footer>
+
+<div class="bar" id="bar" hidden><button type="button" id="barBtn"><span class="q" id="barQ">0</span><span class="mid"><small id="barL"></small><b id="barT"></b></span><span class="go"><span id="barGo"></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 6l6 6-6 6"/></svg></span></button></div>
+
+<div class="sheet" id="sheet" hidden><div class="panel">
+  <div class="hd"><h3 id="sheetH"></h3><button class="x" type="button" id="sheetX" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <ul class="lines" id="lines"></ul>
+  <div class="tot"><span id="totL"></span><div><b id="totV"></b><small id="totC"></small></div></div>
+  <div class="hint" id="extraHint"></div>
+  <div class="row"><button class="btn ghost" type="button" id="clearBtn"></button><button class="btn" type="button" id="waiterBtn"></button></div>
+  <div class="hint" id="sheetHint"></div>
+</div></div>
+
+<div class="waiter" id="waiter" hidden>
+  <div class="ticket">
+    <div class="brand2"><b>Lam Tong</b><span id="tDate"></span></div>
+    <h4>ĐƠN GỌI MÓN</h4>
+    <div class="sub" id="tSub"></div>
+    <div class="tbl"><label for="tableNo">Bàn số</label><input id="tableNo" inputmode="numeric" maxlength="4" autocomplete="off"><span class="sub" id="tblHint"></span></div>
+    <ul class="tlines" id="tlines"></ul>
+    <div class="ttot"><span>Tổng cộng</span><div><b id="tTot"></b><small id="tTotC"></small></div></div>
+    <div class="tnote" id="tExtra"></div>
+  </div>
+  <div class="wback"><button type="button" id="wBack"></button></div>
+</div>
+
+<div class="lb" id="lb" hidden><figure><img id="lbImg" alt=""><figcaption id="lbCap"></figcaption></figure></div>
+
+<script>
+const DATA=__DATA__;
+const PH=__PH__;
+const CATPH=__CATPH__;
+// Ориентировочные курсы: единиц валюты за 1 донг. Обновлять вручную.
+const RATES={VND:1,RUB:1/308,USD:1/26300,KRW:1/18.9,CNY:1/3700};
+const RATE_DATE="01.10.2026";
+const CUR={VND:{s:"₫",d:0,step:1000},RUB:{s:"₽",d:0,step:10},USD:{s:"$",d:2,step:.1},KRW:{s:"₩",d:0,step:100},CNY:{s:"¥",d:1,step:.5}};
+const LANGS=[{k:"ru",n:"Русский",c:"RUB"},{k:"en",n:"English",c:"USD"},{k:"vi",n:"Tiếng Việt",c:"VND"},{k:"ko",n:"한국어",c:"KRW"},{k:"zh",n:"中文",c:"CNY"}];
+const T={
+ ru:{tag:"Вьетнамская кухня и морепродукты. Соберите заказ и покажите его официанту.",search:"Поиск блюда",small:"мал.",big:"бол.",kg:"Цена за кг, по рынку",ask:"Цена у официанта",
+   none:"Ничего не нашлось",rate:"Курс ≈ ",ratenote:"Пересчёт примерный, оплата в донгах.",
+   sizes:"Две цены: маленькая и большая порция.",market:"Свежие морепродукты. Цена за килограмм по рынку дня, вес и цену назовёт официант.",
+   foot:"Фото взяты из меню ресторана, чуть улучшены цвет и резкость. Подача может отличаться. Цены по последним фото меню, актуальные уточняйте у персонала.",
+   pick:"Выберите язык",items:n=>n+" "+pl(n,["блюдо","блюда","блюд"]),order:"Мой заказ",showW:"Показать официанту",total:"Итого",clear:"Очистить",
+   clearSure:"Точно очистить?",wHint:"Заказ никуда не отправляется. Откройте экран для официанта и покажите телефон.",back:"Вернуться к меню",
+   tblHint:"номер стола, если знаете",tSub:"Заказ гостя. Названия на вьетнамском, перевод ниже.",extra:n=>"+ "+n+" "+pl(n,["позиция","позиции","позиций"])+" по цене у официанта (за кг / уточнить)",spicy:"Острое",add:"Добавить",dishes:"блюд"},
+ en:{tag:"Vietnamese food and seafood. Build your order and show it to the waiter.",search:"Search dishes",small:"small",big:"big",kg:"Per kg, market price",ask:"Ask staff",
+   none:"Nothing found",rate:"Rate ≈ ",ratenote:"Approximate; you pay in dong.",
+   sizes:"Two prices: small and big portion.",market:"Fresh seafood priced per kilogram at the day's market rate. Your waiter will tell you weight and price.",
+   foot:"Photos come from the restaurant's printed menu, lightly retouched for colour and sharpness. Plating may vary. Prices are from the latest menu photos; please confirm with staff.",
+   pick:"Choose your language",items:n=>n+(n===1?" dish":" dishes"),order:"My order",showW:"Show to waiter",total:"Total",clear:"Clear",
+   clearSure:"Clear everything?",wHint:"Nothing is sent anywhere. Open the waiter screen and show your phone.",back:"Back to menu",
+   tblHint:"table number, if you know it",tSub:"Guest order. Vietnamese names, translation below.",extra:n=>"+ "+n+" item"+(n>1?"s":"")+" priced by staff (per kg / ask)",spicy:"Spicy",add:"Add",dishes:"dishes"},
+ vi:{tag:"Món Việt và hải sản. Chọn món rồi đưa điện thoại cho nhân viên.",search:"Tìm món",small:"nhỏ",big:"lớn",kg:"Theo kg, thời giá",ask:"Hỏi nhân viên",
+   none:"Không tìm thấy món",rate:"",ratenote:"",
+   sizes:"Hai mức giá: phần nhỏ và phần lớn.",market:"Hải sản tươi tính theo kg theo thời giá. Nhân viên sẽ báo cân và giá.",
+   foot:"Hình ảnh lấy từ thực đơn của nhà hàng, chỉnh nhẹ màu và độ nét. Cách trình bày có thể khác. Giá theo thực đơn mới nhất, vui lòng xác nhận với nhân viên.",
+   pick:"Chọn ngôn ngữ",items:n=>n+" món",order:"Món đã chọn",showW:"Đưa cho nhân viên",total:"Tổng cộng",clear:"Xóa hết",
+   clearSure:"Xóa tất cả?",wHint:"Đơn không được gửi đi. Hãy mở màn hình này và đưa cho nhân viên.",back:"Quay lại thực đơn",
+   tblHint:"",tSub:"Đơn của khách.",extra:n=>"+ "+n+" món tính giá theo cân / hỏi nhân viên",spicy:"Cay",add:"Thêm",dishes:"món"},
+ ko:{tag:"베트남 요리와 해산물. 주문을 담아 직원에게 보여 주세요.",search:"메뉴 검색",small:"소",big:"대",kg:"kg당 시가",ask:"직원에게 문의",
+   none:"검색 결과가 없습니다",rate:"환율 ≈ ",ratenote:"참고용이며 결제는 동으로 합니다.",
+   sizes:"가격 두 가지: 소 / 대.",market:"신선한 해산물, kg당 당일 시가. 무게와 가격은 직원이 안내합니다.",
+   foot:"사진은 식당 메뉴판의 사진을 색감과 선명도만 살짝 보정한 것입니다. 실제 플레이팅은 다를 수 있습니다. 가격은 직원에게 확인해 주세요.",
+   pick:"언어를 선택하세요",items:n=>n+"개 메뉴",order:"내 주문",showW:"직원에게 보여주기",total:"합계",clear:"비우기",
+   clearSure:"모두 비울까요?",wHint:"주문은 전송되지 않습니다. 직원 화면을 열어 휴대폰을 보여 주세요.",back:"메뉴로 돌아가기",
+   tblHint:"테이블 번호 (알면)",tSub:"손님 주문. 베트남어 메뉴명, 아래는 번역.",extra:n=>"+ 시가/문의 메뉴 "+n+"개",spicy:"매운맛",add:"추가",dishes:"개"},
+ zh:{tag:"越南菜与海鲜。点好菜后把手机给服务员看。",search:"搜索菜品",small:"小",big:"大",kg:"按公斤时价",ask:"请询问服务员",
+   none:"未找到菜品",rate:"汇率 ≈ ",ratenote:"仅供参考，以越南盾结算。",
+   sizes:"两个价格：小份 / 大份。",market:"新鲜海鲜，按当日时价每公斤计算，重量和价格由服务员告知。",
+   foot:"图片来自餐厅菜单，仅轻微调整了色彩与清晰度，实际摆盘可能不同。价格请以店内为准。",
+   pick:"请选择语言",items:n=>n+" 道菜",order:"我的点单",showW:"给服务员看",total:"合计",clear:"清空",
+   clearSure:"确定清空？",wHint:"订单不会被发送。打开服务员页面，把手机给服务员看。",back:"返回菜单",
+   tblHint:"桌号（如知道）",tSub:"客人点单。越南语菜名，下方为翻译。",extra:n=>"+ "+n+" 道时价/待询价菜品",spicy:"辣",add:"添加",dishes:"道"}
+};
+function pl(n,f){const a=n%10,b=n%100;return f[(a===1&&b!==11)?0:(a>=2&&a<=4&&(b<12||b>14))?1:2]}
+const IDX={vi:0,en:1,ru:2,ko:3,zh:4};
+const ICON={plus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
+ minus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M5 12h14"/></svg>',
+ chili:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 3c-.6 0-1 .4-1 1v1.2c-1.6.3-2.7 1.6-3 3.3-.5 3-2.4 6-6.6 8.3-.7.4-.5 1.4.3 1.5 6.8 1.1 12.6-2.6 13.5-8.6.2-1.5-.4-3-1.6-3.9V4c0-.6-.5-1-1.1-1z"/></svg>'};
+const SPICY=/ớt|sa tế|Thái|tiêu/;
+let lang=null,cur=null,cart={};
+const ls={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const SEC=Object.fromEntries(DATA.map(s=>[s.id,s]));
+try{cart=JSON.parse(ls.get("lt_cart")||"{}")||{}}catch(e){cart={}}
+function saveCart(){ls.set("lt_cart",JSON.stringify(cart))}
+
+const fmtVND=v=>v.toLocaleString("vi-VN")+" ₫";
+function fmt(v,c){const m=CUR[c];let x=v*RATES[c];x=Math.max(m.step,Math.round(x/m.step)*m.step);
+  const loc={RUB:"ru-RU",USD:"en-US",KRW:"ko-KR",CNY:"zh-CN"}[c]||"en-US";
+  const s=x.toLocaleString(loc,{minimumFractionDigits:m.d,maximumFractionDigits:m.d});
+  return c==="USD"?"$"+s:c==="CNY"?"¥"+s:s+" "+m.s}
+const priceOf=(it,si)=>{const v=it[5];return Array.isArray(v)?v[si]:(typeof v==="number"?v:null)};
+const sizeLabel=(it,si,t)=>Array.isArray(it[5])?(si?t.big:t.small):"";
+
+function ctrl(key){const q=cart[key]||0;
+  return q?`<div class="step"><button type="button" data-k="${key}" data-d="-1" aria-label="−">${ICON.minus}</button><b>${q}</b><button type="button" data-k="${key}" data-d="1" aria-label="+">${ICON.plus}</button></div>`
+          :`<button class="add" type="button" data-k="${key}" data-d="1" aria-label="${esc(T[lang].add)}">${ICON.plus}</button>`}
+function opts(s,i,it,t){const v=it[5],arr=Array.isArray(v)?v:[v];
+  return `<div class="opts">`+arr.map((x,si)=>{const key=s.id+"|"+i+"|"+si;let pv;
+    if(x===null)pv=`<span class="ask">${esc(t.ask)}</span>`;
+    else if(x==="kg")pv=`<span class="ask">${esc(t.kg)}</span>`;
+    else{const lbl=arr.length>1?`<span class="lbl">${esc(si?t.big:t.small)}</span>`:"";
+      pv=cur==="VND"?`${lbl}<span class="main">${fmtVND(x)}</span>`:`${lbl}<span class="main">≈ ${fmt(x,cur)}</span><span class="sub">${fmtVND(x)}</span>`}
+    return `<div class="opt"><div class="pv">${pv}</div>${ctrl(key)}</div>`}).join("")+`</div>`}
+
+function renderCats(){const t=T[lang];
+  $("cats").innerHTML=DATA.map(s=>{const p=CATPH[s.id];
+    return `<a class="cat" href="#${s.id}"><span class="im${p?"":" ph0"}">${p?`<img src="${PH[p]}" alt="">`:esc(s.n[lang].slice(0,1))}</span><span class="t">${esc(s.n[lang])}</span></a>`}).join("")}
+
+function render(){
+  const t=T[lang],li=IDX[lang],q=$("q").value.trim().toLowerCase();
+  document.documentElement.lang=lang;
+  $("tagline").textContent=t.tag;$("langName").textContent=LANGS.find(l=>l.k===lang).n;
+  $("q").placeholder=t.search;
+  $("rate").textContent=cur==="VND"?"":`${t.rate}1 ${CUR[cur].s} = ${Math.round(1/RATES[cur]).toLocaleString("vi-VN")} ₫ · ${RATE_DATE}. ${t.ratenote}`;
+  $("foot").textContent=t.foot;
+  renderCats();
+  let rail="",html="";
+  DATA.forEach(s=>{
+    const items=s.items.map((it,i)=>[it,i]).filter(([it])=>!q||it.slice(0,5).join(" ").toLowerCase().includes(q));
+    if(!items.length)return;
+    const title=s.n[lang];
+    rail+=`<a href="#${s.id}" data-id="${s.id}">${esc(title)}</a>`;
+    html+=`<section class="s" id="${s.id}"><div class="sh"><h2>${esc(title)}</h2><span class="cnt">${items.length} ${esc(t.dishes)}</span></div>${lang!=="vi"?`<div class="vi">${esc(s.n.vi)}</div>`:""}`;
+    if(s.note)html+=`<div class="note">${esc(t[s.note])}</div>`;
+    html+=`<ul class="items">`+items.map(([it,i])=>{
+      const name=it[li],orig=lang==="vi"?it[1]:it[0],ph=it[6];
+      const inc=Object.keys(cart).some(k=>k.startsWith(s.id+"|"+i+"|"));
+      const sp=SPICY.test(it[0])?`<span class="spicy" title="${esc(t.spicy)}" aria-label="${esc(t.spicy)}">${ICON.chili}</span>`:"";
+      return `<li class="it${ph?" hasph":""}${inc?" incart":""}">`+
+        (ph?`<button class="ph" type="button" data-ph="${ph}" data-cap="${esc(name)}"><img loading="lazy" src="${PH[ph]}" alt="${esc(name)}"></button>`:"")+
+        `<div class="txt"><div class="nm"><span class="num">${i+1}</span>${esc(name)}${sp}</div><div class="orig">${esc(orig)}</div>${opts(s,i,it,t)}</div></li>`}).join("")+`</ul></section>`;
+  });
+  $("railIn").innerHTML=rail;
+  $("menu").innerHTML=html||`<div class="empty">${esc(t.none)}</div>`;
+  renderBar();spy();
+}
+function lines(){return Object.entries(cart).filter(([,q])=>q>0).map(([k,q])=>{const [sid,i,si]=k.split("|");const s=SEC[sid];if(!s)return null;
+  const it=s.items[+i];if(!it)return null;return {k,q,it,si:+si,p:priceOf(it,+si)}}).filter(Boolean)}
+function totals(){const L=lines();let sum=0,n=0,extra=0;L.forEach(l=>{n+=l.q;if(l.p===null)extra++;else sum+=l.p*l.q});return {L,sum,n,extra}}
+function moneyLine(sum){return cur==="VND"?"":"≈ "+fmt(sum,cur)}
+function renderBar(){const t=T[lang],{sum,n}=totals();
+  $("bar").hidden=!n;if(!n)return;
+  $("barQ").textContent=n;$("barL").textContent=t.items(n)+(cur==="VND"?"":" · "+moneyLine(sum));
+  $("barT").textContent=fmtVND(sum);$("barGo").textContent=t.showW}
+function renderSheet(){const t=T[lang],li=IDX[lang],{L,sum,extra}=totals();
+  if(!L.length){$("sheet").hidden=true;return}
+  $("sheetH").textContent=t.order;$("totL").textContent=t.total;
+  $("lines").innerHTML=L.map(l=>{const sz=sizeLabel(l.it,l.si,t);
+    return `<li><div class="ln"><b>${esc(l.it[li])}${sz?" · "+esc(sz):""}</b><small>${l.p===null?esc(l.it[5]==="kg"?t.kg:t.ask):fmtVND(l.p)+(cur==="VND"?"":" · ≈ "+fmt(l.p,cur))}</small></div>${ctrl(l.k)}</li>`}).join("");
+  $("totV").textContent=fmtVND(sum);$("totC").textContent=moneyLine(sum);
+  $("extraHint").textContent=extra?t.extra(extra):"";
+  $("clearBtn").textContent=t.clear;$("clearBtn").dataset.arm="";
+  $("waiterBtn").textContent=t.showW;$("sheetHint").textContent=t.wHint}
+let wake=null;
+async function openWaiter(){const t=T[lang],li=IDX[lang],{L,sum,extra}=totals();
+  const d=new Date();$("tDate").textContent=d.toLocaleDateString("vi-VN")+" · "+d.toLocaleTimeString("vi-VN",{hour:"2-digit",minute:"2-digit"});
+  $("tSub").textContent=lang==="vi"?t.tSub:t.tSub;
+  $("tblHint").textContent=t.tblHint;
+  $("tlines").innerHTML=L.map(l=>{const vsz=Array.isArray(l.it[5])?(l.si?" (lớn)":" (nhỏ)"):"";const gsz=sizeLabel(l.it,l.si,t);
+    const pp=l.p===null?(l.it[5]==="kg"?"theo kg":"—"):fmtVND(l.p*l.q);
+    return `<li><span class="qq">${l.q}×</span><div><div class="vn">${esc(l.it[0])}${vsz}</div>${lang!=="vi"?`<div class="tr">${esc(l.it[li])}${gsz?" · "+esc(gsz):""}</div>`:""}</div><span class="pp">${pp}</span></li>`}).join("");
+  $("tTot").textContent=fmtVND(sum);$("tTotC").textContent=moneyLine(sum);
+  $("tExtra").textContent=extra?("+ "+extra+" món theo thời giá / hỏi giá"+(lang!=="vi"?" · "+t.extra(extra):"")):"";
+  $("wBack").textContent=t.back;
+  $("sheet").hidden=true;$("waiter").hidden=false;$("waiter").scrollTop=0;
+  try{wake=await navigator.wakeLock?.request("screen")}catch(e){}}
+function closeWaiter(){$("waiter").hidden=true;try{wake&&wake.release()}catch(e){};wake=null}
+
+function bump(k,d){cart[k]=Math.max(0,(cart[k]||0)+d);if(!cart[k])delete cart[k];saveCart();
+  const y=window.scrollY;render();window.scrollTo(0,y);if(!$("sheet").hidden)renderSheet()}
+document.addEventListener("click",e=>{const b=e.target.closest("button[data-k]");if(b){bump(b.dataset.k,+b.dataset.d)}});
+$("barBtn").addEventListener("click",()=>{renderSheet();$("sheet").hidden=false});
+$("sheetX").addEventListener("click",()=>{$("sheet").hidden=true});
+$("sheet").addEventListener("click",e=>{if(e.target===$("sheet"))$("sheet").hidden=true});
+$("clearBtn").addEventListener("click",e=>{const b=e.currentTarget;
+  if(!b.dataset.arm){b.dataset.arm="1";b.textContent=T[lang].clearSure;return}
+  cart={};saveCart();$("sheet").hidden=true;render()});
+$("waiterBtn").addEventListener("click",openWaiter);
+$("wBack").addEventListener("click",closeWaiter);
+$("tableNo").addEventListener("input",e=>ls.set("lt_table",e.target.value));
+$("tableNo").value=ls.get("lt_table")||"";
+
+function setLang(k){lang=k;ls.set("lt_lang",k);cur=LANGS.find(l=>l.k===k).c;ls.set("lt_cur",cur);
+  $("cur").value=cur;$("gate").hidden=true;render()}
+function openGate(){
+  $("gateOpts").innerHTML=LANGS.map(l=>`<button type="button" data-l="${l.k}" class="${l.k===lang?"sel":""}">${l.n}<span>${l.c==="VND"?"₫":"₫ → "+CUR[l.c].s}</span></button>`).join("");
+  $("gateP").textContent=lang?T[lang].pick:"Выберите язык · Choose language · Chọn ngôn ngữ · 언어 선택 · 选择语言";
+  $("gate").hidden=false}
+$("gateOpts").addEventListener("click",e=>{const b=e.target.closest("button[data-l]");if(b)setLang(b.dataset.l)});
+$("langBtn").addEventListener("click",openGate);
+$("cur").innerHTML=Object.keys(CUR).map(c=>`<option value="${c}">${c} ${CUR[c].s}</option>`).join("");
+$("cur").addEventListener("change",e=>{cur=e.target.value;ls.set("lt_cur",cur);render()});
+$("q").addEventListener("input",render);
+$("menu").addEventListener("click",e=>{const b=e.target.closest(".ph");if(!b)return;$("lbImg").src=PH[b.dataset.ph];$("lbCap").textContent=b.dataset.cap;$("lb").hidden=false});
+$("lb").addEventListener("click",()=>{$("lb").hidden=true});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){$("lb").hidden=true;$("sheet").hidden=true;closeWaiter();if(lang)$("gate").hidden=true}});
+let io;
+function spy(){if(io)io.disconnect();if(!("IntersectionObserver" in window))return;
+  io=new IntersectionObserver(es=>{es.forEach(en=>{if(en.isIntersecting){const id=en.target.id;
+    document.querySelectorAll(".rail a").forEach(a=>{const on=a.dataset.id===id;a.classList.toggle("on",on);
+      if(on){const r=a.parentElement;r.scrollTo({left:a.offsetLeft-r.clientWidth/2+a.clientWidth/2,behavior:"smooth"})}})}})},{rootMargin:"-80px 0px -70% 0px"});
+  document.querySelectorAll("section.s").forEach(s=>io.observe(s))}
+(function init(){const l=ls.get("lt_lang"),c=ls.get("lt_cur");
+  if(l&&T[l]){lang=l;cur=(c&&CUR[c])?c:LANGS.find(x=>x.k===l).c;$("cur").value=cur;render()}
+  else{lang="ru";cur="RUB";$("cur").value=cur;render();lang=null;openGate();lang="ru"}})();
+</script>
