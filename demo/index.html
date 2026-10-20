@@ -443,12 +443,61 @@ body[data-skin="light"] .kc .kh,body[data-skin="light"] .kc.slow .kh,body[data-s
 body[data-skin="light"] .kc .kh,body[data-skin="light"] .kc.slow .kh,body[data-skin="light"] .kc.ready .kh{background:linear-gradient(90deg,color-mix(in srgb,var(--tc,var(--cook)) 50%,transparent),color-mix(in srgb,var(--tc,var(--cook)) 12%,transparent))}
 .kc.slow{border-color:var(--late);box-shadow:0 0 0 1px var(--late),var(--shadow)}
 .kc.slow .kh .tm{color:#fff;background:var(--late);border-radius:999px;padding:3px 10px;font-size:13px}
+/* ===== v2: order card, header menu, kitchen ergonomics ===== */
+.oc.v2{display:grid;grid-template-columns:78px minmax(0,1fr);padding:0;gap:0;background:var(--card)!important}
+.oc.v2::before{display:none!important}
+.oc.v2 .side{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:12px 4px;color:#1b1209;background:linear-gradient(180deg,var(--tc),color-mix(in srgb,var(--tc) 72%,#000))}
+body[data-skin="light"] .oc.v2 .side{color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.25)}
+.oc.v2 .side small{font-size:9.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;opacity:.8}
+.oc.v2 .side b{font-family:var(--fd);font-size:44px;line-height:.9;font-weight:700}
+.oc.v2 .side em{font-style:normal;font-size:11.5px;font-weight:800;font-variant-numeric:tabular-nums;background:rgba(0,0,0,.2);border-radius:999px;padding:2px 9px;margin-top:5px}
+.oc.v2.late .side em{background:var(--late);color:#fff}
+.oc.v2.late{border-color:var(--late);box-shadow:0 0 0 1px var(--late)}
+.oc.v2 .main{padding:12px 14px;display:flex;flex-direction:column;gap:9px;min-width:0}
+.oc.v2 .st{display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:12.5px;font-weight:700}
+.oc.v2 .st>i{width:9px;height:9px;border-radius:50%;background:var(--line2);flex:none}
+.oc.v2.s-new .st{color:var(--new)}.oc.v2.s-new .st>i{background:var(--new);box-shadow:0 0 0 4px color-mix(in srgb,var(--new) 18%,transparent)}
+.oc.v2.s-accepted .st{color:var(--acc-st)}.oc.v2.s-accepted .st>i{background:var(--acc-st)}
+.oc.v2.s-cooking .st{color:var(--cook)}.oc.v2.s-cooking .st>i{background:var(--cook)}
+.oc.v2.s-ready .st{color:var(--ready)}.oc.v2.s-ready .st>i{background:var(--ready);box-shadow:0 0 10px var(--hot-glow)}
+.oc.v2.s-served .st{color:var(--muted)}
+.oc.v2 .st .ex{color:var(--muted);font-weight:600}
+.oc.v2 .st .wn{margin-left:auto;color:var(--dim);font-weight:600;font-size:12px}
+.oc.v2 .st .pill{font-size:10px;padding:2px 8px}
+.oc.v2 .lines{border-top:0;padding-top:0}
+.oc.v2 .of .tot{font-size:24px}
+.oc.v2 .of .btn:last-child{padding:11px 18px}
+.oc.v2 .more{font-size:11.5px;color:var(--dim)}.oc.v2 .more b{color:var(--muted)}
+.mbtn{display:none;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink);place-items:center;margin-left:auto}
+.mbtn svg{width:20px;height:20px}
+@media (max-width:760px){
+  .mbtn{display:grid}
+  .top .in{gap:8px 10px;padding:10px 14px}
+  .top .in .seg{order:3;width:100%}
+  .top .tools,.top .demo{display:none!important}
+  body.mopen .top .tools{display:flex!important;order:4;width:100%}
+  body.mopen .top .demo{display:flex!important}
+  body.mopen .mbtn{background:var(--grad);color:var(--acc-ink);border-color:transparent}
+}
+/* kitchen: big rows for a finger (phone) and a grid of tickets (tablet) */
+.kgrid{grid-template-columns:repeat(auto-fill,minmax(270px,1fr))}
+.kc .kh .tb{font-size:32px}
+.kc .kh .tm{font-size:16px}
+.kc .ki{grid-template-columns:36px minmax(0,1fr) 28px;min-height:52px;align-items:center;padding:8px 0}
+.kc .ki::after{content:"";width:24px;height:24px;border-radius:50%;border:2px solid var(--paper-line);justify-self:end;display:grid;place-items:center;font-size:14px;font-weight:800;line-height:1}
+.kc .ki.done::after{content:"✓";background:var(--acc);border-color:var(--acc);color:var(--acc-ink)}
+.kc .ki .q{font-size:24px}
+.kc .ki b{font-size:16px}
+.kc .kf{flex-wrap:wrap}
+.kc .kf .btn{flex:1 1 100%;padding:14px;font-size:14.5px;justify-content:center}
+@media (max-width:600px){.kgrid{grid-template-columns:1fr}}
 </style>
 
 <header class="top">
   <div class="in">
     <div class="brand"><span class="mono" aria-hidden="true">C</span><span class="bt"><b>Café Chez Oanh</b><small id="tSub"></small></span></div>
     <nav class="seg" id="roles" aria-label="Role"></nav>
+    <button type="button" class="mbtn" id="mBtn" aria-label="Menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
     <div class="tools">
       <button type="button" class="skin" id="skinBtn"><svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 14.5A8 8 0 019.5 4a8 8 0 1010.5 10.5z"/></svg><svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>
       <button class="chipbtn" type="button" id="splitBtn"></button>
@@ -742,11 +791,18 @@ function oCard(o,mode){const l=ST.lang;const mineO=o.waiter===ST.me;
   if(["cooking","ready"].includes(o.status)&&o.bill&&ST.bills[o.bill]&&!ST.bills[o.bill].closed)actions=`<button class="btn ghost sm" type="button" data-a="bill" data-id="${o.bill}">${esc(t("bill"))}</button>`+actions;
   const lateAttr=o.status==="new"?`data-late="${o.createdAt}"`:"";
   const timeRef=o.status==="new"?o.createdAt:o.status==="accepted"?o.acceptedAt:o.status==="cooking"?o.sentAt:o.status==="ready"?o.readyAt:o.servedAt;
-  return `<article style="--tc:var(--t${(((+o.table||1)-1)%8+8)%8+1})" class="oc s-${o.status}${forMe(o)?"":" other"}${o.status==="new"&&Date.now()-o.createdAt>NEW_LATE_MS?" late":""}" ${lateAttr}>
-    <div class="oh"><span class="tb">${esc(t("table"))} ${o.table}</span><span class="no">#${o.no}</span>${ownPill}${o.round>1?`<span class="pill rnd">${esc(t("addMore"))} · ${o.round}</span>`:""}${o.check?`<span class="ckpill">${esc(t("check"))}: ${esc(o.check)}</span>`:""}<span class="pill st-${o.status}">${esc(stLabel(o.status))}</span>${o.status==="served"?(bOpen?`<span class="pill st-late">${esc(t("billOpenP"))}</span>`:`<span class="pill st-ready">${esc(t("paidP"))}${o.bill&&ST.bills[o.bill]&&ST.bills[o.bill].pay?" · "+esc(t("pay_"+ST.bills[o.bill].pay)):""}</span>`):""}${o.status==="new"?`<span class="pill st-late latepill" ${Date.now()-o.createdAt>NEW_LATE_MS?"":"hidden"}>${esc(t("late"))}</span>`:""}${o.escalated&&o.status==="ready"?`<span class="pill st-late">${esc(t("tAll"))}</span>`:""}<span class="tm" data-since="${timeRef}">${since(timeRef)}</span></div>
-    <div class="meta">${esc(t("guestLang"))}: ${esc(LANGNAME[o.lang]||o.lang)}${o.waiter?` · ${esc(t("by"))}: ${esc(wname(o.waiter))}`:""}${o.src==="waiter"?" · ✎":""}${o.bill&&ST.bills[o.bill]&&!ST.bills[o.bill].closed&&billOrders(o.bill).length>1?` · ${esc(t("billTotal"))}: <b>${vnd(billTotal(o.bill))}</b>`:""}</div>
+  const bOpen2=o.bill&&ST.bills[o.bill]&&!ST.bills[o.bill].closed;const B=o.bill&&ST.bills[o.bill];
+  const extra=[o.round>1?t("addMore")+" · "+o.round:"",o.check?t("check")+": "+o.check:""].filter(Boolean).join(" · ");
+  const paid=o.status==="served"?(bOpen2?`<span class="pill st-late">${esc(t("billOpenP"))}</span>`:`<span class="pill st-ready">${esc(t("paidP"))}${B&&B.pay?" · "+esc(t("pay_"+B.pay)):""}</span>`):"";
+  const live2=o.status!=="served";
+  return `<article style="--tc:var(--t${(((+o.table||1)-1)%8+8)%8+1})" class="oc v2 s-${o.status}${forMe(o)?"":" other"}${o.status==="new"&&Date.now()-o.createdAt>NEW_LATE_MS?" late":""}" ${lateAttr}>
+    <div class="side"><small>${esc(t("table"))}</small><b>${o.table}</b>${live2?`<em data-mmss="${timeRef}">${mmss(timeRef)}</em>`:`<em>✓</em>`}</div>
+    <div class="main">
+    <div class="st"><i></i><span class="sl">${esc(stLabel(o.status))}${extra?` <span class="ex">· ${esc(extra)}</span>`:""}</span>${ownPill}${o.status==="new"?`<span class="pill st-late latepill" ${Date.now()-o.createdAt>NEW_LATE_MS?"":"hidden"}>${esc(t("late"))}</span>`:""}${o.escalated&&o.status==="ready"?`<span class="pill st-late">${esc(t("tAll"))}</span>`:""}${paid}<span class="wn">${o.waiter?esc(wname(o.waiter)):""}</span></div>
     ${orderLines(o)}${wishHTML(o,l)}${o.comment?`<div class="cmt">${esc(o.comment)}</div>`:""}
-    <div class="of"><span class="tot">${vnd(tot(o))}</span>${actions}</div></article>`}
+    <div class="of"><span class="tot">${vnd(tot(o))}</span>${actions}</div>
+    <div class="more">${esc(LANGNAME[o.lang]||o.lang)} · #${o.no}${o.src==="waiter"?" · ✎":""}${o.bill&&bOpen2&&billOrders(o.bill).length>1?` · ${esc(t("billTotal"))}: <b>${vnd(billTotal(o.bill))}</b>`:""} · <span data-since="${timeRef}">${since(timeRef)}</span></div>
+    </div></article>`}
 function rWaiter(el){const meS=staffBy(ST.me);if(!meS||meS.status!=="active"){const alt=WAITERS()[0];if(alt&&(!meS||meS.status==="deleted")){ST.me=alt.id}else{el.innerHTML=`<div class="alert red"><span>${esc(t("blockedMsg").replace("{w}",meS?meS.name:""))}</span></div><div class="who"><label for="meSel" class="muted">${esc(t("me"))}</label><select id="meSel"><option></option>${WAITERS().map(w=>`<option value="${w.id}">${esc(w.name)}</option>`).join("")}</select></div>`;el.querySelector("#meSel").onchange=e=>{if(e.target.value){ST.me=e.target.value;save();render()}};return}}
   const on=ST.shift[ST.me];const L=live();
   const myReady=L.filter(o=>o.status==="ready"&&readyTargets(o).includes(ST.me));
@@ -1026,6 +1082,7 @@ $("splitBtn").onclick=()=>{ST.split=!ST.split;save();render()};
 $("langBtn").onclick=()=>{ST.lang=ST.lang==="vi"?"ru":"vi";save();render()};
 $("soundBtn").onclick=()=>{ST.sound=!ST.sound;save();render();if(ST.sound)beep("new")};
 $("sim3Btn").onclick=()=>{const bs=Object.values(ST.bills).filter(b=>!b.closed&&!b.req&&billOrders(b.id).some(o=>!o.seed));if(!bs.length)return;const b=bs[Math.floor(Math.random()*bs.length)];mutate(()=>{ST.bills[b.id].req={at:Date.now(),pay:["cash","card","qr"][Math.floor(Math.random()*3)]}})};$("simBtn").onclick=()=>simulate(false);$("sim2Btn").onclick=()=>simulate(true);
+$("mBtn").onclick=()=>{const o=document.body.classList.toggle("mopen");$("mBtn").setAttribute("aria-expanded",o)};
 $("resetBtn").onclick=()=>{const keep={lang:ST.lang,role:ST.role,split:ST.split,sound:ST.sound,theme:ST.theme,payQr:ST.payQr||"",rev:ST.rev||{}};const tips=Object.fromEntries(ST.staff.filter(x=>x.tipQr).map(x=>[x.id,x.tipQr]));
   /* the guest menu on this site keeps its table session (checks, orders, bill buttons) in the same browser: start it over too */
   ["co_guest","co_ck","co_cart","co_wish","co_tbl","co_inbox"].forEach(k=>{try{localStorage.removeItem(k)}catch(e){}});ST=seedState();Object.assign(ST,keep);ST.staff.forEach(x=>{if(tips[x.id])x.tipQr=tips[x.id]});save();render()};
