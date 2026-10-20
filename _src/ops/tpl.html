@@ -301,6 +301,15 @@ tr:last-child td{border-bottom:0}
 .wait{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;border:1px dashed var(--line2);border-radius:999px;padding:6px 12px}
 .cnt2{display:inline-grid;place-items:center;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--hot);color:#fff;font-size:10.5px;margin-left:4px}
 .qrbox{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.payqr{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.qrimg{width:150px;height:150px;object-fit:contain;border-radius:12px;background:#fff;padding:6px;border:1px solid var(--line);flex:none}
+.qrnone{width:150px;height:150px;border-radius:12px;border:1.5px dashed var(--line2);display:grid;place-items:center;text-align:center;padding:10px;font-size:12px;color:var(--muted);flex:none}
+.payqr .qrt{flex:1;min-width:180px;display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+.upl{position:relative;overflow:hidden}.upl input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.ckpill{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:2px 10px;font-size:11.5px;font-weight:700;background:color-mix(in srgb,var(--acc) 16%,transparent);color:var(--acc);border:1px solid color-mix(in srgb,var(--acc) 45%,transparent)}
+.ckh{display:flex;justify-content:space-between;align-items:baseline;margin:12px 0 2px;padding-top:10px;border-top:1px dashed var(--line2)}
+.ckh b{font-size:15px}.ckh span{font-variant-numeric:tabular-nums;font-weight:700;color:var(--acc)}
+.fl.file input{padding:9px 10px;font-size:13px}
 .qr{width:166px;height:166px;padding:8px;background:#fff;border-radius:14px;display:grid;place-items:center;box-shadow:0 0 0 1px var(--line2),0 10px 26px -14px var(--hot-glow);flex:none;color:#1b1b1e;font-weight:700}
 .qr img,.qr canvas{display:block}
 .qrt{flex:1;min-width:180px;display:flex;flex-direction:column;gap:10px;align-items:flex-start}
@@ -485,6 +494,8 @@ const S={
   nTaker:"Только официанту, который принял",nAll:"Всем на смене",nEsc:"Сначала тому, кто принял; через 30 сек всем",nTakerD:"Меньше всего уведомлений.",nAllD:"Быстрее, но дёргает всех.",nEscD:"Рекомендуем.",
   oLive:"Сейчас",oNow:"Открытых заказов",yes:"да",no:"нет"}
 };
+Object.assign(S.vi,{ckCommon:"chung",payQrT:"Mã QR nhận thanh toán",payQrH:"Khách quét mã này trong thực đơn để chuyển khoản vào tài khoản của bạn. Không cần kết nối ngân hàng hay máy POS.",payQrNo:"Chưa có mã QR",upQr:"Tải ảnh mã QR",repQr:"Thay ảnh",delQr:"Xóa",payQrMiss:"Chưa tải mã QR thanh toán: khách chưa thể chuyển khoản. Vào Nhân viên → Mã QR nhận thanh toán.",tipQr:"QR tiền tip",tipQrT:"Mã QR nhận tip của bạn",tipQrH:"Khách bàn bạn phục vụ có thể quét mã này để gửi tip trực tiếp vào tài khoản của bạn. Lấy mã QR trong ứng dụng ngân hàng.",tipMiss:"Bạn chưa tải mã QR nhận tip, khách không thể gửi tip qua QR.",jTip:"Mã QR nhận tip (từ ứng dụng ngân hàng)",jTipOpt:"Có thể thêm sau",check:"Hóa đơn",paidQr:"Khách báo đã chuyển khoản QR, hãy kiểm tra",allChecks:"tất cả",qrOk:"Đã lưu mã QR",imgErr:"Không đọc được ảnh"});
+Object.assign(S.ru,{ckCommon:"общее",payQrT:"QR для оплаты гостями",payQrH:"Гость видит этот QR в меню и переводит деньги на ваш счёт или карту. Банк и касса не подключаются.",payQrNo:"QR не загружен",upQr:"Загрузить фото QR",repQr:"Заменить",delQr:"Удалить",payQrMiss:"Не загружен QR для оплаты: гости не смогут заплатить переводом. Сотрудники → QR для оплаты гостями.",tipQr:"QR для чаевых",tipQrT:"Ваш QR для чаевых",tipQrH:"Гости ваших столов смогут отсканировать его и перевести чаевые прямо вам. QR берётся в приложении вашего банка.",tipMiss:"Вы не загрузили QR для чаевых: гости не смогут оставить их переводом.",jTip:"QR для чаевых (из приложения банка)",jTipOpt:"Можно добавить позже",check:"Чек",paidQr:"Гость отметил перевод по QR — проверьте",allChecks:"все",qrOk:"QR сохранён",imgErr:"Не удалось прочитать фото"});
 /* guest UI strings */
 const G={
  en:{billTot:"Table bill",rounds:"orders",hi:"Table",menu:"Menu",food:"Food",drinks:"Drinks",send:"Send order",sent:"Order sent",total:"Total",track:"Your order",wish:"Requests",empty:"Add dishes with +",
@@ -524,15 +535,26 @@ function load(){try{const s=JSON.parse(ls.get(KEY)||"null");if(s&&s.v===2&&s.bil
 ST=load();
 if((location.hash||"").toLowerCase().includes("join"))ST.role="join";
 let bc=null;try{bc=new BroadcastChannel("co_ops")}catch(e){}
-function save(){ls.set(KEY,JSON.stringify(ST));try{bc&&bc.postMessage("sync")}catch(e){}}
+setTimeout(pub,0);
+function save(){ls.set(KEY,JSON.stringify(ST));try{bc&&bc.postMessage("sync")}catch(e){}pub()}
+/* what the guest menu (same site) reads: the café's payment QR, each waiter's tip QR, who serves which table */
+let lastPub="";
+function pub(){const w={},tb={};
+  ST.staff.forEach(x=>{if(x.status==="active"&&x.role==="waiter")w[x.id]={n:x.name,qr:x.tipQr||""}});
+  Object.values(ST.bills).forEach(b=>{if(b.closed)return;const o=[...billOrders(b.id)].reverse().find(o=>o.waiter);if(o)tb[b.table]=o.waiter});
+  const v=JSON.stringify({pay:ST.payQr||"",w,t:tb});if(v!==lastPub){lastPub=v;ls.set("co_pub",v)}}
+/* phone photo of a QR → small JPEG data URL (fits in storage, still scans) */
+function readQr(file,cb){if(!file)return;const fr=new FileReader();fr.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,640/Math.max(im.width,im.height));
+  const c=document.createElement("canvas");c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);const x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);cb(c.toDataURL("image/jpeg",.9))};
+  im.onerror=()=>toast(t("imgErr"),"","r");im.src=fr.result};fr.readAsDataURL(file)}
 if(bc)bc.onmessage=()=>{const prev=ST;ST=load();ST.role=prev.role;ST.split=prev.split;ST.me=prev.me;ST.wtab=prev.wtab;ST.ktab=prev.ktab;ST.lang=prev.lang;ST.glang=prev.glang;ST.sound=prev.sound;ST.theme=prev.theme;detectEvents(prev);render()};
 /* orders placed from the QR menu (same site) arrive through a shared inbox */
 const XK="co_inbox",XW={nochili:"nospicy",nocilantro:"nocil"};
 function importInbox(){let q=[];try{q=JSON.parse(localStorage.getItem(XK)||"[]")}catch(e){}if(!Array.isArray(q)||!q.length)return;try{localStorage.setItem(XK,"[]")}catch(e){}
-  mutate(()=>{ST.xm=ST.xm||{};q.forEach(o=>{if(o&&o.type==="bill"){const b=openBill(+o.table);if(b)b.req={at:Date.now(),pay:o.pay||"cash"};return}if(!o||!o.items||!o.items.length)return;
+  mutate(()=>{ST.xm=ST.xm||{};q.forEach(o=>{if(o&&o.type==="bill"){const b=openBill(+o.table);if(b){b.req={at:Date.now(),pay:o.pay||"cash",check:o.check||"",paid:!!o.paid};b.reqs=(b.reqs||[]).filter(r=>r.check!==b.req.check).concat([b.req])}return}if(!o||!o.items||!o.items.length)return;
     const items=o.items.map(i=>{const id="x_"+i.key;if(!ST.xm[id])ST.xm[id]={id,vi:i.vi,ru:i.ru,en:i.en,p:+i.p||0,st:i.st==="b"?"b":"k"};M[id]=ST.xm[id];return {mid:id,qty:i.q||1,note:"",done:false}});
     const ws=[],extra=[];(o.wishes||[]).forEach(w=>{const k=XW[w.k]||w.k;if(WISH.some(x=>x.k===k))ws.push(k);else extra.push(ST.lang==="ru"?w.ru:w.vi)});
-    newOrder({table:+o.table||0,lang:o.lang||"en",items,comment:extra.join(", "),wishes:ws,src:"qr"})})})}
+    newOrder({table:+o.table||0,lang:o.lang||"en",items,comment:extra.join(", "),wishes:ws,src:"qr",check:o.check||""})})})}
 let xbc=null;try{xbc=new BroadcastChannel(XK);xbc.onmessage=()=>importInbox()}catch(e){}
 setInterval(importInbox,2500);
 window.addEventListener("storage",e=>{if(e.key===XK){importInbox();return}if(e.key===KEY&&!bc){const prev=ST;ST=load();detectEvents(prev);render()}});
@@ -566,9 +588,9 @@ function showsForMe(){return ST.role==="waiter"||ST.split}
 /* events between old & new state (for toasts/sounds) */
 function detectEvents(prev){
   if(prev&&prev.staff){const pp=new Set(prev.staff.filter(x=>x.status==="pending").map(x=>x.id));ST.staff.filter(x=>x.status==="pending"&&!pp.has(x.id)).forEach(x=>{if(ST.role==="owner"){toast(t("newReq")+": "+x.name,x.phone,"b");beep("new")}})}
-  for(const b of Object.values(ST.bills)){if(b.closed||!b.req)continue;const pb=prev&&prev.bills&&prev.bills[b.id];if(pb&&pb.req)continue;
+  for(const b of Object.values(ST.bills)){if(b.closed||!b.req)continue;const pb=prev&&prev.bills&&prev.bills[b.id];if(pb&&pb.req&&pb.req.at===b.req.at)continue;
     const w=[...billOrders(b.id)].reverse().find(o=>o.waiter)?.waiter;
-    if(ST.shift[ST.me]&&showsForMe()&&(!w||w===ST.me||!ST.shift[w])){toast(t("billReq")+" · "+t("table")+" "+b.table,t("pay_"+b.req.pay)+" · "+vnd(billTotal(b.id)),"r");beep("ready")}}
+    if(ST.shift[ST.me]&&showsForMe()&&(!w||w===ST.me||!ST.shift[w])){toast(t("billReq")+" · "+t("table")+" "+b.table,reqTxt(b.req)+" · "+vnd(billTotal(b.id)),"r");beep("ready")}}
   const pm=Object.fromEntries((prev?prev.orders:[]).map(o=>[o.id,o]));
   for(const o of live()){const p=pm[o.id];
     if(!p&&o.status==="new"&&ST.shift[ST.me]&&showsForMe()&&forMe(o)){toast((o.round>1?t("addMore"):t("newAlert"))+" · "+t("table")+" "+o.table,o.items.length+" × · "+vnd(tot(o)));beep("new")}
@@ -583,13 +605,14 @@ function mutate(fn){const prev=JSON.parse(JSON.stringify(ST));fn();save();detect
 /* ---------- actions ---------- */
 function logE(k,who,extra){ST.log.unshift({at:Date.now(),k,who,by:"oanh",extra:extra||""});ST.log=ST.log.slice(0,40)}
 function staffBy(id){return ST.staff.find(x=>x.id===id)}
-function joinReq(name,phone){mutate(()=>{const id="u"+Date.now().toString(36);ST.staff.push({id,name,phone,role:"waiter",status:"pending",createdAt:Date.now()});ST.device=id;logE("req",id)})}
+function joinReq(name,phone,tipQr){mutate(()=>{const id="u"+Date.now().toString(36);ST.staff.push({id,name,phone,role:"waiter",status:"pending",createdAt:Date.now(),tipQr:tipQr||""});ST.device=id;logE("req",id)})}
 function approve(id,role){mutate(()=>{const x=staffBy(id);if(!x)return;x.role=role||x.role;x.status="active";x.approvedAt=Date.now();logE("ok",id,role)})}
 function reject(id){mutate(()=>{const x=staffBy(id);if(!x)return;x.status="rejected";logE("no",id)})}
 function block(id){mutate(()=>{const x=staffBy(id);if(!x)return;x.status=x.status==="blocked"?"active":"blocked";if(x.status==="blocked")ST.shift[id]=false;logE(x.status==="blocked"?"block":"unblock",id)})}
 function removeS(id){mutate(()=>{const x=staffBy(id);if(!x)return;x.status="deleted";ST.shift[id]=false;if(ST.device===id)ST.device=null;logE("del",id)})}
 function setRole(id,r){mutate(()=>{const x=staffBy(id);if(!x)return;x.role=r;logE("role",id,r)})}
 function reissue(){mutate(()=>{const c="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";let k="CO-";for(let i=0;i<4;i++)k+=c[Math.floor(Math.random()*c.length)];ST.joinCode=k;logE("code","",k)})}
+function reqTxt(r){return t("pay_"+r.pay)+(r.check?" · "+t("check")+" "+r.check:"")+(r.paid?" · "+t("paidQr"):"")}
 function openBill(table){return Object.values(ST.bills).find(b=>!b.closed&&b.table===table)}
 function newOrder(o){ST.seq++;let b=openBill(o.table);if(!b){b={id:"b"+Date.now().toString(36)+Math.random().toString(36).slice(2,5),table:o.table,openedAt:Date.now(),closed:false};ST.bills[b.id]=b}o.bill=b.id;o.round=ST.orders.filter(x=>x.bill===b.id).length+1;if(o.round>1&&!o.waiter){const prevW=[...ST.orders.filter(x=>x.bill===b.id&&x.waiter)].pop();if(prevW)o.owner=prevW.waiter}o.id="o"+Date.now().toString(36)+Math.random().toString(36).slice(2,5);o.no=ST.seq;o.createdAt=Date.now();o.status=o.status||"new";o.escalated=false;ST.orders.push(o);return o}
 function forMe(o){if(o.status!=="new"||!o.owner)return true;return o.owner===ST.me||!ST.shift[o.owner]||!!o.reEsc}
@@ -676,7 +699,7 @@ function oCard(o,mode){const l=ST.lang;const mineO=o.waiter===ST.me;
   const lateAttr=o.status==="new"?`data-late="${o.createdAt}"`:"";
   const timeRef=o.status==="new"?o.createdAt:o.status==="accepted"?o.acceptedAt:o.status==="cooking"?o.sentAt:o.status==="ready"?o.readyAt:o.servedAt;
   return `<article style="--tc:var(--t${(((+o.table||1)-1)%8+8)%8+1})" class="oc s-${o.status}${forMe(o)?"":" other"}${o.status==="new"&&Date.now()-o.createdAt>NEW_LATE_MS?" late":""}" ${lateAttr}>
-    <div class="oh"><span class="tb">${esc(t("table"))} ${o.table}</span><span class="no">#${o.no}</span>${ownPill}${o.round>1?`<span class="pill rnd">${esc(t("addMore"))} · ${o.round}</span>`:""}<span class="pill st-${o.status}">${esc(stLabel(o.status))}</span>${o.status==="new"?`<span class="pill st-late latepill" ${Date.now()-o.createdAt>NEW_LATE_MS?"":"hidden"}>${esc(t("late"))}</span>`:""}${o.escalated&&o.status==="ready"?`<span class="pill st-late">${esc(t("tAll"))}</span>`:""}<span class="tm" data-since="${timeRef}">${since(timeRef)}</span></div>
+    <div class="oh"><span class="tb">${esc(t("table"))} ${o.table}</span><span class="no">#${o.no}</span>${ownPill}${o.round>1?`<span class="pill rnd">${esc(t("addMore"))} · ${o.round}</span>`:""}${o.check?`<span class="ckpill">${esc(t("check"))}: ${esc(o.check)}</span>`:""}<span class="pill st-${o.status}">${esc(stLabel(o.status))}</span>${o.status==="new"?`<span class="pill st-late latepill" ${Date.now()-o.createdAt>NEW_LATE_MS?"":"hidden"}>${esc(t("late"))}</span>`:""}${o.escalated&&o.status==="ready"?`<span class="pill st-late">${esc(t("tAll"))}</span>`:""}<span class="tm" data-since="${timeRef}">${since(timeRef)}</span></div>
     <div class="meta">${esc(t("guestLang"))}: ${esc(LANGNAME[o.lang]||o.lang)}${o.waiter?` · ${esc(t("by"))}: ${esc(wname(o.waiter))}`:""}${o.src==="waiter"?" · ✎":""}${o.bill&&ST.bills[o.bill]&&!ST.bills[o.bill].closed&&billOrders(o.bill).length>1?` · ${esc(t("billTotal"))}: <b>${vnd(billTotal(o.bill))}</b>`:""}</div>
     ${orderLines(o)}${wishHTML(o,l)}${o.comment?`<div class="cmt">${esc(o.comment)}</div>`:""}
     <div class="of"><span class="tot">${vnd(tot(o))}</span>${actions}</div></article>`}
@@ -685,12 +708,13 @@ function rWaiter(el){const meS=staffBy(ST.me);if(!meS||meS.status!=="active"){co
   const myReady=L.filter(o=>o.status==="ready"&&readyTargets(o).includes(ST.me));
   const tabs=[["new",t("tNew"),L.filter(o=>o.status==="new")],["mine",t("tMine"),L.filter(o=>o.waiter===ST.me&&["accepted","cooking"].includes(o.status))],["ready",t("tReady"),L.filter(o=>o.status==="ready")],["tables",t("tTables"),Object.values(ST.bills).filter(b=>!b.closed&&billOrders(b.id).some(o=>!o.seed))],["done",t("tDone"),L.filter(o=>o.status==="served").slice(-12).reverse()]];
   const cur=tabs.find(x=>x[0]===ST.wtab)||tabs[0];
-  el.innerHTML=`<div class="who"><label for="meSel" class="muted">${esc(t("me"))}</label><select id="meSel">${WAITERS().map(w=>`<option value="${w.id}" ${w.id===ST.me?"selected":""}>${esc(w.name)}${ST.shift[w.id]?" ●":""}</option>`).join("")}</select><span class="sp"></span><button type="button" class="shift ${on?"on":"off"}" id="shiftBtn">${on?"● "+esc(t("onShift"))+" · "+esc(t("endShift")):esc(t("startShift"))}</button></div>
-   ${on?"":`<div class="alert red"><span>${esc(t("offNote"))}</span></div>`}
+  el.innerHTML=`<div class="who"><label for="meSel" class="muted">${esc(t("me"))}</label><select id="meSel">${WAITERS().map(w=>`<option value="${w.id}" ${w.id===ST.me?"selected":""}>${esc(w.name)}${ST.shift[w.id]?" ●":""}</option>`).join("")}</select><button type="button" class="btn ghost sm" id="tipQrBtn">${esc(t("tipQr"))} ${meS.tipQr?"✓":"—"}</button><span class="sp"></span><button type="button" class="shift ${on?"on":"off"}" id="shiftBtn">${on?"● "+esc(t("onShift"))+" · "+esc(t("endShift")):esc(t("startShift"))}</button></div>
+   ${on?"":`<div class="alert red"><span>${esc(t("offNote"))}</span></div>`}${meS.tipQr?"":`<div class="alert"><span>${esc(t("tipMiss"))}</span><span class="sp"></span><button class="btn sm" type="button" id="tipQrBtn2">${esc(t("upQr"))}</button></div>`}
    ${on&&myReady.length?myReady.map(o=>`<div class="alert"><span>✓ ${esc(t("readyAlert"))} · <b>${esc(t("table"))} ${o.table}</b> #${o.no}${o.waiter!==ST.me?` (${esc(wname(o.waiter))})`:""}</span><span class="sp"></span><button class="btn green sm" type="button" data-a="served" data-id="${o.id}">${esc(t("served"))}</button></div>`).join(""):""}
-   ${Object.values(ST.bills).filter(b=>!b.closed&&b.req).sort((a,b)=>a.req.at-b.req.at).map(b=>`<div class="reqbar"><b>${esc(t("table"))} ${b.table} · ${esc(t("billReq"))}</b><span>${esc(t("pay_"+b.req.pay))} · ${vnd(billTotal(b.id))}</span><button class="btn green sm" type="button" data-a="bill" data-id="${b.id}">${esc(t("openBill"))}</button></div>`).join("")}<div class="row"><div class="tabs">${tabs.map(([k,lab,arr])=>`<button type="button" data-wt="${k}" class="${k===cur[0]?"on":""}">${esc(lab)} · ${arr.length}</button>`).join("")}</div><span class="sp"></span><button class="btn ghost sm" type="button" id="manualBtn" ${on?"":"disabled"}>${esc(t("manual"))}</button></div>
+   ${Object.values(ST.bills).filter(b=>!b.closed&&b.req).sort((a,b)=>a.req.at-b.req.at).map(b=>`<div class="reqbar"><b>${esc(t("table"))} ${b.table} · ${esc(t("billReq"))}</b><span>${esc(reqTxt(b.req))} · ${vnd(billTotal(b.id))}</span><button class="btn green sm" type="button" data-a="bill" data-id="${b.id}">${esc(t("openBill"))}</button></div>`).join("")}<div class="row"><div class="tabs">${tabs.map(([k,lab,arr])=>`<button type="button" data-wt="${k}" class="${k===cur[0]?"on":""}">${esc(lab)} · ${arr.length}</button>`).join("")}</div><span class="sp"></span><button class="btn ghost sm" type="button" id="manualBtn" ${on?"":"disabled"}>${esc(t("manual"))}</button></div>
    ${cur[0]==="tables"?(cur[2].length?`<div class="tgrid">${cur[2].sort((a,b)=>a.table-b.table).map(tCard).join("")}</div>`:`<div class="empty">${esc(t("noBills"))}</div>`):cur[2].length?cur[2].map(o=>oCard(o)).join(""):`<div class="empty">${esc(t("none"))}</div>`}`;
   el.querySelector("#meSel").onchange=e=>{ST.me=e.target.value;save();render()};
+  el.querySelector("#tipQrBtn").onclick=openTipQr;{const b=el.querySelector("#tipQrBtn2");if(b)b.onclick=openTipQr}
   el.querySelector("#shiftBtn").onclick=()=>mutate(()=>{ST.shift[ST.me]=!ST.shift[ST.me]});
   el.querySelectorAll("[data-wt]").forEach(b=>b.onclick=()=>{ST.wtab=b.dataset.wt;save();render()});
   el.querySelector("#manualBtn").onclick=()=>openEditor(null);
@@ -705,12 +729,16 @@ function bindActions(el){el.querySelectorAll("[data-a]").forEach(b=>b.onclick=()
   else if(a==="bill")openBillSheet(id)
   else if(a==="moreB"){const os=billOrders(id);openEditor(null,os[os.length-1])}})}
 function tCard(b){const os=billOrders(b.id);const sum=billTotal(b.id);const pend=os.filter(o=>o.status!=="served").length;
-  return `<button type="button" style="--tc:var(--t${(((+b.table||1)-1)%8+8)%8+1})" class="tc${b.req?" req":""}" data-a="bill" data-id="${b.id}">${b.req?`<span class="breq">${esc(t("billReq"))} · ${esc(t("pay_"+b.req.pay))}</span>`:""}<span class="tn">${esc(t("table"))} ${b.table}</span><span class="dim">${os.length} ${esc(t("rounds"))} · ${esc(wname(os.find(o=>o.waiter)?.waiter))}</span><span class="tsum">${vnd(sum)}</span><span class="tst">${os.map(o=>`<i class="d-${o.status}" title="#${o.no}"></i>`).join("")}${pend?`<small>${esc(t("unserved"))}: ${pend}</small>`:""}</span></button>`}
+  return `<button type="button" style="--tc:var(--t${(((+b.table||1)-1)%8+8)%8+1})" class="tc${b.req?" req":""}" data-a="bill" data-id="${b.id}">${b.req?`<span class="breq">${esc(t("billReq"))} · ${esc(reqTxt(b.req))}</span>`:""}<span class="tn">${esc(t("table"))} ${b.table}</span><span class="dim">${os.length} ${esc(t("rounds"))} · ${esc(wname(os.find(o=>o.waiter)?.waiter))}</span><span class="tsum">${vnd(sum)}</span><span class="tst">${os.map(o=>`<i class="d-${o.status}" title="#${o.no}"></i>`).join("")}${pend?`<small>${esc(t("unserved"))}: ${pend}</small>`:""}</span></button>`}
+function billLine(i){return `<li><span class="q">${i.qty}×</span><span class="n"><b>${esc(nm(i.mid,ST.lang))}</b>${ST.lang!=="vi"?`<span class="tr">${esc(nm(i.mid,"vi"))}</span>`:""}${i.note?`<span class="note">${esc(i.note)}</span>`:""}</span><span class="p">${vnd(M[i.mid].p*i.qty)}</span></li>`}
+/* guests who asked for separate checks: one block per check name */
+function billChecks(os){if(!os.some(o=>o.check))return "";const g={};os.forEach(o=>{const k=o.check||t("ckCommon");(g[k]=g[k]||[]).push(o)});
+  return Object.entries(g).map(([k,a])=>`<div class="ckh"><b>${esc(t("check"))}: ${esc(k)}</b><span>${vnd(a.reduce((s,o)=>s+tot(o),0))}</span></div><ul class="lines bill">${aggItems(a).map(billLine).join("")}</ul>`).join("")}
 function aggItems(os){const m={};os.forEach(o=>o.items.forEach(i=>{const k=i.mid+"|"+(i.note||"");m[k]=m[k]||{mid:i.mid,note:i.note,qty:0};m[k].qty+=i.qty}));return Object.values(m)}
 function openBillSheet(bid){const b=ST.bills[bid];if(!b)return;const os=billOrders(bid);const items=aggItems(os);const sum=billTotal(bid);const pend=os.filter(o=>o.status!=="served").length;
-  $("sheetIn").innerHTML=`<div class="row"><h2>${esc(t("billT"))} ${b.table}</h2><span class="sp"></span><button class="btn ghost sm" type="button" id="bX">${esc(t("cancel"))}</button></div>${b.req?`<div class="reqbar"><b>${esc(t("billReqS"))}</b><span>${esc(t("pay_"+b.req.pay))} · ${new Date(b.req.at).toLocaleTimeString("vi-VN",{hour:"2-digit",minute:"2-digit"})}</span></div>`:""}
+  $("sheetIn").innerHTML=`<div class="row"><h2>${esc(t("billT"))} ${b.table}</h2><span class="sp"></span><button class="btn ghost sm" type="button" id="bX">${esc(t("cancel"))}</button></div>${(b.reqs||(b.req?[b.req]:[])).map(r=>`<div class="reqbar"><b>${esc(t("billReqS"))}</b><span>${esc(reqTxt(r))} · ${new Date(r.at).toLocaleTimeString("vi-VN",{hour:"2-digit",minute:"2-digit"})}</span></div>`).join("")}
    <div class="rounds">${os.map(o=>`<span class="pill st-${o.status}">#${o.no} · ${new Date(o.createdAt).toLocaleTimeString("vi-VN",{hour:"2-digit",minute:"2-digit"})} · ${esc(stLabel(o.status))}</span>`).join("")}</div>
-   <ul class="lines bill">${items.map(i=>`<li><span class="q">${i.qty}×</span><span class="n"><b>${esc(nm(i.mid,ST.lang))}</b>${ST.lang!=="vi"?`<span class="tr">${esc(nm(i.mid,"vi"))}</span>`:""}${i.note?`<span class="note">${esc(i.note)}</span>`:""}</span><span class="p">${vnd(M[i.mid].p*i.qty)}</span></li>`).join("")}</ul>
+   ${billChecks(os)}<ul class="lines bill" ${os.some(o=>o.check)?"hidden":""}>${items.map(i=>`<li><span class="q">${i.qty}×</span><span class="n"><b>${esc(nm(i.mid,ST.lang))}</b>${ST.lang!=="vi"?`<span class="tr">${esc(nm(i.mid,"vi"))}</span>`:""}${i.note?`<span class="note">${esc(i.note)}</span>`:""}</span><span class="p">${vnd(M[i.mid].p*i.qty)}</span></li>`).join("")}</ul>
    <div class="btot"><span>${esc(t("billTotal"))}</span><b>${vnd(sum)}</b></div>
    ${pend?`<div class="alert red"><span>${esc(t("unserved"))}: ${pend}</span></div>`:""}
    <div class="row"><button class="btn ghost" type="button" id="bMore">+ ${esc(t("addMore"))}</button><span class="sp"></span><button class="btn green" type="button" id="bClose">${esc(t("closeBill"))}</button></div>`;
@@ -720,6 +748,12 @@ function openBillSheet(bid){const b=ST.bills[bid];if(!b)return;const os=billOrde
   $("bClose").onclick=e=>{const btn=e.currentTarget;if(!btn.dataset.arm){btn.dataset.arm="1";btn.textContent=t("closeSure");return}closeBill(bid);closeEditor();toast(t("closed")+" · "+t("table")+" "+b.table,vnd(sum),"g")}}
 
 /* editor sheet */
+function openTipQr(){const me=staffBy(ST.me);if(!me)return;
+  $("sheetIn").innerHTML=`<div class="row"><h2>${esc(t("tipQrT"))} · ${esc(me.name)}</h2><span class="sp"></span><button class="btn ghost sm" type="button" id="tqX">${esc(t("cancel"))}</button></div>
+   <div class="payqr">${me.tipQr?`<img class="qrimg" src="${me.tipQr}" alt="QR">`:`<div class="qrnone">${esc(t("payQrNo"))}</div>`}<div class="qrt"><p class="muted" style="margin:0">${esc(t("tipQrH"))}</p><div class="row"><label class="btn sm upl">${esc(me.tipQr?t("repQr"):t("upQr"))}<input type="file" accept="image/*" id="tqIn"></label>${me.tipQr?`<button class="btn ghost sm" type="button" id="tqDel">${esc(t("delQr"))}</button>`:""}</div></div></div>`;
+  $("sheet").hidden=false;$("tqX").onclick=closeEditor;
+  $("tqIn").onchange=e=>readQr(e.target.files[0],d=>{mutate(()=>{const x=staffBy(me.id);if(x)x.tipQr=d});toast(t("qrOk"),"","g");openTipQr()});
+  {const d=$("tqDel");if(d)d.onclick=()=>{mutate(()=>{const x=staffBy(me.id);if(x)x.tipQr=""});openTipQr()}}}
 let ED=null;
 function openEditor(id,parent){
   if(id){const o=ST.orders.find(x=>x.id===id);ED={id,table:o.table,items:JSON.parse(JSON.stringify(o.items)),comment:o.comment||"",wishes:[...(o.wishes||[])],lang:o.lang}}
@@ -774,7 +808,7 @@ function rKitchen(el){const f=ST.ktab;const L=live();
 
 /* --- owner --- */
 function rOwnerWrap(el){const pend=ST.staff.filter(x=>x.status==="pending").length;
-  el.innerHTML=`<div class="otabs"><button type="button" data-ot="stats" class="${ST.otab!=="staff"?"on":""}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>${esc(t("oStats"))}</button><button type="button" data-ot="staff" class="${ST.otab==="staff"?"on":""}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8M18.5 14.8c1.6.8 2.6 2.5 3 5.2"/></svg>${esc(t("oStaff"))}${pend?` <span class="cnt2">${pend}</span>`:""}</button></div><div id="ownIn" style="display:flex;flex-direction:column;gap:12px"></div>`;
+  el.innerHTML=`<div class="otabs"><button type="button" data-ot="stats" class="${ST.otab!=="staff"?"on":""}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>${esc(t("oStats"))}</button><button type="button" data-ot="staff" class="${ST.otab==="staff"?"on":""}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8M18.5 14.8c1.6.8 2.6 2.5 3 5.2"/></svg>${esc(t("oStaff"))}${pend?` <span class="cnt2">${pend}</span>`:""}</button></div>${ST.payQr?"":`<div class="alert red" style="margin-bottom:12px"><span>${esc(t("payQrMiss"))}</span></div>`}<div id="ownIn" style="display:flex;flex-direction:column;gap:12px"></div>`;
   el.querySelectorAll("[data-ot]").forEach(b=>b.onclick=()=>{ST.otab=b.dataset.ot;save();render()});
   (ST.otab==="staff"?rStaff:rOwner)(el.querySelector("#ownIn"))}
 const ROLE_OPTS=["waiter","kitchen","manager"];
@@ -782,15 +816,18 @@ function roleName(r){return t("r_"+r)}
 function rStaff(el){const pend=ST.staff.filter(x=>x.status==="pending");const team=ST.staff.filter(x=>["active","blocked"].includes(x.status));
   const joinUrl=location.href.split("#")[0]+"#join";
   const ago=ts=>{const m=Math.round((Date.now()-ts)/60000);return m<60?m+" "+t("min"):m<1440?Math.round(m/60)+" h":Math.round(m/1440)+" d"};
-  el.innerHTML=`<div class="two">
+  el.innerHTML=`<div class="card"><h3>${esc(t("payQrT"))}</h3><div class="payqr">${ST.payQr?`<img class="qrimg" src="${ST.payQr}" alt="QR">`:`<div class="qrnone">${esc(t("payQrNo"))}</div>`}<div class="qrt"><p class="muted" style="margin:0">${esc(t("payQrH"))}</p><div class="row"><label class="btn sm upl">${esc(ST.payQr?t("repQr"):t("upQr"))}<input type="file" accept="image/*" id="payQrIn"></label>${ST.payQr?`<button class="btn ghost sm" type="button" id="payQrDel">${esc(t("delQr"))}</button>`:""}</div></div></div></div>
+   <div class="two">
     <div class="card"><h3>${esc(t("qrTitle"))}</h3><div class="qrbox"><div id="qrJoin" class="qr"></div><div class="qrt"><p class="muted" style="margin:0">${esc(t("qrHint"))}</p><div class="code">${esc(ST.joinCode)}</div><button class="btn ghost sm" type="button" id="reissue">${esc(t("reissue"))}</button></div></div></div>
     <div class="card"><h3>${esc(t("reqs"))} · ${pend.length}</h3>${pend.length?pend.map(x=>`<div class="req"><div class="rq1"><b>${esc(x.name)}</b><span class="dim">${esc(x.phone)} · ${ago(x.createdAt)} ${esc(t("ago"))}</span></div><div class="row"><select data-rrole="${x.id}" aria-label="role">${ROLE_OPTS.map(r=>`<option value="${r}">${esc(roleName(r))}</option>`).join("")}</select><span class="sp"></span><button class="btn ghost sm" type="button" data-rej="${x.id}">${esc(t("rejectB"))}</button><button class="btn sm" type="button" data-ok="${x.id}">${esc(t("approveB"))}</button></div></div>`).join(""):`<div class="empty" style="padding:18px">${esc(t("noReqs"))}</div>`}</div>
    </div>
    <div class="card"><h3>${esc(t("team"))} · ${team.length}</h3><div class="tbl"><table><tr><th>${esc(t("oName"))}</th><th>${esc(t("phone"))}</th><th>${esc(t("role"))}</th><th>${esc(t("status"))}</th><th></th></tr>
-    ${team.map(x=>`<tr class="${x.status==="blocked"?"blk":""}"><td><b>${esc(x.name)}</b>${x.id===ST.device?` <span class="dim">· ${esc(t("thisPhone"))}</span>`:""}</td><td>${esc(x.phone)}</td><td>${x.role==="owner"?esc(t("r_owner")):`<select data-role-s="${x.id}" aria-label="role">${ROLE_OPTS.map(r=>`<option value="${r}" ${x.role===r?"selected":""}>${esc(roleName(r))}</option>`).join("")}</select>`}</td><td>${x.status==="blocked"?`<span class="pill st-late">${esc(t("stBlocked"))}</span>`:ST.shift[x.id]?`<span class="pill st-ready">${esc(t("onShift"))}</span>`:`<span class="pill st-served">${esc(t("stActive"))}</span>`}</td><td class="acts">${x.role==="owner"?"":`<button class="btn ghost sm" type="button" data-blk="${x.id}">${esc(x.status==="blocked"?t("unblockB"):t("blockB"))}</button><button class="btn ghost sm danger" type="button" data-del="${x.id}">${esc(t("deleteB"))}</button>`}</td></tr>`).join("")}</table></div></div>
+    ${team.map(x=>`<tr class="${x.status==="blocked"?"blk":""}"><td><b>${esc(x.name)}</b>${x.role==="waiter"?` <span class="pill ${x.tipQr?"st-ready":"st-served"}" title="${esc(t("tipQr"))}">QR ${x.tipQr?"✓":"—"}</span>`:""}${x.id===ST.device?` <span class="dim">· ${esc(t("thisPhone"))}</span>`:""}</td><td>${esc(x.phone)}</td><td>${x.role==="owner"?esc(t("r_owner")):`<select data-role-s="${x.id}" aria-label="role">${ROLE_OPTS.map(r=>`<option value="${r}" ${x.role===r?"selected":""}>${esc(roleName(r))}</option>`).join("")}</select>`}</td><td>${x.status==="blocked"?`<span class="pill st-late">${esc(t("stBlocked"))}</span>`:ST.shift[x.id]?`<span class="pill st-ready">${esc(t("onShift"))}</span>`:`<span class="pill st-served">${esc(t("stActive"))}</span>`}</td><td class="acts">${x.role==="owner"?"":`<button class="btn ghost sm" type="button" data-blk="${x.id}">${esc(x.status==="blocked"?t("unblockB"):t("blockB"))}</button><button class="btn ghost sm danger" type="button" data-del="${x.id}">${esc(t("deleteB"))}</button>`}</td></tr>`).join("")}</table></div></div>
    <div class="card"><h3>${esc(t("journal"))}</h3>${ST.log.length?`<ul class="jlog">${ST.log.slice(0,12).map(e=>`<li><span class="dim">${new Date(e.at).toLocaleTimeString("vi-VN",{hour:"2-digit",minute:"2-digit"})}</span> ${esc(t("lg_"+e.k).replace("{w}",e.who?wname(e.who):"").replace("{x}",e.k==="ok"||e.k==="role"?roleName(e.extra):e.extra))}</li>`).join("")}</ul>`:`<div class="dim">${esc(t("noLog"))}</div>`}</div>`;
   const q=el.querySelector("#qrJoin");try{if(window.QRCode){new QRCode(q,{text:joinUrl+"?c="+ST.joinCode,width:150,height:150,colorDark:"#1b1b1e",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.M})}else q.textContent=ST.joinCode}catch(e){q.textContent=ST.joinCode}
   el.querySelector("#reissue").onclick=reissue;
+  el.querySelector("#payQrIn").onchange=e=>readQr(e.target.files[0],d=>{mutate(()=>{ST.payQr=d});toast(t("qrOk"),"","g")});
+  {const d=el.querySelector("#payQrDel");if(d)d.onclick=()=>{if(!d.dataset.arm){d.dataset.arm="1";d.textContent=t("deleteSure");return}mutate(()=>{ST.payQr=""})}}
   el.querySelectorAll("[data-ok]").forEach(b=>b.onclick=()=>approve(b.dataset.ok,el.querySelector(`[data-rrole="${b.dataset.ok}"]`).value));
   el.querySelectorAll("[data-rej]").forEach(b=>b.onclick=()=>reject(b.dataset.rej));
   el.querySelectorAll("[data-blk]").forEach(b=>b.onclick=()=>block(b.dataset.blk));
@@ -802,13 +839,14 @@ function rJoin(el){const d=ST.device?staffBy(ST.device):null;const st=d?d.status
   if(st==="none"||st==="deleted")body=`<p class="muted" style="margin:0">${esc(t("jScanned"))}</p>
     <label class="fl"><span>${esc(t("jName"))}</span><input id="jName" type="text" autocomplete="name" placeholder="Nguyễn Văn A"></label>
     <label class="fl"><span>${esc(t("phone"))}</span><input id="jPhone" type="tel" autocomplete="tel" placeholder="+84 …"></label>
+    <label class="fl file"><span>${esc(t("jTip"))} · <span class="dim">${esc(t("jTipOpt"))}</span></span><input id="jTip" type="file" accept="image/*"></label>
     <button class="btn" type="button" id="jSend">${esc(t("jSend"))}</button><p class="dim" style="margin:0;font-size:12px">${esc(t("jNote"))}</p>`;
   else if(st==="pending")body=`<div class="jstate"><div class="spin"></div><b>${esc(t("jWait"))}</b><span class="muted">${esc(d.name)} · ${esc(d.phone)}</span></div><button class="btn ghost sm" type="button" id="jCancel">${esc(t("jCancel"))}</button>`;
   else if(st==="active")body=`<div class="jstate ok"><div class="dot"></div><b>${esc(t("jOk"))}</b><span class="muted">${esc(d.name)} · ${esc(roleName(d.role))}</span></div><button class="btn" type="button" id="jOpen">${esc(t("jOpen"))}</button>`;
   else if(st==="blocked")body=`<div class="jstate bad"><div class="dot"></div><b>${esc(t("jBlocked"))}</b><span class="muted">${esc(d.name)}</span></div>`;
   else if(st==="rejected")body=`<div class="jstate bad"><div class="dot"></div><b>${esc(t("jRejected"))}</b></div><button class="btn ghost sm" type="button" id="jAgain">${esc(t("jAgain"))}</button>`;
   el.innerHTML=`<div class="jphone"><div class="jh"><span class="mono">C</span><div><b>Café Chez Oanh</b><small>${esc(t("jTitle"))} · ${esc(ST.joinCode)}</small></div></div><div class="jb">${body}</div></div><p class="dim" style="text-align:center;margin:4px 0 0;font-size:12px">${esc(t("jDemo"))}</p>`;
-  const sb=el.querySelector("#jSend");if(sb)sb.onclick=()=>{const n=el.querySelector("#jName").value.trim(),p=el.querySelector("#jPhone").value.trim();if(n.length<2||p.replace(/\D/g,"").length<8){toast(t("jErr"),"","r");return}joinReq(n,p)};
+  const sb=el.querySelector("#jSend");if(sb)sb.onclick=()=>{const n=el.querySelector("#jName").value.trim(),p=el.querySelector("#jPhone").value.trim();if(n.length<2||p.replace(/\D/g,"").length<8){toast(t("jErr"),"","r");return}const f=el.querySelector("#jTip").files[0];if(f)readQr(f,d=>joinReq(n,p,d));else joinReq(n,p)};
   const c=el.querySelector("#jCancel");if(c)c.onclick=()=>mutate(()=>{const x=staffBy(ST.device);if(x)x.status="deleted";ST.device=null});
   const a=el.querySelector("#jAgain");if(a)a.onclick=()=>{ST.device=null;save();render()};
   const o=el.querySelector("#jOpen");if(o)o.onclick=()=>{if(d.role==="kitchen"){ST.role="kitchen"}else if(d.role==="manager"){ST.role="owner"}else{ST.role="waiter";ST.me=d.id;ST.shift[d.id]=true}save();render();window.scrollTo(0,0)};
