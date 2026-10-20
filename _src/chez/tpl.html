@@ -36,8 +36,10 @@ button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{ou
 .langbtn{position:fixed;top:calc(env(safe-area-inset-top,0px) + 10px);right:max(12px,calc((100vw - 720px)/2 + 12px));z-index:25;display:inline-flex;align-items:center;gap:7px;border:0;background:linear-gradient(180deg,var(--amber-2),var(--amber));color:#1d140a;border-radius:999px;padding:9px 14px 9px 11px;font-size:13.5px;font-weight:800;letter-spacing:.02em;box-shadow:0 6px 20px rgba(0,0,0,.45),0 0 0 3px rgba(19,16,12,.55)}
 .langbtn svg{width:17px;height:17px}
 .langbtn .cv{width:12px;height:12px;opacity:.8}
-.rail .wrap{padding-right:108px}
-.rw .harr.r{right:104px}
+/* only while the rail is stuck to the top does the language button sit over its right end */
+.rail.stuck .wrap{padding-right:108px}
+.rail.stuck .rw .harr.r{right:104px}
+.rail.stuck .rw::after{content:"";position:absolute;top:0;bottom:0;right:0;width:100px;background:linear-gradient(90deg,transparent,rgba(19,16,12,.97) 18%);pointer-events:none;z-index:3}
 .hero .top .wrap{padding-right:min(46vw,230px)}
 .langbtn.compact{padding:8px 11px 8px 10px;top:calc(env(safe-area-inset-top,0px) + 7px)}
 .langbtn.compact #langName .ln{display:none}
@@ -867,6 +869,7 @@ function hscroll(r,wrap){let down=false,sx=0,sl=0,moved=false;
   r.addEventListener("wheel",e=>{if(e.shiftKey&&Math.abs(e.deltaY)>Math.abs(e.deltaX)){r.scrollLeft+=e.deltaY;e.preventDefault()}},{passive:false});
   sync()}
 hscroll($("cats"),document.querySelector(".cw"));hscroll($("railIn"),document.querySelector(".rw"));
+{const rl=document.querySelector(".rail");const st=()=>{const v=rl.getBoundingClientRect().top<=1;if(rl.classList.contains("stuck")!==v){rl.classList.toggle("stuck",v);$("railIn").dispatchEvent(new Event("scroll"))}};window.addEventListener("scroll",()=>requestAnimationFrame(st),{passive:true});st()}
 window.addEventListener("scroll",()=>{$("toTop").hidden=window.scrollY<700;$("langBtn").classList.toggle("compact",window.scrollY>300)},{passive:true});
 $("toTop").addEventListener("click",()=>window.scrollTo({top:0,behavior:"smooth"}));
 (function(){const r=$("sigRow");let down=false,sx=0,sl=0,moved=false;
