@@ -3,7 +3,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Montserrat:wght@400;500;600;700&display=swap">
 <style>
 /* Layout: "safari lounge at night" — one dark warm world (deliberately single-theme, like the room under the wicker lamps).
-   Lion-painting hero → food/drinks switch → photo category cards → sticky chip rail → dish rows → floating order bar → order straight to the staff app, then bill / QR payment */
+   Lion-painting hero → food/drinks switch → photo category cards → chip rail (slides in after the cards) → dish rows → floating order bar → order straight to the staff app, then bill / QR payment */
 :root{
   color-scheme:dark;
   --bg:#13100c; --bg-2:#1b1611; --card:#211b15; --line:#3a2f24; --ink:#f3ead9; --muted:#b3a58f; --dim:#857862;
@@ -70,7 +70,10 @@ button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{ou
 .cat span{position:absolute;left:10px;right:10px;bottom:9px;z-index:1;font-family:var(--f-display);font-weight:600;font-size:17px;line-height:1.05}
 
 /* rail */
-.rail{position:sticky;top:env(safe-area-inset-top,0px);z-index:6;background:rgba(19,16,12,.93);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line);margin-top:14px}
+/* the chip rail repeats the photo cards, so it only slides in from the top once the cards have scrolled away */
+.rail{position:fixed;left:0;right:0;top:0;padding-top:env(safe-area-inset-top,0px);z-index:6;background:rgba(19,16,12,.93);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line);transform:translateY(-105%);visibility:hidden;transition:transform .25s ease,visibility 0s .25s}
+.rail.stuck{transform:none;visibility:visible;transition:transform .25s ease,visibility 0s}
+.cw{margin-bottom:6px}
 .rail .wrap{display:flex;gap:6px;overflow-x:auto;padding-block:10px;scrollbar-width:none}
 .rail .wrap::-webkit-scrollbar{display:none}
 .rail a{flex:none;text-decoration:none;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:7px 13px;font-size:12.5px;font-weight:600;white-space:nowrap}
@@ -901,7 +904,7 @@ function hscroll(r,wrap){let down=false,sx=0,sl=0,moved=false;
   r.addEventListener("wheel",e=>{if(e.shiftKey&&Math.abs(e.deltaY)>Math.abs(e.deltaX)){r.scrollLeft+=e.deltaY;e.preventDefault()}},{passive:false});
   sync()}
 hscroll($("cats"),document.querySelector(".cw"));hscroll($("railIn"),document.querySelector(".rw"));
-{const rl=document.querySelector(".rail");const st=()=>{const v=rl.getBoundingClientRect().top<=1;if(rl.classList.contains("stuck")!==v){rl.classList.toggle("stuck",v);$("railIn").dispatchEvent(new Event("scroll"))}};window.addEventListener("scroll",()=>requestAnimationFrame(st),{passive:true});st()}
+{const rl=document.querySelector(".rail");const st=()=>{const v=$("cats").getBoundingClientRect().bottom<=0;if(rl.classList.contains("stuck")!==v){rl.classList.toggle("stuck",v);$("railIn").dispatchEvent(new Event("scroll"))}};window.addEventListener("scroll",()=>requestAnimationFrame(st),{passive:true});st()}
 window.addEventListener("scroll",()=>{$("toTop").hidden=window.scrollY<700;$("langBtn").classList.toggle("compact",window.scrollY>300)},{passive:true});
 $("toTop").addEventListener("click",()=>window.scrollTo({top:0,behavior:"smooth"}));
 (function(){const r=$("sigRow");let down=false,sx=0,sl=0,moved=false;
