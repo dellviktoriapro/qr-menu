@@ -10,11 +10,11 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Montserrat:wght@400;500;600;700&display=swap">
 <style>
 /* Layout: "safari lounge at night" — one dark warm world (deliberately single-theme, like the room under the wicker lamps).
-   Lion-painting hero → food/drinks switch → photo category cards → sticky chip rail → dish rows → floating order bar → paper ticket for the waiter */
+   Lion-painting hero → food/drinks switch → photo category cards → sticky chip rail → dish rows → floating order bar → order straight to the staff app, then bill / QR payment */
 :root{
   color-scheme:dark;
   --bg:#13100c; --bg-2:#1b1611; --card:#211b15; --line:#3a2f24; --ink:#f3ead9; --muted:#b3a58f; --dim:#857862;
-  --amber:#e39a3b; --amber-2:#f2b65c; --teal:#3db3ad; --teal-ink:#7fd6d0; --paper:#fbf6ea; --paper-ink:#211a12;
+  --amber:#e39a3b; --amber-2:#f2b65c; --teal:#3db3ad; --teal-ink:#7fd6d0;
   --f-display:"Cormorant Garamond",Georgia,"Times New Roman",serif;
   --f-body:"Montserrat",system-ui,-apple-system,"Segoe UI","Apple SD Gothic Neo","Malgun Gothic","PingFang SC","Microsoft YaHei",sans-serif;
 }
@@ -196,32 +196,6 @@ footer .small{color:var(--dim);font-size:11.5px;margin-top:18px}
 
 .toast{position:fixed;left:50%;bottom:calc(90px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:60;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-weight:600;font-size:13px}
 
-/* waiter ticket: light paper so it reads anywhere */
-.waiter{position:fixed;inset:0;z-index:35;background:#0b0907;overflow:auto;padding:calc(16px + env(safe-area-inset-top,0px)) 14px calc(20px + env(safe-area-inset-bottom,0px))}
-.ticket{max-width:520px;margin:0 auto;background:var(--paper);color:var(--paper-ink);border-radius:16px;padding:22px 20px 18px;position:relative}
-.ticket::after{content:"";position:absolute;left:0;right:0;bottom:-10px;height:12px;background:radial-gradient(circle at 8px -2px,transparent 8px,var(--paper) 8.5px) 0 0/16px 12px repeat-x}
-.ticket .b2{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px dashed #d6ccb6;padding-bottom:12px;gap:10px}
-.ticket .b2 b{font-family:var(--f-display);font-weight:700;font-size:24px;color:#8a4f12}
-.ticket .b2 span{font-size:12px;color:#6d6252;text-align:right}
-.ticket h4{margin:14px 0 2px;font-size:21px;letter-spacing:.05em}
-.ticket .sub{color:#6d6252;font-size:12.5px}
-.tbl{display:flex;align-items:center;gap:10px;margin-top:12px;flex-wrap:wrap}
-.tbl label{font-weight:700;font-size:15px;white-space:nowrap}
-.tbl input{width:90px;border:2px solid var(--paper-ink);border-radius:10px;padding:8px 10px;font:inherit;font-size:20px;font-weight:700;color:var(--paper-ink);background:#fff;text-align:center;color-scheme:light}
-.tlines{list-style:none;margin:14px 0 0;padding:0}
-.tlines li{display:grid;grid-template-columns:42px 1fr auto;gap:8px;padding-block:10px;border-bottom:1px solid #e6dcc6;align-items:start;font-variant-numeric:tabular-nums}
-.tlines .qq{font-size:22px;font-weight:700;line-height:1.1}
-.tlines .vn{font-size:17px;font-weight:700;line-height:1.25}
-.tlines .tr{font-size:12px;color:#6d6252;margin-top:2px}
-.tlines .pp{font-size:13.5px;font-weight:600;white-space:nowrap}
-.twish{margin-top:12px;padding:10px 12px;background:#efe6d2;border-radius:10px;font-weight:700;font-size:15px}
-.twish small{display:block;font-weight:500;font-size:12px;color:#6d6252}
-.ttot{display:flex;justify-content:space-between;align-items:baseline;padding-top:14px;font-variant-numeric:tabular-nums}
-.ttot span{font-weight:700;font-size:16px}
-.ttot b{font-size:26px}
-.ttot small{display:block;text-align:right;color:#6d6252;font-size:13px;font-weight:500}
-.tnote{margin-top:10px;font-size:12.5px;color:#6d6252}
-.wback{max-width:520px;margin:22px auto 0}
 /* shimmering primary actions */
 .bar #barBtn,.btn:not(.ghost),.btn-gold,.pays button{position:relative;overflow:hidden;isolation:isolate}
 .bar #barBtn,.btn:not(.ghost),.btn-gold{background:linear-gradient(115deg,#f7c978 0%,#e8a145 42%,#cf7f2a 100%);box-shadow:inset 0 1px 0 rgba(255,236,200,.55),0 0 0 1px rgba(255,200,120,.25),0 10px 28px rgba(227,154,59,.38);animation:glow 3.4s ease-in-out infinite}
@@ -237,7 +211,20 @@ footer .small{color:var(--dim);font-size:11.5px;margin-top:18px}
 .bar .barin button{margin:0}
 .bar #barBtn{flex:1}
 .bar .billb{flex:none;width:auto;display:flex;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden;isolation:isolate;color:var(--amber-2);font-weight:700;font-size:13.5px;padding:12px 16px;border:1.5px solid transparent;background:linear-gradient(#1f1912,#1f1912) padding-box,linear-gradient(115deg,#f7c978,#e39a3b,#6b4115,#e39a3b,#f7c978) border-box;background-size:100% 100%,300% 100%;animation:bd 5s linear infinite}
-.bar .billb.solo{flex:1}
+.bills{max-width:688px;margin:0 auto 8px;display:grid;grid-template-columns:1fr 1fr;gap:8px;pointer-events:auto}
+.bar .bills button{margin:0;line-height:1.15;font-size:13px;padding:11px 10px;text-align:center}
+.bar .bills button svg{flex:none}
+body.hasbar2{padding-bottom:160px}
+body.hasbar2 .totop{bottom:calc(150px + env(safe-area-inset-bottom,0px))}
+.tgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.tgrid button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:14px;padding:16px 0;font-family:var(--f-display);font-size:26px;font-weight:700}
+.tgrid button:hover,.tgrid button:focus-visible{border-color:var(--amber);color:var(--amber-2)}
+.qrsum{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:12px 0 14px;border-bottom:1px solid var(--line);margin-bottom:16px}
+.qrsum b{font-size:24px;font-variant-numeric:tabular-nums;color:var(--amber-2)}
+.qrsum small{display:block;text-align:right;color:var(--muted);font-size:12.5px}
+.qrbox{width:min(240px,70vw);aspect-ratio:1;margin:0 auto 12px;border-radius:18px;background:#fbf6ea;display:grid;place-items:center;align-content:center;gap:10px;padding:18px;text-align:center;color:#6d6252;font-size:12.5px;line-height:1.35;border:6px solid #fbf6ea;box-shadow:0 0 0 1px var(--line)}
+.qrbox svg{color:#211a12;opacity:.35}
+#qrPaid{width:100%;margin-top:6px}
 .bar .billb.sent{color:var(--muted);animation:none;background:linear-gradient(#1f1912,#1f1912) padding-box,linear-gradient(var(--line),var(--line)) border-box}
 .bar .billb.sent::after{display:none}
 @keyframes bd{to{background-position:0 0,300% 0}}
@@ -254,7 +241,6 @@ footer .small{color:var(--dim);font-size:11.5px;margin-top:18px}
 .dcard .btn{width:100%}
 @keyframes pop{from{transform:scale(.92);opacity:0}}
 @media (prefers-reduced-motion:reduce){.bar #barBtn,.btn,.btn-gold,.billb,.dcard{animation:none!important}.bar #barBtn::after,.btn::after,.btn-gold::after,.billb::after,.pays button::after{display:none}}
-.wback button{width:100%;border:1px solid rgba(243,234,217,.3);background:transparent;color:var(--ink);border-radius:14px;padding:13px;font-weight:600}
 @media (prefers-reduced-motion:no-preference){
   .ph img,.cat img{transition:transform .35s}.ph:hover img,.cat:hover img{transform:scale(1.06)}
   .bar button{animation:rise .25s ease-out}@keyframes rise{from{transform:translateY(20px);opacity:.4}}
@@ -425,7 +411,7 @@ body.hasbar .totop{bottom:calc(88px + env(safe-area-inset-bottom,0px))}
   <div class="small" id="foot"></div>
 </footer>
 
-<div class="bar" id="bar" hidden><div class="barin"><button type="button" class="billb" id="billBtn" hidden><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></svg><span id="billT"></span></button><button type="button" id="barBtn"><span class="q" id="barQ">0</span><span class="mid"><small id="barL"></small><b id="barT"></b></span><span class="go"><span id="barGo"></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 6l6 6-6 6"/></svg></span></button></div></div>
+<div class="bar" id="bar" hidden><div class="bills" id="bills" hidden><button type="button" class="billb" id="billBtn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></svg><span id="billT"></span></button><button type="button" class="billb" id="qrBtn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3zM20 14v7M14 20h3"/></svg><span id="qrT"></span></button></div><div class="barin"><button type="button" id="barBtn"><span class="q" id="barQ">0</span><span class="mid"><small id="barL"></small><b id="barT"></b></span><span class="go"><span id="barGo"></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 6l6 6-6 6"/></svg></span></button></div></div>
 
 <div class="sheet" id="sheet" hidden><div class="panel">
   <div class="hd"><h3 id="sheetH"></h3><button class="x" type="button" id="sheetX" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
@@ -437,19 +423,19 @@ body.hasbar .totop{bottom:calc(88px + env(safe-area-inset-bottom,0px))}
   <div class="hint" id="sheetHint"></div>
 </div></div>
 
-<div class="waiter" id="waiter" hidden>
-  <div class="ticket">
-    <div class="b2"><b>Chez Oanh</b><span id="tDate"></span></div>
-    <h4>ĐƠN GỌI MÓN</h4>
-    <div class="sub" id="tSub"></div>
-    <div class="tbl"><label for="tableNo">Bàn số</label><input id="tableNo" inputmode="numeric" maxlength="4" autocomplete="off"><span class="sub" id="tblHint"></span></div>
-    <ul class="tlines" id="tlines"></ul>
-    <div class="twish" id="twish" hidden></div>
-    <div class="ttot"><span>Tổng cộng</span><div><b id="tTot"></b><small id="tTotC"></small></div></div>
-    <div class="tnote" id="tExtra"></div>
-  </div>
-  <div class="wback"><button type="button" id="wBack"></button></div>
-</div>
+<div class="sheet" id="tpick" hidden><div class="panel">
+  <div class="hd"><h3 id="tpickH"></h3><button class="x" type="button" id="tpickX" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <p class="hint" id="tpickS" style="margin:0 0 14px;font-size:13.5px;color:var(--muted)"></p>
+  <div class="tgrid" id="tgrid"></div>
+</div></div>
+
+<div class="sheet" id="qrs" hidden><div class="panel">
+  <div class="hd"><h3 id="qrH"></h3><button class="x" type="button" id="qrX" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="qrsum"><span id="qrSumL"></span><div><b id="qrSum"></b><small id="qrSumC"></small></div></div>
+  <div class="qrbox"><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3zM20 14v7M14 20h3"/></svg><span id="qrSoon"></span></div>
+  <p class="hint" id="qrS" style="text-align:center;font-size:13px;color:var(--muted)"></p>
+  <button class="btn" type="button" id="qrPaid"></button>
+</div></div>
 
 <div class="sheet" id="pay" hidden><div class="panel">
   <div class="hd"><h3 id="payH"></h3><button class="x" type="button" id="payX" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
@@ -489,9 +475,9 @@ const T={
  ru:{top:"Наверх",ctaMenu:"Смотреть меню",ctaRoom:"Атмосфера",f1t:"С рынка",f1s:"Готовим после заказа",f2t:"Весь день",f3t:"Healthy",f3s:"Боулы, фреши, смузи",sigE:"Фирменное",sigH:"Завтраки <em>весь день</em>",ph2:"Иллюстрация блюда по описанию из меню, подача в кафе может отличаться",addr:"Адрес · открыть карту",tag:"Кафе в джунглях Хамтьена: домашняя еда из продуктов с утреннего рынка, кофе, свежие соки и коктейли. Закажите прямо с телефона — официант подтвердит заказ у стола.",
    hours:"Открыто ежедневно",open:"Сейчас открыто",closed:"Сейчас закрыто",food:"Еда",drinks:"Напитки",search:"Найти блюдо или напиток",
    S:"мал.",B:"бол.",N:"обычный",ask:"Цену уточните у официанта",none:"Ничего не нашлось",rate:"Курс ≈ ",ratenote:"Пересчёт примерный, оплата в донгах.",
-   items:n=>n+" "+pl(n,["позиция","позиции","позиций"]),dishes:"",order:"Мой заказ",showW0:"Показать официанту",showW:"Заказать",scan:"Чтобы заказывать с телефона, отсканируйте QR-код на столе.",bill:"Рассчитать",billSent:"Счёт запрошен",payH:"Попросить счёт",payS:"Как будете платить? Официант подойдёт к столу.",pCash:"Наличные",pCard:"Карта",pQr:"Перевод по QR",doneH:"Заказ отправлен",doneS:"Официант уже видит его и подтвердит у стола. Дозаказать можно в любой момент — просто добавьте блюда.",billH:"Счёт запрошен",billS:"Официант скоро подойдёт к столу.",ok:"Хорошо",tableL:"Стол",total:"Итого",clear:"Очистить",clearSure:"Точно очистить?",
-   wHint:"Заказ сразу придёт официанту, он подтвердит его у стола.",wHint0:"Заказ никуда не отправляется: откройте экран для официанта и покажите телефон.",back:"Вернуться к меню",tblHint:"номер стола, если знаете",
-   tSub:"Заказ гостя. Под названием — перевод.",extra:n=>"+ "+n+" "+pl(n,["позиция","позиции","позиций"])+" без цены (уточнит официант)",add:"Добавить",
+   items:n=>n+" "+pl(n,["позиция","позиции","позиций"]),dishes:"",order:"Мой заказ",qrPay:"Оплатить по QR‑коду",qrH:"Оплата по QR-коду",qrSumL:"К оплате",qrSoon:"Здесь будет QR-код банка кафе",qrS:"Отсканируйте код в приложении банка и переведите сумму.",qrPaid:"Я оплатил(а)",paidH:"Спасибо!",paidS:"Официант проверит оплату и закроет счёт.",tpickH:"Ваш стол",tpickS:"Номер написан на табличке на столе.",showW:"Заказать",bill:"Попросить счёт",billSent:"Счёт запрошен",payH:"Попросить счёт",payS:"Как будете платить? Официант принесёт счёт.",pCash:"Наличные",pCard:"Карта",doneH:"Заказ отправлен",doneS:"Официант уже видит его и подтвердит у стола. Дозаказать можно в любой момент — просто добавьте блюда.",billH:"Счёт запрошен",billS:"Официант скоро подойдёт к столу.",ok:"Хорошо",tableL:"Стол",total:"Итого",clear:"Очистить",clearSure:"Точно очистить?",
+   wHint:"Заказ сразу придёт официанту, он подтвердит его у стола.",
+   extra:n=>"+ "+n+" "+pl(n,["позиция","позиции","позиций"])+" без цены (уточнит официант)",add:"Добавить",
    wish:"Пожелания",copied:"Пароль Wi-Fi скопирован",copyFail:"Пароль: marina12345",
    aEy:"Атмосфера",aH:"Львы, зебры <em>и диваны</em>",aP:"Соломенные навесы, плетёные лампы, бирюзовые ставни и большие картины с саванной. Зал внутри и тенистая терраса с качелями.",
    quote:"«Вся еда готовится дома из продуктов с рынка, купленных утром. Мы начинаем резать и готовить, когда вы заказываете, поэтому придётся немного подождать. Спасибо за терпение!»",
@@ -506,9 +492,9 @@ const T={
  en:{top:"Top",ctaMenu:"Explore menu",ctaRoom:"The room",f1t:"Market fresh",f1s:"Cooked to order",f2t:"All day",f3t:"Healthy",f3s:"Bowls, juices, smoothies",sigE:"Signature",sigH:"All-day <em>breakfast</em>",ph2:"Illustration based on the menu description; plating may vary",addr:"Address · open map",tag:"A jungle-lounge café in Ham Tien: homemade food from the morning market, coffee, fresh juices and cocktails. Order right from your phone; the waiter confirms it at your table.",
    hours:"Open daily",open:"Open now",closed:"Closed now",food:"Food",drinks:"Drinks",search:"Search food or drinks",
    S:"small",B:"big",N:"normal",ask:"Ask staff for the price",none:"Nothing found",rate:"Rate ≈ ",ratenote:"Approximate; you pay in dong.",
-   items:n=>n+(n===1?" item":" items"),dishes:"",order:"My order",showW0:"Show to waiter",showW:"Order",scan:"To order from your phone, scan the QR code on your table.",bill:"Get the bill",billSent:"Bill requested",payH:"Ask for the bill",payS:"How would you like to pay? The waiter will come to your table.",pCash:"Cash",pCard:"Card",pQr:"QR bank transfer",doneH:"Order sent",doneS:"The waiter can already see it and will confirm it at your table. Add more dishes any time.",billH:"Bill requested",billS:"The waiter will come to your table shortly.",ok:"OK",tableL:"Table",total:"Total",clear:"Clear",clearSure:"Clear everything?",
-   wHint:"Your order goes straight to the waiter, who confirms it at your table.",wHint0:"Nothing is sent anywhere: open the waiter screen and show your phone.",back:"Back to menu",tblHint:"table number, if you know it",
-   tSub:"Guest order. Translation under each line.",extra:n=>"+ "+n+" item"+(n>1?"s":"")+" without a listed price (ask staff)",add:"Add",
+   items:n=>n+(n===1?" item":" items"),dishes:"",order:"My order",qrPay:"Pay by QR code",qrH:"Pay by QR code",qrSumL:"To pay",qrSoon:"The café's bank QR code will be here",qrS:"Scan the code in your banking app and transfer the amount.",qrPaid:"I've paid",paidH:"Thank you!",paidS:"The waiter will check the payment and close the bill.",tpickH:"Your table",tpickS:"The number is on the card on your table.",showW:"Order",bill:"Ask for the bill",billSent:"Bill requested",payH:"Ask for the bill",payS:"How would you like to pay? The waiter will bring the bill.",pCash:"Cash",pCard:"Card",doneH:"Order sent",doneS:"The waiter can already see it and will confirm it at your table. Add more dishes any time.",billH:"Bill requested",billS:"The waiter will come to your table shortly.",ok:"OK",tableL:"Table",total:"Total",clear:"Clear",clearSure:"Clear everything?",
+   wHint:"Your order goes straight to the waiter, who confirms it at your table.",
+   extra:n=>"+ "+n+" item"+(n>1?"s":"")+" without a listed price (ask staff)",add:"Add",
    wish:"Requests",copied:"Wi-Fi password copied",copyFail:"Password: marina12345",
    aEy:"The room",aH:"Lions, zebras <em>and sofas</em>",aP:"Thatched roofs, wicker lamps, turquoise shutters and big savanna paintings. An indoor lounge and a shady terrace with a swing.",
    quote:"“All the food is homemade and fresh from the market every day. We start cutting and cooking when you order, so it takes a while. Thank you for your patience.”",
@@ -523,9 +509,9 @@ const T={
  vi:{top:"Lên đầu",ctaMenu:"Xem thực đơn",ctaRoom:"Không gian",f1t:"Từ chợ",f1s:"Nấu khi gọi món",f2t:"Cả ngày",f3t:"Healthy",f3s:"Ngũ cốc, nước ép, sinh tố",sigE:"Đặc biệt",sigH:"Điểm tâm <em>cả ngày</em>",ph2:"Hình minh họa theo mô tả món, cách trình bày có thể khác",addr:"Địa chỉ · mở bản đồ",tag:"Món ăn nhà làm từ chợ mỗi sáng, cà phê, nước ép và cocktail. Gọi món ngay trên điện thoại, nhân viên sẽ xác nhận tại bàn.",
    hours:"Mở cửa hằng ngày",open:"Đang mở cửa",closed:"Đã đóng cửa",food:"Món ăn",drinks:"Đồ uống",search:"Tìm món",
    S:"nhỏ",B:"lớn",N:"thường",ask:"Hỏi nhân viên",none:"Không tìm thấy món",rate:"",ratenote:"",
-   items:n=>n+" món",dishes:"",order:"Món đã chọn",showW0:"Đưa cho nhân viên",showW:"Gọi món",scan:"Để gọi món bằng điện thoại, hãy quét mã QR trên bàn.",bill:"Thanh toán",billSent:"Đã gọi thanh toán",payH:"Gọi thanh toán",payS:"Bạn muốn thanh toán bằng cách nào? Nhân viên sẽ đến bàn.",pCash:"Tiền mặt",pCard:"Thẻ",pQr:"Chuyển khoản QR",doneH:"Đã gửi đơn",doneS:"Nhân viên đã nhận đơn và sẽ xác nhận tại bàn. Bạn có thể gọi thêm bất cứ lúc nào.",billH:"Đã gọi thanh toán",billS:"Nhân viên sẽ đến bàn ngay.",ok:"OK",tableL:"Bàn",total:"Tổng cộng",clear:"Xóa hết",clearSure:"Xóa tất cả?",
-   wHint:"Đơn được gửi ngay cho nhân viên, nhân viên sẽ xác nhận tại bàn.",wHint0:"Đơn không được gửi đi. Hãy mở màn hình này và đưa cho nhân viên.",back:"Quay lại thực đơn",tblHint:"",
-   tSub:"Đơn của khách.",extra:n=>"+ "+n+" món chưa có giá (hỏi nhân viên)",add:"Thêm",
+   items:n=>n+" món",dishes:"",order:"Món đã chọn",qrPay:"Thanh toán QR",qrH:"Thanh toán bằng mã QR",qrSumL:"Cần thanh toán",qrSoon:"Mã QR ngân hàng của quán sẽ ở đây",qrS:"Quét mã bằng ứng dụng ngân hàng và chuyển khoản số tiền.",qrPaid:"Tôi đã thanh toán",paidH:"Cảm ơn bạn!",paidS:"Nhân viên sẽ kiểm tra và đóng hóa đơn.",tpickH:"Bàn của bạn",tpickS:"Số bàn ghi trên thẻ đặt trên bàn.",showW:"Gọi món",bill:"Gọi thanh toán",billSent:"Đã gọi thanh toán",payH:"Gọi thanh toán",payS:"Bạn muốn thanh toán bằng cách nào? Nhân viên sẽ mang hóa đơn đến.",pCash:"Tiền mặt",pCard:"Thẻ",doneH:"Đã gửi đơn",doneS:"Nhân viên đã nhận đơn và sẽ xác nhận tại bàn. Bạn có thể gọi thêm bất cứ lúc nào.",billH:"Đã gọi thanh toán",billS:"Nhân viên sẽ đến bàn ngay.",ok:"OK",tableL:"Bàn",total:"Tổng cộng",clear:"Xóa hết",clearSure:"Xóa tất cả?",
+   wHint:"Đơn được gửi ngay cho nhân viên, nhân viên sẽ xác nhận tại bàn.",
+   extra:n=>"+ "+n+" món chưa có giá (hỏi nhân viên)",add:"Thêm",
    wish:"Yêu cầu",copied:"Đã sao chép mật khẩu Wi-Fi",copyFail:"Mật khẩu: marina12345",
    aEy:"Không gian",aH:"Sư tử, ngựa vằn <em>và sofa</em>",aP:"Mái lá, đèn mây, cửa chớp xanh ngọc và những bức tranh thảo nguyên lớn. Phòng trong nhà và hiên mát có xích đu.",
    quote:"“Tất cả các món ăn đều được làm tại nhà và tươi mới từ chợ mỗi ngày. Chúng tôi bắt đầu cắt và nấu khi bạn gọi món, vì vậy sẽ mất một chút thời gian. Cảm ơn sự kiên nhẫn của bạn.”",
@@ -540,9 +526,9 @@ const T={
  ko:{top:"맨 위",ctaMenu:"메뉴 보기",ctaRoom:"분위기",f1t:"시장 직송",f1s:"주문 후 조리",f2t:"하루 종일",f3t:"헬시",f3s:"볼, 주스, 스무디",sigE:"시그니처",sigH:"올데이 <em>브런치</em>",ph2:"메뉴 설명을 바탕으로 한 일러스트, 실제와 다를 수 있음",addr:"주소 · 지도 열기",tag:"함띠엔의 정글 라운지 카페. 아침 시장 재료로 만든 집밥, 커피, 생과일 주스와 칵테일. 휴대폰으로 바로 주문하면 직원이 테이블에서 확인합니다.",
    hours:"매일 영업",open:"영업 중",closed:"영업 종료",food:"음식",drinks:"음료",search:"메뉴 검색",
    S:"소",B:"대",N:"보통",ask:"가격은 직원에게 문의",none:"검색 결과가 없습니다",rate:"환율 ≈ ",ratenote:"참고용이며 결제는 동으로 합니다.",
-   items:n=>n+"개",dishes:"",order:"내 주문",showW0:"직원에게 보여주기",showW:"주문하기",scan:"휴대폰으로 주문하려면 테이블의 QR 코드를 스캔하세요.",bill:"계산하기",billSent:"계산 요청됨",payH:"계산 요청",payS:"결제 방법을 선택하세요. 직원이 테이블로 갑니다.",pCash:"현금",pCard:"카드",pQr:"QR 계좌이체",doneH:"주문 완료",doneS:"직원이 주문을 받았고 테이블에서 확인합니다. 언제든 추가 주문할 수 있어요.",billH:"계산 요청됨",billS:"직원이 곧 테이블로 갑니다.",ok:"확인",tableL:"테이블",total:"합계",clear:"비우기",clearSure:"모두 비울까요?",
-   wHint:"주문이 바로 직원에게 전달되며, 직원이 테이블에서 확인합니다.",wHint0:"주문은 전송되지 않습니다. 직원 화면을 열어 휴대폰을 보여 주세요.",back:"메뉴로 돌아가기",tblHint:"테이블 번호 (알면)",
-   tSub:"손님 주문. 각 줄 아래는 번역.",extra:n=>"+ 가격 문의 메뉴 "+n+"개",add:"추가",
+   items:n=>n+"개",dishes:"",order:"내 주문",qrPay:"QR로 결제",qrH:"QR 코드로 결제",qrSumL:"결제 금액",qrSoon:"카페 은행 QR 코드가 여기에 표시됩니다",qrS:"은행 앱으로 코드를 스캔해 금액을 이체하세요.",qrPaid:"결제했어요",paidH:"감사합니다!",paidS:"직원이 결제를 확인하고 계산을 마칩니다.",tpickH:"테이블 번호",tpickS:"번호는 테이블 위 카드에 있습니다.",showW:"주문하기",bill:"계산서 요청",billSent:"계산 요청됨",payH:"계산 요청",payS:"결제 방법을 선택하세요. 직원이 계산서를 가져다 드립니다.",pCash:"현금",pCard:"카드",doneH:"주문 완료",doneS:"직원이 주문을 받았고 테이블에서 확인합니다. 언제든 추가 주문할 수 있어요.",billH:"계산 요청됨",billS:"직원이 곧 테이블로 갑니다.",ok:"확인",tableL:"테이블",total:"합계",clear:"비우기",clearSure:"모두 비울까요?",
+   wHint:"주문이 바로 직원에게 전달되며, 직원이 테이블에서 확인합니다.",
+   extra:n=>"+ 가격 문의 메뉴 "+n+"개",add:"추가",
    wish:"요청 사항",copied:"Wi-Fi 비밀번호 복사됨",copyFail:"비밀번호: marina12345",
    aEy:"분위기",aH:"사자, 얼룩말 <em>그리고 소파</em>",aP:"초가 지붕, 라탄 조명, 청록색 덧문과 커다란 사바나 그림. 실내 라운지와 그네가 있는 그늘진 테라스.",
    quote:"“모든 음식은 매일 시장에서 산 신선한 재료로 직접 만듭니다. 주문 후 손질과 조리를 시작하므로 시간이 조금 걸립니다. 기다려 주셔서 감사합니다.”",
@@ -557,9 +543,9 @@ const T={
  zh:{top:"顶部",ctaMenu:"查看菜单",ctaRoom:"环境",f1t:"市场新鲜",f1s:"现点现做",f2t:"全天供应",f3t:"健康",f3s:"麦片碗、果汁、果昔",sigE:"招牌",sigH:"全天 <em>早餐</em>",ph2:"根据菜单描述制作的示意图，实物可能不同",addr:"地址 · 打开地图",tag:"咸田的丛林风沙发咖啡馆：每天早市新鲜食材的家常菜、咖啡、鲜榨果汁和鸡尾酒。用手机直接下单，服务员会到桌确认。",
    hours:"每天营业",open:"营业中",closed:"已打烊",food:"餐食",drinks:"饮品",search:"搜索菜品或饮品",
    S:"小",B:"大",N:"普通",ask:"价格请咨询服务员",none:"未找到",rate:"汇率 ≈ ",ratenote:"仅供参考，以越南盾结算。",
-   items:n=>n+" 项",dishes:"",order:"我的点单",showW0:"给服务员看",showW:"下单",scan:"想用手机下单，请扫描桌上的二维码。",bill:"结账",billSent:"已请求结账",payH:"请求结账",payS:"请选择付款方式，服务员会到桌。",pCash:"现金",pCard:"刷卡",pQr:"二维码转账",doneH:"订单已发送",doneS:"服务员已收到订单，会到桌确认。随时可以加点。",billH:"已请求结账",billS:"服务员马上到您桌前。",ok:"好的",tableL:"桌",total:"合计",clear:"清空",clearSure:"确定清空？",
-   wHint:"订单会直接发给服务员，服务员会到桌确认。",wHint0:"订单不会被发送。打开服务员页面，把手机给服务员看。",back:"返回菜单",tblHint:"桌号（如知道）",
-   tSub:"客人点单，每行下方为翻译。",extra:n=>"+ "+n+" 项待询价",add:"添加",
+   items:n=>n+" 项",dishes:"",order:"我的点单",qrPay:"扫码付款",qrH:"扫码付款",qrSumL:"应付金额",qrSoon:"这里将显示咖啡馆的银行收款码",qrS:"用银行App扫码并转账。",qrPaid:"我已付款",paidH:"谢谢！",paidS:"服务员会核对付款并结账。",tpickH:"您的桌号",tpickS:"桌号写在桌上的牌子上。",showW:"下单",bill:"请求结账",billSent:"已请求结账",payH:"请求结账",payS:"请选择付款方式，服务员会把账单送来。",pCash:"现金",pCard:"刷卡",doneH:"订单已发送",doneS:"服务员已收到订单，会到桌确认。随时可以加点。",billH:"已请求结账",billS:"服务员马上到您桌前。",ok:"好的",tableL:"桌",total:"合计",clear:"清空",clearSure:"确定清空？",
+   wHint:"订单会直接发给服务员，服务员会到桌确认。",
+   extra:n=>"+ "+n+" 项待询价",add:"添加",
    wish:"特别要求",copied:"已复制 Wi-Fi 密码",copyFail:"密码：marina12345",
    aEy:"环境",aH:"狮子、斑马 <em>和沙发</em>",aP:"茅草屋顶、藤编吊灯、青绿色百叶窗和大幅草原油画。室内沙发区和带秋千的阴凉露台。",
    quote:"“所有菜品每天用市场新鲜食材现做。点单后才开始切配和烹饪，需要稍等片刻。感谢您的耐心。”",
@@ -662,11 +648,11 @@ function lines(){return Object.entries(cart).filter(([,q])=>q>0).map(([k,q])=>{c
   const it=s.items[+i];if(!it)return null;const o=opts(it)[+oi];if(!o)return null;return {k,q,it,o,p:o[1]}}).filter(Boolean)}
 function totals(){const L=lines();let sum=0,n=0,extra=0;L.forEach(l=>{n+=l.q;if(l.p===null)extra++;else sum+=l.p*l.q});return {L,sum,n,extra}}
 function renderBar(){const t=T[lang],{sum,n}=totals();const bs=billState();
-  $("bar").hidden=!n&&!bs;document.body.classList.toggle("hasbar",!!(n||bs));$("barBtn").hidden=!n;
-  $("billBtn").hidden=!bs;if(bs){$("billBtn").classList.toggle("solo",!n);$("billBtn").classList.toggle("sent",bs==="sent");$("billT").textContent=bs==="sent"?t.billSent:t.bill}
+  $("bar").hidden=!n&&!bs;document.body.classList.toggle("hasbar",!!(n||bs));document.body.classList.toggle("hasbar2",!!(n&&bs));$("barBtn").hidden=!n;
+  $("bills").hidden=!bs;if(bs){$("billBtn").classList.toggle("sent",bs==="sent");$("billT").textContent=bs==="sent"?t.billSent:t.bill;$("qrT").textContent=t.qrPay}
   if(!n)return;
   $("barQ").textContent=n;$("barL").textContent=t.items(n)+(cur==="VND"?"":" · "+moneyLine(sum));
-  $("barT").textContent=fmtVND(sum);$("barGo").textContent=TABLE()?t.showW:t.showW0}
+  $("barT").textContent=fmtVND(sum);$("barGo").textContent=t.showW}
 function renderSheet(){const t=T[lang],li=IDX[lang],{L,sum,extra}=totals();
   if(!L.length){$("sheet").hidden=true;return}
   $("sheetH").textContent=t.order;$("totL").textContent=t.total;$("wishL").textContent=t.wish;
@@ -676,22 +662,7 @@ function renderSheet(){const t=T[lang],li=IDX[lang],{L,sum,extra}=totals();
   $("totV").textContent=fmtVND(sum);$("totC").textContent=moneyLine(sum);
   $("extraHint").textContent=extra?t.extra(extra):"";
   $("clearBtn").textContent=t.clear;$("clearBtn").dataset.arm="";
-  $("waiterBtn").textContent=TABLE()?t.showW:t.showW0;$("sheetHint").textContent=TABLE()?t.wHint:t.wHint0+" "+t.scan}
-let wake=null;
-async function openWaiter(){const t=T[lang],li=IDX[lang],{L,sum,extra}=totals();
-  const d=new Date();$("tDate").textContent=d.toLocaleDateString("vi-VN")+" · "+d.toLocaleTimeString("vi-VN",{hour:"2-digit",minute:"2-digit"});
-  $("tSub").textContent=t.tSub;$("tblHint").textContent=t.tblHint;
-  $("tlines").innerHTML=L.map(l=>{const vl=optLabel(l.o,"vi"),gl=optLabel(l.o,lang);
-    return `<li><span class="qq">${l.q}×</span><div><div class="vn">${esc(l.it[1])}${vl?" ("+esc(vl)+")":""}</div>${lang!=="vi"?`<div class="tr">${esc(l.it[li])}${gl?" · "+esc(gl):""}</div>`:""}</div><span class="pp">${l.p===null?"—":fmtVND(l.p*l.q)}</span></li>`}).join("");
-  const ws=WISH.filter(w=>wish[w.k]);
-  $("twish").hidden=!ws.length;
-  $("twish").innerHTML=ws.map(w=>esc(w.vi)).join(" · ")+(lang!=="vi"&&ws.length?`<small>${ws.map(w=>esc(w[lang])).join(" · ")}</small>`:"");
-  $("tTot").textContent=fmtVND(sum);$("tTotC").textContent=moneyLine(sum);
-  $("tExtra").textContent=extra?("+ "+extra+" món chưa có giá, hỏi giá"+(lang!=="vi"?" · "+t.extra(extra):"")):"";
-  $("wBack").textContent=t.back;
-  $("sheet").hidden=true;$("waiter").hidden=false;$("waiter").scrollTop=0;
-  try{wake=await navigator.wakeLock?.request("screen")}catch(e){}}
-function closeWaiter(){$("waiter").hidden=true;try{wake&&wake.release()}catch(e){};wake=null}
+  $("waiterBtn").textContent=t.showW;$("sheetHint").textContent=t.wHint}
 
 function bump(k,d){cart[k]=Math.max(0,(cart[k]||0)+d);if(!cart[k])delete cart[k];save();
   const y=window.scrollY;render();window.scrollTo(0,y);if(!$("sheet").hidden)renderSheet()}
@@ -712,18 +683,19 @@ function inbox(msg){let q=[];try{q=JSON.parse(ls.get("co_inbox")||"[]")}catch(e)
   try{const c=new BroadcastChannel("co_inbox");c.postMessage(1);c.close()}catch(e){}}
 function billState(){const tb=TABLE();if(!tb)return "";let o={};try{o=JSON.parse(ls.get("co_guest")||"{}")}catch(e){}
   if(o.t!==tb||!o.ord||Date.now()-o.ord>6*3600e3)return "";return o.bill&&Date.now()-o.bill<3*60e3?"sent":"on"}
-function guestMark(k){let o={};try{o=JSON.parse(ls.get("co_guest")||"{}")}catch(e){}const tb=TABLE();if(o.t!==tb)o={t:tb};o[k]=Date.now();ls.set("co_guest",JSON.stringify(o))}
+function guestMark(k,add){let o={};try{o=JSON.parse(ls.get("co_guest")||"{}")}catch(e){}const tb=TABLE();if(o.t!==tb||(o.ord&&Date.now()-o.ord>6*3600e3))o={t:tb};o[k]=Date.now();if(add)o.sum=(o.sum||0)+add;ls.set("co_guest",JSON.stringify(o))}
+function billSum(){try{const o=JSON.parse(ls.get("co_guest")||"{}");return o.t===TABLE()?o.sum||0:0}catch(e){return 0}}
 function done(h,s){const t=T[lang];$("doneT").textContent=t.tableL+" "+TABLE();$("doneH").textContent=h;$("doneS").textContent=s;$("doneOk").textContent=t.ok;$("done").hidden=false}
-function sendOrder(){const t=T[lang],{L}=totals();if(!L.length)return;
+function sendOrder(){const t=T[lang],{L,sum}=totals();if(!L.length)return;
   const nm=(l,i,lg)=>{const x=optLabel(l.o,lg);return l.it[i]+(x?" ("+x+")":"")};
   const items=L.map(l=>({key:l.k.replace(/\|/g,"_"),q:l.q,vi:nm(l,1,"vi"),ru:nm(l,2,"ru"),en:nm(l,0,"en"),p:l.p||0,st:SEC[l.k.split("|")[0]].g==="drinks"?"b":"k"}));
   const ws=WISH.filter(w=>wish[w.k]).map(w=>({k:w.k,vi:w.vi,ru:w.ru,en:w.en}));
-  inbox({type:"order",items,wishes:ws});guestMark("ord");
+  inbox({type:"order",items,wishes:ws});guestMark("ord",sum);
   cart={};wish={};save();$("sheet").hidden=true;render();done(t.doneH,t.doneS)}
 function openPay(){const t=T[lang];if(billState()==="sent"){done(t.billH,t.billS);return}
   $("payH").textContent=t.payH;$("payS").textContent=t.payS;
   const ic={cash:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/></svg>',card:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>',qr:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3zM20 14v7M14 20h3"/></svg>'};
-  $("pays").innerHTML=[["cash",t.pCash],["card",t.pCard],["qr",t.pQr]].map(([k,n])=>`<button type="button" data-pay="${k}"><span>${ic[k]}</span>${esc(n)}</button>`).join("");
+  $("pays").innerHTML=[["cash",t.pCash],["card",t.pCard]].map(([k,n])=>`<button type="button" data-pay="${k}"><span>${ic[k]}</span>${esc(n)}</button>`).join("");
   $("pay").hidden=false}
 $("pays").addEventListener("click",e=>{const b=e.target.closest("[data-pay]");if(!b)return;inbox({type:"bill",pay:b.dataset.pay});guestMark("bill");$("pay").hidden=true;renderBar();done(T[lang].billH,T[lang].billS)});
 $("billBtn").addEventListener("click",openPay);
@@ -732,10 +704,20 @@ $("pay").addEventListener("click",e=>{if(e.target===$("pay"))$("pay").hidden=tru
 $("doneOk").addEventListener("click",()=>{$("done").hidden=true});
 $("done").addEventListener("click",e=>{if(e.target===$("done"))$("done").hidden=true});
 setInterval(()=>{if(TABLE())renderBar()},30000);
-$("waiterBtn").addEventListener("click",()=>TABLE()?sendOrder():openWaiter());
-$("wBack").addEventListener("click",closeWaiter);
-$("tableNo").addEventListener("input",e=>ls.set("co_table",e.target.value));
-$("tableNo").value=ls.get("co_table")||"";
+$("waiterBtn").addEventListener("click",()=>TABLE()?sendOrder():openPick());
+/* general link without ?t= : the guest picks the table once, then it works like the QR on the table */
+const NT=12;
+function openPick(){const t=T[lang];$("tpickH").textContent=t.tpickH;$("tpickS").textContent=t.tpickS;
+  $("tgrid").innerHTML=Array.from({length:NT},(_,i)=>`<button type="button" data-t="${i+1}">${i+1}</button>`).join("");$("tpick").hidden=false}
+$("tgrid").addEventListener("click",e=>{const b=e.target.closest("[data-t]");if(!b)return;ls.set("co_tbl",JSON.stringify({t:+b.dataset.t,at:Date.now()}));$("tpick").hidden=true;sendOrder()});
+$("tpickX").addEventListener("click",()=>{$("tpick").hidden=true});
+$("tpick").addEventListener("click",e=>{if(e.target===$("tpick"))$("tpick").hidden=true});
+function openQr(){const t=T[lang],sum=billSum();$("qrH").textContent=t.qrH;$("qrSumL").textContent=t.qrSumL;
+  $("qrSum").textContent=fmtVND(sum);$("qrSumC").textContent=moneyLine(sum);$("qrSoon").textContent=t.qrSoon;$("qrS").textContent=t.qrS;$("qrPaid").textContent=t.qrPaid;$("qrs").hidden=false}
+$("qrBtn").addEventListener("click",openQr);
+$("qrPaid").addEventListener("click",()=>{inbox({type:"bill",pay:"qr",paid:true});guestMark("bill");$("qrs").hidden=true;renderBar();done(T[lang].paidH,T[lang].paidS)});
+$("qrX").addEventListener("click",()=>{$("qrs").hidden=true});
+$("qrs").addEventListener("click",e=>{if(e.target===$("qrs"))$("qrs").hidden=true});
 let tt;function toast(m){$("toast").textContent=m;$("toast").hidden=false;clearTimeout(tt);tt=setTimeout(()=>$("toast").hidden=true,2200)}
 $("wifiBtn").addEventListener("click",()=>{try{navigator.clipboard.writeText("marina12345").then(()=>toast(T[lang].copied),()=>toast(T[lang].copyFail))}catch(e){toast(T[lang].copyFail)}});
 function setGroup(g){group=g;$("q").value="";render();window.scrollTo({top:$("cats").offsetTop-10,behavior:"smooth"})}
@@ -782,7 +764,7 @@ $("toTop").addEventListener("click",()=>window.scrollTo({top:0,behavior:"smooth"
   $("sDots").addEventListener("click",e=>{const b=e.target.closest("button");if(b)sigGo([...$("sDots").children].indexOf(b))});
   window.addEventListener("resize",sigSync)})();
 $("sigRow").addEventListener("click",e=>{const b=e.target.closest(".im");if(!b)return;$("lbImg").src=PH[b.dataset.ph];$("lbCap").textContent=b.dataset.cap;$("lbNote").textContent=GEN.has(b.dataset.ph)?T[lang].ph2:T[lang].ph;$("lb").hidden=false});
-document.addEventListener("keydown",e=>{if(e.key==="Escape"){$("lb").hidden=true;$("sheet").hidden=true;closeWaiter();if(lang)$("gate").hidden=true}});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){$("lb").hidden=true;$("sheet").hidden=true;$("pay").hidden=true;$("qrs").hidden=true;$("tpick").hidden=true;if(lang)$("gate").hidden=true}});
 let io;
 function spy(){if(io)io.disconnect();if(!("IntersectionObserver" in window))return;
   io=new IntersectionObserver(es=>{es.forEach(en=>{if(en.isIntersecting){const id=en.target.id;
