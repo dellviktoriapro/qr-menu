@@ -375,7 +375,13 @@ li.it.extra{grid-template-columns:1fr auto;align-items:center;border-bottom:0}
 .totop svg{width:18px;height:18px}
 body.hasbar .totop{bottom:calc(88px + env(safe-area-inset-bottom,0px))}
 /* ===== v2 layout: compact hero, pinned search + circles, dish tiles, bottom capsule ===== */
-.hero{min-height:0!important;height:clamp(190px,30vh,250px)}
+.hero{min-height:0!important;height:clamp(270px,44vh,360px)}
+.hero .bg{background-position:50% 50%!important;background-size:cover;transform:scale(1.18)!important;transform-origin:50% 46%;filter:saturate(1.08) contrast(1.06) brightness(1.08)!important}
+.hero::before{background:linear-gradient(180deg,rgba(19,16,12,.45) 0%,rgba(19,16,12,0) 22%,rgba(19,16,12,0) 50%,rgba(19,16,12,.72) 80%,var(--bg) 100%)!important}
+.hero h1{text-shadow:0 2px 18px rgba(0,0,0,.6)}
+/* wide screens: the whole face fits the height, the sides fade into the page */
+@media (min-width:700px){.hero{height:400px}.hero .bg{background-size:auto 128%!important;background-position:50% 44%!important;background-repeat:no-repeat!important;transform:none!important}
+.hero::before{background:linear-gradient(90deg,var(--bg) 0%,rgba(19,16,12,0) calc(50% - 220px),rgba(19,16,12,0) calc(50% + 220px),var(--bg) 100%),linear-gradient(180deg,rgba(19,16,12,.4) 0%,rgba(19,16,12,0) 20%,rgba(19,16,12,0) 55%,rgba(19,16,12,.75) 82%,var(--bg) 100%)!important}}
 .hero .txt{padding-block:0 16px}
 .hero h1{font-size:clamp(36px,10vw,56px)!important;line-height:.95}
 .hero h1 em{font-size:.42em;margin-top:6px;letter-spacing:.02em}
