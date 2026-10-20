@@ -250,6 +250,12 @@ tr:last-child td{border-bottom:0}
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r2);padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 @media (max-width:760px){.two{grid-template-columns:1fr}}
+.pbar{display:flex;flex-direction:column;gap:10px}
+.pcust{display:flex;gap:10px;flex-wrap:wrap}.pcust label{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);font-weight:600}
+.pcust input{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 10px;color:var(--ink);font:inherit}
+.kpi em{display:block;font-style:normal;font-size:11.5px;font-weight:700;margin-top:4px}.kpi em.dlu{color:#6fbf86}.kpi em.dld{color:var(--late)}.kpi em.dl0{color:var(--dim)}
+body[data-skin="light"] .kpi em.dlu{color:#5d7a4f}
+.hours.days{gap:3px}.hours.days.dense{gap:1px}.hours.days small{font-size:9.5px}
 .seed{font-size:11px;color:var(--dim);border:1px dashed var(--line2);border-radius:999px;padding:5px 11px}
 .radio{display:flex;flex-direction:column;gap:7px}
 .radio label{display:flex;gap:10px;align-items:flex-start;font-size:13px;background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer}
@@ -523,8 +529,8 @@ const S={
   nTaker:"Только официанту, который принял",nAll:"Всем на смене",nEsc:"Сначала тому, кто принял; через 30 сек всем",nTakerD:"Меньше всего уведомлений.",nAllD:"Быстрее, но дёргает всех.",nEscD:"Рекомендуем.",
   oLive:"Сейчас",oNow:"Открытых заказов",yes:"да",no:"нет"}
 };
-Object.assign(S.vi,{payHow:"Khách đã thanh toán bằng",pickPay:"Chọn cách khách đã thanh toán",oPay:"Hình thức thanh toán",pay_mix:"Kết hợp",payNone:"chưa ghi",billOpenP:"Chưa thanh toán",paidP:"Đã thanh toán",revT:"Đánh giá của khách",revH:"Sau khi thanh toán, khách thấy lời mời đánh giá và nút mở trang của quán. Dán đường dẫn trang quán trên Google Maps và Tripadvisor.",revG:"Google Maps",revTa:"Tripadvisor",revSave:"Lưu",revOk:"Đã lưu đường dẫn",revBad:"Đường dẫn phải bắt đầu bằng https://",revMiss:"Chưa có đường dẫn đánh giá",kStop:"Hết món",stopT:"Món đã hết",stopH:"Đánh dấu món đã hết: khách thấy “Hết món” trong thực đơn và không thể gọi. Khi có lại, bấm “Có lại”.",stopNone:"Tất cả món đều còn",stopOut:"Hết món",stopBack:"Có lại",stopQ:"Tìm món…",stopAll:"Tất cả món",stopOk:"Đã báo hết món",stopRet:"Món đã có lại",ckCommon:"chung",payQrT:"Mã QR nhận thanh toán",payQrH:"Khách quét mã này trong thực đơn để chuyển khoản vào tài khoản của bạn. Không cần kết nối ngân hàng hay máy POS.",payQrNo:"Chưa có mã QR",upQr:"Tải ảnh mã QR",repQr:"Thay ảnh",delQr:"Xóa",payQrMiss:"Chưa tải mã QR thanh toán: khách chưa thể chuyển khoản. Vào Nhân viên → Mã QR nhận thanh toán.",tipQr:"QR tiền tip",tipQrT:"Mã QR nhận tip của bạn",tipQrH:"Khách bàn bạn phục vụ có thể quét mã này để gửi tip trực tiếp vào tài khoản của bạn. Lấy mã QR trong ứng dụng ngân hàng.",tipMiss:"Bạn chưa tải mã QR nhận tip, khách không thể gửi tip qua QR.",jTip:"Mã QR nhận tip (từ ứng dụng ngân hàng)",jTipOpt:"Có thể thêm sau",check:"Hóa đơn",paidQr:"Khách báo đã chuyển khoản QR, hãy kiểm tra",allChecks:"tất cả",qrOk:"Đã lưu mã QR",imgErr:"Không đọc được ảnh"});
-Object.assign(S.ru,{payHow:"Как оплатили",pickPay:"Отметьте, как оплатили",oPay:"Способы оплаты",pay_mix:"Смешанная",payNone:"не отмечено",billOpenP:"Счёт открыт",paidP:"Оплачено",revT:"Отзывы гостей",revH:"После оплаты гость увидит просьбу оставить отзыв и кнопки, которые откроют страницу кафе. Вставьте ссылки на страницу кафе в Google Картах и Tripadvisor.",revG:"Google Карты",revTa:"Tripadvisor",revSave:"Сохранить",revOk:"Ссылки сохранены",revBad:"Ссылка должна начинаться с https://",revMiss:"Ссылки на отзывы не добавлены",kStop:"Стоп-лист",stopT:"Закончилось",stopH:"Отметьте, что закончилось: гость сразу видит «Закончилось» в меню и не может это заказать. Когда снова есть — «Вернуть».",stopNone:"Всё в наличии",stopOut:"Закончилось",stopBack:"Вернуть",stopQ:"Найти блюдо…",stopAll:"Всё меню",stopOk:"Снято из меню",stopRet:"Снова в меню",ckCommon:"общее",payQrT:"QR для оплаты гостями",payQrH:"Гость видит этот QR в меню и переводит деньги на ваш счёт или карту. Банк и касса не подключаются.",payQrNo:"QR не загружен",upQr:"Загрузить фото QR",repQr:"Заменить",delQr:"Удалить",payQrMiss:"Не загружен QR для оплаты: гости не смогут заплатить переводом. Сотрудники → QR для оплаты гостями.",tipQr:"QR для чаевых",tipQrT:"Ваш QR для чаевых",tipQrH:"Гости ваших столов смогут отсканировать его и перевести чаевые прямо вам. QR берётся в приложении вашего банка.",tipMiss:"Вы не загрузили QR для чаевых: гости не смогут оставить их переводом.",jTip:"QR для чаевых (из приложения банка)",jTipOpt:"Можно добавить позже",check:"Чек",paidQr:"Гость отметил перевод по QR — проверьте",allChecks:"все",qrOk:"QR сохранён",imgErr:"Не удалось прочитать фото"});
+Object.assign(S.vi,{noToday:"Ở Việt Nam bây giờ là {h}, hôm nay chưa có đơn đã phục vụ.",pToday:"Hôm nay",pYest:"Hôm qua",p7:"7 ngày",p30:"30 ngày",p90:"90 ngày",pCustom:"Tùy chọn",pFrom:"Từ",pTo:"Đến",vsPrev:"so với kỳ trước",oByDay:"Doanh thu theo ngày",csv:"Tải CSV (Excel)",csvDate:"Ngày",histNote:"Demo: hôm nay là đơn thật trong trình duyệt này, các ngày trước là dữ liệu mẫu.",payHow:"Khách đã thanh toán bằng",pickPay:"Chọn cách khách đã thanh toán",oPay:"Hình thức thanh toán",pay_mix:"Kết hợp",payNone:"chưa ghi",billOpenP:"Chưa thanh toán",paidP:"Đã thanh toán",revT:"Đánh giá của khách",revH:"Sau khi thanh toán, khách thấy lời mời đánh giá và nút mở trang của quán. Dán đường dẫn trang quán trên Google Maps và Tripadvisor.",revG:"Google Maps",revTa:"Tripadvisor",revSave:"Lưu",revOk:"Đã lưu đường dẫn",revBad:"Đường dẫn phải bắt đầu bằng https://",revMiss:"Chưa có đường dẫn đánh giá",kStop:"Hết món",stopT:"Món đã hết",stopH:"Đánh dấu món đã hết: khách thấy “Hết món” trong thực đơn và không thể gọi. Khi có lại, bấm “Có lại”.",stopNone:"Tất cả món đều còn",stopOut:"Hết món",stopBack:"Có lại",stopQ:"Tìm món…",stopAll:"Tất cả món",stopOk:"Đã báo hết món",stopRet:"Món đã có lại",ckCommon:"chung",payQrT:"Mã QR nhận thanh toán",payQrH:"Khách quét mã này trong thực đơn để chuyển khoản vào tài khoản của bạn. Không cần kết nối ngân hàng hay máy POS.",payQrNo:"Chưa có mã QR",upQr:"Tải ảnh mã QR",repQr:"Thay ảnh",delQr:"Xóa",payQrMiss:"Chưa tải mã QR thanh toán: khách chưa thể chuyển khoản. Vào Nhân viên → Mã QR nhận thanh toán.",tipQr:"QR tiền tip",tipQrT:"Mã QR nhận tip của bạn",tipQrH:"Khách bàn bạn phục vụ có thể quét mã này để gửi tip trực tiếp vào tài khoản của bạn. Lấy mã QR trong ứng dụng ngân hàng.",tipMiss:"Bạn chưa tải mã QR nhận tip, khách không thể gửi tip qua QR.",jTip:"Mã QR nhận tip (từ ứng dụng ngân hàng)",jTipOpt:"Có thể thêm sau",check:"Hóa đơn",paidQr:"Khách báo đã chuyển khoản QR, hãy kiểm tra",allChecks:"tất cả",qrOk:"Đã lưu mã QR",imgErr:"Không đọc được ảnh"});
+Object.assign(S.ru,{noToday:"Во Вьетнаме сейчас {h}, сегодня ещё нет вынесенных заказов.",pToday:"Сегодня",pYest:"Вчера",p7:"7 дней",p30:"30 дней",p90:"90 дней",pCustom:"Свой период",pFrom:"С",pTo:"по",vsPrev:"к прошлому периоду",oByDay:"Выручка по дням",csv:"Скачать для Excel",csvDate:"Дата",histNote:"Демо: сегодня — настоящие заказы в этом браузере, прошлые дни — примерные данные для показа.",payHow:"Как оплатили",pickPay:"Отметьте, как оплатили",oPay:"Способы оплаты",pay_mix:"Смешанная",payNone:"не отмечено",billOpenP:"Счёт открыт",paidP:"Оплачено",revT:"Отзывы гостей",revH:"После оплаты гость увидит просьбу оставить отзыв и кнопки, которые откроют страницу кафе. Вставьте ссылки на страницу кафе в Google Картах и Tripadvisor.",revG:"Google Карты",revTa:"Tripadvisor",revSave:"Сохранить",revOk:"Ссылки сохранены",revBad:"Ссылка должна начинаться с https://",revMiss:"Ссылки на отзывы не добавлены",kStop:"Стоп-лист",stopT:"Закончилось",stopH:"Отметьте, что закончилось: гость сразу видит «Закончилось» в меню и не может это заказать. Когда снова есть — «Вернуть».",stopNone:"Всё в наличии",stopOut:"Закончилось",stopBack:"Вернуть",stopQ:"Найти блюдо…",stopAll:"Всё меню",stopOk:"Снято из меню",stopRet:"Снова в меню",ckCommon:"общее",payQrT:"QR для оплаты гостями",payQrH:"Гость видит этот QR в меню и переводит деньги на ваш счёт или карту. Банк и касса не подключаются.",payQrNo:"QR не загружен",upQr:"Загрузить фото QR",repQr:"Заменить",delQr:"Удалить",payQrMiss:"Не загружен QR для оплаты: гости не смогут заплатить переводом. Сотрудники → QR для оплаты гостями.",tipQr:"QR для чаевых",tipQrT:"Ваш QR для чаевых",tipQrH:"Гости ваших столов смогут отсканировать его и перевести чаевые прямо вам. QR берётся в приложении вашего банка.",tipMiss:"Вы не загрузили QR для чаевых: гости не смогут оставить их переводом.",jTip:"QR для чаевых (из приложения банка)",jTipOpt:"Можно добавить позже",check:"Чек",paidQr:"Гость отметил перевод по QR — проверьте",allChecks:"все",qrOk:"QR сохранён",imgErr:"Не удалось прочитать фото"});
 /* guest UI strings */
 const G={
  en:{billTot:"Table bill",rounds:"orders",hi:"Table",menu:"Menu",food:"Food",drinks:"Drinks",send:"Send order",sent:"Order sent",total:"Total",track:"Your order",wish:"Requests",empty:"Add dishes with +",
@@ -541,7 +547,7 @@ const KEY="co_ops_demo_v2";
 const ls={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
 let ST=null;
 function seedState(){
-  const now=Date.now(),d0=new Date();d0.setHours(7,0,0,0);
+  const now=Date.now(),d0=(()=>{/* today 7:00 in Vietnam (UTC+7); before 8:00 there the demo day is the previous one */const v=new Date(now+7*3600e3);v.setUTCHours(0,0,0,0);let x=v.getTime();if(now<x+3600e3)x-=86400e3;return new Date(x)})();
   let r=7;const rnd=()=>{r=(r*16807)%2147483647;return r/2147483647};
   const pick=a=>a[Math.floor(rnd()*a.length)];
   const hist=[];const langs=["en","en","ru","ru","ru","ko","zh","vi","en"];
@@ -921,37 +927,96 @@ function rJoin(el){const d=ST.device?staffBy(ST.device):null;const st=d?d.status
   const a=el.querySelector("#jAgain");if(a)a.onclick=()=>{ST.device=null;save();render()};
   const o=el.querySelector("#jOpen");if(o)o.onclick=()=>{if(d.role==="kitchen"){ST.role="kitchen"}else if(d.role==="manager"){ST.role="owner"}else{ST.role="waiter";ST.me=d.id;ST.shift[d.id]=true}save();render();window.scrollTo(0,0)};
 }
-function rOwner(el){const all=ST.orders.filter(o=>o.status==="served");const open=live().filter(o=>o.status!=="served");
-  const rev=all.reduce((s,o)=>s+tot(o),0);const billIds=[...new Set(all.map(o=>o.bill))];const avg=billIds.length?rev/billIds.length:0;const openB=Object.values(ST.bills).filter(b=>!b.closed).length;
-  const accT=all.filter(o=>o.acceptedAt&&o.src==="qr").map(o=>(o.acceptedAt-o.createdAt)/1000);const cookT=all.filter(o=>o.readyAt&&o.sentAt).map(o=>(o.readyAt-o.sentAt)/60000);
-  const mean=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:0;
-  const per=ST.staff.filter(s=>s.role==="waiter"&&s.status!=="deleted"&&s.status!=="pending"&&s.status!=="rejected").map(w=>{const os=all.filter(o=>o.waiter===w.id);const r=os.reduce((s,o)=>s+tot(o),0);const ac=os.filter(o=>o.src==="qr"&&o.acceptedAt).map(o=>(o.acceptedAt-o.createdAt)/1000);
-    return {w,n:os.length,r,avg:os.length?r/os.length:0,acc:mean(ac),late:os.filter(o=>o.lateAccept||o.escalated).length}}).sort((a,b)=>b.r-a.r);
-  const items={};all.forEach(o=>o.items.forEach(i=>{items[i.mid]=(items[i.mid]||0)+i.qty}));const top=Object.entries(items).sort((a,b)=>b[1]-a[1]).slice(0,6);const topMax=top.length?top[0][1]:1;
-  const lg={};all.forEach(o=>{lg[o.lang]=(lg[o.lang]||0)+1});const lgs=Object.entries(lg).sort((a,b)=>b[1]-a[1]);const lgMax=lgs.length?lgs[0][1]:1;
-  const hrs={};for(let h=7;h<=22;h++)hrs[h]=0;all.forEach(o=>{const h=new Date(o.createdAt).getHours();if(h in hrs)hrs[h]+=tot(o)});const hMax=Math.max(1,...Object.values(hrs));
-  const pmS={cash:0,card:0,qr:0,none:0};Object.values(ST.bills).filter(b=>b.closed).forEach(b=>{const os=billOrders(b.id);
-    if(b.pays&&Object.keys(b.pays).length>1){os.forEach(o=>{const k=o.check||t("ckCommon");pmS[b.pays[k]||"none"]+=tot(o)})}else pmS[b.pay&&b.pay!=="mix"?b.pay:"none"]+=os.reduce((s,o)=>s+tot(o),0)});
-  const pmT=Object.values(pmS).reduce((a,b)=>a+b,0)||1,pmMax=Math.max(1,...Object.values(pmS));
+/* ---------- owner analytics over a chosen period ----------
+   Today (and any day with real orders) comes from the orders in this browser.
+   Earlier days in the demo are a deterministic sample history, so periods and comparisons have something to show.
+   With the server this becomes one query per period over the saved orders. Days are counted in Vietnam time (UTC+7). */
+const DAY=86400e3,HIST_DAYS=180;
+const dkey=ts=>new Date(ts+7*3600e3).toISOString().slice(0,10);
+const kts=k=>Date.parse(k+"T00:00:00Z")-7*3600e3;
+const addD=(k,n)=>dkey(kts(k)+n*DAY+3600e3);
+function agg0(){return {rev:0,bills:0,orders:0,acc:[0,0],cook:[0,0],w:{},items:{},lang:{},hrs:{},pay:{cash:0,card:0,qr:0,none:0}}}
+function aggAdd(A,B){A.rev+=B.rev;A.bills+=B.bills;A.orders+=B.orders;A.acc[0]+=B.acc[0];A.acc[1]+=B.acc[1];A.cook[0]+=B.cook[0];A.cook[1]+=B.cook[1];
+  for(const [id,x] of Object.entries(B.w)){const y=A.w[id]=A.w[id]||{n:0,r:0,acc:[0,0],late:0};y.n+=x.n;y.r+=x.r;y.acc[0]+=x.acc[0];y.acc[1]+=x.acc[1];y.late+=x.late}
+  for(const k of ["items","lang","hrs","pay"])for(const [i,v] of Object.entries(B[k]))A[k][i]=(A[k][i]||0)+v;return A}
+function aggOrder(A,o,r,accS,cookM,late,h){A.orders++;A.rev+=r;if(accS!=null){A.acc[0]+=accS;A.acc[1]++}if(cookM!=null){A.cook[0]+=cookM;A.cook[1]++}
+  if(o.waiter){const y=A.w[o.waiter]=A.w[o.waiter]||{n:0,r:0,acc:[0,0],late:0};y.n++;y.r+=r;if(accS!=null){y.acc[0]+=accS;y.acc[1]++}if(late)y.late++}
+  o.items.forEach(i=>{A.items[i.mid]=(A.items[i.mid]||0)+i.qty});A.lang[o.lang]=(A.lang[o.lang]||0)+1;A.hrs[h]=(A.hrs[h]||0)+r}
+/* real orders of one day (served), bills counted by the day they were closed */
+function realDay(k){const A=agg0();
+  ST.orders.filter(o=>o.status==="served"&&dkey(o.createdAt)===k).forEach(o=>{const r=tot(o);
+    aggOrder(A,o,r,o.acceptedAt&&o.src==="qr"?(o.acceptedAt-o.createdAt)/1000:null,o.readyAt&&o.sentAt?(o.readyAt-o.sentAt)/60000:null,o.lateAccept||o.escalated,new Date(o.createdAt+7*3600e3).getUTCHours())});
+  Object.values(ST.bills).filter(b=>b.closed&&b.closedAt&&dkey(b.closedAt)===k).forEach(b=>{A.bills++;const os=billOrders(b.id);
+    if(b.pays&&Object.keys(b.pays).length>1)os.forEach(o=>{const c=o.check||t("ckCommon");A.pay[b.pays[c]||"none"]+=tot(o)});else A.pay[b.pay&&b.pay!=="mix"?b.pay:"none"]+=os.reduce((s,o)=>s+tot(o),0)});
+  return A}
+/* sample history for days before today: same seed for the same date, so numbers stay put between visits */
+const GEN=new Map();const HW=[3,6,7,5,4,6,8,7,4,3,3,4,6,8,7,5];
+function genDay(k){if(GEN.has(k))return GEN.get(k);let r=0;for(const c of k)r=(r*31+c.charCodeAt(0))%2147483647;r=r||7;
+  const rnd=()=>{r=(r*16807)%2147483647;return r/2147483647};const pick=a=>a[Math.floor(rnd()*a.length)];
+  const dow=new Date(kts(k)+7*3600e3).getUTCDay(),ago=(kts(dkey(Date.now()))-kts(k))/DAY;
+  const n=Math.round((38+rnd()*16)*([1.3,.9,.85,.9,1,1.2,1.35][dow])*(1-ago*.0015));const A=agg0();const hw=HW.reduce((x,y)=>x+y,0);
+  const ws=["minh","minh","lan","lan","lan","huy"],ls=["en","en","ru","ru","ru","ko","zh","vi","en"];
+  for(let i=0;i<n;i++){const items=[];for(let j=0,m=1+Math.floor(rnd()*3);j<m;j++)items.push({mid:pick(MENU).id,qty:1+(rnd()<.2?1:0)});
+    const o={waiter:pick(ws),lang:pick(ls),items};const rv=items.reduce((s,x)=>s+M[x.mid].p*x.qty,0);
+    let q=rnd()*hw,h=7;for(;h<22&&q>HW[h-7];h++)q-=HW[h-7];const acc=10+rnd()*42;
+    aggOrder(A,o,rv,rnd()<.8?acc:null,5+rnd()*16,acc>45||rnd()<.03,h);
+    if(rnd()>.28){A.bills++;const p=rnd();A.pay[p<.4?"cash":p<.78?"qr":"card"]+=rv}else{A.pay[pick(["cash","qr","qr","card"])]+=rv}}
+  GEN.set(k,A);return A}
+function dayAgg(k){const today=dkey(Date.now());const A=realDay(k);
+  /* a day that already holds the demo seed orders is not topped up with sample history */
+  const seeded=ST.orders.some(o=>o.seed&&dkey(o.createdAt)===k);return k<today&&!seeded&&k>=addD(today,-HIST_DAYS)?aggAdd(A,genDay(k)):A}
+function periodKeys(){const today=dkey(Date.now()),P=ST.oper||{k:"today"};
+  if(P.k==="yest")return [addD(today,-1),addD(today,-1)];
+  if(["7","30","90"].includes(P.k))return [addD(today,-(+P.k-1)),today];
+  if(P.k==="custom"&&P.from&&P.to){let f=P.from<P.to?P.from:P.to,to=P.from<P.to?P.to:P.from;const min=addD(today,-HIST_DAYS);if(f<min)f=min;if(to>today)to=today;return [f,to]}
+  return [today,today]}
+function keysIn(f,to){const r=[];for(let k=f;k<=to;k=addD(k,1))r.push(k);return r}
+function fmtK(k,o){return new Date(kts(k)+7*3600e3).toLocaleDateString(ST.lang==="ru"?"ru-RU":"vi-VN",Object.assign({timeZone:"UTC"},o||{day:"numeric",month:"short"}))}
+function delta(cur,prev,lowerBetter){if(!prev||!cur)return "";const d=(cur-prev)/prev*100;if(Math.abs(d)<.5)return `<em class="dl0">≈ ${esc(t("vsPrev"))}</em>`;
+  const good=lowerBetter?d<0:d>0;return `<em class="${good?"dlu":"dld"}">${d>0?"▲":"▼"} ${Math.abs(d).toFixed(0)}% ${esc(t("vsPrev"))}</em>`}
+function rOwner(el){const [f,to]=periodKeys();const days=keysIn(f,to);const len=days.length;const pdays=keysIn(addD(f,-len),addD(f,-1));
+  const perDay=days.map(k=>[k,dayAgg(k)]);const A=perDay.reduce((x,[,d])=>aggAdd(x,d),agg0());const B=pdays.reduce((x,k)=>aggAdd(x,dayAgg(k)),agg0());
+  const today=dkey(Date.now()),isToday=len===1&&f===today;
+  const mean=a=>a[1]?a[0]/a[1]:0;const avg=A.bills?A.rev/A.bills:0,pavg=B.bills?B.rev/B.bills:0;
+  const openB=Object.values(ST.bills).filter(b=>!b.closed).length;
+  const per=ST.staff.filter(s=>s.role==="waiter"&&s.status!=="deleted"&&s.status!=="pending"&&s.status!=="rejected").map(w=>{const x=A.w[w.id]||{n:0,r:0,acc:[0,0],late:0};
+    return {w,n:x.n,r:x.r,avg:x.n?x.r/x.n:0,acc:mean(x.acc),late:x.late}}).sort((a,b)=>b.r-a.r);
+  const top=Object.entries(A.items).sort((a,b)=>b[1]-a[1]).slice(0,6);const topMax=top.length?top[0][1]:1;
+  const lgs=Object.entries(A.lang).sort((a,b)=>b[1]-a[1]);const lgMax=lgs.length?lgs[0][1]:1;
+  const hrs={};for(let h=7;h<=22;h++)hrs[h]=A.hrs[h]||0;const hMax=Math.max(1,...Object.values(hrs));
+  const pmS=A.pay;const pmT=Object.values(pmS).reduce((a,b)=>a+b,0)||1,pmMax=Math.max(1,...Object.values(pmS));
+  const dMax=Math.max(1,...perDay.map(([,d])=>d.rev));const step=len>45?10:len>14?5:1;
+  const P=ST.oper||{k:"today"};const PK=[["today",t("pToday")],["yest",t("pYest")],["7",t("p7")],["30",t("p30")],["90",t("p90")],["custom",t("pCustom")]];
+  const title=isToday?t("pToday"):len===1?fmtK(f,{day:"numeric",month:"long",weekday:"long"}):fmtK(f)+" – "+fmtK(to);
   const nopt=[["taker",t("nTaker"),t("nTakerD")],["all",t("nAll"),t("nAllD")],["esc",t("nEsc"),t("nEscD")]];
-  el.innerHTML=`<div class="row"><h2>${esc(t("oToday"))}</h2><span class="sp"></span><span class="seed">${esc(t("oSeed"))}</span></div>
+  el.innerHTML=`<div class="pbar"><div class="tabs" id="perTabs">${PK.map(([k,l])=>`<button type="button" data-per="${k}" class="${P.k===k?"on":""}">${esc(l)}</button>`).join("")}</div>
+    ${P.k==="custom"?`<div class="pcust"><label>${esc(t("pFrom"))} <input type="date" id="pF" min="${addD(today,-HIST_DAYS)}" max="${today}" value="${P.from||addD(today,-13)}"></label><label>${esc(t("pTo"))} <input type="date" id="pT" min="${addD(today,-HIST_DAYS)}" max="${today}" value="${P.to||today}"></label></div>`:""}</div>
+   <div class="row"><h2>${esc(title)}</h2><span class="sp"></span><button class="btn ghost sm" type="button" id="csvBtn">${esc(t("csv"))}</button></div>
+   <p class="seed" style="margin:0;align-self:flex-start">${esc(t("histNote"))}</p>
+   ${isToday&&!A.orders?`<div class="alert"><span>${esc(t("noToday").replace("{h}",new Date(Date.now()+7*3600e3).toISOString().slice(11,16)))}</span><span class="sp"></span><button class="btn sm" type="button" data-per="yest">${esc(t("pYest"))}</button></div>`:""}
    <div class="kpis">
-    <div class="kpi"><small>${esc(t("oRev"))}</small><b>${short(rev)} ₫</b><span>${vnd(rev)}</span></div>
-    <div class="kpi"><small>${esc(t("oBills"))}</small><b>${billIds.length}</b><span>${esc(t("oOpen"))}: ${openB} · ${esc(t("oOrders"))}: ${all.length}</span></div>
-    <div class="kpi"><small>${esc(t("oAvg"))}</small><b>${short(avg)} ₫</b><span>&nbsp;</span></div>
-    <div class="kpi"><small>${esc(t("oAccept"))}</small><b>${Math.round(mean(accT))} ${esc(t("sec"))}</b><span>QR → ${esc(t("sAccepted"))}</span></div>
-    <div class="kpi"><small>${esc(t("oCook"))}</small><b>${mean(cookT).toFixed(1)} ${esc(t("min"))}</b><span>${esc(t("sCooking"))} → ${esc(t("sReady"))}</span></div>
+    <div class="kpi"><small>${esc(t("oRev"))}</small><b>${short(A.rev)} ₫</b><span>${vnd(A.rev)}</span>${delta(A.rev,B.rev)}</div>
+    <div class="kpi"><small>${esc(t("oBills"))}</small><b>${A.bills}</b><span>${isToday?esc(t("oOpen"))+": "+openB+" · ":""}${esc(t("oOrders"))}: ${A.orders}</span>${delta(A.bills,B.bills)}</div>
+    <div class="kpi"><small>${esc(t("oAvg"))}</small><b>${short(avg)} ₫</b><span>&nbsp;</span>${delta(avg,pavg)}</div>
+    <div class="kpi"><small>${esc(t("oAccept"))}</small><b>${Math.round(mean(A.acc))} ${esc(t("sec"))}</b><span>QR → ${esc(t("sAccepted"))}</span>${delta(mean(A.acc),mean(B.acc),true)}</div>
+    <div class="kpi"><small>${esc(t("oCook"))}</small><b>${mean(A.cook).toFixed(1)} ${esc(t("min"))}</b><span>${esc(t("sCooking"))} → ${esc(t("sReady"))}</span>${delta(mean(A.cook),mean(B.cook),true)}</div>
    </div>
-   <div class="card"><h3>${esc(t("oWaiters"))}</h3><div class="tbl"><table><tr><th>${esc(t("oName"))}</th><th>${esc(t("oShift"))}</th><th>${esc(t("oOrd"))}</th><th>${esc(t("oRevS"))}</th><th>${esc(t("oAvgS"))}</th><th>${esc(t("oAcc"))}</th><th>${esc(t("oLate"))}</th></tr>
-     ${per.map((p,pi)=>`<tr><td><span class="av" style="--c:var(--c${pi%6+1})">${esc(p.w.name[0])}</span><b>${esc(p.w.name)}</b></td><td>${ST.shift[p.w.id]?'<span class="pill st-ready">●</span>':'<span class="dim">—</span>'}</td><td>${p.n}</td><td>${vnd(p.r)}</td><td>${short(p.avg)}</td><td>${p.n?Math.round(p.acc)+" "+esc(t("sec")):"—"}</td><td>${p.late?`<span class="pill st-late">${p.late}</span>`:"0"}</td></tr>`).join("")}</table></div></div>
+   ${len>1?`<div class="card"><h3>${esc(t("oByDay"))}</h3><div class="hours days${len>31?" dense":""}">${perDay.map(([k,d],i)=>`<div title="${esc(fmtK(k,{day:"numeric",month:"short",weekday:"short"}))} · ${vnd(d.rev)}"><i style="height:${d.rev/dMax*100}%"></i><small>${(len-1-i)%step===0?new Date(kts(k)+7*3600e3).getUTCDate():"&nbsp;"}</small></div>`).join("")}</div></div>`:""}
+   <div class="card"><h3>${esc(t("oWaiters"))}</h3><div class="tbl"><table><tr><th>${esc(t("oName"))}</th>${isToday?`<th>${esc(t("oShift"))}</th>`:""}<th>${esc(t("oOrd"))}</th><th>${esc(t("oRevS"))}</th><th>${esc(t("oAvgS"))}</th><th>${esc(t("oAcc"))}</th><th>${esc(t("oLate"))}</th></tr>
+     ${per.map((p,pi)=>`<tr><td><span class="av" style="--c:var(--c${pi%6+1})">${esc(p.w.name[0])}</span><b>${esc(p.w.name)}</b></td>${isToday?`<td>${ST.shift[p.w.id]?'<span class="pill st-ready">●</span>':'<span class="dim">—</span>'}</td>`:""}<td>${p.n}</td><td>${vnd(p.r)}</td><td>${short(p.avg)}</td><td>${p.n?Math.round(p.acc)+" "+esc(t("sec")):"—"}</td><td>${p.late?`<span class="pill st-late">${p.late}</span>`:"0"}</td></tr>`).join("")}</table></div></div>
    <div class="two">
     <div class="card"><h3>${esc(t("oTop"))}</h3><div class="bars">${top.map(([k,v])=>`<div class="bar"><span>${esc(nm(k,ST.lang==="ru"?"ru":"vi"))}</span><i style="width:${Math.max(4,v/topMax*100)}%"></i><span>${v}</span></div>`).join("")}</div></div>
-    <div class="card"><h3>${esc(t("oLang"))}</h3><div class="bars">${lgs.map(([k,v])=>`<div class="bar"><span>${esc(LANGNAME[k]||k)}</span><i style="width:${Math.max(4,v/lgMax*100)}%"></i><span>${Math.round(v/all.length*100)}%</span></div>`).join("")}</div></div>
+    <div class="card"><h3>${esc(t("oLang"))}</h3><div class="bars">${lgs.map(([k,v])=>`<div class="bar"><span>${esc(LANGNAME[k]||k)}</span><i style="width:${Math.max(4,v/lgMax*100)}%"></i><span>${Math.round(v/(A.orders||1)*100)}%</span></div>`).join("")}</div></div>
    </div>
    <div class="card"><h3>${esc(t("oPay"))}</h3><div class="bars">${[...PAYS,"none"].filter(k=>k!=="none"||pmS.none).map(k=>`<div class="bar"><span>${esc(k==="none"?t("payNone"):t("pay_"+k))}</span><i style="width:${Math.max(4,pmS[k]/pmMax*100)}%"></i><span>${short(pmS[k])} · ${Math.round(pmS[k]/pmT*100)}%</span></div>`).join("")}</div></div>
    <div class="card"><h3>${esc(t("oHours"))}</h3><div class="hours">${Object.entries(hrs).map(([h,v])=>`<div title="${h}:00 · ${vnd(v)}"><i style="height:${v/hMax*100}%"></i><small>${h}</small></div>`).join("")}</div></div>
    <div class="card"><h3>${esc(t("oSettings"))}</h3><div class="radio">${nopt.map(([k,a,b])=>`<label><input type="radio" name="notify" value="${k}" ${ST.notify===k?"checked":""}><span><b>${esc(a)}</b><br><span class="dim">${esc(b)}</span></span></label>`).join("")}</div></div>`;
   el.querySelectorAll("input[name=notify]").forEach(r=>r.onchange=()=>mutate(()=>{ST.notify=r.value}));
+  el.querySelectorAll("[data-per]").forEach(b=>b.onclick=()=>{const k=b.dataset.per;ST.oper=Object.assign({},ST.oper||{},{k});if(k==="custom"&&!ST.oper.from){ST.oper.from=addD(today,-13);ST.oper.to=today}save();render()});
+  ["pF","pT"].forEach(id=>{const i=el.querySelector("#"+id);if(i)i.onchange=()=>{if(!i.value)return;ST.oper=Object.assign({},ST.oper,id==="pF"?{from:i.value}:{to:i.value});save();render()}});
+  el.querySelector("#csvBtn").onclick=()=>{const rows=[[t("csvDate"),t("oRev"),t("oBills"),t("oOrders"),t("oAvg"),t("pay_cash"),t("pay_card"),t("pay_qr")]].concat(perDay.map(([k,d])=>[k,d.rev,d.bills,d.orders,d.bills?Math.round(d.rev/d.bills):0,d.pay.cash,d.pay.card,d.pay.qr]));
+    const csv="﻿"+rows.map(r=>r.map(v=>/[;"\n]/.test(String(v))?'"'+String(v).replace(/"/g,'""')+'"':v).join(";")).join("\r\n");
+    const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));a.download=`chez-oanh_${f}_${to}.csv`;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500)};
 }
 
 /* ---------- top controls ---------- */
