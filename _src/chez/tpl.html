@@ -35,7 +35,6 @@ button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{ou
 .open.closed i{background:#d0533b;box-shadow:0 0 0 3px rgba(208,83,59,.25)}
 .langbtn{position:fixed;top:calc(env(safe-area-inset-top,0px) + 10px);right:max(12px,calc((100vw - 720px)/2 + 12px));z-index:25;display:inline-flex;align-items:center;gap:7px;border:0;background:linear-gradient(180deg,var(--amber-2),var(--amber));color:#1d140a;border-radius:999px;padding:9px 14px 9px 11px;font-size:13.5px;font-weight:800;letter-spacing:.02em;box-shadow:0 6px 20px rgba(0,0,0,.45),0 0 0 3px rgba(19,16,12,.55)}
 .langbtn svg{width:17px;height:17px}
-.langbtn .fl{font-size:17px;line-height:1}
 .langbtn .cv{width:12px;height:12px;opacity:.8}
 .rail .wrap{padding-right:108px}
 .rw .harr.r{right:104px}
@@ -362,7 +361,7 @@ body.hasbar .totop{bottom:calc(88px + env(safe-area-inset-bottom,0px))}
   </div>
 </div>
 
-<button class="langbtn" id="langBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 3 2.5 15 0 18M12 3c-2.5 3-2.5 15 0 18"/></svg><span class="fl" id="langFlag"></span><span id="langName"></span><svg class="cv" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 9l6 6 6-6"/></svg></button>
+<button class="langbtn" id="langBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 3 2.5 15 0 18M12 3c-2.5 3-2.5 15 0 18"/></svg><span id="langName"></span><svg class="cv" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 9l6 6 6-6"/></svg></button>
 <header class="hero">
   <div class="bg" id="heroBg"></div>
   <div class="top"><div class="wrap">
@@ -669,7 +668,7 @@ function renderCats(){
 function render(){
   const t=T[lang],li=IDX[lang],q=$("q").value.trim().toLowerCase();
   document.documentElement.lang=lang;
-  $("tagline").textContent=t.tag;$("langName").innerHTML=lang.toUpperCase()+"<span class=\"ln\"> · "+esc(LANGS.find(l=>l.k===lang).n)+"</span>";$("langFlag").textContent={ru:"🇷🇺",en:"🇬🇧",vi:"🇻🇳",ko:"🇰🇷",zh:"🇨🇳"}[lang]||"";$("langBtn").setAttribute("aria-label","Language: "+LANGS.find(l=>l.k===lang).n);$("fHours").textContent=t.hours;$("fAddr").textContent=t.addr;$("ftH").textContent=t.hours;
+  $("tagline").textContent=t.tag;$("langName").innerHTML=lang.toUpperCase()+"<span class=\"ln\"> · "+esc(LANGS.find(l=>l.k===lang).n)+"</span>";$("langBtn").setAttribute("aria-label","Language: "+LANGS.find(l=>l.k===lang).n);$("fHours").textContent=t.hours;$("fAddr").textContent=t.addr;$("ftH").textContent=t.hours;
   $("gFood").textContent=t.food;$("gDrinks").textContent=t.drinks;
   $("gFood").classList.toggle("on",group==="food");$("gDrinks").classList.toggle("on",group==="drinks");
   $("gFood").setAttribute("aria-selected",group==="food");$("gDrinks").setAttribute("aria-selected",group==="drinks");
