@@ -374,6 +374,94 @@ li.it.extra{grid-template-columns:1fr auto;align-items:center;border-bottom:0}
 .totop{position:fixed;right:16px;bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:14;display:flex;align-items:center;gap:6px;height:44px;padding:0 14px 0 12px;border-radius:999px;border:1px solid var(--amber);background:rgba(19,16,12,.92);color:var(--amber-2);font-weight:700;font-size:12px;letter-spacing:.08em;text-transform:uppercase;box-shadow:0 8px 24px rgba(0,0,0,.5);backdrop-filter:blur(6px)}
 .totop svg{width:18px;height:18px}
 body.hasbar .totop{bottom:calc(88px + env(safe-area-inset-bottom,0px))}
+/* ===== v2 layout: compact hero, pinned search + circles, dish tiles, bottom capsule ===== */
+.hero{min-height:0!important;height:clamp(190px,30vh,250px)}
+.hero .txt{padding-block:0 16px}
+.hero h1{font-size:clamp(36px,10vw,56px)!important;line-height:.95}
+.hero h1 em{font-size:.42em;margin-top:6px;letter-spacing:.02em}
+.hero .top .wrap{padding-right:min(46vw,230px)}
+.hmeta{display:flex;align-items:center;gap:10px;margin-top:10px;flex-wrap:wrap}
+.tchip{font-size:12px;font-weight:800;color:#1d140a;background:var(--amber);border-radius:999px;padding:5px 11px}
+.hlink{font-size:12px;font-weight:600;color:var(--muted);text-decoration:none;border-bottom:1px dotted var(--dim)}
+.stick{position:sticky;top:env(safe-area-inset-top,0px);z-index:8;background:rgba(19,16,12,.94);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding-block:10px 4px}
+.srow{display:flex;gap:8px;align-items:center}
+.srow .search{padding:10px 12px}
+.srow .groups{flex:none;margin:0;display:flex;gap:3px;padding:3px;border-radius:12px}
+.srow .groups button{padding:8px 10px;font-size:11px;border-radius:9px}
+body.stuck .langbtn{opacity:0;pointer-events:none;transform:translateY(-8px)}
+.langbtn{transition:opacity .2s,transform .2s}
+.stick .cw{max-width:none;margin:0 calc(-1*max(16px,env(safe-area-inset-left,0px)))}
+.cats{padding:10px max(16px,env(safe-area-inset-left,0px)) 6px!important;gap:12px!important;max-width:none!important}
+.cats{align-items:flex-start}
+.cat{width:74px!important;height:auto!important;align-content:start;grid-template-rows:auto auto;border:0!important;border-radius:0!important;background:none!important;overflow:visible!important;display:grid;justify-items:center;gap:5px;text-align:center}
+.cat::before,.cat::after{display:none!important}
+.cat img{position:static!important;width:58px!important;height:58px!important;border-radius:50%;object-fit:cover;border:2px solid var(--line);transition:border-color .2s,box-shadow .2s}
+.cat .ini{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;background:var(--card);border:2px solid var(--line);font-family:var(--f-display);font-size:24px;color:var(--amber-2)}
+.cat span{position:static!important;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;max-width:100%;font-family:var(--f-body)!important;font-size:10.5px!important;font-weight:600;line-height:1.2!important;color:var(--muted);text-shadow:none!important;letter-spacing:0!important}
+.cat.on img,.cat.on .ini{border-color:var(--amber-2);box-shadow:0 0 0 3px rgba(242,182,92,.2)}
+.cat.on span{color:var(--ink)}
+.cw .harr{top:38px!important;width:30px;height:30px}
+@media (hover:none),(max-width:700px){.cw .harr{display:none!important}}
+section.s .medals,section.s .orn2{display:none}
+section.s h2{font-size:32px!important;margin-top:8px}
+.rate{font-size:11.5px;color:var(--dim)}
+.rate{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding-top:12px}
+.rate .cur{padding:7px 8px;font-size:12.5px;border-radius:10px}
+section.s{scroll-margin-top:calc(var(--stickh,130px) + 8px)!important;padding-block:26px 4px}
+.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:14px}
+@media (min-width:640px){.tiles{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.tile{position:relative;display:flex;flex-direction:column;border-radius:18px;overflow:hidden;background:linear-gradient(180deg,#221b14,#1a1510);border:1px solid var(--line);min-width:0}
+.tile.big{grid-column:1/-1}
+.tile .ph{width:100%!important;height:auto!important;aspect-ratio:1;border:0!important;border-radius:0!important;display:block}
+.tile.big .ph{aspect-ratio:16/10}
+.tile .ph img{width:100%;height:100%;object-fit:cover;display:block}
+.tile .txt{padding:10px 11px 12px;display:flex;flex-direction:column;flex:1;min-width:0}
+.tile .nm{font-family:var(--f-display);font-size:17px;font-weight:600;line-height:1.12;color:var(--ink)}
+.tile.big .nm{font-size:21px}
+.tile .orig{font-size:12px;margin-top:3px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.tile .opts{padding-top:8px}
+.tile .opt{gap:6px;flex-wrap:wrap}
+.tile .step{padding:2px}.tile .step button{width:26px;height:26px}.tile .step b{min-width:16px;font-size:13px}
+.tile .add{width:32px;height:32px}
+.tile .pv .main{font-size:14px}
+.tile.incart{border-color:rgba(242,182,92,.55)}
+.tile.incart .nm{color:var(--amber-2)}
+.tile.out .ph img,.tile.out .nm,.tile.out .orig,.tile.out .pv{opacity:.42;filter:grayscale(.6)}
+.tile.out .nm{text-decoration:line-through;text-decoration-thickness:1px}
+.tiles+.items{margin-top:8px}
+.about{margin-top:34px;padding:22px 18px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(180deg,#1f1913,#17130f);scroll-margin-top:calc(var(--stickh,130px) + 8px)}
+.about h3{margin:6px 0 8px;font-family:var(--f-display);font-size:30px;font-weight:600}
+.about p{margin:0;color:var(--muted);font-size:13.5px;max-width:60ch}
+.about .feat{margin-top:18px}
+/* capsule */
+.bar .cap{pointer-events:auto;max-width:688px;margin:0 auto;display:flex;align-items:center;gap:8px;padding:6px 6px 6px 8px;border-radius:999px;background:rgba(33,27,21,.94);border:1px solid rgba(242,182,92,.35);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 16px 40px rgba(0,0,0,.6)}
+.bar .cap button{width:auto;margin:0;box-shadow:none}
+.bar .capin{flex:1;min-width:0;display:flex!important;align-items:center;gap:10px;background:none!important;border:0;padding:4px!important;color:var(--ink)!important;text-align:left}
+.bar .capin .gs{display:flex;flex:none}
+.bar .capin .gs i{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-family:var(--f-display);font-weight:700;font-size:15px;color:#1d140a;border:2px solid #211b15;margin-left:-9px}
+.bar .capin .gs i:first-child{margin-left:0}
+.bar .capin .gs i.n{background:#1d140a;color:var(--amber-2);border-color:rgba(242,182,92,.5);font-family:var(--f-body);font-size:13px}
+.bar .capin .gs i.ic{background:var(--card);color:var(--amber-2);border-color:var(--line)}
+.bar .capin .gs i.ic svg{width:16px;height:16px}
+.bar .capin .mid small{opacity:1;color:var(--muted);font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar .capin .mid b{font-size:15.5px;color:var(--ink)}
+.bar #barBtn.go{flex:none!important;border-radius:999px!important;padding:13px 18px!important;font-weight:800;font-size:13.5px;color:#1d140a;justify-content:center}
+.bar #barBtn.go[hidden]{display:none!important}
+#tbl .gl{display:grid;gap:8px;margin:12px 0 4px}
+#tbl .gr{display:flex;align-items:center;gap:10px;width:100%;padding:11px 12px;border-radius:14px;background:var(--card);border:1px solid var(--line);color:var(--ink);text-align:left;font:inherit;cursor:pointer}
+#tbl .gr.on{border-color:var(--amber)}
+#tbl .gr i{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-family:var(--f-display);font-weight:700;font-size:16px;color:#1d140a;flex:none}
+#tbl .gr span{flex:1;min-width:0;font-weight:700;font-size:14px}
+#tbl .gr small{display:block;color:var(--muted);font-weight:500;font-size:11.5px}
+#tbl .gr b{font-variant-numeric:tabular-nums;font-size:13.5px}
+#tbl .gadd{width:100%;border:1.5px dashed var(--amber);background:rgba(242,182,92,.06);color:var(--amber-2);border-radius:14px;padding:12px;font:800 13.5px var(--f-body)}
+#tbl .acts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}
+#tbl .acts button{display:grid;justify-items:center;gap:7px;padding:14px 6px;border-radius:16px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-weight:700;font-size:12px;line-height:1.2;text-align:center;cursor:pointer}
+#tbl .acts button svg{color:var(--amber-2)}
+#tbl .acts button.sent{color:var(--muted)}
+#tbl .acts button.tip{border-color:rgba(239,154,106,.6);background:linear-gradient(160deg,rgba(239,154,106,.18),rgba(239,154,106,.05))}
+#tbl .acts button.tip svg{color:#ef9a6a}
+#tbl .hint2{font-size:12.5px;color:var(--muted);margin:10px 0 0}
 </style>
 
 <div class="gate" id="gate" hidden>
@@ -393,48 +481,33 @@ body.hasbar .totop{bottom:calc(88px + env(safe-area-inset-bottom,0px))}
     <span class="open" id="open"><i></i><span id="openT"></span></span>
   </div></div>
   <div class="wrap txt">
-    <div class="eyebrow">by La Marina Boutique Hotel &amp; Spa</div>
-    <h1>Café Chez Oanh<em>Sofa Café</em></h1>
-    <div class="orn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.6 7.4H22l-6 4.6 2.3 7.5L12 17l-6.3 4.5L8 14 2 9.4h7.4z"/></svg></div>
+    <h1>Café Chez Oanh<em>Sofa Café · Hàm Tiến</em></h1>
+    <div class="hmeta"><span class="tchip" id="tChip" hidden></span><a class="hlink" href="#about" id="aboutLnk"></a></div>
+  </div>
+</header>
+<!-- search, food / drinks and the section circles stay pinned to the top while the guest scrolls -->
+<div class="stick" id="stick"><div class="wrap">
+  <div class="srow"><input class="search" id="q" type="search" autocomplete="off"><div class="groups" role="tablist" id="menuTop"><button type="button" id="gFood" role="tab"></button><button type="button" id="gDrinks" role="tab"></button></div></div>
+  <div class="hwrap cw"><div class="cats" id="cats"></div><button class="harr l" type="button" aria-label="‹"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 6l-6 6 6 6"/></svg></button><button class="harr r" type="button" aria-label="›"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 6l6 6-6 6"/></svg></button></div>
+</div></div>
+<main class="wrap">
+  <div class="rate"><select class="cur" id="cur" aria-label="Currency"></select><span id="rate"></span></div>
+  <div id="menu"></div>
+  <section class="about" id="about">
+    <div class="eyebrow" id="abE"></div>
+    <h3 id="abH">Café Chez Oanh</h3>
     <p id="tagline"></p>
-    <div class="facts">
+  <div class="facts">
       <a class="fact addr" href="https://www.google.com/maps/search/?api=1&amp;query=Cafe+Chez+Oanh+246%2F8+Nguy%E1%BB%85n+%C4%90%C3%ACnh+Chi%E1%BB%83u+H%C3%A0m+Ti%E1%BA%BFn+Phan+Thi%E1%BA%BFt" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0119 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><div><small id="fAddr"></small>246/8 Nguyễn Đình Chiểu, Hàm Tiến, Phan Thiết</div></a>
       <div class="fact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><div><small id="fHours"></small>7:00 – 22:00</div></div>
       <button class="fact" type="button" id="wifiBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 8.5a15 15 0 0120 0M5 12a10 10 0 0114 0M8.5 15.5a5 5 0 017 0"/><circle cx="12" cy="19" r="1.2" fill="currentColor"/></svg><div><small>Wi-Fi · CAFE CHEZ OANH</small><span id="wifiPw">marina12345</span></div></button>
     </div>
-    <div class="cta"><a class="btn-gold" href="#menuTop" id="ctaMenu"></a><a class="btn-line" href="#atmo" id="ctaRoom"></a></div>
-  </div>
-</header>
-
-<main class="wrap">
   <div class="feat">
     <div><svg viewBox="0 0 32 32" fill="none" stroke="currentColor"><path d="M6 13h20l-2 13H8z"/><path d="M11 13l5-7 5 7"/><path d="M12 18v4M16 18v4M20 18v4"/></svg><b id="f1t"></b><span id="f1s"></span></div>
     <div><svg viewBox="0 0 32 32" fill="none" stroke="currentColor"><circle cx="16" cy="18" r="9"/><path d="M16 13v5l3 2M13 4h6M16 4v5"/></svg><b id="f2t"></b><span>7:00 – 22:00</span></div>
     <div><svg viewBox="0 0 32 32" fill="none" stroke="currentColor"><path d="M16 27c-6 0-9-5-9-10 0-4 3-7 6-7 1.5 0 2.3.6 3 .6s1.5-.6 3-.6c3 0 6 3 6 7 0 5-3 10-9 10z"/><path d="M16 10c0-3 2-5 4-6"/></svg><b id="f3t"></b><span id="f3s"></span></div>
   </div>
-  <div class="sig" id="sigBox">
-    <div class="eyebrow" id="sigE"></div>
-    <h3 id="sigH"></h3>
-    <div class="orn2"><i></i></div>
-    <div class="sigwrap"><div class="sigrow" id="sigRow"></div>
-      <button class="sarr l" type="button" id="sPrev" aria-label="‹"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 6l-6 6 6 6"/></svg></button>
-      <button class="sarr r" type="button" id="sNext" aria-label="›"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 6l6 6-6 6"/></svg></button></div>
-    <div class="sdots" id="sDots"></div>
-  </div>
-  <div class="groups" role="tablist" id="menuTop">
-    <button type="button" id="gFood" role="tab"></button>
-    <button type="button" id="gDrinks" role="tab"></button>
-  </div>
-</main>
-<div class="hwrap cw"><div class="cats" id="cats"></div><button class="harr l" type="button" aria-label="‹"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 6l-6 6 6 6"/></svg></button><button class="harr r" type="button" aria-label="›"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 6l6 6-6 6"/></svg></button></div>
-<nav class="rail"><div class="hwrap rw"><div class="wrap" id="railIn"></div><button class="harr l" type="button" aria-label="‹"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 6l-6 6 6 6"/></svg></button><button class="harr r" type="button" aria-label="›"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 6l6 6-6 6"/></svg></button></div></nav>
-<main class="wrap">
-  <div class="tools">
-    <input class="search" id="q" type="search" autocomplete="off">
-    <select class="cur" id="cur" aria-label="Currency"></select>
-  </div>
-  <div class="rate" id="rate"></div>
-  <div id="menu"></div>
+  </section>
 
   <div class="atmo" id="atmo">
     <div class="zebra"></div>
@@ -460,7 +533,13 @@ body.hasbar .totop{bottom:calc(88px + env(safe-area-inset-bottom,0px))}
   <div class="small" id="foot"></div>
 </footer>
 
-<div class="bar" id="bar" hidden><div class="cks" id="cks" hidden></div><div class="bills" id="bills" hidden><button type="button" class="billb" id="billBtn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></svg><span id="billT"></span></button><button type="button" class="billb" id="qrBtn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3zM20 14v7M14 20h3"/></svg><span id="qrT"></span></button></div><div class="barin"><button type="button" id="barBtn"><span class="q" id="barQ">0</span><span class="mid"><small id="barL"></small><b id="barT"></b></span><span class="go"><span id="barGo"></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 6l6 6-6 6"/></svg></span></button></div></div>
+<!-- one capsule at the bottom: guests, total and the main action; tapping it opens the table sheet -->
+<div class="bar" id="bar" hidden><div class="cap" id="cap"><button type="button" class="capin" id="capOpen"><span class="gs" id="capG"></span><span class="mid"><small id="barL"></small><b id="barT"></b></span></button><button type="button" class="go" id="barBtn"><span id="barGo"></span></button></div></div>
+<div class="sheet" id="tbl" hidden><div class="panel">
+  <div class="hd"><h3 id="tblH"></h3><button class="x" type="button" id="tblX" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="gl" id="tblG"></div>
+  <div class="acts" id="tblA"><button type="button" class="billb" id="billBtn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></svg><span id="billT"></span></button><button type="button" id="qrBtn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3zM20 14v7M14 20h3"/></svg><span id="qrT"></span></button><button type="button" class="tip" id="tipT"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span id="tipTT"></span></button></div>
+</div></div>
 
 <div class="sheet" id="sheet" hidden><div class="panel">
   <div class="hd"><h3 id="sheetH"></h3><button class="x" type="button" id="sheetX" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
@@ -633,11 +712,11 @@ const T={
      sugar:"如需不加糖或不加冰，请告知。",milk:"如需不加奶、不加糖或不加冰，请告知。",
      own:"自选果汁：橙子、菠萝、苹果、百香果、甜菜、西瓜、黄瓜、青柠、胡萝卜、番茄、芹菜、姜、蜂蜜。"}}
 };
-Object.assign(T.ru,{"revH": "Спасибо, что были у нас!", "revS": "Если вам понравилось, оставьте, пожалуйста, отзыв. Это очень помогает маленькому кафе.", "revG": "Отзыв в Google Картах", "revTa": "Отзыв на Tripadvisor", "revNo": "Не сейчас","soldOut": "Закончилось", "soldGone": "Некоторые блюда закончились и убраны из корзины","ckNextH": "Кто ещё платит отдельно?", "ckNextS": "Назовите следующий чек, например «Иван». Можно и позже: кнопка «+ Гость» над корзиной.", "ckNextPh": "Иван", "cknDone": "Готово", "ckNextOk": "Добавить","clearH": "Очистить корзину?", "clearS": "Все выбранные блюда будут удалены из корзины.", "clearYes": "Да, очистить", "cancel": "Отмена", "tpickS": "Обычно номер стола подставляется сам, когда меню открывают через QR-код на столе. Если открыли по общей ссылке, выберите стол:","splitB":"Разделить счёт","askH": "Счёт общий или раздельный?", "askS": "Если платите отдельно, заведите чек на каждого. Заказывать в свои чеки можно с одного телефона или с разных.", "askOne": "Один общий счёт", "askOneS": "Платим вместе", "askSplit": "Раздельные чеки", "askSplitS": "У каждого свой чек, например «Анна»", "cknH": "Название чека", "cknS": "Например, имя. Блюда будут добавляться в этот чек.", "cknPh": "Анна", "cknOk": "Создать чек", "ckL": "Чек", "ckAdd": "+ Гость", "ckAll": "Все вместе", "ckEmpty": "Пока пусто", "qrNone": "Кафе пока не добавило QR для оплаты. Попросите счёт у официанта.", "tipL": "Чаевые официанту", "tipH": "Чаевые официанту", "tipS": "Чаевые идут лично официанту, на его карту. Отсканируйте код в приложении банка.", "tipNoW": "Чаевые можно будет оставить, когда официант примет ваш заказ.", "tipNoQr": "Официант пока не добавил QR. Чаевые можно оставить наличными.", "tipFT": "Понравилось обслуживание? Чаевые идут лично вашему официанту.", "tipW": "Ваш официант"});
-Object.assign(T.en,{"revH": "Thank you for visiting!", "revS": "If you enjoyed it, please leave us a review. It really helps a small café.", "revG": "Review on Google Maps", "revTa": "Review on Tripadvisor", "revNo": "Not now","soldOut": "Sold out", "soldGone": "Some dishes have sold out and were removed from your cart","ckNextH": "Who else pays separately?", "ckNextS": "Name the next check, e.g. “Ivan”. You can also do it later with “+ Guest” above the cart.", "ckNextPh": "Ivan", "cknDone": "Done", "ckNextOk": "Add","clearH": "Clear the cart?", "clearS": "All selected dishes will be removed from the cart.", "clearYes": "Yes, clear", "cancel": "Cancel", "tpickS": "The table number is filled in automatically when you open the menu from the QR code on your table. Opened a general link? Pick your table:","splitB":"Split the bill","askH": "One bill or separate?", "askS": "Paying separately? Make a check for each person. Everyone can order into their own check from one phone or from several.", "askOne": "One bill", "askOneS": "We pay together", "askSplit": "Separate checks", "askSplitS": "Each person has a check, e.g. “Anna”", "cknH": "Name the check", "cknS": "A first name works. Dishes will go into this check.", "cknPh": "Anna", "cknOk": "Create check", "ckL": "Check", "ckAdd": "+ Guest", "ckAll": "All together", "ckEmpty": "Empty for now", "qrNone": "The café hasn't added a payment QR yet. Ask the waiter for the bill.", "tipL": "Tip the waiter", "tipH": "Tip the waiter", "tipS": "Tips go personally to the waiter's own account. Scan the code in your banking app.", "tipNoW": "You can leave a tip once the waiter has accepted your order.", "tipNoQr": "The waiter hasn't added a QR yet. You can tip in cash.", "tipFT": "Enjoyed the service? Tips go straight to your waiter.", "tipW": "Your waiter"});
-Object.assign(T.vi,{"revH": "Cảm ơn bạn đã ghé quán!", "revS": "Nếu bạn hài lòng, hãy để lại đánh giá nhé. Điều đó giúp quán nhỏ rất nhiều.", "revG": "Đánh giá trên Google Maps", "revTa": "Đánh giá trên Tripadvisor", "revNo": "Để sau","soldOut": "Hết món", "soldGone": "Một số món đã hết và được bỏ khỏi giỏ","ckNextH": "Ai trả riêng nữa?", "ckNextS": "Đặt tên hóa đơn tiếp theo, ví dụ “Ivan”. Có thể thêm sau bằng nút “+ Khách” phía trên giỏ.", "ckNextPh": "Ivan", "cknDone": "Xong", "ckNextOk": "Thêm","clearH": "Xóa giỏ hàng?", "clearS": "Tất cả món đã chọn sẽ bị xóa khỏi giỏ.", "clearYes": "Xóa", "cancel": "Hủy", "tpickS": "Số bàn tự động điền khi bạn mở thực đơn bằng mã QR trên bàn. Nếu mở bằng đường dẫn chung, hãy chọn bàn:","splitB":"Tách hóa đơn","askH": "Thanh toán chung hay riêng?", "askS": "Nếu trả riêng, hãy tạo hóa đơn cho từng người. Mỗi người có thể gọi món vào hóa đơn của mình từ một hoặc nhiều điện thoại.", "askOne": "Một hóa đơn chung", "askOneS": "Trả chung", "askSplit": "Hóa đơn riêng", "askSplitS": "Mỗi người một hóa đơn, ví dụ “Anna”", "cknH": "Tên hóa đơn", "cknS": "Ví dụ tên người. Món sẽ được thêm vào hóa đơn này.", "cknPh": "Anna", "cknOk": "Tạo hóa đơn", "ckL": "Hóa đơn", "ckAdd": "+ Khách", "ckAll": "Tất cả", "ckEmpty": "Chưa có món", "qrNone": "Quán chưa thêm mã QR thanh toán. Hãy gọi nhân viên để thanh toán.", "tipL": "Tip cho nhân viên", "tipH": "Tip cho nhân viên", "tipS": "Tiền tip được chuyển thẳng vào tài khoản của nhân viên. Quét mã bằng ứng dụng ngân hàng.", "tipNoW": "Bạn có thể gửi tip sau khi nhân viên nhận đơn.", "tipNoQr": "Nhân viên chưa thêm mã QR. Bạn có thể tip bằng tiền mặt.", "tipFT": "Hài lòng với phục vụ? Tiền tip đến thẳng nhân viên của bạn.", "tipW": "Nhân viên phục vụ"});
-Object.assign(T.ko,{"revH": "방문해 주셔서 감사합니다!", "revS": "마음에 드셨다면 리뷰를 남겨 주세요. 작은 카페에 큰 힘이 됩니다.", "revG": "Google 지도에 리뷰 쓰기", "revTa": "Tripadvisor에 리뷰 쓰기", "revNo": "나중에","soldOut": "품절", "soldGone": "일부 메뉴가 품절되어 장바구니에서 삭제되었어요","ckNextH": "따로 계산할 분이 더 있나요?", "ckNextS": "다음 계산서 이름을 입력하세요. 예: “Ivan”. 나중에 장바구니 위 “+ 손님”로 추가해도 됩니다.", "ckNextPh": "Ivan", "cknDone": "완료", "ckNextOk": "추가","clearH": "장바구니를 비울까요?", "clearS": "선택한 메뉴가 모두 삭제됩니다.", "clearYes": "네, 비우기", "cancel": "취소", "tpickS": "테이블의 QR 코드로 메뉴를 열면 테이블 번호가 자동으로 입력됩니다. 일반 링크로 여셨다면 테이블을 선택하세요:","splitB":"따로 계산하기","askH": "함께 계산할까요, 따로 할까요?", "askS": "따로 계산하려면 사람마다 계산서를 만드세요. 한 휴대폰이나 여러 휴대폰에서 각자 계산서로 주문할 수 있어요.", "askOne": "함께 계산", "askOneS": "한 번에 결제", "askSplit": "따로 계산", "askSplitS": "사람마다 계산서, 예: “Anna”", "cknH": "계산서 이름", "cknS": "이름을 입력하세요. 메뉴가 이 계산서에 담깁니다.", "cknPh": "Anna", "cknOk": "계산서 만들기", "ckL": "계산서", "ckAdd": "+ 손님", "ckAll": "모두 함께", "ckEmpty": "아직 비어 있음", "qrNone": "카페가 아직 결제 QR을 등록하지 않았어요. 직원에게 계산을 요청하세요.", "tipL": "직원에게 팁", "tipH": "직원에게 팁", "tipS": "팁은 직원 개인 계좌로 바로 갑니다. 은행 앱으로 코드를 스캔하세요.", "tipNoW": "직원이 주문을 받은 뒤 팁을 남길 수 있어요.", "tipNoQr": "직원이 아직 QR을 등록하지 않았어요. 현금으로 팁을 주셔도 됩니다.", "tipFT": "서비스가 마음에 드셨나요? 팁은 담당 직원에게 바로 갑니다.", "tipW": "담당 직원"});
-Object.assign(T.zh,{"revH": "感谢您的光临！", "revS": "如果您满意，请给我们留个评价，这对小咖啡馆帮助很大。", "revG": "在 Google 地图评价", "revTa": "在 Tripadvisor 评价", "revNo": "以后再说","soldOut": "已售完", "soldGone": "部分菜品已售完，已从购物车移除","ckNextH": "还有谁要分开付？", "ckNextS": "给下一张账单起名，例如“Ivan”。也可以稍后用购物车上方的“+ 客人”添加。", "ckNextPh": "Ivan", "cknDone": "完成", "ckNextOk": "添加","clearH": "清空购物车？", "clearS": "已选的菜品将全部删除。", "clearYes": "清空", "cancel": "取消", "tpickS": "通过桌上的二维码打开菜单时，桌号会自动填写。如果是通过普通链接打开的，请选择桌号：","splitB":"分开结账","askH": "一起付还是分开付？", "askS": "分开付的话，请为每个人建一张账单。每人可以用同一部或不同手机往自己的账单里点单。", "askOne": "一起付", "askOneS": "合并结账", "askSplit": "分开付", "askSplitS": "每人一张账单，例如“Anna”", "cknH": "账单名称", "cknS": "填名字即可，菜品会加到这张账单。", "cknPh": "Anna", "cknOk": "建立账单", "ckL": "账单", "ckAdd": "+ 客人", "ckAll": "全部一起", "ckEmpty": "暂时为空", "qrNone": "咖啡馆还没有添加收款码，请找服务员结账。", "tipL": "给服务员小费", "tipH": "给服务员小费", "tipS": "小费直接转到服务员本人的账户。请用银行App扫码。", "tipNoW": "服务员接单后即可给小费。", "tipNoQr": "服务员还没有添加收款码，可以给现金小费。", "tipFT": "满意我们的服务吗？小费直接给您的服务员。", "tipW": "您的服务员"});
+Object.assign(T.ru,{"abE": "О кафе", "aboutL": "Адрес, часы, Wi‑Fi", "tblOrd": "Заказ отправлен", "tblBtn": "Счёт", "ckAct": "добавляю сюда", "ckIn": "в корзине", "tblNone": "Здесь появятся счёт, оплата по QR и чаевые после первого заказа.","revH": "Спасибо, что были у нас!", "revS": "Если вам понравилось, оставьте, пожалуйста, отзыв. Это очень помогает маленькому кафе.", "revG": "Отзыв в Google Картах", "revTa": "Отзыв на Tripadvisor", "revNo": "Не сейчас","soldOut": "Закончилось", "soldGone": "Некоторые блюда закончились и убраны из корзины","ckNextH": "Кто ещё платит отдельно?", "ckNextS": "Назовите следующий чек, например «Иван». Можно и позже: кнопка «+ Гость» над корзиной.", "ckNextPh": "Иван", "cknDone": "Готово", "ckNextOk": "Добавить","clearH": "Очистить корзину?", "clearS": "Все выбранные блюда будут удалены из корзины.", "clearYes": "Да, очистить", "cancel": "Отмена", "tpickS": "Обычно номер стола подставляется сам, когда меню открывают через QR-код на столе. Если открыли по общей ссылке, выберите стол:","splitB":"Разделить счёт","askH": "Счёт общий или раздельный?", "askS": "Если платите отдельно, заведите чек на каждого. Заказывать в свои чеки можно с одного телефона или с разных.", "askOne": "Один общий счёт", "askOneS": "Платим вместе", "askSplit": "Раздельные чеки", "askSplitS": "У каждого свой чек, например «Анна»", "cknH": "Название чека", "cknS": "Например, имя. Блюда будут добавляться в этот чек.", "cknPh": "Анна", "cknOk": "Создать чек", "ckL": "Чек", "ckAdd": "+ Гость", "ckAll": "Все вместе", "ckEmpty": "Пока пусто", "qrNone": "Кафе пока не добавило QR для оплаты. Попросите счёт у официанта.", "tipL": "Чаевые официанту", "tipH": "Чаевые официанту", "tipS": "Чаевые идут лично официанту, на его карту. Отсканируйте код в приложении банка.", "tipNoW": "Чаевые можно будет оставить, когда официант примет ваш заказ.", "tipNoQr": "Официант пока не добавил QR. Чаевые можно оставить наличными.", "tipFT": "Понравилось обслуживание? Чаевые идут лично вашему официанту.", "tipW": "Ваш официант"});
+Object.assign(T.en,{"abE": "About", "aboutL": "Address, hours, Wi‑Fi", "tblOrd": "Order sent", "tblBtn": "Bill", "ckAct": "adding here", "ckIn": "in cart", "tblNone": "The bill, QR payment and tips appear here after your first order.","revH": "Thank you for visiting!", "revS": "If you enjoyed it, please leave us a review. It really helps a small café.", "revG": "Review on Google Maps", "revTa": "Review on Tripadvisor", "revNo": "Not now","soldOut": "Sold out", "soldGone": "Some dishes have sold out and were removed from your cart","ckNextH": "Who else pays separately?", "ckNextS": "Name the next check, e.g. “Ivan”. You can also do it later with “+ Guest” above the cart.", "ckNextPh": "Ivan", "cknDone": "Done", "ckNextOk": "Add","clearH": "Clear the cart?", "clearS": "All selected dishes will be removed from the cart.", "clearYes": "Yes, clear", "cancel": "Cancel", "tpickS": "The table number is filled in automatically when you open the menu from the QR code on your table. Opened a general link? Pick your table:","splitB":"Split the bill","askH": "One bill or separate?", "askS": "Paying separately? Make a check for each person. Everyone can order into their own check from one phone or from several.", "askOne": "One bill", "askOneS": "We pay together", "askSplit": "Separate checks", "askSplitS": "Each person has a check, e.g. “Anna”", "cknH": "Name the check", "cknS": "A first name works. Dishes will go into this check.", "cknPh": "Anna", "cknOk": "Create check", "ckL": "Check", "ckAdd": "+ Guest", "ckAll": "All together", "ckEmpty": "Empty for now", "qrNone": "The café hasn't added a payment QR yet. Ask the waiter for the bill.", "tipL": "Tip the waiter", "tipH": "Tip the waiter", "tipS": "Tips go personally to the waiter's own account. Scan the code in your banking app.", "tipNoW": "You can leave a tip once the waiter has accepted your order.", "tipNoQr": "The waiter hasn't added a QR yet. You can tip in cash.", "tipFT": "Enjoyed the service? Tips go straight to your waiter.", "tipW": "Your waiter"});
+Object.assign(T.vi,{"abE": "Về quán", "aboutL": "Địa chỉ, giờ mở cửa, Wi‑Fi", "tblOrd": "Đã gửi đơn", "tblBtn": "Hóa đơn", "ckAct": "đang thêm vào đây", "ckIn": "trong giỏ", "tblNone": "Hóa đơn, thanh toán QR và tip sẽ hiện ở đây sau đơn đầu tiên.","revH": "Cảm ơn bạn đã ghé quán!", "revS": "Nếu bạn hài lòng, hãy để lại đánh giá nhé. Điều đó giúp quán nhỏ rất nhiều.", "revG": "Đánh giá trên Google Maps", "revTa": "Đánh giá trên Tripadvisor", "revNo": "Để sau","soldOut": "Hết món", "soldGone": "Một số món đã hết và được bỏ khỏi giỏ","ckNextH": "Ai trả riêng nữa?", "ckNextS": "Đặt tên hóa đơn tiếp theo, ví dụ “Ivan”. Có thể thêm sau bằng nút “+ Khách” phía trên giỏ.", "ckNextPh": "Ivan", "cknDone": "Xong", "ckNextOk": "Thêm","clearH": "Xóa giỏ hàng?", "clearS": "Tất cả món đã chọn sẽ bị xóa khỏi giỏ.", "clearYes": "Xóa", "cancel": "Hủy", "tpickS": "Số bàn tự động điền khi bạn mở thực đơn bằng mã QR trên bàn. Nếu mở bằng đường dẫn chung, hãy chọn bàn:","splitB":"Tách hóa đơn","askH": "Thanh toán chung hay riêng?", "askS": "Nếu trả riêng, hãy tạo hóa đơn cho từng người. Mỗi người có thể gọi món vào hóa đơn của mình từ một hoặc nhiều điện thoại.", "askOne": "Một hóa đơn chung", "askOneS": "Trả chung", "askSplit": "Hóa đơn riêng", "askSplitS": "Mỗi người một hóa đơn, ví dụ “Anna”", "cknH": "Tên hóa đơn", "cknS": "Ví dụ tên người. Món sẽ được thêm vào hóa đơn này.", "cknPh": "Anna", "cknOk": "Tạo hóa đơn", "ckL": "Hóa đơn", "ckAdd": "+ Khách", "ckAll": "Tất cả", "ckEmpty": "Chưa có món", "qrNone": "Quán chưa thêm mã QR thanh toán. Hãy gọi nhân viên để thanh toán.", "tipL": "Tip cho nhân viên", "tipH": "Tip cho nhân viên", "tipS": "Tiền tip được chuyển thẳng vào tài khoản của nhân viên. Quét mã bằng ứng dụng ngân hàng.", "tipNoW": "Bạn có thể gửi tip sau khi nhân viên nhận đơn.", "tipNoQr": "Nhân viên chưa thêm mã QR. Bạn có thể tip bằng tiền mặt.", "tipFT": "Hài lòng với phục vụ? Tiền tip đến thẳng nhân viên của bạn.", "tipW": "Nhân viên phục vụ"});
+Object.assign(T.ko,{"abE": "카페 소개", "aboutL": "주소, 영업시간, Wi‑Fi", "tblOrd": "주문 완료", "tblBtn": "계산", "ckAct": "여기에 추가 중", "ckIn": "장바구니", "tblNone": "첫 주문 후 계산서, QR 결제, 팁이 여기에 표시됩니다.","revH": "방문해 주셔서 감사합니다!", "revS": "마음에 드셨다면 리뷰를 남겨 주세요. 작은 카페에 큰 힘이 됩니다.", "revG": "Google 지도에 리뷰 쓰기", "revTa": "Tripadvisor에 리뷰 쓰기", "revNo": "나중에","soldOut": "품절", "soldGone": "일부 메뉴가 품절되어 장바구니에서 삭제되었어요","ckNextH": "따로 계산할 분이 더 있나요?", "ckNextS": "다음 계산서 이름을 입력하세요. 예: “Ivan”. 나중에 장바구니 위 “+ 손님”로 추가해도 됩니다.", "ckNextPh": "Ivan", "cknDone": "완료", "ckNextOk": "추가","clearH": "장바구니를 비울까요?", "clearS": "선택한 메뉴가 모두 삭제됩니다.", "clearYes": "네, 비우기", "cancel": "취소", "tpickS": "테이블의 QR 코드로 메뉴를 열면 테이블 번호가 자동으로 입력됩니다. 일반 링크로 여셨다면 테이블을 선택하세요:","splitB":"따로 계산하기","askH": "함께 계산할까요, 따로 할까요?", "askS": "따로 계산하려면 사람마다 계산서를 만드세요. 한 휴대폰이나 여러 휴대폰에서 각자 계산서로 주문할 수 있어요.", "askOne": "함께 계산", "askOneS": "한 번에 결제", "askSplit": "따로 계산", "askSplitS": "사람마다 계산서, 예: “Anna”", "cknH": "계산서 이름", "cknS": "이름을 입력하세요. 메뉴가 이 계산서에 담깁니다.", "cknPh": "Anna", "cknOk": "계산서 만들기", "ckL": "계산서", "ckAdd": "+ 손님", "ckAll": "모두 함께", "ckEmpty": "아직 비어 있음", "qrNone": "카페가 아직 결제 QR을 등록하지 않았어요. 직원에게 계산을 요청하세요.", "tipL": "직원에게 팁", "tipH": "직원에게 팁", "tipS": "팁은 직원 개인 계좌로 바로 갑니다. 은행 앱으로 코드를 스캔하세요.", "tipNoW": "직원이 주문을 받은 뒤 팁을 남길 수 있어요.", "tipNoQr": "직원이 아직 QR을 등록하지 않았어요. 현금으로 팁을 주셔도 됩니다.", "tipFT": "서비스가 마음에 드셨나요? 팁은 담당 직원에게 바로 갑니다.", "tipW": "담당 직원"});
+Object.assign(T.zh,{"abE": "关于我们", "aboutL": "地址、营业时间、Wi‑Fi", "tblOrd": "订单已发送", "tblBtn": "账单", "ckAct": "正在加到这里", "ckIn": "购物车中", "tblNone": "首次下单后，这里会显示账单、扫码付款和小费。","revH": "感谢您的光临！", "revS": "如果您满意，请给我们留个评价，这对小咖啡馆帮助很大。", "revG": "在 Google 地图评价", "revTa": "在 Tripadvisor 评价", "revNo": "以后再说","soldOut": "已售完", "soldGone": "部分菜品已售完，已从购物车移除","ckNextH": "还有谁要分开付？", "ckNextS": "给下一张账单起名，例如“Ivan”。也可以稍后用购物车上方的“+ 客人”添加。", "ckNextPh": "Ivan", "cknDone": "完成", "ckNextOk": "添加","clearH": "清空购物车？", "clearS": "已选的菜品将全部删除。", "clearYes": "清空", "cancel": "取消", "tpickS": "通过桌上的二维码打开菜单时，桌号会自动填写。如果是通过普通链接打开的，请选择桌号：","splitB":"分开结账","askH": "一起付还是分开付？", "askS": "分开付的话，请为每个人建一张账单。每人可以用同一部或不同手机往自己的账单里点单。", "askOne": "一起付", "askOneS": "合并结账", "askSplit": "分开付", "askSplitS": "每人一张账单，例如“Anna”", "cknH": "账单名称", "cknS": "填名字即可，菜品会加到这张账单。", "cknPh": "Anna", "cknOk": "建立账单", "ckL": "账单", "ckAdd": "+ 客人", "ckAll": "全部一起", "ckEmpty": "暂时为空", "qrNone": "咖啡馆还没有添加收款码，请找服务员结账。", "tipL": "给服务员小费", "tipH": "给服务员小费", "tipS": "小费直接转到服务员本人的账户。请用银行App扫码。", "tipNoW": "服务员接单后即可给小费。", "tipNoQr": "服务员还没有添加收款码，可以给现金小费。", "tipFT": "满意我们的服务吗？小费直接给您的服务员。", "tipW": "您的服务员"});
 function pl(n,f){const a=n%10,b=n%100;return f[(a===1&&b!==11)?0:(a>=2&&a<=4&&(b<12||b>14))?1:2]}
 const VILBL={S:"nhỏ",B:"lớn",N:"thường"};
 const ICON={plus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
@@ -686,18 +765,9 @@ function optsHTML(s,i,it,t){const os=opts(it);
     else pv=cur==="VND"?`${lbl}<span class="main">${fmtVND(x)}</span>`:`${lbl}<span class="main">${fmtVND(x)}</span><span class="sub">≈ ${fmt(x,cur)}</span>`;
     return `<div class="opt"><div class="pv">${pv}</div>${ctrl(key)}</div>`}).join("")+`</div>`}
 
-function renderSig(){const li=IDX[lang],t=T[lang],out=[];
-  DATA.forEach(s=>s.items.forEach((it,i)=>{if(it[6]&&GEN.has(it[6])&&typeof it[5]==="number")out.push([s,it,i])}));
-  $("sigBox").hidden=!out.length;$("sigE").textContent=t.sigE;$("sigH").innerHTML=t.sigH;
-  $("sigRow").innerHTML=out.map(([s,it,i])=>`<div class="scard${STOP.has(s.id+"|"+i)?" out":""}"><button class="im" type="button" data-ph="${it[6]}" data-cap="${esc(it[li])}"><img loading="lazy" src="${PH[it[6]]}" alt="${esc(it[li])}"></button>${ctrl(s.id+"|"+i+"|0")}<div class="bd"><div class="t"><b>${esc(it[li])}</b><span>${Math.round(it[5]/1000)}k ₫</span></div><p>${esc(lang==="vi"?it[0]:it[1])}${cur==="VND"?"":" · ≈ "+fmt(it[5],cur)}</p></div></div>`).join("");
-  $("sDots").innerHTML=out.map((_,k)=>`<button type="button" aria-label="${k+1}"></button>`).join("");requestAnimationFrame(sigSync)}
-function sigSync(){const r=$("sigRow"),c=r.querySelector(".scard");if(!c)return;const w=c.offsetWidth+12,i=Math.round(r.scrollLeft/w);
-  $("sPrev").disabled=r.scrollLeft<8;$("sNext").disabled=r.scrollLeft+r.clientWidth>=r.scrollWidth-8;
-  [...$("sDots").children].forEach((d,k)=>d.classList.toggle("on",k===i))}
-function sigGo(i){const r=$("sigRow"),c=r.querySelector(".scard");if(c)r.scrollTo({left:i*(c.offsetWidth+12),behavior:"smooth"})}
 function renderCats(){
   $("cats").innerHTML=DATA.filter(s=>s.g===group).map(s=>{const p=CATPH[s.id];
-    return `<a class="cat" href="#${s.id}">${p?`<img src="${PH[p]}" alt="">`:""}<span>${esc(s.n[lang])}</span></a>`}).join("")}
+    return `<a class="cat" href="#${s.id}" data-id="${s.id}">${p?`<img src="${PH[p]}" alt="">`:`<i class="ini">${esc(s.n[lang][0])}</i>`}<span>${esc(s.n[lang])}</span></a>`}).join("")}
 function render(){
   const t=T[lang],li=IDX[lang],q=$("q").value.trim().toLowerCase();
   document.documentElement.lang=lang;
@@ -706,30 +776,29 @@ function render(){
   $("gFood").classList.toggle("on",group==="food");$("gDrinks").classList.toggle("on",group==="drinks");
   $("gFood").setAttribute("aria-selected",group==="food");$("gDrinks").setAttribute("aria-selected",group==="drinks");
   $("q").placeholder=t.search;
-  $("rate").textContent=cur==="VND"?"":`${t.rate}1 ${CUR[cur].s} = ${Math.round(1/RATES[cur]).toLocaleString("vi-VN")} ₫ · ${RATE_DATE}. ${t.ratenote}`;
+  $("rate").textContent=cur==="VND"?"":`1 ${CUR[cur].s} ≈ ${Math.round(1/RATES[cur]).toLocaleString("vi-VN")} ₫`;$("rate").title=cur==="VND"?"":`${t.rate}1 ${CUR[cur].s} = ${Math.round(1/RATES[cur]).toLocaleString("vi-VN")} ₫ · ${RATE_DATE}. ${t.ratenote}`;
   $("foot").textContent=t.foot;$("tipFT").textContent=t.tipFT;$("tipF").querySelector(".tipL").textContent=t.tipL;$("aEy").textContent=t.aEy;$("aH").innerHTML=t.aH;$("aP").textContent=t.aP;$("quote").textContent=t.quote;
-  openState();renderCats();renderSig();
-  $("ctaMenu").textContent=t.ctaMenu;$("toTopT").textContent=t.top;$("ctaRoom").textContent=t.ctaRoom;
+  openState();renderCats();
+  $("toTopT").textContent=t.top;$("abE").textContent=t.abE;$("aboutLnk").textContent=t.aboutL;
+  $("tChip").hidden=!TABLE();$("tChip").textContent=t.tableL+" "+TABLE();
   $("f1t").textContent=t.f1t;$("f1s").textContent=t.f1s;$("f2t").textContent=t.f2t;$("f3t").textContent=t.f3t;$("f3s").textContent=t.f3s;
-  let rail="",html="";
+  let html="";
   DATA.filter(s=>q||s.g===group).forEach(s=>{
     const items=s.items.map((it,i)=>[it,i]).filter(([it])=>!q||it.slice(0,5).join(" ").toLowerCase().includes(q));
     if(!items.length)return;
     const title=s.n[lang];
-    rail+=`<a href="#${s.id}" data-id="${s.id}">${esc(title)}</a>`;
     const md=[...new Set(s.items.map(x=>x[6]).filter(Boolean))].sort((a,b)=>GEN.has(b)-GEN.has(a)).slice(0,3);
     html+=`<section class="s" id="${s.id}"><div class="sh"><div class="tt"><span class="vi">${esc(lang==="vi"?s.n.en:s.n.vi)}</span><h2>${esc(title)}</h2><div class="orn2"><i></i></div></div><div class="medals">${md.map(p=>`<img src="${PH[p]}" alt="">`).join("")}</div></div>`;
     if(s.note&&t.notes[s.note])html+=`<div class="note">${esc(t.notes[s.note])}</div>`;
-    html+=`<ul class="items">`+items.map(([it,i])=>{
+    const tiles=[],rows=[];
+    items.forEach(([it,i])=>{
       const name=it[li],orig=lang==="vi"?it[0]:it[1],ph=it[6];
       const inc=Object.keys(cart).some(k=>k.startsWith(s.id+"|"+i+"|")),out=STOP.has(s.id+"|"+i)?" out":"";
-      if(isExtra(it)&&!Array.isArray(it[5])){const p=it[5];return `<li class="it extra${inc?" incart":""}${out}"><div class="lead"><span>${esc(name)}</span><i></i><b>${p===null?"—":fmtVND(p)}</b></div>${ctrl(s.id+"|"+i+"|0")}</li>`}
-      const big=ph&&GEN.has(ph);
-      return `<li class="it${ph?" hasph":""}${big?" big":""}${isExtra(it)?" extra":""}${inc?" incart":""}${out}">`+
-        (ph?`<button class="ph" type="button" data-ph="${ph}" data-cap="${esc(name)}"><img loading="lazy" src="${PH[ph]}" alt="${esc(name)}"></button>`:"")+
-        `<div class="txt"><div class="nm">${esc(name)}</div>${isExtra(it)?"":`<div class="orig">${esc(orig)}</div>`}${optsHTML(s,i,it,t)}</div></li>`}).join("")+`</ul></section>`;
+      if(isExtra(it)&&!Array.isArray(it[5])){const p=it[5];rows.push(`<li class="it extra${inc?" incart":""}${out}"><div class="lead"><span>${esc(name)}</span><i></i><b>${p===null?"—":fmtVND(p)}</b></div>${ctrl(s.id+"|"+i+"|0")}</li>`);return}
+      if(ph){tiles.push(`<article class="tile${inc?" incart":""}${out}"><button class="ph" type="button" data-ph="${ph}" data-cap="${esc(name)}"><img loading="lazy" src="${PH[ph]}" alt="${esc(name)}"></button><div class="txt"><div class="nm">${esc(name)}</div>${isExtra(it)?"":`<div class="orig">${esc(orig)}</div>`}${optsHTML(s,i,it,t)}</div></article>`);return}
+      rows.push(`<li class="it${isExtra(it)?" extra":""}${inc?" incart":""}${out}"><div class="txt"><div class="nm">${esc(name)}</div>${isExtra(it)?"":`<div class="orig">${esc(orig)}</div>`}${optsHTML(s,i,it,t)}</div></li>`)});
+    html+=(tiles.length?`<div class="tiles">${tiles.join("")}</div>`:"")+(rows.length?`<ul class="items">${rows.join("")}</ul>`:"")+`</section>`;
   });
-  $("railIn").innerHTML=rail;
   $("menu").innerHTML=html||`<div class="empty">${esc(t.none)}</div>`;
   renderBar();spy();
 }
@@ -740,14 +809,26 @@ function lines(c=cart){return Object.entries(c).filter(([,q])=>q>0).map(([k,q])=
   const it=s.items[+i];if(!it)return null;const o=opts(it)[+oi];if(!o)return null;return {k,q,it,o,p:o[1]}}).filter(Boolean)}
 function totals(c=cart){const L=lines(c);let sum=0,n=0,extra=0;L.forEach(l=>{n+=l.q;if(l.p===null)extra++;else sum+=l.p*l.q});return {L,sum,n,extra}}
 function allTotals(){let sum=0,n=0;allCarts().forEach(([,c])=>{const x=totals(c);sum+=x.sum;n+=x.n});return {sum,n}}
-function renderBar(){const t=T[lang],{sum,n}=allTotals();const bs=billState();
-  const sp=SPLIT();$("bar").hidden=!n&&!bs&&!sp;document.body.classList.toggle("hasbar",!!(n||bs||sp));$("barBtn").hidden=!n;
-  $("cks").hidden=!sp;if(sp)$("cks").innerHTML=`<span class="l">${esc(t.ckL)}</span>`+CK.names.map(nm=>{const q=totals(nm===CK.act?cart:CK.carts[nm]||{}).n;return `<button type="button" data-ck="${esc(nm)}" class="${nm===CK.act?"on":""}">${esc(nm)}${q?`<i>${q}</i>`:""}</button>`}).join("")+`<button type="button" class="add2" data-ck="">${esc(t.ckAdd)}</button>`;
-  requestAnimationFrame(()=>document.documentElement.style.setProperty("--barh",$("bar").offsetHeight+"px"));
-  $("bills").hidden=!bs;if(bs){$("billBtn").classList.toggle("sent",bs==="sent");$("billT").textContent=bs==="sent"?t.billSent:t.bill;$("qrT").textContent=t.qrPay}
-  if(!n)return;
-  $("barQ").textContent=n;$("barL").textContent=t.items(n)+(cur==="VND"?"":" · "+moneyLine(sum));
-  $("barT").textContent=fmtVND(sum);$("barGo").textContent=t.showW}
+const GC=["#f2b65c","#7fd6d0","#e9846f","#b9a1e6","#9fd49a","#f0c3a0"];
+const gcol=nm=>GC[Math.max(0,CK.names.indexOf(nm))%GC.length];
+const RCPT='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></svg>';
+function renderBar(){const t=T[lang],{sum,n}=allTotals();const bs=billState(),sp=SPLIT();
+  $("bar").hidden=!n&&!bs&&!sp;document.body.classList.toggle("hasbar",!!(n||bs||sp));
+  {const sb=()=>document.documentElement.style.setProperty("--barh",$("bar").offsetHeight+"px");requestAnimationFrame(sb);setTimeout(sb,80)}
+  const av=sp?CK.names.slice(0,3).map(nm=>`<i style="background:${gcol(nm)}">${esc(nm[0].toUpperCase())}</i>`).join("")+(CK.names.length>3?`<i class="n">+${CK.names.length-3}</i>`:""):"";
+  $("capG").innerHTML=n?(sp?av:`<i class="n">${n}</i>`):(sp?av:`<i class="ic">${RCPT}</i>`);
+  $("barL").textContent=n?t.items(n)+(sp?" · "+CK.act:"")+(cur==="VND"?"":" · "+moneyLine(sum)):bs?(bs==="sent"?t.billSent:t.tblOrd):t.ckL+": "+CK.act;
+  $("barT").textContent=n?fmtVND(sum):bs?fmtVND(billSum()):CK.names.join(", ");
+  $("barBtn").hidden=!n&&!bs;$("barGo").textContent=n?t.showW:t.tblBtn;
+  if(!$("tbl").hidden)renderTbl()}
+/* the table sheet: guests (separate checks), bill, QR payment, tips */
+function renderTbl(){const t=T[lang],bs=billState(),sp=SPLIT();$("tblH").textContent=TABLE()?t.tableL+" "+TABLE():t.order;
+  $("tblG").innerHTML=sp?CK.names.map(nm=>{const c=nm===CK.act?cart:CK.carts[nm]||{},x=totals(c),ord=billSum(nm);
+    return `<button type="button" class="gr${nm===CK.act?" on":""}" data-ck="${esc(nm)}"><i style="background:${gcol(nm)}">${esc(nm[0].toUpperCase())}</i><span>${esc(nm)}<small>${nm===CK.act?esc(t.ckAct):""}${x.n?(nm===CK.act?" · ":"")+esc(t.ckIn)+": "+x.n:""}</small></span><b>${ord?fmtVND(ord):""}</b></button>`}).join("")+`<button type="button" class="gadd" data-ck="">${esc(t.ckAdd)}</button>`
+    :(bs?"":`<button type="button" class="gadd" id="tblSplit">${esc(t.splitB)}</button>`);
+  $("tblA").hidden=!bs;$("billBtn").classList.toggle("sent",bs==="sent");$("billT").textContent=bs==="sent"?t.billSent:t.bill;$("qrT").textContent=t.qrPay;$("tipTT").textContent=t.tipL;
+  const sb=$("tblSplit");if(sb)sb.onclick=()=>{$("tbl").hidden=true;openCkn()}}
+function openTbl(){renderTbl();$("tbl").hidden=false}
 function lineHTML(l,c){const t=T[lang],li=IDX[lang],lab=optLabel(l.o,lang);
   return `<li><div class="ln"><b>${esc(l.it[li])}${lab?" · "+esc(lab):""}</b><small>${l.p===null?esc(t.ask):fmtVND(l.p)+(cur==="VND"?"":" · ≈ "+fmt(l.p,cur))}</small></div>${ctrl(l.k,c)}</li>`}
 function renderSheet(){const t=T[lang],li=IDX[lang],{L,sum:s0,extra:e0}=totals();const AT=allTotals();
@@ -770,7 +851,11 @@ function bump(k,d,c){if(d>0&&!CK.mode&&!allTotals().n){pend=[k,d];openAsk();retu
 document.addEventListener("click",e=>{const b=e.target.closest("button[data-k]");if(b){bump(b.dataset.k,+b.dataset.d,b.dataset.c);return}
   const ck=e.target.closest("button[data-ck]");if(ck){if(ck.dataset.ck)setAct(ck.dataset.ck);else openCkn();return}
   const w=e.target.closest("button[data-w]");if(w){wish[w.dataset.w]=!wish[w.dataset.w];save();w.setAttribute("aria-pressed",!!wish[w.dataset.w])}});
-$("barBtn").addEventListener("click",()=>{renderSheet();$("sheet").hidden=false});
+$("barBtn").addEventListener("click",()=>{if(allTotals().n){renderSheet();$("sheet").hidden=false}else openTbl()});
+$("capOpen").addEventListener("click",()=>{if(SPLIT()||billState())openTbl();else{renderSheet();$("sheet").hidden=false}});
+$("tblX").addEventListener("click",()=>{$("tbl").hidden=true});
+$("tbl").addEventListener("click",e=>{if(e.target===$("tbl"))$("tbl").hidden=true});
+$("tipT").addEventListener("click",()=>{$("tbl").hidden=true;openTips()});
 function setAct(nm){CK.carts[CK.act]=cart;CK.act=nm;cart=CK.carts[nm]||(CK.carts[nm]={});save();const y=window.scrollY;render();window.scrollTo(0,y)}
 function openAsk(){const t=T[lang];$("askH").textContent=t.askH;$("askS").textContent=t.askS;
   $("askOne").innerHTML=esc(t.askOne)+`<small>${esc(t.askOneS)}</small>`;$("askSplit").innerHTML=esc(t.askSplit)+`<small>${esc(t.askSplitS)}</small>`;$("ask").hidden=false}
@@ -832,7 +917,7 @@ function openPay(){const t=T[lang];if(payCk&&!paidChecks().includes(payCk))payCk
   $("pays").innerHTML=[["cash",t.pCash],["card",t.pCard]].map(([k,n])=>`<button type="button" data-pay="${k}"><span>${ic[k]}</span>${esc(n)}</button>`).join("");
   $("pay").hidden=false}
 $("pays").addEventListener("click",e=>{const b=e.target.closest("[data-pay]");if(!b)return;inbox({type:"bill",pay:b.dataset.pay,check:paidChecks().length>1?payCk:""});guestMark("bill");$("pay").hidden=true;renderBar();done(T[lang].billH,T[lang].billS)});
-$("billBtn").addEventListener("click",openPay);
+$("billBtn").addEventListener("click",()=>{$("tbl").hidden=true;openPay()});
 $("payX").addEventListener("click",()=>{$("pay").hidden=true});
 $("pay").addEventListener("click",e=>{if(e.target===$("pay"))$("pay").hidden=true});
 $("doneOk").addEventListener("click",()=>{$("done").hidden=true});
@@ -853,7 +938,7 @@ function openQr(){const t=T[lang];if(qrCk===null)qrCk=SPLIT()&&paidChecks().incl
   const pq=PUB().pay;$("qrImg").hidden=!pq;if(pq)$("qrImg").src=pq;$("qrBox").classList.toggle("has",!!pq);$("qrBox").classList.toggle("none",!pq);
   $("qrBox").querySelector("svg").style.display=pq?"none":"";$("qrSoon").hidden=!!pq;$("qrPaid").hidden=!pq;$("tipQ").querySelector(".tipL").textContent=t.tipL;$("qrH").textContent=t.qrH;$("qrSumL").textContent=t.qrSumL;
   $("qrSum").textContent=fmtVND(sum);$("qrSumC").textContent=moneyLine(sum);$("qrSoon").textContent=t.qrNone;$("qrS").textContent=pq?t.qrS:"";$("qrPaid").textContent=t.qrPaid;$("qrs").hidden=false}
-$("qrBtn").addEventListener("click",openQr);
+$("qrBtn").addEventListener("click",()=>{$("tbl").hidden=true;openQr()});
 function openTips(){const t=T[lang],p=PUB(),wid=TABLE()&&p.t?p.t[TABLE()]:"",w=wid&&p.w?p.w[wid]:null;
   $("tipH").textContent=t.tipH;$("tipW").innerHTML=w?`${esc(t.tipW)}<b>${esc(w.n)}</b>`:"";
   const q=w&&w.qr;$("tipImg").hidden=!q;if(q)$("tipImg").src=q;$("tipBox").classList.toggle("has",!!q);$("tipBox").classList.toggle("none",!q);$("tipBox").querySelector("svg").style.display=q?"none":"";
@@ -881,7 +966,7 @@ function checkClosed(){const tb=TABLE();if(!tb||!lang)return;const o=guestO();if
 setInterval(checkClosed,5000);window.addEventListener("storage",e=>{if(e.key==="co_pub")checkClosed()});
 let tt;function toast(m){$("toast").textContent=m;$("toast").hidden=false;clearTimeout(tt);tt=setTimeout(()=>$("toast").hidden=true,2200)}
 $("wifiBtn").addEventListener("click",()=>{try{navigator.clipboard.writeText("marina12345").then(()=>toast(T[lang].copied),()=>toast(T[lang].copyFail))}catch(e){toast(T[lang].copyFail)}});
-function setGroup(g){group=g;$("q").value="";render();window.scrollTo({top:$("cats").offsetTop-10,behavior:"smooth"})}
+function setGroup(g){group=g;$("q").value="";render();window.scrollTo({top:$("menu").getBoundingClientRect().top+window.scrollY-$("stick").offsetHeight-6,behavior:"smooth"})}
 $("gFood").addEventListener("click",()=>setGroup("food"));$("gDrinks").addEventListener("click",()=>setGroup("drinks"));
 
 function setLang(k){lang=k;ls.set("co_lang",k);cur=LANGS.find(l=>l.k===k).c;ls.set("co_cur",cur);
@@ -910,28 +995,16 @@ function hscroll(r,wrap){let down=false,sx=0,sl=0,moved=false;
   r.addEventListener("click",e=>{if(moved){e.stopPropagation();e.preventDefault();moved=false}},true);
   r.addEventListener("wheel",e=>{if(e.shiftKey&&Math.abs(e.deltaY)>Math.abs(e.deltaX)){r.scrollLeft+=e.deltaY;e.preventDefault()}},{passive:false});
   sync()}
-hscroll($("cats"),document.querySelector(".cw"));hscroll($("railIn"),document.querySelector(".rw"));
-{const rl=document.querySelector(".rail");const st=()=>{const v=$("cats").getBoundingClientRect().bottom<=0;if(rl.classList.contains("stuck")!==v){rl.classList.toggle("stuck",v);$("railIn").dispatchEvent(new Event("scroll"))}};window.addEventListener("scroll",()=>requestAnimationFrame(st),{passive:true});st()}
+hscroll($("cats"),document.querySelector(".cw"));
+{const st=()=>{const v=$("stick").getBoundingClientRect().top<=1&&window.scrollY>40;document.body.classList.toggle("stuck",v);document.documentElement.style.setProperty("--stickh",$("stick").offsetHeight+"px")};window.addEventListener("scroll",()=>requestAnimationFrame(st),{passive:true});window.addEventListener("resize",st);st()}
 window.addEventListener("scroll",()=>{$("toTop").hidden=window.scrollY<700;$("langBtn").classList.toggle("compact",window.scrollY>300)},{passive:true});
 $("toTop").addEventListener("click",()=>window.scrollTo({top:0,behavior:"smooth"}));
-(function(){const r=$("sigRow");let down=false,sx=0,sl=0,moved=false;
-  r.addEventListener("scroll",()=>requestAnimationFrame(sigSync),{passive:true});
-  r.addEventListener("pointerdown",e=>{if(e.pointerType!=="mouse")return;down=true;moved=false;sx=e.clientX;sl=r.scrollLeft});
-  window.addEventListener("pointermove",e=>{if(!down)return;const dx=e.clientX-sx;if(Math.abs(dx)>5){moved=true;r.classList.add("drag")}r.scrollLeft=sl-dx});
-  window.addEventListener("pointerup",()=>{if(!down)return;down=false;r.classList.remove("drag");if(moved){const c=r.querySelector(".scard");if(c)sigGo(Math.round(r.scrollLeft/(c.offsetWidth+12)))}});
-  r.addEventListener("click",e=>{if(moved){e.stopPropagation();e.preventDefault();moved=false}},true);
-  r.addEventListener("wheel",e=>{if(Math.abs(e.deltaY)>Math.abs(e.deltaX)&&e.shiftKey){r.scrollLeft+=e.deltaY;e.preventDefault()}},{passive:false});
-  const step=d=>{const c=r.querySelector(".scard");if(c)sigGo(Math.round(r.scrollLeft/(c.offsetWidth+12))+d)};
-  $("sPrev").addEventListener("click",()=>step(-1));$("sNext").addEventListener("click",()=>step(1));
-  $("sDots").addEventListener("click",e=>{const b=e.target.closest("button");if(b)sigGo([...$("sDots").children].indexOf(b))});
-  window.addEventListener("resize",sigSync)})();
-$("sigRow").addEventListener("click",e=>{const b=e.target.closest(".im");if(!b)return;$("lbImg").src=PH[b.dataset.ph];$("lbCap").textContent=b.dataset.cap;$("lbNote").textContent=GEN.has(b.dataset.ph)?T[lang].ph2:T[lang].ph;$("lb").hidden=false});
-document.addEventListener("keydown",e=>{if(e.key==="Escape"){$("lb").hidden=true;$("sheet").hidden=true;$("pay").hidden=true;$("qrs").hidden=true;$("tpick").hidden=true;$("tips").hidden=true;$("ask").hidden=true;$("cfm").hidden=true;$("rev").hidden=true;$("ckn").hidden=true;if(lang)$("gate").hidden=true}});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){$("lb").hidden=true;$("sheet").hidden=true;$("pay").hidden=true;$("qrs").hidden=true;$("tpick").hidden=true;$("tips").hidden=true;$("ask").hidden=true;$("cfm").hidden=true;$("rev").hidden=true;$("tbl").hidden=true;$("ckn").hidden=true;if(lang)$("gate").hidden=true}});
 let io;
 function spy(){if(io)io.disconnect();if(!("IntersectionObserver" in window))return;
   io=new IntersectionObserver(es=>{es.forEach(en=>{if(en.isIntersecting){const id=en.target.id;
-    document.querySelectorAll(".rail a").forEach(a=>{const on=a.dataset.id===id;a.classList.toggle("on",on);
-      if(on){const r=a.parentElement;r.scrollTo({left:a.offsetLeft-r.clientWidth/2+a.clientWidth/2,behavior:"smooth"})}})}})},{rootMargin:"-80px 0px -70% 0px"});
+    document.querySelectorAll("#cats .cat").forEach(a=>{const on=a.dataset.id===id;a.classList.toggle("on",on);
+      if(on){const r=a.parentElement;r.scrollTo({left:a.offsetLeft-r.clientWidth/2+a.clientWidth/2,behavior:"smooth"})}})}})},{rootMargin:"-160px 0px -60% 0px"});
   document.querySelectorAll("section.s").forEach(s=>io.observe(s))}
 (function init(){const l=ls.get("co_lang"),c=ls.get("co_cur");
   if(l&&T[l]){lang=l;cur=(c&&CUR[c])?c:LANGS.find(x=>x.k===l).c;$("cur").value=cur;render()}
