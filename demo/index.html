@@ -312,6 +312,10 @@ tr:last-child td{border-bottom:0}
 .qrimg{width:150px;height:150px;object-fit:contain;border-radius:12px;background:#fff;padding:6px;border:1px solid var(--line);flex:none}
 .qrnone{width:150px;height:150px;border-radius:12px;border:1.5px dashed var(--line2);display:grid;place-items:center;text-align:center;padding:10px;font-size:12px;color:var(--muted);flex:none}
 .payqr .qrt{flex:1;min-width:180px;display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+/* waiter has no tip QR yet: the button itself glows instead of a separate warning */
+.btn.tipneed{animation:tipglow 1.8s ease-in-out infinite}
+@keyframes tipglow{50%{box-shadow:0 0 0 4px color-mix(in srgb,var(--acc) 30%,transparent),0 0 18px var(--hot-glow,rgba(231,122,67,.5))}}
+@media (prefers-reduced-motion:reduce){.btn.tipneed{animation:none}}
 .upl{position:relative;overflow:hidden}.upl input{position:absolute;inset:0;opacity:0;cursor:pointer}
 .ckpill{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:2px 10px;font-size:11.5px;font-weight:700;background:color-mix(in srgb,var(--acc) 16%,transparent);color:var(--acc);border:1px solid color-mix(in srgb,var(--acc) 45%,transparent)}
 .pmbox{display:flex;flex-direction:column;gap:10px;padding:12px 14px;border:1px solid var(--line2);border-radius:14px;background:var(--card)}
@@ -742,13 +746,13 @@ function rWaiter(el){const meS=staffBy(ST.me);if(!meS||meS.status!=="active"){co
   const myReady=L.filter(o=>o.status==="ready"&&readyTargets(o).includes(ST.me));
   const tabs=[["new",t("tNew"),L.filter(o=>o.status==="new")],["mine",t("tMine"),L.filter(o=>o.waiter===ST.me&&["accepted","cooking"].includes(o.status))],["ready",t("tReady"),L.filter(o=>o.status==="ready")],["tables",t("tTables"),Object.values(ST.bills).filter(b=>!b.closed&&billOrders(b.id).some(o=>!o.seed))],["done",t("tDone"),L.filter(o=>o.status==="served").slice(-12).reverse()]];
   const cur=tabs.find(x=>x[0]===ST.wtab)||tabs[0];
-  el.innerHTML=`<div class="who"><label for="meSel" class="muted">${esc(t("me"))}</label><select id="meSel">${WAITERS().map(w=>`<option value="${w.id}" ${w.id===ST.me?"selected":""}>${esc(w.name)}${ST.shift[w.id]?" ●":""}</option>`).join("")}</select><button type="button" class="btn ghost sm" id="tipQrBtn">${esc(t("tipQr"))} ${meS.tipQr?"✓":"—"}</button><span class="sp"></span><button type="button" class="shift ${on?"on":"off"}" id="shiftBtn">${on?"● "+esc(t("onShift"))+" · "+esc(t("endShift")):esc(t("startShift"))}</button></div>
-   ${on?"":`<div class="alert red"><span>${esc(t("offNote"))}</span></div>`}${meS.tipQr?"":`<div class="alert"><span>${esc(t("tipMiss"))}</span><span class="sp"></span><button class="btn sm" type="button" id="tipQrBtn2">${esc(t("upQr"))}</button></div>`}
+  el.innerHTML=`<div class="who"><label for="meSel" class="muted">${esc(t("me"))}</label><select id="meSel">${WAITERS().map(w=>`<option value="${w.id}" ${w.id===ST.me?"selected":""}>${esc(w.name)}${ST.shift[w.id]?" ●":""}</option>`).join("")}</select><button type="button" class="btn sm ${meS.tipQr?"ghost":"tipneed"}" id="tipQrBtn" title="${meS.tipQr?"":esc(t("tipMiss"))}">${esc(t("tipQr"))}${meS.tipQr?" ✓":""}</button><span class="sp"></span><button type="button" class="shift ${on?"on":"off"}" id="shiftBtn">${on?"● "+esc(t("onShift"))+" · "+esc(t("endShift")):esc(t("startShift"))}</button></div>
+   ${on?"":`<div class="alert red"><span>${esc(t("offNote"))}</span></div>`}
    ${on&&myReady.length?myReady.map(o=>`<div class="alert"><span>✓ ${esc(t("readyAlert"))} · <b>${esc(t("table"))} ${o.table}</b> #${o.no}${o.waiter!==ST.me?` (${esc(wname(o.waiter))})`:""}</span><span class="sp"></span><button class="btn green sm" type="button" data-a="served" data-id="${o.id}">${esc(t("served"))}</button></div>`).join(""):""}
    ${Object.values(ST.bills).filter(b=>!b.closed&&b.req).sort((a,b)=>a.req.at-b.req.at).map(b=>`<div class="reqbar"><b>${esc(t("table"))} ${b.table} · ${esc(t("billReq"))}</b><span>${esc(reqTxt(b.req))} · ${vnd(billTotal(b.id))}</span><button class="btn green sm" type="button" data-a="bill" data-id="${b.id}">${esc(t("openBill"))}</button></div>`).join("")}<div class="row"><div class="tabs">${tabs.map(([k,lab,arr])=>`<button type="button" data-wt="${k}" class="${k===cur[0]?"on":""}">${esc(lab)} · ${arr.length}</button>`).join("")}</div><span class="sp"></span><button class="btn ghost sm" type="button" id="manualBtn" ${on?"":"disabled"}>${esc(t("manual"))}</button></div>
    ${cur[0]==="tables"?(cur[2].length?`<div class="tgrid">${cur[2].sort((a,b)=>a.table-b.table).map(tCard).join("")}</div>`:`<div class="empty">${esc(t("noBills"))}</div>`):cur[2].length?cur[2].map(o=>oCard(o)).join(""):`<div class="empty">${esc(t("none"))}</div>`}`;
   el.querySelector("#meSel").onchange=e=>{ST.me=e.target.value;save();render()};
-  el.querySelector("#tipQrBtn").onclick=openTipQr;{const b=el.querySelector("#tipQrBtn2");if(b)b.onclick=openTipQr}
+  el.querySelector("#tipQrBtn").onclick=openTipQr;
   el.querySelector("#shiftBtn").onclick=()=>mutate(()=>{ST.shift[ST.me]=!ST.shift[ST.me]});
   el.querySelectorAll("[data-wt]").forEach(b=>b.onclick=()=>{ST.wtab=b.dataset.wt;save();render()});
   el.querySelector("#manualBtn").onclick=()=>openEditor(null);
