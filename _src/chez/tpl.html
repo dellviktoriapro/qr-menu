@@ -1089,7 +1089,8 @@ function hscroll(r,wrap){let down=false,sx=0,sl=0,moved=false;
   window.addEventListener("pointermove",e=>{if(!down)return;const dx=e.clientX-sx;if(Math.abs(dx)>5){moved=true;r.classList.add("hdrag")}r.scrollLeft=sl-dx});
   window.addEventListener("pointerup",()=>{if(!down)return;down=false;setTimeout(()=>r.classList.remove("hdrag"),0)});
   r.addEventListener("click",e=>{if(moved){e.stopPropagation();e.preventDefault();moved=false}},true);
-  r.addEventListener("wheel",e=>{if(e.shiftKey&&Math.abs(e.deltaY)>Math.abs(e.deltaX)){r.scrollLeft+=e.deltaY;e.preventDefault()}},{passive:false});
+  /* a mouse wheel over the row scrolls it sideways; at either end the page scrolls on as usual */
+  r.addEventListener("wheel",e=>{if(Math.abs(e.deltaY)<=Math.abs(e.deltaX))return;const max=r.scrollWidth-r.clientWidth;if(max<2)return;const nx=Math.max(0,Math.min(max,r.scrollLeft+e.deltaY));if(Math.abs(nx-r.scrollLeft)<1)return;r.scrollLeft=nx;e.preventDefault()},{passive:false});
   sync()}
 hscroll($("cats"),document.querySelector(".cw"));
 {const st=()=>{const v=$("stick").getBoundingClientRect().top<=1&&window.scrollY>40;document.body.classList.toggle("stuck",v);document.documentElement.style.setProperty("--stickh",$("stick").offsetHeight+"px")};window.addEventListener("scroll",()=>requestAnimationFrame(st),{passive:true});window.addEventListener("resize",st);st()}

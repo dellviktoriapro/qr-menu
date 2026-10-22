@@ -32,6 +32,9 @@ if cur: chunks.append(cur)
 for n, c in enumerate(chunks, 1):
     open(f'{OUT}/ph{n}.js', 'w').write('__ph(' + json.dumps(dict(c)) + ');')
 BAND = webp('amb/band.jpg', 1200, 84)
+def webpa(src, q=82):
+    im = Image.open(src); b = io.BytesIO(); im.save(b, 'WEBP', quality=q, method=6); return 'data:image/webp;base64,' + base64.b64encode(b.getvalue()).decode()
+CORNER = {k: webpa(f'amb/c_{k}.png') for k in ['tl', 'tr']}
 
 s = open('../chez/tpl.html', encoding='utf-8').read()
 def rep(a, b, cnt=1):
@@ -39,6 +42,8 @@ def rep(a, b, cnt=1):
     assert s.count(a) == cnt, (a[:90], s.count(a))
     s = s.replace(a, b)
 
+# ---- section header: title, then a ribbon "СУПЫ • SOUPS • SÚP"
+rep('<span class="vi">${esc(lang==="vi"?s.n.en:s.n.vi)}</span><h2>${esc(title)}</h2>', '<h2>${esc(title)}</h2><span class="vi">${esc([...new Set(["ru","en","vi"].filter(k=>k!==lang).map(k=>s.n[k]))].join(" • "))}</span>')
 # ---- identity
 rep('<title>Café Chez Oanh Menu</title>', '<title>Sun&amp;Sea Restaurant · Mui Ne · Menu</title>')
 rep('family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Montserrat:wght@400;500;600;700',
@@ -102,7 +107,7 @@ rep('''  color-scheme:dark;
   --amber:#e39a3b; --amber-2:#f2b65c; --teal:#3db3ad; --teal-ink:#7fd6d0;
   --f-display:"Cormorant Garamond",Georgia,"Times New Roman",serif;''',
 '''  color-scheme:light;
-  --bg:#f4e7c5; --bg-2:#fbf2da; --card:#fffaee; --line:#e2cf9f; --ink:#1f2f1c; --muted:#5b5638; --dim:#8b815d;
+  --bg:#f3cf86; --bg-2:#fbecc8; --card:#fff6dc; --line:#d9b46a; --ink:#1d3a22; --muted:#4f4a2c; --dim:#7d6f45;
   --amber:#1f5b37; --amber-2:#1f5b37; --teal:#9c2a1f; --teal-ink:#9c2a1f; --red:#a3201f; --gold:#c9a24a;
   --f-display:"Alegreya SC",Georgia,"Times New Roman",serif;''')
 for a_, b_ in [('rgba(19,16,12,', 'rgba(251,242,218,'), ('rgba(242,182,92,', 'rgba(31,91,55,'), ('rgba(227,154,59,', 'rgba(31,91,55,'),
@@ -114,7 +119,7 @@ for a_, b_ in [('#1d140a', '#fffaee'), ('#f7c978', '#2f7a4a'), ('#e8a145', '#226
                ('#241d16', '#fffaee'), ('#211a12', '#fffaee'), ('#17130f', '#f8ecd0'), ('#1f1913', '#fffaee'), ('#2a1608', '#fffaee')]:
     s = s.replace(a_, b_)
 rep('</style>', '''/* ===== Sun&Sea ===== */
-body{background:var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.8' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .35 0 0 0 0 .15 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
+body{background-color:var(--bg)!important;background-image:url(__C_TL__),url(__C_TR__),radial-gradient(120% 80% at 50% 35%,#fbe5ae 0%,#f3cf86 55%,#e2b061 100%)!important;background-repeat:no-repeat!important;background-position:left top,right top,center!important;background-size:min(30vw,170px) auto,min(30vw,165px) auto,cover!important;background-attachment:scroll,scroll,fixed!important}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 .hero{height:auto!important;aspect-ratio:853/248;max-width:860px;margin:0 auto}
 .hero .bg{background-size:cover!important;background-position:center!important;transform:none!important;filter:none!important}
@@ -127,11 +132,34 @@ body{background:var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.or
 .gate::before{background:linear-gradient(180deg,rgba(244,231,197,.15),rgba(244,231,197,.75) 45%,var(--bg) 78%)!important}
 .gate .bg{background-size:contain!important;background-position:top center!important;background-repeat:no-repeat!important}
 .stick{box-shadow:0 6px 16px rgba(80,60,20,.08)}
-section.s h2{font-family:var(--f-display);font-weight:800;color:var(--amber);letter-spacing:.01em}
-.sh .vi{background:var(--amber)!important;color:#fffaee!important}
+section.s{padding-block:30px 6px!important}
+.sh{display:block!important;text-align:center}
+.sh .tt{display:flex;flex-direction:column;align-items:center}
+section.s h2{font-family:var(--f-display);font-weight:800;color:var(--amber);letter-spacing:.02em;font-size:clamp(34px,9vw,46px)!important;line-height:1;margin:0!important;text-shadow:0 1px 0 rgba(255,246,220,.6)}
+.sh .vi{order:2;margin-top:10px;background:var(--amber)!important;color:#fbe7b5!important;font-family:var(--f-display);font-size:13px!important;letter-spacing:.08em!important;padding:7px 22px!important;border-radius:4px;box-shadow:0 0 0 2px rgba(31,91,55,.25),inset 0 0 0 1px rgba(201,162,74,.8);clip-path:polygon(0 0,100% 0,96% 50%,100% 100%,0 100%,4% 50%)}
+.sh .vi::after,.sh .vi::before{display:none!important}
+section.s .note{text-align:center;border:0!important;padding:0!important;margin:10px auto 0;max-width:46ch;font-style:italic;color:var(--muted)}
 .sh .vi::after{border-left-color:var(--amber)!important}
-.tile{background:var(--card)!important;border:1px solid var(--line)!important;box-shadow:0 6px 18px rgba(80,60,20,.08)}
-.tile .ph{background:#fff}
+.tiles{gap:22px 14px!important;margin-top:18px!important}
+.tile{background:none!important;border:0!important;box-shadow:none!important;overflow:visible!important;text-align:center}
+.tile .ph{background:none!important;aspect-ratio:1/.86!important;overflow:visible!important}
+.tile .ph img{object-fit:cover;-webkit-mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 72%,transparent 100%);mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 72%,transparent 100%);filter:saturate(1.08) contrast(1.04)}
+.tile:hover .ph img{transform:scale(1.04)}
+.tile .txt{padding:2px 2px 0!important;align-items:center}
+.tile .nm{text-transform:uppercase;font-size:15px!important;line-height:1.12!important;color:var(--amber)!important}
+.tile .orig{text-align:center}
+.tile .ds{text-align:center;font-size:11.5px}
+.tile .opts{width:100%;justify-items:center}
+.tile .opt{justify-content:center;gap:8px}
+.tile .pv{align-items:center}
+.tile .num{left:4px;right:auto;top:4px;bottom:auto;background:var(--amber)!important;color:#fbe7b5!important;border:2px solid #fbe7b5!important;min-width:34px;height:34px;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+.tile .tgs{left:auto;right:2px;top:2px;justify-content:flex-end}
+.tile.incart .nm{color:var(--red)!important}
+.tile.incart .ph img{filter:saturate(1.15) drop-shadow(0 0 10px rgba(31,91,55,.35))}
+li.it{border-bottom:1px dashed rgba(31,91,55,.3)!important}
+li.it .nr{display:inline-grid;place-items:center;min-width:26px;height:26px;padding:0 5px;border-radius:999px;background:var(--amber);color:#fbe7b5!important;font-family:var(--f-body);font-size:11.5px;margin-right:4px}
+.stick{background:rgba(251,233,184,.95)!important}
+.about,.dcard{background:linear-gradient(180deg,#fff3d2,#f6dc9f)!important}
 .tile .nm,li.it .nm{font-family:var(--f-display)!important;font-weight:800!important;color:var(--ink)!important;letter-spacing:.01em}
 .tile .orig,li.it .orig,#dish .orig{color:var(--red)!important;font-style:normal!important;font-family:var(--f-body)!important;font-weight:600;font-size:12px}
 .pv .main{color:#fffaee!important;background:var(--amber);border-radius:999px;padding:3px 10px;align-self:flex-start;font-size:13.5px!important}
@@ -159,7 +187,7 @@ section.s h2{font-family:var(--f-display);font-weight:800;color:var(--amber);let
 .toast{background:var(--amber)!important;color:#fffaee!important}
 #atmo{display:none!important}
 </style>''')
-s = s.replace('__DATA__', json.dumps(D, ensure_ascii=False)).replace('__PH__', json.dumps({'amb_lion': BAND})).replace('__AMB__', json.dumps({'lion': BAND})).replace('__GEN__', '[]').replace('__CATPH__', json.dumps({k: v for k, v in CAT.items() if v}))
+s = s.replace('__DATA__', json.dumps(D, ensure_ascii=False)).replace('__PH__', json.dumps({'amb_lion': BAND})).replace('__AMB__', json.dumps({'lion': BAND})).replace('__GEN__', '[]').replace('__C_TL__', CORNER['tl']).replace('__C_TR__', CORNER['tr']).replace('__CATPH__', json.dumps({k: v for k, v in CAT.items() if v}))
 s += '<script>(function n(i){if(i>%d)return;var e=document.createElement("script");e.src="ph"+i+".js";e.onload=e.onerror=function(){n(i+1)};document.body.appendChild(e)})(1)</script>' % len(chunks)
 s = '<!doctype html>\n<html lang="ru">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">\n</head>\n<body>\n' + s + '</body></html>'
 open(OUT + '/index.html', 'w', encoding='utf-8').write(s)
