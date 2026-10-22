@@ -509,6 +509,14 @@ body[data-skin="light"] .oc.v2 .side{color:#fff;text-shadow:0 1px 2px rgba(0,0,0
 .fab:disabled{opacity:.45;filter:grayscale(.5);cursor:not-allowed}
 body:has(.fab) .toasts{bottom:calc(86px + env(safe-area-inset-bottom,0px))}
 body:has(.fab) .panes{padding-bottom:84px}
+/* venue switch */
+.cafebtn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line2);background:var(--card);color:var(--ink);border-radius:999px;padding:7px 12px;font-weight:700;font-size:12.5px;white-space:nowrap}
+.cafebtn svg{width:16px;height:16px;color:var(--acc)}.cafebtn .cv{width:11px;height:11px;color:var(--muted)}
+.cafes{display:grid;gap:10px;margin-top:12px}
+.cafe{display:flex;align-items:center;gap:12px;text-align:left;padding:14px;border-radius:16px;border:1.5px solid var(--line2);background:var(--card);color:var(--ink);cursor:pointer}
+.cafe.on{border-color:var(--acc);box-shadow:0 0 0 1px var(--acc)}
+.cafe .mono{flex:none}.cafe b{display:block;font-size:15px}.cafe small{color:var(--muted);font-size:12px}
+@media (max-width:760px){.cafebtn{order:1}}
 /* ===== hall map + swipe ===== */
 .tview{display:inline-flex;gap:4px;padding:4px;border:1px solid var(--line);border-radius:999px;background:var(--card);margin-bottom:12px}
 .tview button{border:0;background:none;color:var(--muted);font-weight:700;font-size:12.5px;padding:8px 14px;border-radius:999px}
@@ -546,6 +554,7 @@ body:has(.fab) .panes{padding-bottom:84px}
 <header class="top">
   <div class="in">
     <div class="brand"><span class="mono" aria-hidden="true">C</span><span class="bt"><b>Café Chez Oanh</b><small id="tSub"></small></span></div>
+    <button type="button" class="cafebtn" id="cafeBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10l9-6 9 6v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M9 21v-7h6v7"/></svg><span id="cafeName"></span><svg class="cv" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></button>
     <nav class="seg" id="roles" aria-label="Role"></nav>
     <button class="chipbtn" type="button" id="splitBtn"></button>
     <button type="button" class="mbtn" id="mBtn" aria-label="Menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
@@ -566,7 +575,16 @@ body:has(.fab) .panes{padding-bottom:84px}
 const PH=__PH__;
 /* full guest menu of Chez Oanh for the stop list: [section id, vi, ru, [[vi, ru], ...]] — key of a dish is "section|index", same as in the menu */
 const CO=__CO__;
-const MENU=[
+/* Sun&Sea guest menu, same shape as CO */
+const SSD=__SS__;
+/* each venue is its own "login": own orders, bills, staff, stop list, payment QR, reviews and order channel from its menu.
+   In the demo the chosen venue is remembered in this browser; switching reloads the app into that venue's data. */
+const CAFES={
+ co:{id:"co",name:"Café Chez Oanh",short:"Chez Oanh",mono:"C",sfx:"",inbox:"co_inbox",pub:"co_pub",mk:"co_",join:"CO-7F3K",file:"chez-oanh",names:null},
+ ss:{id:"ss",name:"Sun&Sea Restaurant",short:"Sun&Sea",mono:"S",sfx:"_ss",inbox:"ss_inbox",pub:"ss_pub",mk:"ss_",join:"SS-4M2Q",file:"sun-sea",names:{minh:"Tuấn",lan:"Hoa",huy:"Long",tam:"Bảo",oanh:"Hải",phuc:"Vy"}}};
+const CAFE=CAFES[(()=>{try{return localStorage.getItem("ops_cafe")}catch(e){return null}})()]||CAFES.co;
+const CMENU=CAFE.id==="ss"?SSD:CO;
+const MENU_CO=[
  {id:"k1",st:"k",p:85000,ph:"pho_bo",vi:"Phở bò",en:"Beef pho",ru:"Фо с говядиной"},
  {id:"k2",st:"k",p:160000,ph:"vn_luclac",vi:"Bò lúc lắc",en:"Shaking beef",ru:"Бо лук лак (говядина)"},
  {id:"k3",st:"k",p:160000,ph:"ri_seafood",vi:"Cơm chiên hải sản",en:"Seafood fried rice",ru:"Жареный рис с морепродуктами"},
@@ -586,8 +604,30 @@ const MENU=[
  {id:"b6",st:"b",p:40000,ph:"ju_orange",vi:"Cam vắt",en:"Fresh orange juice",ru:"Апельсиновый фреш"},
  {id:"b7",st:"b",p:40000,ph:null,vi:"Bia Sài Gòn",en:"Saigon beer",ru:"Пиво Saigon"}
 ];
+/* Sun&Sea: dishes for manual orders, demo simulation and sample history */
+const MENU_SS=[
+ {id:"s1",st:"k",p:180000,ph:null,vi:"Phi lê cá chiên bột",en:"Beer battered fish fillet",ru:"Филе рыбы в кляре"},
+ {id:"s2",st:"k",p:165000,ph:null,vi:"Tôm bơ tỏi",en:"Garlic butter shrimp",ru:"Креветки гриль с чесноком и маслом"},
+ {id:"s3",st:"k",p:139000,ph:null,vi:"Tom yum kung",en:"Tom yum kung",ru:"Том ям"},
+ {id:"s4",st:"k",p:120000,ph:"pho_bo",vi:"Phở bò",en:"Beef pho",ru:"Суп фо бо"},
+ {id:"s5",st:"k",p:120000,ph:null,vi:"Súp borscht",en:"Borscht",ru:"Борщ"},
+ {id:"s6",st:"k",p:135000,ph:null,vi:"Phở xào bò",en:"Fried pho with beef",ru:"Жареная рисовая лапша с говядиной"},
+ {id:"s7",st:"k",p:210000,ph:null,vi:"Pizza salami",en:"Pepperoni pizza",ru:"Пицца пепперони"},
+ {id:"s8",st:"k",p:150000,ph:null,vi:"Spaghetti carbonara",en:"Spaghetti carbonara",ru:"Карбонара"},
+ {id:"s9",st:"k",p:140000,ph:"ri_seafood",vi:"Cơm chiên hải sản",en:"Seafood fried rice",ru:"Жареный рис с морепродуктами"},
+ {id:"s10",st:"k",p:180000,ph:null,vi:"Sun and Sea sườn BBQ",en:"Sun and Sea BBQ ribs",ru:"Рёбра на гриле"},
+ {id:"s11",st:"k",p:180000,ph:null,vi:"Mực chiên",en:"Deep fried squid",ru:"Кальмар в кляре"},
+ {id:"s12",st:"k",p:95000,ph:null,vi:"Bánh pie xoài",en:"Mango pie",ru:"Пирог с манго"},
+ {id:"t1",st:"b",p:45000,ph:"cd_salted",vi:"Cà phê muối",en:"Salted coffee",ru:"Солёный кофе"},
+ {id:"t2",st:"b",p:40000,ph:"ju_orange",vi:"Nước cam",en:"Orange juice",ru:"Апельсиновый сок"},
+ {id:"t3",st:"b",p:45000,ph:"sm_mango",vi:"Sinh tố xoài",en:"Mango smoothie",ru:"Смузи манго"},
+ {id:"t4",st:"b",p:35000,ph:null,vi:"Sài Gòn Special",en:"Saigon Special",ru:"Сайгон Спешл"},
+ {id:"t5",st:"b",p:20000,ph:null,vi:"Coca-Cola",en:"Coca-Cola",ru:"Кока-кола"}
+];
+const MENU=CAFE.id==="ss"?MENU_SS:MENU_CO;
 const M=Object.fromEntries(MENU.map(x=>[x.id,x]));
 const STAFF0=[{id:"minh",name:"Minh",phone:"+84 905 112 334",role:"waiter"},{id:"lan",name:"Lan",phone:"+84 938 551 207",role:"waiter"},{id:"huy",name:"Huy",phone:"+84 913 742 650",role:"waiter"},{id:"tam",name:"Tâm",phone:"+84 977 208 415",role:"kitchen"},{id:"oanh",name:"Oanh",phone:"+84 252 374 3848",role:"owner"},{id:"phuc",name:"Phúc",phone:"+84 962 310 588",role:"waiter",status:"pending"}];
+if(CAFE.names)STAFF0.forEach(x=>{if(CAFE.names[x.id])x.name=CAFE.names[x.id]});
 function seedStaff(){const n=Date.now();return STAFF0.map((x,i)=>({...x,status:x.status||"active",createdAt:n-(x.status?4*60e3:(30-i)*86400e3),approvedAt:x.status?null:n-(29-i)*86400e3}))}
 const WAITERS=()=>ST.staff.filter(s=>s.role==="waiter"&&s.status==="active");
 const WISH=[
@@ -627,8 +667,8 @@ const S={
   nTaker:"Только официанту, который принял",nAll:"Всем на смене",nEsc:"Сначала тому, кто принял; через 30 сек всем",nTakerD:"Меньше всего уведомлений.",nAllD:"Быстрее, но дёргает всех.",nEscD:"Рекомендуем.",
   oLive:"Сейчас",oNow:"Открытых заказов",yes:"да",no:"нет"}
 };
-Object.assign(S.vi,{fabT:"Ghi đơn",tPaid:"Đã thanh toán",tvMap:"Sơ đồ",tvList:"Danh sách",zHall:"Trong nhà",zTerr:"Sân hiên",hs_free:"trống",hs_new:"đơn mới",hs_cook:"đang làm",hs_ready:"xong, mang ra",hs_bill:"gọi thanh toán",hs_eat:"có khách",swHint:"Vuốt phải để thực hiện",kSentW:"Đã báo cho {w}: món đã xong",noToday:"Ở Việt Nam bây giờ là {h}, hôm nay chưa có đơn đã phục vụ.",pToday:"Hôm nay",pYest:"Hôm qua",p7:"7 ngày",p30:"30 ngày",p90:"90 ngày",pCustom:"Tùy chọn",pFrom:"Từ",pTo:"Đến",vsPrev:"so với kỳ trước",oByDay:"Doanh thu theo ngày",csv:"Tải CSV (Excel)",csvDate:"Ngày",histNote:"Demo: hôm nay là đơn thật trong trình duyệt này, các ngày trước là dữ liệu mẫu.",payHow:"Khách đã thanh toán bằng",pickPay:"Chọn cách khách đã thanh toán",oPay:"Hình thức thanh toán",pay_mix:"Kết hợp",payNone:"chưa ghi",billOpenP:"Chưa thanh toán",paidP:"Đã thanh toán",revT:"Đánh giá của khách",revH:"Sau khi thanh toán, khách thấy lời mời đánh giá và nút mở trang của quán. Dán đường dẫn trang quán trên Google Maps và Tripadvisor.",revG:"Google Maps",revTa:"Tripadvisor",revSave:"Lưu",revOk:"Đã lưu đường dẫn",revBad:"Đường dẫn phải bắt đầu bằng https://",revMiss:"Chưa có đường dẫn đánh giá",kStop:"Hết món",stopT:"Món đã hết",stopH:"Đánh dấu món đã hết: khách thấy “Hết món” trong thực đơn và không thể gọi. Khi có lại, bấm “Có lại”.",stopNone:"Tất cả món đều còn",stopOut:"Hết món",stopBack:"Có lại",stopQ:"Tìm món…",stopAll:"Tất cả món",stopOk:"Đã báo hết món",stopRet:"Món đã có lại",ckCommon:"chung",payQrT:"Mã QR nhận thanh toán",payQrH:"Khách quét mã này trong thực đơn để chuyển khoản vào tài khoản của bạn. Không cần kết nối ngân hàng hay máy POS.",payQrNo:"Chưa có mã QR",upQr:"Tải ảnh mã QR",repQr:"Thay ảnh",delQr:"Xóa",payQrMiss:"Chưa tải mã QR thanh toán: khách chưa thể chuyển khoản. Vào Nhân viên → Mã QR nhận thanh toán.",tipQr:"QR tiền tip",tipQrT:"Mã QR nhận tip của bạn",tipQrH:"Khách bàn bạn phục vụ có thể quét mã này để gửi tip trực tiếp vào tài khoản của bạn. Lấy mã QR trong ứng dụng ngân hàng.",tipMiss:"Bạn chưa tải mã QR nhận tip, khách không thể gửi tip qua QR.",jTip:"Mã QR nhận tip (từ ứng dụng ngân hàng)",jTipOpt:"Có thể thêm sau",check:"Hóa đơn",paidQr:"Khách báo đã chuyển khoản QR, hãy kiểm tra",allChecks:"tất cả",qrOk:"Đã lưu mã QR",imgErr:"Không đọc được ảnh"});
-Object.assign(S.ru,{fabT:"Устный заказ",tPaid:"Завершённые",tvMap:"Карта зала",tvList:"Список",zHall:"Зал",zTerr:"Терраса",hs_free:"свободен",hs_new:"новый заказ",hs_cook:"готовится",hs_ready:"готово, нести",hs_bill:"просит счёт",hs_eat:"занят",swHint:"Смахните вправо",kSentW:"Официант {w} получил уведомление: заказ готов",noToday:"Во Вьетнаме сейчас {h}, сегодня ещё нет вынесенных заказов.",pToday:"Сегодня",pYest:"Вчера",p7:"7 дней",p30:"30 дней",p90:"90 дней",pCustom:"Свой период",pFrom:"С",pTo:"по",vsPrev:"к прошлому периоду",oByDay:"Выручка по дням",csv:"Скачать для Excel",csvDate:"Дата",histNote:"Демо: сегодня — настоящие заказы в этом браузере, прошлые дни — примерные данные для показа.",payHow:"Как оплатили",pickPay:"Отметьте, как оплатили",oPay:"Способы оплаты",pay_mix:"Смешанная",payNone:"не отмечено",billOpenP:"Счёт открыт",paidP:"Оплачено",revT:"Отзывы гостей",revH:"После оплаты гость увидит просьбу оставить отзыв и кнопки, которые откроют страницу кафе. Вставьте ссылки на страницу кафе в Google Картах и Tripadvisor.",revG:"Google Карты",revTa:"Tripadvisor",revSave:"Сохранить",revOk:"Ссылки сохранены",revBad:"Ссылка должна начинаться с https://",revMiss:"Ссылки на отзывы не добавлены",kStop:"Стоп-лист",stopT:"Закончилось",stopH:"Отметьте, что закончилось: гость сразу видит «Закончилось» в меню и не может это заказать. Когда снова есть — «Вернуть».",stopNone:"Всё в наличии",stopOut:"Закончилось",stopBack:"Вернуть",stopQ:"Найти блюдо…",stopAll:"Всё меню",stopOk:"Снято из меню",stopRet:"Снова в меню",ckCommon:"общее",payQrT:"QR для оплаты гостями",payQrH:"Гость видит этот QR в меню и переводит деньги на ваш счёт или карту. Банк и касса не подключаются.",payQrNo:"QR не загружен",upQr:"Загрузить фото QR",repQr:"Заменить",delQr:"Удалить",payQrMiss:"Не загружен QR для оплаты: гости не смогут заплатить переводом. Сотрудники → QR для оплаты гостями.",tipQr:"QR для чаевых",tipQrT:"Ваш QR для чаевых",tipQrH:"Гости ваших столов смогут отсканировать его и перевести чаевые прямо вам. QR берётся в приложении вашего банка.",tipMiss:"Вы не загрузили QR для чаевых: гости не смогут оставить их переводом.",jTip:"QR для чаевых (из приложения банка)",jTipOpt:"Можно добавить позже",check:"Чек",paidQr:"Гость отметил перевод по QR — проверьте",allChecks:"все",qrOk:"QR сохранён",imgErr:"Не удалось прочитать фото"});
+Object.assign(S.vi,{cafeT:"Quán của bạn",cafeH:"Chủ quán đăng nhập vào quán của mình: mỗi quán chỉ thấy đơn, thực đơn, danh sách hết món, nhân viên và thống kê của mình. Trong demo có thể chuyển giữa các quán.",cafeNow:"Đang mở",cafeGo:"Đăng nhập vào quán này",fabT:"Ghi đơn",tPaid:"Đã thanh toán",tvMap:"Sơ đồ",tvList:"Danh sách",zHall:"Trong nhà",zTerr:"Sân hiên",hs_free:"trống",hs_new:"đơn mới",hs_cook:"đang làm",hs_ready:"xong, mang ra",hs_bill:"gọi thanh toán",hs_eat:"có khách",swHint:"Vuốt phải để thực hiện",kSentW:"Đã báo cho {w}: món đã xong",noToday:"Ở Việt Nam bây giờ là {h}, hôm nay chưa có đơn đã phục vụ.",pToday:"Hôm nay",pYest:"Hôm qua",p7:"7 ngày",p30:"30 ngày",p90:"90 ngày",pCustom:"Tùy chọn",pFrom:"Từ",pTo:"Đến",vsPrev:"so với kỳ trước",oByDay:"Doanh thu theo ngày",csv:"Tải CSV (Excel)",csvDate:"Ngày",histNote:"Demo: hôm nay là đơn thật trong trình duyệt này, các ngày trước là dữ liệu mẫu.",payHow:"Khách đã thanh toán bằng",pickPay:"Chọn cách khách đã thanh toán",oPay:"Hình thức thanh toán",pay_mix:"Kết hợp",payNone:"chưa ghi",billOpenP:"Chưa thanh toán",paidP:"Đã thanh toán",revT:"Đánh giá của khách",revH:"Sau khi thanh toán, khách thấy lời mời đánh giá và nút mở trang của quán. Dán đường dẫn trang quán trên Google Maps và Tripadvisor.",revG:"Google Maps",revTa:"Tripadvisor",revSave:"Lưu",revOk:"Đã lưu đường dẫn",revBad:"Đường dẫn phải bắt đầu bằng https://",revMiss:"Chưa có đường dẫn đánh giá",kStop:"Hết món",stopT:"Món đã hết",stopH:"Đánh dấu món đã hết: khách thấy “Hết món” trong thực đơn và không thể gọi. Khi có lại, bấm “Có lại”.",stopNone:"Tất cả món đều còn",stopOut:"Hết món",stopBack:"Có lại",stopQ:"Tìm món…",stopAll:"Tất cả món",stopOk:"Đã báo hết món",stopRet:"Món đã có lại",ckCommon:"chung",payQrT:"Mã QR nhận thanh toán",payQrH:"Khách quét mã này trong thực đơn để chuyển khoản vào tài khoản của bạn. Không cần kết nối ngân hàng hay máy POS.",payQrNo:"Chưa có mã QR",upQr:"Tải ảnh mã QR",repQr:"Thay ảnh",delQr:"Xóa",payQrMiss:"Chưa tải mã QR thanh toán: khách chưa thể chuyển khoản. Vào Nhân viên → Mã QR nhận thanh toán.",tipQr:"QR tiền tip",tipQrT:"Mã QR nhận tip của bạn",tipQrH:"Khách bàn bạn phục vụ có thể quét mã này để gửi tip trực tiếp vào tài khoản của bạn. Lấy mã QR trong ứng dụng ngân hàng.",tipMiss:"Bạn chưa tải mã QR nhận tip, khách không thể gửi tip qua QR.",jTip:"Mã QR nhận tip (từ ứng dụng ngân hàng)",jTipOpt:"Có thể thêm sau",check:"Hóa đơn",paidQr:"Khách báo đã chuyển khoản QR, hãy kiểm tra",allChecks:"tất cả",qrOk:"Đã lưu mã QR",imgErr:"Không đọc được ảnh"});
+Object.assign(S.ru,{cafeT:"Ваше заведение",cafeH:"Владелец входит в своё заведение и видит только его: заказы, меню и стоп-лист, сотрудников, QR оплаты, отзывы и аналитику. В демо между заведениями можно переключаться.",cafeNow:"Сейчас открыто",cafeGo:"Войти в это заведение",fabT:"Устный заказ",tPaid:"Завершённые",tvMap:"Карта зала",tvList:"Список",zHall:"Зал",zTerr:"Терраса",hs_free:"свободен",hs_new:"новый заказ",hs_cook:"готовится",hs_ready:"готово, нести",hs_bill:"просит счёт",hs_eat:"занят",swHint:"Смахните вправо",kSentW:"Официант {w} получил уведомление: заказ готов",noToday:"Во Вьетнаме сейчас {h}, сегодня ещё нет вынесенных заказов.",pToday:"Сегодня",pYest:"Вчера",p7:"7 дней",p30:"30 дней",p90:"90 дней",pCustom:"Свой период",pFrom:"С",pTo:"по",vsPrev:"к прошлому периоду",oByDay:"Выручка по дням",csv:"Скачать для Excel",csvDate:"Дата",histNote:"Демо: сегодня — настоящие заказы в этом браузере, прошлые дни — примерные данные для показа.",payHow:"Как оплатили",pickPay:"Отметьте, как оплатили",oPay:"Способы оплаты",pay_mix:"Смешанная",payNone:"не отмечено",billOpenP:"Счёт открыт",paidP:"Оплачено",revT:"Отзывы гостей",revH:"После оплаты гость увидит просьбу оставить отзыв и кнопки, которые откроют страницу кафе. Вставьте ссылки на страницу кафе в Google Картах и Tripadvisor.",revG:"Google Карты",revTa:"Tripadvisor",revSave:"Сохранить",revOk:"Ссылки сохранены",revBad:"Ссылка должна начинаться с https://",revMiss:"Ссылки на отзывы не добавлены",kStop:"Стоп-лист",stopT:"Закончилось",stopH:"Отметьте, что закончилось: гость сразу видит «Закончилось» в меню и не может это заказать. Когда снова есть — «Вернуть».",stopNone:"Всё в наличии",stopOut:"Закончилось",stopBack:"Вернуть",stopQ:"Найти блюдо…",stopAll:"Всё меню",stopOk:"Снято из меню",stopRet:"Снова в меню",ckCommon:"общее",payQrT:"QR для оплаты гостями",payQrH:"Гость видит этот QR в меню и переводит деньги на ваш счёт или карту. Банк и касса не подключаются.",payQrNo:"QR не загружен",upQr:"Загрузить фото QR",repQr:"Заменить",delQr:"Удалить",payQrMiss:"Не загружен QR для оплаты: гости не смогут заплатить переводом. Сотрудники → QR для оплаты гостями.",tipQr:"QR для чаевых",tipQrT:"Ваш QR для чаевых",tipQrH:"Гости ваших столов смогут отсканировать его и перевести чаевые прямо вам. QR берётся в приложении вашего банка.",tipMiss:"Вы не загрузили QR для чаевых: гости не смогут оставить их переводом.",jTip:"QR для чаевых (из приложения банка)",jTipOpt:"Можно добавить позже",check:"Чек",paidQr:"Гость отметил перевод по QR — проверьте",allChecks:"все",qrOk:"QR сохранён",imgErr:"Не удалось прочитать фото"});
 /* guest UI strings */
 const G={
  en:{billTot:"Table bill",rounds:"orders",hi:"Table",menu:"Menu",food:"Food",drinks:"Drinks",send:"Send order",sent:"Order sent",total:"Total",track:"Your order",wish:"Requests",empty:"Add dishes with +",
@@ -641,7 +681,7 @@ const G={
 const ESC_MS=30000, NEW_LATE_MS=45000, REORDER_MS=40000;
 
 /* ---------- state ---------- */
-const KEY="co_ops_v2";
+const KEY="co_ops_v2"+CAFE.sfx;
 const ls={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
 let ST=null;
 function seedState(){
@@ -658,16 +698,16 @@ function seedState(){
       createdAt:t,acceptedAt:acc,sentAt:sent,readyAt:ready,servedAt:ready+(1+rnd()*4)*60e3,escalated:rnd()<.08,lateAccept:(acc-t)>NEW_LATE_MS,seed:true});
   }
   hist.sort((a,b)=>a.createdAt-b.createdAt);hist.forEach((o,i)=>o.no=i+1);
-  const L1={id:"l1",no:hist.length+1,table:5,lang:"ru",items:[{mid:"k2",qty:1,note:"",done:false},{mid:"b1",qty:2,note:"",done:false}],comment:"",wishes:["nosugar"],status:"new",src:"qr",createdAt:now-20000,escalated:false};
-  const L2={id:"l2",no:hist.length+2,table:3,lang:"en",items:[{mid:"k7",qty:2,note:"1 trứng chín kỹ",done:true},{mid:"b6",qty:2,note:"",done:false}],comment:"Khách vội, ra đồ uống trước",wishes:[],status:"cooking",src:"qr",waiter:"lan",createdAt:now-6*60e3,acceptedAt:now-5.5*60e3,sentAt:now-4*60e3,escalated:false};
+  const L1={id:"l1",no:hist.length+1,table:5,lang:"ru",items:[{mid:MENU[1].id,qty:1,note:"",done:false},{mid:MENU.filter(x=>x.st==="b")[0].id,qty:2,note:"",done:false}],comment:"",wishes:["nosugar"],status:"new",src:"qr",createdAt:now-20000,escalated:false};
+  const L2={id:"l2",no:hist.length+2,table:3,lang:"en",items:[{mid:MENU[6].id,qty:2,note:"1 trứng chín kỹ",done:true},{mid:MENU.filter(x=>x.st==="b")[1].id,qty:2,note:"",done:false}],comment:"Khách vội, ra đồ uống trước",wishes:[],status:"cooking",src:"qr",waiter:"lan",createdAt:now-6*60e3,acceptedAt:now-5.5*60e3,sentAt:now-4*60e3,escalated:false};
   hist.push(L1,L2);
   hist.forEach(o=>{if(!o.bill){o.bill="b"+o.id;o.round=1}});const bills={};hist.forEach(o=>{if(!bills[o.bill])bills[o.bill]={id:o.bill,table:o.table,openedAt:o.createdAt,closed:o.status==="served",closedAt:o.servedAt||null,...(o.status==="served"?{pay:pick(["cash","cash","qr","qr","card"])}:{})}});
-  return {v:2,staff:seedStaff(),log:[],joinCode:"CO-7F3K",device:null,otab:"stats",bills,seq:hist.length,orders:hist,shift:{minh:true,lan:true,huy:false},me:"minh",role:"waiter",split:false,lang:"vi",glang:"en",gtable:7,gcart:{},gwish:{},notify:"esc",ktab:"all",wtab:"new",sound:false,seen:{},theme:"dark"};
+  return {v:2,staff:seedStaff(),log:[],joinCode:CAFE.join,device:null,otab:"stats",bills,seq:hist.length,orders:hist,shift:{minh:true,lan:true,huy:false},me:"minh",role:"waiter",split:false,lang:"vi",glang:"en",gtable:7,gcart:{},gwish:{},notify:"esc",ktab:"all",wtab:"new",sound:false,seen:{},theme:"dark"};
 }
-function load(){try{const s=JSON.parse(ls.get(KEY)||"null");if(s&&s.v===2&&s.bills){if(s.xm)Object.assign(M,s.xm);if(!s.staff){s.staff=seedStaff();s.log=[];s.joinCode="CO-7F3K"}return s}}catch(e){}return seedState()}
+function load(){try{const s=JSON.parse(ls.get(KEY)||"null");if(s&&s.v===2&&s.bills){if(s.xm)Object.assign(M,s.xm);if(!s.staff){s.staff=seedStaff();s.log=[];s.joinCode=CAFE.join}return s}}catch(e){}return seedState()}
 ST=load();
 if((location.hash||"").toLowerCase().includes("join"))ST.role="join";
-let bc=null;try{bc=new BroadcastChannel("co_ops")}catch(e){}
+let bc=null;try{bc=new BroadcastChannel("co_ops"+CAFE.sfx)}catch(e){}
 setTimeout(pub,0);
 function save(){ls.set(KEY,JSON.stringify(ST));try{bc&&bc.postMessage("sync")}catch(e){}pub()}
 /* what the guest menu (same site) reads: the café's payment QR, each waiter's tip QR, who serves which table */
@@ -677,14 +717,14 @@ function pub(){const w={},tb={};
   Object.values(ST.bills).forEach(b=>{if(b.closed)return;const o=[...billOrders(b.id)].reverse().find(o=>o.waiter);if(o)tb[b.table]=o.waiter});
   const cl={};Object.values(ST.bills).forEach(b=>{if(b.closed&&b.closedAt&&Date.now()-b.closedAt<6*3600e3&&(!cl[b.table]||cl[b.table]<b.closedAt))cl[b.table]=b.closedAt});
   const od={};Object.values(ST.bills).forEach(b=>{if(b.closed)return;const os=billOrders(b.id).filter(o=>!o.seed);if(os.length)od[b.table]=os.map(o=>({no:o.no,st:o.status,w:o.waiter?wname(o.waiter):"",at:o.createdAt,ck:o.check||""}))});
-  const v=JSON.stringify({pay:ST.payQr||"",w,t:tb,stop:Object.keys(ST.stop||{}),rev:ST.rev||{},closed:cl,ord:od});if(v!==lastPub){lastPub=v;ls.set("co_pub",v)}}
+  const v=JSON.stringify({pay:ST.payQr||"",w,t:tb,stop:Object.keys(ST.stop||{}),rev:ST.rev||{},closed:cl,ord:od});if(v!==lastPub){lastPub=v;ls.set(CAFE.pub,v)}}
 /* phone photo of a QR → small JPEG data URL (fits in storage, still scans) */
 function readQr(file,cb){if(!file)return;const fr=new FileReader();fr.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,640/Math.max(im.width,im.height));
   const c=document.createElement("canvas");c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);const x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);cb(c.toDataURL("image/jpeg",.9))};
   im.onerror=()=>toast(t("imgErr"),"","r");im.src=fr.result};fr.readAsDataURL(file)}
 if(bc)bc.onmessage=()=>{const prev=ST;ST=load();ST.role=prev.role;ST.split=prev.split;ST.me=prev.me;ST.wtab=prev.wtab;ST.ktab=prev.ktab;ST.lang=prev.lang;ST.glang=prev.glang;ST.sound=prev.sound;ST.theme=prev.theme;detectEvents(prev);render()};
 /* orders placed from the QR menu (same site) arrive through a shared inbox */
-const XK="co_inbox",XW={nochili:"nospicy",nocilantro:"nocil"};
+const XK=CAFE.inbox,XW={nochili:"nospicy",nocilantro:"nocil"};
 function importInbox(){let q=[];try{q=JSON.parse(localStorage.getItem(XK)||"[]")}catch(e){}if(!Array.isArray(q)||!q.length)return;try{localStorage.setItem(XK,"[]")}catch(e){}
   mutate(()=>{ST.xm=ST.xm||{};q.forEach(o=>{if(o&&o.type==="bill"){const b=openBill(+o.table);if(b){b.req={at:Date.now(),pay:o.pay||"cash",check:o.check||"",paid:!!o.paid};b.reqs=(b.reqs||[]).filter(r=>r.check!==b.req.check).concat([b.req])}return}if(!o||!o.items||!o.items.length)return;
     const items=o.items.map(i=>{const id="x_"+i.key;if(!ST.xm[id])ST.xm[id]={id,vi:i.vi,ru:i.ru,en:i.en,p:+i.p||0,st:i.st==="b"?"b":"k"};M[id]=ST.xm[id];return {mid:id,qty:i.q||1,note:"",done:false}});
@@ -811,7 +851,7 @@ function rGuest(el){const g=G[ST.glang],l=ST.glang;
   const gb=openBill(ST.gtable);const mine=gb?billOrders(gb.id).filter(o=>o.status!=="served"):[];const gsum=gb?billTotal(gb.id):0;
   const item=m=>`<div class="gi">${m.ph?`<img src="${PH[m.ph]}" alt="">`:`<img alt="">`}<div><div class="nm">${esc(m[l])}</div>${l!=="vi"?`<div class="dim" style="font-size:11.5px">${esc(m.vi)}</div>`:""}<div class="pr">${vnd(m.p)}</div></div><div class="qa">${cart[m.id]?`<button type="button" data-g="-" data-m="${m.id}" aria-label="−">−</button><b>${cart[m.id]}</b>`:""}<button type="button" data-g="+" data-m="${m.id}" aria-label="+">+</button></div></div>`;
   el.innerHTML=`<div class="phone">
-    <div class="gh"><div><b>Chez Oanh</b><small>${esc(g.hi)} ${ST.gtable} · QR</small></div><div class="gl">${["en","ru","vi"].map(x=>`<button type="button" data-gl="${x}" class="${x===l?"on":""}">${x.toUpperCase()}</button>`).join("")}</div></div>
+    <div class="gh"><div><b>${esc(CAFE.short)}</b><small>${esc(g.hi)} ${ST.gtable} · QR</small></div><div class="gl">${["en","ru","vi"].map(x=>`<button type="button" data-gl="${x}" class="${x===l?"on":""}">${x.toUpperCase()}</button>`).join("")}</div></div>
     ${gb?`<div class="gbill"><span>${esc(g.billTot)} · ${billOrders(gb.id).length} ${esc(g.rounds)}</span><b>${vnd(gsum)}</b></div>`:""}${mine.length?`<div style="padding:10px 12px;display:flex;flex-direction:column;gap:8px">${mine.map(o=>{const idx={new:0,accepted:1,cooking:2,ready:3,served:4}[o.status];return `<div class="gtrack"><div class="row"><span class="lab">${esc(g.track)} #${o.no}</span><span class="sp"></span><span class="pill st-${o.status}">${esc(g.st[idx])}</span></div>${stepsHTML(o)}<div class="dim" style="font-size:12px">${o.status==="new"?esc(g.note):o.waiter?esc(wname(o.waiter)):""}</div></div>`}).join("")}</div>`:""}
     <div class="gm"><div class="gsec">${esc(g.food)}</div>${MENU.filter(m=>m.st==="k").map(item).join("")}<div class="gsec">${esc(g.drinks)}</div>${MENU.filter(m=>m.st==="b").map(item).join("")}</div>
     <div class="gbar"><div class="wchips">${WISH.slice(0,5).map(w=>`<button type="button" data-gw="${w.k}" aria-pressed="${!!ST.gwish[w.k]}">${esc(w[l])}</button>`).join("")}</div>
@@ -998,11 +1038,11 @@ function rOwnerWrap(el){const pend=ST.staff.filter(x=>x.status==="pending").leng
 let stopQ="";
 const coName=(d,l)=>l==="ru"?d[1]:d[0];
 function setStop(k,on){mutate(()=>{ST.stop=ST.stop||{};if(on)ST.stop[k]={at:Date.now(),by:ST.role};else delete ST.stop[k]});toast(on?t("stopOk"):t("stopRet"),coDish(k),on?"r":"g")}
-function coDish(k){const [sid,i]=k.split("|");const s=CO.find(x=>x[0]===sid);const d=s&&s[3][+i];return d?coName(d,ST.lang):k}
+function coDish(k){const [sid,i]=k.split("|");const s=CMENU.find(x=>x[0]===sid);const d=s&&s[3][+i];return d?coName(d,ST.lang):k}
 function rStop(el){const stop=ST.stop||{};const ks=Object.keys(stop).sort((a,b)=>stop[b].at-stop[a].at);const l=ST.lang;
   const row=(k,d,out)=>`<li class="${out?"out":""}" data-q="${esc((d[0]+" "+d[1]).toLowerCase())}"><div class="n"><b>${esc(coName(d,l))}</b>${l==="ru"?`<span>${esc(d[0])}</span>`:""}</div><button class="btn sm ${out?"":"outb"}" type="button" data-stop="${k}" data-on="${out?0:1}">${esc(out?t("stopBack"):t("stopOut"))}</button></li>`;
-  el.innerHTML=`<div class="card"><h3>${esc(t("stopT"))} · ${ks.length}</h3><p class="muted" style="margin:0">${esc(t("stopH"))}</p>${ks.length?`<ul class="stopl">${ks.map(k=>{const [sid,i]=k.split("|");const s=CO.find(x=>x[0]===sid);const d=s&&s[3][+i];return d?row(k,d,true):""}).join("")}</ul>`:`<div class="empty" style="padding:14px">${esc(t("stopNone"))}</div>`}</div>
-   <div class="card"><h3>${esc(t("stopAll"))}</h3><input class="stopin" id="stopQ" type="search" placeholder="${esc(t("stopQ"))}" value="${esc(stopQ)}"><ul class="stopl" id="stopAll">${CO.map(s=>`<h4 data-sec="${s[0]}">${esc(l==="ru"?s[2]:s[1])}</h4>`+s[3].map((d,i)=>row(s[0]+"|"+i,d,!!stop[s[0]+"|"+i])).join("")).join("")}</ul></div>`;
+  el.innerHTML=`<div class="card"><h3>${esc(t("stopT"))} · ${ks.length}</h3><p class="muted" style="margin:0">${esc(t("stopH"))}</p>${ks.length?`<ul class="stopl">${ks.map(k=>{const [sid,i]=k.split("|");const s=CMENU.find(x=>x[0]===sid);const d=s&&s[3][+i];return d?row(k,d,true):""}).join("")}</ul>`:`<div class="empty" style="padding:14px">${esc(t("stopNone"))}</div>`}</div>
+   <div class="card"><h3>${esc(t("stopAll"))}</h3><input class="stopin" id="stopQ" type="search" placeholder="${esc(t("stopQ"))}" value="${esc(stopQ)}"><ul class="stopl" id="stopAll">${CMENU.map(s=>`<h4 data-sec="${s[0]}">${esc(l==="ru"?s[2]:s[1])}</h4>`+s[3].map((d,i)=>row(s[0]+"|"+i,d,!!stop[s[0]+"|"+i])).join("")).join("")}</ul></div>`;
   const flt=()=>{const q=stopQ.trim().toLowerCase();const all=el.querySelector("#stopAll");let shown={};
     all.querySelectorAll("li").forEach(li=>{const v=!q||li.dataset.q.includes(q);li.hidden=!v;if(v)shown[li.querySelector("[data-stop]").dataset.stop.split("|")[0]]=1});
     all.querySelectorAll("h4").forEach(h=>h.hidden=!shown[h.dataset.sec])};
@@ -1045,7 +1085,7 @@ function rJoin(el){const d=ST.device?staffBy(ST.device):null;const st=d?d.status
   else if(st==="active")body=`<div class="jstate ok"><div class="dot"></div><b>${esc(t("jOk"))}</b><span class="muted">${esc(d.name)} · ${esc(roleName(d.role))}</span></div><button class="btn" type="button" id="jOpen">${esc(t("jOpen"))}</button>`;
   else if(st==="blocked")body=`<div class="jstate bad"><div class="dot"></div><b>${esc(t("jBlocked"))}</b><span class="muted">${esc(d.name)}</span></div>`;
   else if(st==="rejected")body=`<div class="jstate bad"><div class="dot"></div><b>${esc(t("jRejected"))}</b></div><button class="btn ghost sm" type="button" id="jAgain">${esc(t("jAgain"))}</button>`;
-  el.innerHTML=`<div class="jphone"><div class="jh"><span class="mono">C</span><div><b>Café Chez Oanh</b><small>${esc(t("jTitle"))} · ${esc(ST.joinCode)}</small></div></div><div class="jb">${body}</div></div><p class="dim" style="text-align:center;margin:4px 0 0;font-size:12px">${esc(t("jDemo"))}</p>`;
+  el.innerHTML=`<div class="jphone"><div class="jh"><span class="mono">${esc(CAFE.mono)}</span><div><b>${esc(CAFE.name)}</b><small>${esc(t("jTitle"))} · ${esc(ST.joinCode)}</small></div></div><div class="jb">${body}</div></div><p class="dim" style="text-align:center;margin:4px 0 0;font-size:12px">${esc(t("jDemo"))}</p>`;
   const sb=el.querySelector("#jSend");if(sb)sb.onclick=()=>{const n=el.querySelector("#jName").value.trim(),p=el.querySelector("#jPhone").value.trim();if(n.length<2||p.replace(/\D/g,"").length<8){toast(t("jErr"),"","r");return}const f=el.querySelector("#jTip").files[0];if(f)readQr(f,d=>joinReq(n,p,d));else joinReq(n,p)};
   const c=el.querySelector("#jCancel");if(c)c.onclick=()=>mutate(()=>{const x=staffBy(ST.device);if(x)x.status="deleted";ST.device=null});
   const a=el.querySelector("#jAgain");if(a)a.onclick=()=>{ST.device=null;save();render()};
@@ -1140,7 +1180,7 @@ function rOwner(el){const [f,to]=periodKeys();const days=keysIn(f,to);const len=
   ["pF","pT"].forEach(id=>{const i=el.querySelector("#"+id);if(i)i.onchange=()=>{if(!i.value)return;ST.oper=Object.assign({},ST.oper,id==="pF"?{from:i.value}:{to:i.value});save();render()}});
   el.querySelector("#csvBtn").onclick=()=>{const rows=[[t("csvDate"),t("oRev"),t("oBills"),t("oOrders"),t("oAvg"),t("pay_cash"),t("pay_card"),t("pay_qr")]].concat(perDay.map(([k,d])=>[k,d.rev,d.bills,d.orders,d.bills?Math.round(d.rev/d.bills):0,d.pay.cash,d.pay.card,d.pay.qr]));
     const csv="﻿"+rows.map(r=>r.map(v=>/[;"\n]/.test(String(v))?'"'+String(v).replace(/"/g,'""')+'"':v).join(";")).join("\r\n");
-    const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));a.download=`chez-oanh_${f}_${to}.csv`;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500)};
+    const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));a.download=`${CAFE.file}_${f}_${to}.csv`;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500)};
 }
 
 /* ---------- top controls ---------- */
@@ -1150,10 +1190,15 @@ $("splitBtn").onclick=()=>{ST.split=!ST.split;save();render()};
 $("langBtn").onclick=()=>{ST.lang=ST.lang==="vi"?"ru":"vi";save();render()};
 $("soundBtn").onclick=()=>{ST.sound=!ST.sound;save();render();if(ST.sound)beep("new")};
 $("sim3Btn").onclick=()=>{const bs=Object.values(ST.bills).filter(b=>!b.closed&&!b.req&&billOrders(b.id).some(o=>!o.seed));if(!bs.length)return;const b=bs[Math.floor(Math.random()*bs.length)];mutate(()=>{ST.bills[b.id].req={at:Date.now(),pay:["cash","card","qr"][Math.floor(Math.random()*3)]}})};$("simBtn").onclick=()=>simulate(false);$("sim2Btn").onclick=()=>simulate(true);
+document.querySelector(".brand b").textContent=CAFE.name;document.querySelector(".brand .mono").textContent=CAFE.mono;$("cafeName").textContent=CAFE.short;
+$("cafeBtn").onclick=()=>{$("sheetIn").innerHTML=`<div class="row"><h2>${esc(t("cafeT"))}</h2><span class="sp"></span><button class="btn ghost sm" type="button" id="cfX">${esc(t("cancel"))}</button></div><p class="muted" style="margin:0">${esc(t("cafeH"))}</p>
+   <div class="cafes">${Object.values(CAFES).map(c=>`<button type="button" class="cafe ${c.id===CAFE.id?"on":""}" data-cafe="${c.id}"><span class="mono">${esc(c.mono)}</span><span><b>${esc(c.name)}</b><small>${c.id===CAFE.id?esc(t("cafeNow")):esc(t("cafeGo"))}</small></span></button>`).join("")}</div>`;
+  $("sheet").hidden=false;$("cfX").onclick=closeEditor;
+  $("sheetIn").querySelectorAll("[data-cafe]").forEach(b=>b.onclick=()=>{if(b.dataset.cafe===CAFE.id){closeEditor();return}try{localStorage.setItem("ops_cafe",b.dataset.cafe)}catch(e){}location.reload()})};
 $("mBtn").onclick=()=>{const o=document.body.classList.toggle("mopen");$("mBtn").setAttribute("aria-expanded",o)};
 $("resetBtn").onclick=()=>{const keep={lang:ST.lang,role:ST.role,split:ST.split,sound:ST.sound,theme:ST.theme,payQr:ST.payQr||"",rev:ST.rev||{}};const tips=Object.fromEntries(ST.staff.filter(x=>x.tipQr).map(x=>[x.id,x.tipQr]));
   /* the guest menu on this site keeps its table session (checks, orders, bill buttons) in the same browser: start it over too */
-  ["co_guest","co_ck","co_cart","co_wish","co_tbl","co_inbox"].forEach(k=>{try{localStorage.removeItem(k)}catch(e){}});ST=seedState();Object.assign(ST,keep);ST.staff.forEach(x=>{if(tips[x.id])x.tipQr=tips[x.id]});save();render()};
+  ["guest","ck","cart","wish","tbl"].map(k=>CAFE.mk+k).concat([CAFE.inbox]).forEach(k=>{try{localStorage.removeItem(k)}catch(e){}});ST=seedState();Object.assign(ST,keep);ST.staff.forEach(x=>{if(tips[x.id])x.tipQr=tips[x.id]});save();render()};
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("sheet").hidden)closeEditor()});
 render();importInbox();
 </script>

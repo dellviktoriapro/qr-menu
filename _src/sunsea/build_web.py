@@ -61,8 +61,8 @@ rep('<b id="f2t"></b><span>7:00 – 22:00</span>', '<b id="f2t"></b><span id="f2
 a = s.index('  <div class="cols">'); b = s.index('  <div class="small" id="foot"></div>')
 s = s[:a] + '  <div class="cols"><div><b>Sun&amp;Sea Restaurant</b><br>Mũi Né, Phan Thiết</div><div><b id="ftH"></b><br><span id="ftC"></span></div></div>\n' + s[b:]
 
-# ---- separate storage for this menu (cart, checks, table) — the bridge to the staff app (co_inbox, co_pub) stays shared
-for k in ['co_cart', 'co_wish', 'co_ck', 'co_guest', 'co_tbl', 'co_lang', 'co_cur']:
+# ---- separate storage for this menu (cart, checks, table) and its own channel to the staff app's Sun&Sea venue (ss_inbox, ss_pub)
+for k in ['co_cart', 'co_wish', 'co_ck', 'co_guest', 'co_tbl', 'co_lang', 'co_cur', 'co_inbox', 'co_pub']:
     s = s.replace(f'"{k}"', f'"ss_{k[3:]}"')
 
 # ---- texts

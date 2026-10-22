@@ -864,7 +864,7 @@ const moneyLine=sum=>cur==="VND"?"":"≈ "+fmt(sum,cur);
 /* stop list from the staff app (cook / manager): "section|index" */
 let STOP=new Set();
 const isOut=key=>STOP.has(key.split("|").slice(0,2).join("|"));
-function loadStop(){let p={};try{p=JSON.parse(ls.get("co_pub")||"{}")||{}}catch(e){}const nx=new Set(p.stop||[]);
+function loadStop(){let p={};try{p=JSON.parse(ls.get("ss_pub")||"{}")||{}}catch(e){}const nx=new Set(p.stop||[]);
   const same=nx.size===STOP.size&&[...nx].every(k=>STOP.has(k));STOP=nx;if(same)return false;
   let n=0;allCarts().forEach(([,c])=>Object.keys(c).forEach(k=>{if(isOut(k)){delete c[k];n++}}));if(n){save();setTimeout(()=>toast(T[lang]?T[lang].soldGone:""),50)}return true}
 function ctrl(key,c){if(isOut(key))return `<span class="sold">${esc(T[lang].soldOut)}</span>`;const cc=c==null?cart:(c===CK.act?cart:CK.carts[c]||{}),q=cc[key]||0,dc=c==null?"":` data-c="${esc(c)}"`;
@@ -1017,9 +1017,9 @@ function clearCart(){
 (function(){const qt=(new URLSearchParams(location.search).get("t")||((location.hash.match(/^#t=?(\d+)/)||[])[1])||"").replace(/\D/g,"");
   if(qt)ls.set("ss_tbl",JSON.stringify({t:+qt,at:Date.now()}))})();
 function TABLE(){try{const x=JSON.parse(ls.get("ss_tbl")||"null");if(x&&x.t&&Date.now()-x.at<5*3600e3)return x.t}catch(e){}return 0}
-function inbox(msg){let q=[];try{q=JSON.parse(ls.get("co_inbox")||"[]")}catch(e){}if(!Array.isArray(q))q=[];
-  q.push(Object.assign({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),table:TABLE(),lang,at:Date.now()},msg));ls.set("co_inbox",JSON.stringify(q));
-  try{const c=new BroadcastChannel("co_inbox");c.postMessage(1);c.close()}catch(e){}}
+function inbox(msg){let q=[];try{q=JSON.parse(ls.get("ss_inbox")||"[]")}catch(e){}if(!Array.isArray(q))q=[];
+  q.push(Object.assign({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),table:TABLE(),lang,at:Date.now()},msg));ls.set("ss_inbox",JSON.stringify(q));
+  try{const c=new BroadcastChannel("ss_inbox");c.postMessage(1);c.close()}catch(e){}}
 function billState(){const tb=TABLE();if(!tb)return "";let o={};try{o=JSON.parse(ls.get("ss_guest")||"{}")}catch(e){}
   if(o.t!==tb||!o.ord||Date.now()-o.ord>6*3600e3)return "";return o.bill&&Date.now()-o.bill<3*60e3?"sent":"on"}
 function guestMark(k,add,nm){let o={};try{o=JSON.parse(ls.get("ss_guest")||"{}")}catch(e){}const tb=TABLE();if(o.t!==tb||(o.ord&&Date.now()-o.ord>6*3600e3))o={t:tb};o[k]=Date.now();if(k==="ord"&&!o.ord0)o.ord0=o.ord;if(add){o.sum=(o.sum||0)+add;o.sums=o.sums||{};o.sums[nm||""]=(o.sums[nm||""]||0)+add}ls.set("ss_guest",JSON.stringify(o))}
@@ -1059,7 +1059,7 @@ function openPick(){const t=T[lang];$("tpickH").textContent=t.tpickH;$("tpickS")
 $("tgrid").addEventListener("click",e=>{const b=e.target.closest("[data-t]");if(!b)return;ls.set("ss_tbl",JSON.stringify({t:+b.dataset.t,at:Date.now()}));$("tpick").hidden=true;sendOrder()});
 $("tpickX").addEventListener("click",()=>{$("tpick").hidden=true});
 $("tpick").addEventListener("click",e=>{if(e.target===$("tpick"))$("tpick").hidden=true});
-function PUB(){try{return JSON.parse(ls.get("co_pub")||"{}")||{}}catch(e){return {}}}
+function PUB(){try{return JSON.parse(ls.get("ss_pub")||"{}")||{}}catch(e){return {}}}
 let qrCk=null;
 function openQr(){const t=T[lang];if(qrCk===null)qrCk=SPLIT()&&paidChecks().includes(CK.act)?CK.act:"";if(!paidChecks().includes(qrCk))qrCk="";
   ckPick($("qrCk"),qrCk,k=>{qrCk=k;openQr()});const sum=qrCk?billSum(qrCk):billSum();
@@ -1078,7 +1078,7 @@ $("qrPaid").addEventListener("click",()=>{inbox({type:"bill",pay:"qr",paid:true,
 $("qrX").addEventListener("click",()=>{$("qrs").hidden=true});
 $("qrs").addEventListener("click",e=>{if(e.target===$("qrs"))$("qrs").hidden=true});
 loadStop();
-window.addEventListener("storage",e=>{if(e.key==="co_pub"&&loadStop()&&lang){const y=window.scrollY;render();window.scrollTo(0,y);if(!$("sheet").hidden)renderSheet()}});
+window.addEventListener("storage",e=>{if(e.key==="ss_pub"&&loadStop()&&lang){const y=window.scrollY;render();window.scrollTo(0,y);if(!$("sheet").hidden)renderSheet()}});
 setInterval(()=>{if(loadStop()&&lang){const y=window.scrollY;render();window.scrollTo(0,y);if(!$("sheet").hidden)renderSheet()}},10000);
 /* review request after paying: QR "I've paid", or the waiter closed this table's bill (cash / card) */
 function askReview(sub){const t=T[lang],r=PUB().rev||{};if(!r.g&&!r.ta)return false;const o=guestO();if(o.rev)return false;
@@ -1091,9 +1091,9 @@ $("rev").addEventListener("click",e=>{if(e.target===$("rev"))$("rev").hidden=tru
 function checkClosed(){const tb=TABLE();if(!tb||!lang)return;const o=guestO();if(!o.ord)return;const c=(PUB().closed||{})[tb];if(!c||c<o.ord)return;
   /* bill paid and closed by the waiter: this visit is over */
   askReview("");ls.set("ss_guest",JSON.stringify({t:tb,rev:o.rev||Date.now()}));CK={mode:"",names:[],act:"",carts:{},at:0};cart={};save();render()}
-setInterval(checkClosed,5000);window.addEventListener("storage",e=>{if(e.key==="co_pub")checkClosed()});
+setInterval(checkClosed,5000);window.addEventListener("storage",e=>{if(e.key==="ss_pub")checkClosed()});
 let lastOrd="";function liveTick(){const v=JSON.stringify(liveOrders());if(v===lastOrd||!lang)return;lastOrd=v;renderBar();if(!$("tbl").hidden)renderTbl()}
-setInterval(liveTick,3000);window.addEventListener("storage",e=>{if(e.key==="co_pub")liveTick()});
+setInterval(liveTick,3000);window.addEventListener("storage",e=>{if(e.key==="ss_pub")liveTick()});
 /* dish sheet */
 let DISH=null;
 function openDish(id){const [sid,i]=id.split("|");const sec=SEC[sid],it=sec&&sec.items[+i];if(!it)return;DISH=id;const t=T[lang],li=IDX[lang],ph=it[6];

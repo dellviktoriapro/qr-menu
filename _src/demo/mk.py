@@ -4,8 +4,8 @@ def rep(a,b):
     global s
     assert a in s,a[:80]; s=s.replace(a,b,1)
 rep('<title>Chez Oanh Order Flow</title>','<title>Chez Oanh Order Flow RU</title>')
-rep('const KEY="co_ops_v2";','const KEY="co_ops_ru_v3";')
-rep('BroadcastChannel("co_ops")','BroadcastChannel("co_ops_ru")')
+rep('const KEY="co_ops_v2"','const KEY="co_ops_ru_v3"')
+rep('BroadcastChannel("co_ops"','BroadcastChannel("co_ops_ru"')
 rep('lang:"vi",glang:"en"','lang:"ru",glang:"ru"')
 rep('note:"1 trứng chín kỹ"','note:"одно яйцо полной прожарки"')
 rep('comment:"Khách vội, ra đồ uống trước"','comment:"Гости спешат, сначала напитки"')
@@ -28,8 +28,8 @@ def rp(a,b):
     global s
     assert a in s,a[:60]; s=s.replace(a,b,1)
 rp('<title>Chez Oanh Order Flow RU</title>','<title>Chez Oanh Order Flow</title>')
-rp('const KEY="co_ops_ru_v3";','const KEY="co_ops_demo_v2";')
-rp('BroadcastChannel("co_ops_ru")','BroadcastChannel("co_ops_demo")')
+rp('const KEY="co_ops_ru_v3"','const KEY="co_ops_demo_v2"')
+rp('BroadcastChannel("co_ops_ru"','BroadcastChannel("co_ops_demo"')
 rp('<b>Кафе Chez Oanh</b>','<b>Café Chez Oanh</b>')
 rp('ST=load();','''const FRESH=!ls.get(KEY);ST=load();
 (function(){const h=(location.hash||"").slice(1).toLowerCase();
