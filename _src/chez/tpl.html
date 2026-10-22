@@ -497,6 +497,20 @@ section.s{scroll-margin-top:calc(var(--stickh,130px) + 8px)!important;padding-bl
 @keyframes lp{50%{box-shadow:0 0 0 9px rgba(242,182,92,0)}}
 .lo p{margin:0;font-size:13px;color:var(--ink)}
 @media (prefers-reduced-motion:reduce){.dhero img,.steps .stp.now i,.bar .cap.bump .gs{animation:none}}
+/* ===== item extras: number, tags, description, price note ===== */
+.tile .ph{position:relative}
+.tgs{position:absolute;left:8px;top:8px;right:8px;display:flex;flex-wrap:wrap;gap:4px;pointer-events:none}
+.tgs.in{position:static;margin-bottom:4px}
+.tg{font-style:normal;font-size:9.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:3px 8px;background:rgba(19,16,12,.78);color:var(--amber-2);backdrop-filter:blur(4px)}
+.tg-special,.tg-best,.tg-must{background:#a3201f;color:#fff3d8}
+.tg-signature,.tg-day,.tg-premium{background:var(--amber);color:#1d140a}
+.tg-preorder{background:#2c5c3f;color:#eaf6ea}
+.num{position:absolute;right:8px;bottom:8px;min-width:30px;height:30px;padding:0 7px;border-radius:999px;display:grid;place-items:center;font-weight:800;font-size:12.5px;background:rgba(19,16,12,.8);color:var(--amber-2);border:1px solid rgba(242,182,92,.5)}
+.nr{color:var(--amber-2);font-weight:800}
+.ds{font-size:12px;color:var(--muted);line-height:1.4;margin-top:4px}
+.tile .ds{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.pnote{font-size:11.5px;font-weight:700;color:var(--amber-2);margin-top:4px}
+.ddesc{font-size:14px;color:var(--ink);line-height:1.5;opacity:.9}
 </style>
 
 <div class="gate" id="gate" hidden>
@@ -572,7 +586,7 @@ section.s{scroll-margin-top:calc(var(--stickh,130px) + 8px)!important;padding-bl
 <div class="bar" id="bar" hidden><div class="cap" id="cap"><button type="button" class="capin" id="capOpen"><span class="gs" id="capG"></span><span class="mid"><small id="barL"></small><b id="barT"></b></span></button><button type="button" class="go" id="barBtn"><span id="barGo"></span></button></div></div>
 <div class="sheet" id="dish" hidden><div class="panel">
   <div class="dhero" id="dHero"><img id="dImg" alt=""><button class="x" type="button" id="dX" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
-  <div class="dbd"><h3 id="dN"></h3><div class="orig" id="dO"></div><div class="dnote" id="dNote"></div><div id="dOpts"></div></div>
+  <div class="dbd"><div id="dTg"></div><h3 id="dN"></h3><div class="orig" id="dO"></div><div class="ddesc" id="dDs"></div><div class="pnote" id="dPn"></div><div class="dnote" id="dNote"></div><div id="dOpts"></div></div>
 </div></div>
 <div class="sheet" id="tbl" hidden><div class="panel">
   <div class="hd"><h3 id="tblH"></h3><button class="x" type="button" id="tblX" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
@@ -757,6 +771,11 @@ Object.assign(T.en,{"liveH": "Your order", "waiterW": "The waiter", "stS": ["Sen
 Object.assign(T.vi,{"liveH": "Đơn của bạn", "waiterW": "Nhân viên", "stS": ["Đã gửi", "Đã nhận", "Đang làm", "Đang mang ra", "Đã phục vụ"], "stSub": ["Đang chờ nhân viên nhận đơn", "{w} đã nhận đơn", "Bếp đang chuẩn bị", "{w} đang mang món ra", "Chúc ngon miệng!"],"abE": "Về quán", "aboutL": "Địa chỉ, giờ mở cửa, Wi‑Fi", "tblOrd": "Đã gửi đơn", "tblBtn": "Hóa đơn", "ckAct": "đang thêm vào đây", "ckIn": "trong giỏ", "tblNone": "Hóa đơn, thanh toán QR và tip sẽ hiện ở đây sau đơn đầu tiên.","revH": "Cảm ơn bạn đã ghé quán!", "revS": "Nếu bạn hài lòng, hãy để lại đánh giá nhé. Điều đó giúp quán nhỏ rất nhiều.", "revG": "Đánh giá trên Google Maps", "revTa": "Đánh giá trên Tripadvisor", "revNo": "Để sau","soldOut": "Hết món", "soldGone": "Một số món đã hết và được bỏ khỏi giỏ","ckNextH": "Ai trả riêng nữa?", "ckNextS": "Đặt tên hóa đơn tiếp theo, ví dụ “Ivan”. Có thể thêm sau bằng nút “+ Khách” phía trên giỏ.", "ckNextPh": "Ivan", "cknDone": "Xong", "ckNextOk": "Thêm","clearH": "Xóa giỏ hàng?", "clearS": "Tất cả món đã chọn sẽ bị xóa khỏi giỏ.", "clearYes": "Xóa", "cancel": "Hủy", "tpickS": "Số bàn tự động điền khi bạn mở thực đơn bằng mã QR trên bàn. Nếu mở bằng đường dẫn chung, hãy chọn bàn:","splitB":"Tách hóa đơn","askH": "Thanh toán chung hay riêng?", "askS": "Nếu trả riêng, hãy tạo hóa đơn cho từng người. Mỗi người có thể gọi món vào hóa đơn của mình từ một hoặc nhiều điện thoại.", "askOne": "Một hóa đơn chung", "askOneS": "Trả chung", "askSplit": "Hóa đơn riêng", "askSplitS": "Mỗi người một hóa đơn, ví dụ “Anna”", "cknH": "Tên hóa đơn", "cknS": "Ví dụ tên người. Món sẽ được thêm vào hóa đơn này.", "cknPh": "Anna", "cknOk": "Tạo hóa đơn", "ckL": "Hóa đơn", "ckAdd": "+ Khách", "ckAll": "Tất cả", "ckEmpty": "Chưa có món", "qrNone": "Quán chưa thêm mã QR thanh toán. Hãy gọi nhân viên để thanh toán.", "tipL": "Tip cho nhân viên", "tipH": "Tip cho nhân viên", "tipS": "Tiền tip được chuyển thẳng vào tài khoản của nhân viên. Quét mã bằng ứng dụng ngân hàng.", "tipNoW": "Bạn có thể gửi tip sau khi nhân viên nhận đơn.", "tipNoQr": "Nhân viên chưa thêm mã QR. Bạn có thể tip bằng tiền mặt.", "tipFT": "Hài lòng với phục vụ? Tiền tip đến thẳng nhân viên của bạn.", "tipW": "Nhân viên phục vụ"});
 Object.assign(T.ko,{"liveH": "내 주문", "waiterW": "직원", "stS": ["전송됨", "접수", "조리 중", "서빙 중", "완료"], "stSub": ["직원이 주문을 확인하는 중", "{w}님이 주문을 접수했어요", "주방에서 조리 중이에요", "{w}님이 가져가는 중이에요", "맛있게 드세요!"],"abE": "카페 소개", "aboutL": "주소, 영업시간, Wi‑Fi", "tblOrd": "주문 완료", "tblBtn": "계산", "ckAct": "여기에 추가 중", "ckIn": "장바구니", "tblNone": "첫 주문 후 계산서, QR 결제, 팁이 여기에 표시됩니다.","revH": "방문해 주셔서 감사합니다!", "revS": "마음에 드셨다면 리뷰를 남겨 주세요. 작은 카페에 큰 힘이 됩니다.", "revG": "Google 지도에 리뷰 쓰기", "revTa": "Tripadvisor에 리뷰 쓰기", "revNo": "나중에","soldOut": "품절", "soldGone": "일부 메뉴가 품절되어 장바구니에서 삭제되었어요","ckNextH": "따로 계산할 분이 더 있나요?", "ckNextS": "다음 계산서 이름을 입력하세요. 예: “Ivan”. 나중에 장바구니 위 “+ 손님”로 추가해도 됩니다.", "ckNextPh": "Ivan", "cknDone": "완료", "ckNextOk": "추가","clearH": "장바구니를 비울까요?", "clearS": "선택한 메뉴가 모두 삭제됩니다.", "clearYes": "네, 비우기", "cancel": "취소", "tpickS": "테이블의 QR 코드로 메뉴를 열면 테이블 번호가 자동으로 입력됩니다. 일반 링크로 여셨다면 테이블을 선택하세요:","splitB":"따로 계산하기","askH": "함께 계산할까요, 따로 할까요?", "askS": "따로 계산하려면 사람마다 계산서를 만드세요. 한 휴대폰이나 여러 휴대폰에서 각자 계산서로 주문할 수 있어요.", "askOne": "함께 계산", "askOneS": "한 번에 결제", "askSplit": "따로 계산", "askSplitS": "사람마다 계산서, 예: “Anna”", "cknH": "계산서 이름", "cknS": "이름을 입력하세요. 메뉴가 이 계산서에 담깁니다.", "cknPh": "Anna", "cknOk": "계산서 만들기", "ckL": "계산서", "ckAdd": "+ 손님", "ckAll": "모두 함께", "ckEmpty": "아직 비어 있음", "qrNone": "카페가 아직 결제 QR을 등록하지 않았어요. 직원에게 계산을 요청하세요.", "tipL": "직원에게 팁", "tipH": "직원에게 팁", "tipS": "팁은 직원 개인 계좌로 바로 갑니다. 은행 앱으로 코드를 스캔하세요.", "tipNoW": "직원이 주문을 받은 뒤 팁을 남길 수 있어요.", "tipNoQr": "직원이 아직 QR을 등록하지 않았어요. 현금으로 팁을 주셔도 됩니다.", "tipFT": "서비스가 마음에 드셨나요? 팁은 담당 직원에게 바로 갑니다.", "tipW": "담당 직원"});
 Object.assign(T.zh,{"liveH": "您的订单", "waiterW": "服务员", "stS": ["已发送", "已接单", "制作中", "正在上菜", "已上齐"], "stSub": ["等待服务员接单", "{w} 已接单", "厨房正在制作", "{w} 正在上菜", "祝您用餐愉快！"],"abE": "关于我们", "aboutL": "地址、营业时间、Wi‑Fi", "tblOrd": "订单已发送", "tblBtn": "账单", "ckAct": "正在加到这里", "ckIn": "购物车中", "tblNone": "首次下单后，这里会显示账单、扫码付款和小费。","revH": "感谢您的光临！", "revS": "如果您满意，请给我们留个评价，这对小咖啡馆帮助很大。", "revG": "在 Google 地图评价", "revTa": "在 Tripadvisor 评价", "revNo": "以后再说","soldOut": "已售完", "soldGone": "部分菜品已售完，已从购物车移除","ckNextH": "还有谁要分开付？", "ckNextS": "给下一张账单起名，例如“Ivan”。也可以稍后用购物车上方的“+ 客人”添加。", "ckNextPh": "Ivan", "cknDone": "完成", "ckNextOk": "添加","clearH": "清空购物车？", "clearS": "已选的菜品将全部删除。", "clearYes": "清空", "cancel": "取消", "tpickS": "通过桌上的二维码打开菜单时，桌号会自动填写。如果是通过普通链接打开的，请选择桌号：","splitB":"分开结账","askH": "一起付还是分开付？", "askS": "分开付的话，请为每个人建一张账单。每人可以用同一部或不同手机往自己的账单里点单。", "askOne": "一起付", "askOneS": "合并结账", "askSplit": "分开付", "askSplitS": "每人一张账单，例如“Anna”", "cknH": "账单名称", "cknS": "填名字即可，菜品会加到这张账单。", "cknPh": "Anna", "cknOk": "建立账单", "ckL": "账单", "ckAdd": "+ 客人", "ckAll": "全部一起", "ckEmpty": "暂时为空", "qrNone": "咖啡馆还没有添加收款码，请找服务员结账。", "tipL": "给服务员小费", "tipH": "给服务员小费", "tipS": "小费直接转到服务员本人的账户。请用银行App扫码。", "tipNoW": "服务员接单后即可给小费。", "tipNoQr": "服务员还没有添加收款码，可以给现金小费。", "tipFT": "满意我们的服务吗？小费直接给您的服务员。", "tipW": "您的服务员"});
+Object.assign(T.ru,{"tags":{"special": "Special", "best": "Лучший выбор", "must": "Must try", "signature": "Фирменное", "day": "Блюдо дня", "premium": "Премиум", "preorder": "Предзаказ", "hot": "Острое", "veg": "Вег"}});
+Object.assign(T.en,{"tags":{"special": "Special", "best": "Best choice", "must": "Must try", "signature": "Signature", "day": "Dish of the day", "premium": "Premium", "preorder": "Pre-order", "hot": "Spicy", "veg": "Veg"}});
+Object.assign(T.vi,{"tags":{"special": "Đặc biệt", "best": "Lựa chọn tốt nhất", "must": "Nên thử", "signature": "Đặc trưng", "day": "Món của ngày", "premium": "Cao cấp", "preorder": "Đặt trước", "hot": "Cay", "veg": "Chay"}});
+Object.assign(T.ko,{"tags":{"special": "스페셜", "best": "베스트", "must": "강력 추천", "signature": "시그니처", "day": "오늘의 요리", "premium": "프리미엄", "preorder": "사전 예약", "hot": "매운맛", "veg": "채식"}});
+Object.assign(T.zh,{"tags":{"special": "特色", "best": "首选", "must": "必尝", "signature": "招牌", "day": "今日特餐", "premium": "优选", "preorder": "需预订", "hot": "辣", "veg": "素食"}});
 function pl(n,f){const a=n%10,b=n%100;return f[(a===1&&b!==11)?0:(a>=2&&a<=4&&(b<12||b>14))?1:2]}
 const VILBL={S:"nhỏ",B:"lớn",N:"thường"};
 const ICON={plus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
@@ -798,6 +817,13 @@ function loadStop(){let p={};try{p=JSON.parse(ls.get("co_pub")||"{}")||{}}catch(
 function ctrl(key,c){if(isOut(key))return `<span class="sold">${esc(T[lang].soldOut)}</span>`;const cc=c==null?cart:(c===CK.act?cart:CK.carts[c]||{}),q=cc[key]||0,dc=c==null?"":` data-c="${esc(c)}"`;
   return q?`<div class="step"><button type="button" data-k="${key}"${dc} data-d="-1" aria-label="−">${ICON.minus}</button><b>${q}</b><button type="button" data-k="${key}"${dc} data-d="1" aria-label="+">${ICON.plus}</button></div>`
           :`<button class="add" type="button" data-k="${key}" data-d="1" aria-label="${esc(T[lang].add)}">${ICON.plus}</button>`}
+/* optional extras of an item (it[7]): menu number, description, tags, note under the price */
+const EX=it=>it[7]||{};
+const exL=v=>v?(v[lang]||v.en||""):"";
+function tagsHTML(it,cls){const tg=EX(it).tg||[];return tg.length?`<span class="${cls||"tgs"}">${tg.map(k=>`<i class="tg tg-${k}">${esc((T[lang].tags||{})[k]||k)}</i>`).join("")}</span>`:""}
+const numHTML=it=>EX(it).n?`<span class="num">${esc(EX(it).n)}</span>`:"";
+const descHTML=it=>{const d=exL(EX(it).d);return d?`<div class="ds">${esc(d)}</div>`:""};
+const noteHTML=it=>{const n=exL(EX(it).nt);return n?`<div class="pnote">${esc(n)}</div>`:""};
 function optsHTML(s,i,it,t){const os=opts(it);
   return `<div class="opts">`+os.map((o,oi)=>{const key=s.id+"|"+i+"|"+oi,x=o[1],lab=optLabel(o,lang);let pv;
     const lbl=lab?`<span class="lbl">${esc(lab)}</span>`:"";
@@ -824,7 +850,7 @@ function render(){
   $("f1t").textContent=t.f1t;$("f1s").textContent=t.f1s;$("f2t").textContent=t.f2t;$("f3t").textContent=t.f3t;$("f3s").textContent=t.f3s;
   let html="";
   DATA.filter(s=>q||s.g===group).forEach(s=>{
-    const items=s.items.map((it,i)=>[it,i]).filter(([it])=>!q||it.slice(0,5).join(" ").toLowerCase().includes(q));
+    const items=s.items.map((it,i)=>[it,i]).filter(([it])=>!q||(it.slice(0,5).join(" ")+" "+exL(EX(it).d)+" "+(EX(it).n||"")).toLowerCase().includes(q));
     if(!items.length)return;
     const title=s.n[lang];
     const md=[...new Set(s.items.map(x=>x[6]).filter(Boolean))].sort((a,b)=>GEN.has(b)-GEN.has(a)).slice(0,3);
@@ -835,8 +861,8 @@ function render(){
       const name=it[li],orig=lang==="vi"?it[0]:it[1],ph=it[6];
       const inc=Object.keys(cart).some(k=>k.startsWith(s.id+"|"+i+"|")),out=STOP.has(s.id+"|"+i)?" out":"";
       if(isExtra(it)&&!Array.isArray(it[5])){const p=it[5];rows.push(`<li class="it extra${inc?" incart":""}${out}"><div class="lead"><span>${esc(name)}</span><i></i><b>${p===null?"—":fmtVND(p)}</b></div>${ctrl(s.id+"|"+i+"|0")}</li>`);return}
-      if(ph){tiles.push(`<article class="tile${inc?" incart":""}${out}" data-d="${s.id}|${i}"><button class="ph" type="button" data-ph="${ph}" data-cap="${esc(name)}"><img loading="lazy" src="${PH[ph]}" alt="${esc(name)}"></button><div class="txt"><div class="nm">${esc(name)}</div>${isExtra(it)?"":`<div class="orig">${esc(orig)}</div>`}${optsHTML(s,i,it,t)}</div></article>`);return}
-      rows.push(`<li class="it${isExtra(it)?" extra":""}${inc?" incart":""}${out}" data-d="${s.id}|${i}"><div class="txt"><div class="nm">${esc(name)}</div>${isExtra(it)?"":`<div class="orig">${esc(orig)}</div>`}${optsHTML(s,i,it,t)}</div></li>`)});
+      if(ph){tiles.push(`<article class="tile${inc?" incart":""}${out}" data-d="${s.id}|${i}"><button class="ph" type="button" data-ph="${ph}" data-cap="${esc(name)}"><img loading="lazy" src="${PH[ph]}" alt="${esc(name)}">${tagsHTML(it)}${numHTML(it)}</button><div class="txt"><div class="nm">${esc(name)}</div>${isExtra(it)?"":`<div class="orig">${esc(orig)}</div>`}${descHTML(it)}${noteHTML(it)}${optsHTML(s,i,it,t)}</div></article>`);return}
+      rows.push(`<li class="it${isExtra(it)?" extra":""}${inc?" incart":""}${out}" data-d="${s.id}|${i}"><div class="txt">${tagsHTML(it,"tgs in")}<div class="nm">${EX(it).n?`<span class="nr">${esc(EX(it).n)}.</span> `:""}${esc(name)}</div>${isExtra(it)?"":`<div class="orig">${esc(orig)}</div>`}${descHTML(it)}${noteHTML(it)}${optsHTML(s,i,it,t)}</div></li>`)});
     html+=(tiles.length?`<div class="tiles">${tiles.join("")}</div>`:"")+(rows.length?`<ul class="items">${rows.join("")}</ul>`:"")+`</section>`;
   });
   $("menu").innerHTML=html||`<div class="empty">${esc(t.none)}</div>`;
@@ -1018,7 +1044,7 @@ setInterval(liveTick,3000);window.addEventListener("storage",e=>{if(e.key==="co_
 /* dish sheet */
 let DISH=null;
 function openDish(id){const [sid,i]=id.split("|");const sec=SEC[sid],it=sec&&sec.items[+i];if(!it)return;DISH=id;const t=T[lang],li=IDX[lang],ph=it[6];
-  $("dHero").hidden=!ph;if(ph){$("dImg").src=PH[ph];$("dImg").alt=it[li]}$("dN").textContent=it[li];$("dO").textContent=lang==="vi"?it[0]:it[1];
+  $("dHero").hidden=!ph;if(ph){$("dImg").src=PH[ph];$("dImg").alt=it[li]}$("dN").textContent=(EX(it).n?EX(it).n+". ":"")+it[li];$("dO").textContent=lang==="vi"?it[0]:it[1];$("dTg").innerHTML=tagsHTML(it,"tgs in");$("dDs").textContent=exL(EX(it).d);$("dDs").hidden=!exL(EX(it).d);$("dPn").textContent=exL(EX(it).nt);$("dPn").hidden=!exL(EX(it).nt);
   $("dNote").textContent=ph?(GEN.has(ph)?t.ph2:""):"";drawDish();$("dish").querySelector(".panel").scrollTop=0;$("dish").hidden=false}
 function drawDish(){if(!DISH)return;const [sid,i]=DISH.split("|");const sec=SEC[sid],it=sec.items[+i];$("dOpts").innerHTML=optsHTML(sec,+i,it,T[lang]);
   $("dish").classList.toggle("out",STOP.has(DISH))}

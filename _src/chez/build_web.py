@@ -24,7 +24,7 @@ for k,v in items:
 if cur:chunks.append(cur)
 for n,c in enumerate(chunks,1):
     open(f'{OUT}/ph{n}.js','w').write('__ph('+json.dumps(dict(c))+');')
-D=[dict(id=s['id'],n=s['n'],note=s['note'],g=s['g'],items=[[i[0],i[1],i[2],i[3],i[4],([[l,p] for l,p in i[5]] if isinstance(i[5],list) else i[5]),i[6]] for i in s['items']]) for s in data.S]
+D=[dict(id=s['id'],n=s['n'],note=s['note'],g=s['g'],items=[[i[0],i[1],i[2],i[3],i[4],([[l,p] for l,p in i[5]] if isinstance(i[5],list) else i[5]),i[6]]+([i[7]] if len(i)>7 and i[7] else []) for i in s['items']]) for s in data.S]
 AMB={'lion':webp('amb/lion.jpg',1100,70)}
 h=open('tpl.html').read().replace('__DATA__',json.dumps(D,ensure_ascii=False)).replace('__PH__','{}').replace('__AMB__',json.dumps(AMB)).replace('__GEN__',json.dumps(gen)).replace('__CATPH__',json.dumps({k:v for k,v in CAT.items() if v}))
 h+='<script>(function n(i){if(i>%d)return;var s=document.createElement("script");s.src="ph"+i+".js";s.onload=s.onerror=function(){n(i+1)};document.body.appendChild(s)})(1)</script>'%len(chunks)
