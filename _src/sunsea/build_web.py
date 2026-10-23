@@ -125,6 +125,8 @@ rep('function openState(){', 'function openState(){$("open").hidden=true;return;
 rep('  color-scheme:dark;', '  color-scheme:light;')
 rep('</style>', open('skin.css', encoding='utf-8').read() + '\n</style>')
 
+# Decorative section artwork uses the approved thin icon shapes, without extra downloads.
+rep('<h2>${esc(title)}</h2>', '<h2>${esc(title)}</h2><span class="section-shadow" aria-hidden="true">${coastIcon(s.id)}</span>')
 # Lightweight category links, no circular crops of plates or initial-letter placeholders.
 old_cat = '${p?`<img src="${PH[p]}" alt="">`:`<i class="ini">${esc(s.n[lang][0])}</i>`}'
 rep(old_cat, '${coastIcon(s.id)}')

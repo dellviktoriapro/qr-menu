@@ -936,6 +936,27 @@ section.s:first-child .sh{padding-bottom:16px}
 }
 @media(max-width:699px){section.s .sh{padding:0 0 14px}}
 
+/* Selected design B: neutral relief, with low-contrast themed shadow drawings. */
+section.s .sh,section.s:first-child .sh{position:relative;isolation:isolate;overflow:hidden;background:#eeece4;border:0;border-bottom:1px solid #ddded3;border-radius:13px;box-shadow:inset 0 1px 0 rgba(255,253,247,.8),0 4px 10px rgba(36,48,34,.025);padding:22px 116px 22px 24px;min-height:100px;margin-bottom:20px}
+.sh .tt{position:relative;z-index:1}
+section.s h2{max-width:26ch}
+.section-shadow{position:absolute;right:22px;top:50%;transform:translateY(-50%) rotate(-10deg);width:88px;height:88px;color:#243022;opacity:.085;pointer-events:none;z-index:0}
+.section-shadow .coast-icon{display:block;width:100%;height:100%}
+.section-shadow svg *{stroke-width:.85}
+#ss_pies .sh,#ss_pizza .sh{padding:22px 116px 22px 24px}
+#ss_pies .note,#ss_pizza .note{position:relative;z-index:1}
+#sheet .panel{background:#fbfaf6}
+#sheet .hd{background:linear-gradient(120deg,#efede5,#f6f5ee);border-bottom:1px solid #e4e2d8;margin:-18px -16px 20px;padding:22px 16px}
+#sheet .tot{background:#f0eee7;border:1px solid #e3e1d7;border-radius:12px;padding:16px;margin-top:22px;margin-bottom:18px}
+@media(max-width:699px){
+ section.s .sh,section.s:first-child .sh,#ss_pies .sh,#ss_pizza .sh{padding:18px 70px 18px 16px;min-height:78px;margin-bottom:16px;border-radius:11px}
+ .section-shadow{width:60px;height:60px;right:9px;opacity:.065}
+ #ss_pies .note,#ss_pizza .note{font-size:28px;max-width:100%}
+ #sheet .hd{padding:20px 16px}
+ #sheet .tot{padding:14px}
+}
+.sh .tt{position:static;z-index:auto}.sh h2{position:relative;z-index:1}
+
 </style>
 
 <div class="gate" id="gate" hidden>
@@ -1316,7 +1337,7 @@ function render(){
     if(!items.length)return;
     const title=s.n[lang];
     const md=[...new Set(s.items.map(x=>x[6]).filter(Boolean))].sort((a,b)=>GEN.has(b)-GEN.has(a)).slice(0,3);
-    html+=`<section class="s" id="${s.id}"><div class="sh"><div class="tt"><h2>${esc(title)}</h2><span class="vi">${esc([...new Set(["ru","en","vi"].filter(k=>k!==lang).map(k=>s.n[k]))].join(" • "))}</span><div class="orn2"><i></i></div></div></div>`;
+    html+=`<section class="s" id="${s.id}"><div class="sh"><div class="tt"><h2>${esc(title)}</h2><span class="section-shadow" aria-hidden="true">${coastIcon(s.id)}</span><span class="vi">${esc([...new Set(["ru","en","vi"].filter(k=>k!==lang).map(k=>s.n[k]))].join(" • "))}</span><div class="orn2"><i></i></div></div></div>`;
     if(s.note&&t.notes[s.note])html+=`<div class="note">${esc(t.notes[s.note])}</div>`;
     const tiles=[],rows=[];
     items.sort(([a],[b])=>{const rank=k=>({fish_beer:0,fish_lemon:1,smoked_mash:2,fish_corn:3})[k]??99;return rank(a[6])-rank(b[6])}).forEach(([it,i])=>{
