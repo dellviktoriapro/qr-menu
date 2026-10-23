@@ -50,6 +50,8 @@ save_webp('amb/hero.webp', 1600, 76, 'hero.webp')
 save_webp('amb/hero-mobile.webp' if os.path.isfile('amb/hero-mobile.webp') else 'amb/hero.webp', 640, 72, 'hero-mobile.webp')
 BAND = 'hero.webp?v=' + hashlib.sha256(open(os.path.join(OUT, 'hero.webp'), 'rb').read()).hexdigest()[:10]
 MOBILE = 'hero-mobile.webp?v=' + hashlib.sha256(open(os.path.join(OUT, 'hero-mobile.webp'), 'rb').read()).hexdigest()[:10]
+shutil.copyfile('ICON_LICENSES.md', os.path.join(OUT, 'ICON_LICENSES.md'))
+shutil.copyfile('amb/squid.svg', os.path.join(OUT, 'squid.svg'))
 shutil.copyfile('amb/palm-shadow.svg', os.path.join(OUT, 'palm-shadow.svg'))
 shutil.copyfile('amb/waves.svg', os.path.join(OUT, 'waves.svg'))
 shutil.copyfile('amb/sea-ripple.svg', os.path.join(OUT, 'sea-ripple.svg'))
