@@ -1,6 +1,5 @@
 """Sun&Sea Restaurant (Mui Ne) menu.
-Same engine as Chez Oanh: takes ../chez/tpl.html, re-skins it to the Sun&Sea look (parchment, deep green, red ribbons,
-plumeria; their own header band) and swaps the cafe-specific texts. All features stay: language choice, table QR orders,
+Same engine as Chez Oanh: takes ../chez/tpl.html, applies the coastal skin in skin.css and swaps the cafe-specific texts. All features stay: language choice, table QR orders,
 separate checks, bill / QR payment / tips, live status, stop list, review request.
 Run from the repo root through build_all.py, or:  cd _src/sunsea && python build_web.py ../../sun-sea"""
 import json, os, shutil, base64, io, sys, re
@@ -11,19 +10,31 @@ OUT = sys.argv[1] if len(sys.argv) > 1 else '../../sun-sea'
 shutil.rmtree(OUT, ignore_errors=True); os.makedirs(OUT)
 
 def webp(src, maxw, q=80):
-    im = Image.open(src).convert('RGB')
+    im = Image.open(src).convert('RGBA')
     if im.width > maxw: im = im.resize((maxw, round(im.height * maxw / im.width)), Image.LANCZOS)
     b = io.BytesIO(); im.save(b, 'WEBP', quality=q, method=6); return 'data:image/webp;base64,' + base64.b64encode(b.getvalue()).decode()
 
-has = lambda k: k and os.path.exists(f'ph/{k}.jpg')
+# Only approved cutouts enter the new menu; original JPG scans remain source material.
+# New PNG/WebP cutouts are picked up automatically without changing menu IDs or prices.
+def photo_path(k):
+    if k:
+        for ext in ('png', 'webp'):
+            path = f'ph/{k}.{ext}'
+            if os.path.isfile(path):
+                return path
+    return None
+
+has = lambda k: bool(photo_path(k))
 # ---- data for the page (photos only where we already have them)
 D = [dict(id=s['id'], n=s['n'], note=s['note'], g=s['g'], items=[[i[0], i[1], i[2], i[3], i[4],
       ([[l, p] for l, p in i[5]] if isinstance(i[5], list) else i[5]), i[6] if has(i[6]) else None] + ([i[7]] if len(i) > 7 and i[7] else [])
       for i in s['items']]) for s in data.S]
 CAT = {s['id']: next((i[6] for i in s['items'] if has(i[6])), None) for s in data.S}
+# Short Russian navigation/title, without altering the original dish records.
+next(s for s in D if s['id'] == 'ss_chef')['n'] = dict(next(s for s in D if s['id'] == 'ss_chef')['n'], ru='От шефа')
 order = [k for k in CAT.values() if k] + [i[6] for s in data.S for i in s['items'] if has(i[6])]
 order = list(dict.fromkeys(order))
-items = [(k, webp(f'ph/{k}.jpg', 900)) for k in order]
+items = [(k, webp(photo_path(k), 1000, 88)) for k in order]
 chunks = []; cur = []; size = 0
 for k, v in items:
     cur.append((k, v)); size += len(v)
@@ -31,11 +42,9 @@ for k, v in items:
 if cur: chunks.append(cur)
 for n, c in enumerate(chunks, 1):
     open(f'{OUT}/ph{n}.js', 'w').write('__ph(' + json.dumps(dict(c)) + ');')
-BAND = webp('amb/band.jpg', 1200, 84)
-def webpa(src, q=82):
-    im = Image.open(src); b = io.BytesIO(); im.save(b, 'WEBP', quality=q, method=6); return 'data:image/webp;base64,' + base64.b64encode(b.getvalue()).decode()
-CORNER = {k: webpa(f'amb/c_{k}.png') for k in ['tl', 'tr']}
-ENG = [webpa(f'amb/{k}.png') for k in ['e_ship', 'e_pagoda', 'e_pagoda2']]
+# Hero is a separate cacheable WebP; keep the menu text light.
+shutil.copyfile('amb/hero.webp', os.path.join(OUT, 'hero.webp'))
+BAND = 'hero.webp'
 
 s = open('../chez/tpl.html', encoding='utf-8').read()
 def rep(a, b, cnt=1):
@@ -48,12 +57,12 @@ rep('<span class="vi">${esc(lang==="vi"?s.n.en:s.n.vi)}</span><h2>${esc(title)}<
 # ---- identity
 rep('<title>Café Chez Oanh Menu</title>', '<title>Sun&amp;Sea Restaurant · Mui Ne · Menu</title>')
 rep('family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Montserrat:wght@400;500;600;700',
-    'family=Alegreya+SC:wght@500;700;800&family=Lobster&family=Montserrat:wght@400;500;600;700;800')
+    'family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800')
 rep('    <div class="eyebrow">Phan Thiết · Hàm Tiến</div>\n    <h2>Café Chez Oanh<em>Sofa Café</em></h2>',
-    '    <div class="eyebrow">Mui Ne · Phan Thiết</div>\n    <h2 class="logo">Sun&amp;Sea<em>Restaurant</em></h2>')
+    '    <div class="eyebrow">Mui Ne · Phan Thiết</div>\n    <h2 class="logo">Sun&amp;Sea<em>Mũi Né</em></h2>')
 rep('''    <h1>Café Chez Oanh<em>Sofa Café · Hàm Tiến</em></h1>
     <div class="hmeta"><span class="tchip" id="tChip" hidden></span><a class="hlink" href="#about" id="aboutLnk"></a></div>''',
-    '''    <h1 class="sr">Sun&amp;Sea Restaurant · Mui Ne</h1>''')
+    '''    <h1 class="logo">Sun&amp;Sea<em>Mũi Né</em></h1>''')
 rep('<!-- search, food / drinks', '<div class="wrap hsub"><div class="hmeta"><span class="tchip" id="tChip" hidden></span><a class="hlink" href="#about" id="aboutLnk"></a></div></div>\n<!-- search, food / drinks')
 rep('<h3 id="abH">Café Chez Oanh</h3>', '<h3 id="abH" class="logo">Sun&amp;Sea<em>Restaurant · Mui Ne</em></h3>')
 a = s.index('  <div class="facts">'); b = s.index('  <div class="feat">')
@@ -102,132 +111,22 @@ rep('$("foot").textContent=t.foot;', '$("foot").textContent=t.foot;if($("f2s"))$
 rep('$("gI1").src=AMB.interior;$("gI2").src=AMB.terrace;$("gI3").src=AMB.impala;$("gI4").src=AMB.zebras;', '')
 rep('function openState(){', 'function openState(){$("open").hidden=true;return;')
 
-# ---- look: parchment, deep green, red ribbons (their printed menu)
-rep('''  color-scheme:dark;
-  --bg:#13100c; --bg-2:#1b1611; --card:#211b15; --line:#3a2f24; --ink:#f3ead9; --muted:#b3a58f; --dim:#857862;
-  --amber:#e39a3b; --amber-2:#f2b65c; --teal:#3db3ad; --teal-ink:#7fd6d0;
-  --f-display:"Cormorant Garamond",Georgia,"Times New Roman",serif;''',
-'''  color-scheme:light;
-  --bg:#f3cf86; --bg-2:#fbecc8; --card:#fff6dc; --line:#d9b46a; --ink:#1f2f17; --muted:#4f4a2c; --dim:#7d6f45;
-  --amber:#26401c; --amber-2:#26401c; --teal:#9c2a1f; --teal-ink:#9c2a1f; --red:#a3201f; --gold:#c9a24a;
-  --f-display:"Alegreya SC",Georgia,"Times New Roman",serif;''')
-for a_, b_ in [('rgba(19,16,12,', 'rgba(251,242,218,'), ('rgba(242,182,92,', 'rgba(38,64,28,'), ('rgba(227,154,59,', 'rgba(38,64,28,'),
-               ('rgba(33,27,21,', 'rgba(255,250,238,'), ('rgba(243,234,217,', 'rgba(31,47,28,'), ('rgba(255,236,200,', 'rgba(38,64,28,'),
-               ('rgba(255,200,120,', 'rgba(38,64,28,'), ('rgba(255,214,150,', 'rgba(38,64,28,')]:
-    s = s.replace(a_, b_)
-for a_, b_ in [('#1d140a', '#fffaee'), ('#f7c978', '#3d5e2b'), ('#e8a145', '#2f4c21'), ('#cf7f2a', '#1b2e12'), ('#d9852c', '#1b2e12'), ('#6b4115', '#1b2e12'),
-               ('#1f1912', '#fffaee'), ('#221b14', '#fffaee'), ('#211b15', '#fffaee'), ('#1b1611', '#fbf2da'), ('#1a1510', '#f8ecd0'), ('#2a2118', '#fffaee'),
-               ('#241d16', '#fffaee'), ('#211a12', '#fffaee'), ('#17130f', '#f8ecd0'), ('#1f1913', '#fffaee'), ('#2a1608', '#fffaee')]:
-    s = s.replace(a_, b_)
-rep('</style>', '''/* ===== Sun&Sea ===== */
-body{background-color:var(--bg)!important;background-image:url(__C_TL__),url(__C_TR__),radial-gradient(120% 80% at 50% 35%,#fbe5ae 0%,#f3cf86 55%,#e2b061 100%)!important;background-repeat:no-repeat!important;background-position:left top,right top,center!important;background-size:min(30vw,170px) auto,min(30vw,165px) auto,cover!important;background-attachment:scroll,scroll,fixed!important}
-.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-.hero{height:auto!important;aspect-ratio:853/262;max-width:980px;margin:0 auto;-webkit-mask-image:linear-gradient(180deg,#000 62%,transparent 100%),linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);-webkit-mask-composite:source-in;mask-image:linear-gradient(180deg,#000 62%,transparent 100%),linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);mask-composite:intersect}
-@media (max-width:700px){.hero{-webkit-mask-image:linear-gradient(180deg,#000 62%,transparent 100%);mask-image:linear-gradient(180deg,#000 62%,transparent 100%)}}
-.hsub{margin-top:-18px;position:relative}
-.hero .bg{background-size:cover!important;background-position:center!important;transform:none!important;filter:none!important}
-.hero::before{display:none!important}
-.hero .txt{display:none}
-.hsub{padding-block:6px 4px}
-.hsub .hmeta{justify-content:center;margin:0}
-.logo{font-family:"Lobster",cursive!important;font-weight:400!important;color:var(--amber)!important;letter-spacing:0!important;text-transform:none!important}
-.logo em{display:block;font-family:"Alegreya SC",serif;font-style:normal;font-size:.36em;color:var(--muted);letter-spacing:.14em;margin-top:4px}
-.gate::before{background:linear-gradient(180deg,rgba(244,231,197,.15),rgba(244,231,197,.75) 45%,var(--bg) 78%)!important}
-.gate .bg{background-size:contain!important;background-position:top center!important;background-repeat:no-repeat!important}
-.stick{box-shadow:0 6px 16px rgba(80,60,20,.08)}
-section.s{padding-block:30px 6px!important;position:relative;isolation:isolate}
-section.s::before{content:"";position:absolute;z-index:-1;top:-6px;width:min(36vw,190px);aspect-ratio:1;background:var(--eng) no-repeat center/contain;opacity:.2;pointer-events:none;left:-6px}
-section.s:nth-of-type(even)::before{left:auto;right:-6px;transform:scaleX(-1)}
-section.s:nth-of-type(3n+1){--eng:url(__E0__)}section.s:nth-of-type(3n+2){--eng:url(__E1__)}section.s:nth-of-type(3n){--eng:url(__E2__)}
-.sh{display:block!important;text-align:center}
-.sh .tt{display:flex;flex-direction:column;align-items:center}
-section.s h2{font-family:var(--f-display);font-weight:800;color:var(--amber);letter-spacing:.02em;font-size:clamp(34px,9vw,46px)!important;line-height:1;margin:0!important;text-shadow:0 1px 0 rgba(255,246,220,.6)}
-.sh .vi{order:2;margin-top:10px;background:var(--amber)!important;color:#fbe7b5!important;font-family:var(--f-display);font-size:13px!important;letter-spacing:.08em!important;padding:7px 22px!important;border-radius:4px;box-shadow:0 0 0 2px rgba(38,64,28,.25),inset 0 0 0 1px rgba(201,162,74,.8);clip-path:polygon(0 0,100% 0,96% 50%,100% 100%,0 100%,4% 50%)}
-.sh .vi::after,.sh .vi::before{display:none!important}
-section.s .note{text-align:center;border:0!important;padding:0!important;margin:10px auto 0;max-width:46ch;font-style:italic;color:var(--muted)}
-.sh .vi::after{border-left-color:var(--amber)!important}
-.tiles{gap:22px 14px!important;margin-top:18px!important}
-.tile{background:none!important;border:0!important;box-shadow:none!important;overflow:visible!important;text-align:center}
-.tile .ph{background:none!important;aspect-ratio:auto!important;height:auto!important;overflow:visible!important}
-.tile .ph img{height:auto!important;object-fit:contain;-webkit-mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent),linear-gradient(180deg,transparent,#000 9%,#000 91%,transparent);-webkit-mask-composite:source-in;mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent),linear-gradient(180deg,transparent,#000 9%,#000 91%,transparent);mask-composite:intersect;filter:saturate(1.06) contrast(1.03)}
-.tile:hover .ph img{transform:scale(1.04)}
-.tile .txt{padding:2px 2px 0!important;align-items:center}
-.tile .nm{text-transform:uppercase;font-size:15px!important;line-height:1.12!important;color:var(--amber)!important}
-.tile .orig{text-align:center}
-.tile .ds{text-align:center;font-size:11.5px}
-.tile .opts{width:100%;justify-items:center}
-.tile .opt{justify-content:center;gap:8px}
-.tile .pv{align-items:center}
-.tile .num{left:4px;right:auto;top:4px;bottom:auto;background:var(--amber)!important;color:#fbe7b5!important;border:2px solid #fbe7b5!important;min-width:34px;height:34px;box-shadow:0 2px 6px rgba(0,0,0,.25)}
-.tile .tgs{left:auto;right:2px;top:2px;justify-content:flex-end}
-.tile.incart .nm{color:var(--red)!important}
-.tile.incart .ph img{filter:saturate(1.15) drop-shadow(0 0 10px rgba(38,64,28,.35))}
-li.it{border-bottom:1px dashed rgba(38,64,28,.3)!important}
-li.it .nr{display:inline-grid;place-items:center;min-width:26px;height:26px;padding:0 5px;border-radius:999px;background:var(--amber);color:#fbe7b5!important;font-family:var(--f-body);font-size:11.5px;margin-right:4px}
-.stick{background:rgba(251,233,184,.95)!important}
-.about,.dcard{background:linear-gradient(180deg,#fff3d2,#f6dc9f)!important}
-.tile .nm,li.it .nm{font-family:var(--f-display)!important;font-weight:800!important;color:var(--ink)!important;letter-spacing:.01em}
-.tile .orig,li.it .orig,#dish .orig{color:var(--red)!important;font-style:normal!important;font-family:var(--f-body)!important;font-weight:600;font-size:12px}
-.pv .main{color:#fffaee!important;background:var(--amber);border-radius:999px;padding:3px 10px;align-self:flex-start;font-size:13.5px!important}
-.pv .sub{color:var(--muted)!important}
-.pnote{color:var(--red)!important}
-.nr,.num{color:var(--amber)!important}
-.num{background:#fffaee!important;border-color:var(--amber)!important}
-.tg{background:rgba(255,250,238,.92)!important;color:var(--amber)!important;border:1px solid var(--amber)}
-.tg-special,.tg-best,.tg-must{background:var(--red)!important;color:#fff3d8!important;border-color:var(--gold)}
-.tg-signature,.tg-day,.tg-premium{background:var(--amber)!important;color:#fff3d8!important;border-color:var(--gold)}
-.tg-preorder{background:var(--gold)!important;color:#1f2f1c!important}
-.add{border-color:var(--amber)!important;color:var(--amber)!important;background:#fffaee!important}
-.step{background:var(--amber)!important}.step button{color:#fffaee!important}.step b{color:#fffaee}
-.cat img,.cat .ini{border-color:var(--gold)!important}
-.cat.on img,.cat.on .ini{border-color:var(--red)!important;box-shadow:0 0 0 3px rgba(163,32,31,.18)!important}
-.groups button.on{background:var(--amber)!important;color:#fffaee!important}
-.bar .cap{background:rgba(255,250,238,.96)!important;border-color:var(--gold)!important;box-shadow:0 14px 34px rgba(60,45,15,.25)!important}
-.bar .capin .gs i.n{background:var(--amber)!important;color:#fffaee!important}
-.langbtn{background:var(--amber)!important;color:#fffaee!important;box-shadow:0 6px 18px rgba(38,64,28,.35),0 0 0 3px rgba(255,250,238,.8)!important}
-.about{background:linear-gradient(180deg,#fffaee,#f8ecd0)!important;border-color:var(--gold)!important}
-.about h3{font-size:40px!important}
-.tipb{color:#fffaee!important;background:linear-gradient(115deg,#b5332a,#a3201f 55%,#7d1715)!important}
-.tipf{border-color:rgba(163,32,31,.4)!important;background:linear-gradient(180deg,rgba(163,32,31,.08),rgba(163,32,31,.02))!important}
-.dcard{background:linear-gradient(180deg,#fffaee,#f6e7c3)!important;border-color:var(--gold)!important}
-.toast{background:var(--amber)!important;color:#fffaee!important}
-#atmo{display:none!important}
-/* ===== computer (>=1100px): restaurant-menu layout — categories as a pinned left column, dishes in a wide grid ===== */
-@media (min-width:1100px){
-  :root{--side:270px}
-  body{padding-left:var(--side)}
-  .stick{position:fixed!important;left:0;top:0;bottom:0;width:var(--side);z-index:9;overflow-y:auto;padding:22px 0 24px!important;border-right:1px solid var(--line)!important;border-bottom:0!important;box-shadow:6px 0 24px rgba(80,60,20,.08)!important;background:linear-gradient(180deg,rgba(251,233,184,.97),rgba(246,220,159,.97))!important}
-  .stick .wrap{max-width:none;padding-inline:18px}
-  .stick .srow{flex-direction:column;align-items:stretch;gap:10px}
-  .stick .srow .groups{justify-content:stretch}.stick .srow .groups button{flex:1}
-  .stick .cw{margin:12px 0 0!important}
-  .stick .harr{display:none!important}
-  .cats{flex-direction:column!important;overflow:visible!important;padding:0!important;gap:4px!important;cursor:default}
-  .cat{width:100%!important;display:flex!important;align-items:center;gap:12px;padding:6px 8px!important;border-radius:12px!important;text-align:left!important;justify-items:start}
-  .cat img,.cat .ini{width:44px!important;height:44px!important;flex:none}
-  .cat span{font-size:13.5px!important;-webkit-line-clamp:2}
-  .cat:hover{background:rgba(38,64,28,.08)!important}
-  .cat.on{background:var(--amber)!important}.cat.on span{color:#fbe7b5!important}
-  .wrap{max-width:1180px}
-  .hero{max-width:none!important;aspect-ratio:auto!important;height:340px!important}
-  .hero .bg{background-size:auto 100%!important;background-repeat:no-repeat!important}
-  .hsub .hmeta{justify-content:center}
-  main.wrap{padding-inline:36px}
-  .tiles{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:30px 22px!important}
-  ul.items{columns:2;column-gap:40px}
-  ul.items li{break-inside:avoid}
-  section.s::before{width:240px}
-  .langbtn{right:24px!important}
-  .bar{left:var(--side)!important}
-  .bar .cap{max-width:560px!important;margin-left:auto!important;margin-right:24px!important}
-  .totop{right:24px}
-  footer.wrap,.about{max-width:1180px}
-}
-@media (min-width:1500px){.tiles{grid-template-columns:repeat(5,minmax(0,1fr))!important}}
-/* tablet (700–1099px): three dishes per row */
-@media (min-width:700px) and (max-width:1099px){.wrap{max-width:980px}.tiles{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
-</style>''')
-s = s.replace('__DATA__', json.dumps(D, ensure_ascii=False)).replace('__PH__', json.dumps({'amb_lion': BAND})).replace('__AMB__', json.dumps({'lion': BAND})).replace('__GEN__', '[]').replace('__E0__', ENG[0]).replace('__E1__', ENG[1]).replace('__E2__', ENG[2]).replace('__C_TL__', CORNER['tl']).replace('__C_TR__', CORNER['tr']).replace('__CATPH__', json.dumps({k: v for k, v in CAT.items() if v}))
+# ---- Sun&Sea-only visual layer: leave the shared Chez Oanh engine untouched.
+rep('  color-scheme:dark;', '  color-scheme:light;')
+rep('</style>', open('skin.css', encoding='utf-8').read() + '\n</style>')
+
+# Lightweight category links, no circular crops of plates or initial-letter placeholders.
+old_cat = '${p?`<img src="${PH[p]}" alt="">`:`<i class="ini">${esc(s.n[lang][0])}</i>`}'
+rep(old_cat, '')
+rep('<a class="cat" href="#${s.id}"', '<a class="cat${s.id===DATA.find(x=>x.g===group).id?" on":""}" href="#${s.id}"')
+# On desktop the sidebar is below the panoramic header. Its height must not be
+# subtracted from section anchors; mobile uses the real two-row sticky toolbar.
+rep('$("stick").offsetHeight', '(matchMedia("(min-width:1100px)").matches?16:$("stick").offsetHeight)', cnt=2)
+# Keep sidebar active link visible vertically without hijacking the document scroll.
+rep('r.scrollTo({left:a.offsetLeft-r.clientWidth/2+a.clientWidth/2,behavior:"smooth"})',
+    'r.scrollTo({left:a.offsetLeft-r.clientWidth/2+a.clientWidth/2,top:a.offsetTop-r.clientHeight/2+a.clientHeight/2,behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"instant":"smooth"})')
+
+s = s.replace('__DATA__', json.dumps(D, ensure_ascii=False)).replace('__PH__', json.dumps({'amb_lion': BAND})).replace('__AMB__', json.dumps({'lion': BAND})).replace('__GEN__', json.dumps(order)).replace('__CATPH__', '{}')
 s += '<script>(function n(i){if(i>%d)return;var e=document.createElement("script");e.src="ph"+i+".js";e.onload=e.onerror=function(){n(i+1)};document.body.appendChild(e)})(1)</script>' % len(chunks)
 s = '<!doctype html>\n<html lang="ru">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">\n</head>\n<body>\n' + s + '</body></html>'
 open(OUT + '/index.html', 'w', encoding='utf-8').write(s)
