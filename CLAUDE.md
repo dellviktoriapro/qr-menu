@@ -133,3 +133,10 @@ _src/                   исходники и сборка — править Т
 - Марго просит самостоятельно отсеивать средние и явно слабые варианты: не выносить такие варианты на выбор. Для кальмара выбран естественный контур OpenMoji, с вытянутым телом, боковыми плавниками и длинными щупальцами; диагональный поворот помогает прочтению в22px. Не использовать геометрические «ракеты». Всего9 адресных замен, остальные первые иконки сохранены. Кальмар CC BY-SA4.0 с атрибуцией и отдельным squid.svg.
 
 - Марго выбрала Б для оформления заголовков и корзины: нейтральный рельеф тон в тон, без цветных полос. Дополнительно явно попросила светлые тематические рисунки как тени возле названий. Реализованы section-shadow (approved coastIcon,88px/60px,opacity.085/.065,aria-hidden,pointer-events:none), запас справа под рисунок. Корзина: нейтральная верхняя полоса и отдельный тональный блок итога. Линия под заголовком сохранена, сверху жёсткой линии нет.
+
+
+### Sun&Sea — unique category artwork and quiet scrolling scenery (2026-10-23)
+- All 25 categories have distinct artwork, shared by sidebar and header shadows. Rolls use sushi-03; soups retain the steaming bowl. Nine further Hugeicons replace repeated leaves, cups and bottles; approved earlier icons remain.
+- Scenery is anchored to every third rendered section: palm, caravel, flower, lighthouse. Absolute decoration scrolls with content; no fixed palm or scroll listener. Opacity .035–.045 and aria-hidden / pointer-events:none.
+- Cart header has a faint serving cloche; split checks have separate rounded blocks in three neutral shades. Guest avatar palette is neutral too. Order logic, IDs, prices and translations unchanged.
+- Sources only _src/sunsea; asset attribution in ICON_LICENSES.md. Local browser checks cover 25 unique SVGs, 179 dishes, mobile/desktop widths, languages, order submission, cart motion and three split-check shades.

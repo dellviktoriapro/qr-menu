@@ -55,6 +55,8 @@ shutil.copyfile('amb/squid.svg', os.path.join(OUT, 'squid.svg'))
 shutil.copyfile('amb/palm-shadow.svg', os.path.join(OUT, 'palm-shadow.svg'))
 shutil.copyfile('amb/waves.svg', os.path.join(OUT, 'waves.svg'))
 shutil.copyfile('amb/sea-ripple.svg', os.path.join(OUT, 'sea-ripple.svg'))
+for asset in ['coast-ship.svg','coast-flower.svg','coast-lighthouse.svg']:
+    shutil.copyfile('amb/' + asset, os.path.join(OUT, asset))
 
 s = open('../chez/tpl.html', encoding='utf-8').read()
 def rep(a, b, cnt=1):
@@ -125,6 +127,8 @@ rep('function openState(){', 'function openState(){$("open").hidden=true;return;
 rep('  color-scheme:dark;', '  color-scheme:light;')
 rep('</style>', open('skin.css', encoding='utf-8').read() + '\n</style>')
 
+rep('<h3 id="sheetH"></h3>', '<h3 id="sheetH"></h3><span class="cart-shadow" aria-hidden="true"><svg viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" d="M2 17h20"/><path stroke-linejoin="round" d="M12 7s1.5-1.034 1.5-2.309c0-2.255-3-2.255-3 0C10.5 5.966 12 7 12 7Z"/><path stroke-linecap="round" d="m3 17l.621 2.485A2 2 0 0 0 5.561 21h12.877a2 2 0 0 0 1.94-1.515L21 17m-.5-2.5C20.002 10.277 16.386 7 12 7s-8.002 3.277-8.5 7.5"/></g></svg></span>')
+rep('const GC=["#f2b65c","#7fd6d0","#e9846f","#b9a1e6","#9fd49a","#f0c3a0"];', 'const GC=["#dfded4","#cbcbbf","#b8baad","#e9e7df","#d4d3c8","#c1c2b6"];')
 # Decorative section artwork uses the approved thin icon shapes, without extra downloads.
 rep('<h2>${esc(title)}</h2>', '<h2>${esc(title)}</h2><span class="section-shadow" aria-hidden="true">${coastIcon(s.id)}</span>')
 # Lightweight category links, no circular crops of plates or initial-letter placeholders.

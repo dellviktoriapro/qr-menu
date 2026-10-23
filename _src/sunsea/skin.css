@@ -436,3 +436,30 @@ section.s h2{max-width:26ch}
  #sheet .tot{padding:14px}
 }
 .sh .tt{position:static;z-index:auto}.sh h2{position:relative;z-index:1}
+
+/* Quiet scenery belongs to the document and leaves the viewport on scroll. */
+body::before,body::after{display:none}
+main.wrap{background-image:none}
+section.s{position:relative;isolation:isolate}
+.coast-scenery{position:absolute;right:-10px;top:135px;width:min(320px,34vw);height:340px;background-repeat:no-repeat;background-size:contain;background-position:right center;opacity:.045;pointer-events:none;z-index:-1}
+section.s:nth-of-type(6n+4) .coast-scenery{right:auto;left:0;transform:rotate(-9deg);opacity:.035}
+#sheet .hd{position:relative;gap:14px}
+#sheet .hd h3{margin-right:auto}
+.cart-shadow{flex:0 0 64px;width:64px;height:54px;color:#243022;opacity:.12;pointer-events:none;transform:rotate(-8deg)}
+.cart-shadow svg{width:100%;height:100%}
+#sheet .ckg{margin:14px 0;padding:0 16px 8px;border:1px solid #d9dad0;border-radius:13px;background:#f6f5ef;overflow:hidden}
+#sheet .ckg:nth-child(3n+2){background:#eae9e1;border-color:#d1d2c7}
+#sheet .ckg:nth-child(3n){background:#dedfd5;border-color:#c7c9bd}
+#sheet .ckg h4{margin:0;padding:14px 0 12px;border-bottom:1px solid #c9cbbd;color:var(--ink);gap:8px;flex-wrap:wrap}
+#sheet .ckg .lines{margin:0}
+#sheet .ckg .lines li:last-child{border-bottom:0}
+.bar .capin .gs i{color:#243022}
+@media(max-width:699px){
+ .coast-scenery{width:170px;height:220px;right:0;opacity:.035}
+ #sheet .hd{gap:8px}
+ #sheet .hd h3{font-size:30px}
+ .cart-shadow{flex-basis:40px;width:40px;height:42px}
+ #sheet .ckg{padding:0 12px 8px}
+}
+
+section.s h2{overflow-wrap:anywhere;hyphens:auto}
