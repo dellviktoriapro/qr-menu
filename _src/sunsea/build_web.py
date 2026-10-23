@@ -47,10 +47,11 @@ os.makedirs(os.path.join(OUT, 'images'))
 photos = {k: save_webp(photo_path(k), 480, 76, f'images/{k}-480.webp', True) for k in order}
 full = {k: save_webp(photo_path(k), 960, 82, f'images/{k}-960.webp', True) for k in order}
 save_webp('amb/hero.webp', 1600, 76, 'hero.webp')
-save_webp('amb/hero-mobile.webp' if os.path.isfile('amb/hero-mobile.webp') else 'amb/hero.webp', 960, 74, 'hero-mobile.webp')
+save_webp('amb/hero-mobile.webp' if os.path.isfile('amb/hero-mobile.webp') else 'amb/hero.webp', 640, 72, 'hero-mobile.webp')
 BAND = 'hero.webp?v=' + hashlib.sha256(open(os.path.join(OUT, 'hero.webp'), 'rb').read()).hexdigest()[:10]
 MOBILE = 'hero-mobile.webp?v=' + hashlib.sha256(open(os.path.join(OUT, 'hero-mobile.webp'), 'rb').read()).hexdigest()[:10]
 shutil.copyfile('amb/palm-shadow.svg', os.path.join(OUT, 'palm-shadow.svg'))
+shutil.copyfile('amb/waves.svg', os.path.join(OUT, 'waves.svg'))
 
 s = open('../chez/tpl.html', encoding='utf-8').read()
 def rep(a, b, cnt=1):
@@ -90,7 +91,7 @@ for k in ['co_cart', 'co_wish', 'co_ck', 'co_guest', 'co_tbl', 'co_lang', 'co_cu
 NEW = {
  'ru': dict(tag='Sun&Sea Restaurant в Муйне: морепродукты, вьетнамская и тайская кухня, пицца, паста и фирменные блюда от шефа. Закажите прямо с телефона — официант подтвердит заказ у стола.',
             hours='Цены', f1t='От шеф-повара', f1s='Фирменные блюда', f2t='Свежесть и качество', f2s='Морепродукты каждый день', f3t='Копчение 12 часов', f3s='На древесных углях',
-            abE='О ресторане', aboutL='О ресторане', addr='Где мы', foot='Цены указаны в донгах (VND). Спасибо, что выбрали Sun&Sea! See you again!', cur='Цены в донгах (VND)'),
+            abE='О ресторане', aboutL='Информация о ресторане', addr='Где мы', foot='Цены указаны в донгах (VND). Спасибо, что выбрали Sun&Sea! See you again!', cur='Цены в донгах (VND)'),
  'en': dict(tag='Sun&Sea Restaurant in Mui Ne: seafood, Vietnamese and Thai cuisine, pizza, pasta and chef’s specials. Order right from your phone; the waiter confirms it at your table.',
             hours='Prices', f1t='From the chef', f1s='Signature dishes', f2t='Fresh & quality', f2s='Seafood every day', f3t='Smoked 12 hours', f3s='Over natural charcoal',
             abE='About us', aboutL='About the restaurant', addr='Where we are', foot='Prices are in Vietnamese dong (VND). Thank you for choosing Sun&Sea. See you again!', cur='Prices in VND'),
@@ -132,14 +133,19 @@ rep('$("stick").offsetHeight', '(matchMedia("(min-width:1100px)").matches?16:$("
 rep('r.scrollTo({left:a.offsetLeft-r.clientWidth/2+a.clientWidth/2,behavior:"smooth"})',
     'r.scrollTo({left:a.offsetLeft-r.clientWidth/2+a.clientWidth/2,top:a.offsetTop-r.clientHeight/2+a.clientHeight/2,behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"instant":"smooth"})')
 
-# Approved concept: panoramic hero, horizontal food/drink navigation, icon sidebar.
-rep('</header>', '</header><nav class="coastnav" id="coastNav" aria-label="Menu"><div class="coastgroups"><button type="button" data-coast-group="food"></button><button type="button" data-coast-group="drinks"></button></div><div class="coastcats" id="coastCats"></div></nav>')
+# One responsive navigation: sidebar on desktop, top toolbar on phones.
 rep('function renderCats(){', open('skin.js', encoding='utf-8').read() + '\nfunction renderCats(){')
-rep('function render(){', 'function render(){syncCoastNav();')
 # The existing currency selector remains available in the search toolbar.
 rate='<div class="rate"><select class="cur" id="cur" aria-label="Currency"></select><span id="rate"></span></div>'
 rep('  ' + rate + '\n', '')
 rep('<div class="srow">', '<div class="srow">' + rate)
+rep('<a class="hlink" href="#about" id="aboutLnk"></a>', '')
+rep('<button type="button" id="gDrinks" role="tab"></button></div>', '<button type="button" id="gDrinks" role="tab"></button><a class="restaurant-info" href="#about" id="aboutLnk"></a></div>')
+# Hidden section medals were still requesting images, despite display:none.
+rep('<div class="medals">${md.map(p=>`<img src="${PH[p]}" alt="">`).join("")}</div>', '')
+rep('<img loading="lazy" src="${PH[ph]}" alt="${esc(name)}">', '<img loading="lazy" decoding="async" src="${BL}" data-menu-src="${PH[ph]}" alt="${esc(name)}">')
+rep('  $("menu").innerHTML=html||`<div class="empty">${esc(t.none)}</div>`;', '  $("menu").innerHTML=html||`<div class="empty">${esc(t.none)}</div>`;observeMenuPhotos();')
+
 # Keep order IDs stable: sort the display tuples, never the underlying dish data.
 rep('items.forEach(([it,i])=>{', 'items.sort(([a],[b])=>{const rank=k=>({fish_beer:0,fish_lemon:1,smoked_mash:2,fish_corn:3})[k]??99;return rank(a[6])-rank(b[6])}).forEach(([it,i])=>{')
 # Three large dishes per row as in the approved preview, even on wide screens.

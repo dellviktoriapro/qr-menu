@@ -16,11 +16,15 @@ function coastIcon(id){
  const kind=({chef:'chef',pies:'pie',pizza:'pizza',salads:'leaf',tuna:'fish',rolls:'bowl',soups:'bowl',noodles:'pasta',rice:'bowl',shrimp:'fish',squid:'fish',oysters:'fish',chicken:'meat',meat:'meat',pasta:'pasta',veg:'leaf',sides:'bowl',coffee:'cup'})[key]||(key.includes('coffee')||key.includes('tea')?'cup':'bottle');
  return `<svg class="coast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${COAST_ICONS[kind]}</svg>`;
 }
-function syncCoastNav(){
- const nav=document.getElementById('coastNav');if(!nav)return;
- nav.querySelector('[data-coast-group="food"]').textContent=T[lang].food;
- nav.querySelector('[data-coast-group="drinks"]').textContent=T[lang].drinks;
- nav.querySelectorAll('[data-coast-group]').forEach(b=>{const on=b.dataset.coastGroup===group;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on)});
- document.getElementById('coastCats').innerHTML=DATA.filter(s=>s.g===group).map((s,i)=>`<a href="#${s.id}" data-id="${s.id}" class="${i===0?'on':''}">${esc(s.n[lang])}</a>`).join('');
+// Strict near-viewport loading: total menu size does not determine initial downloads.
+let menuPhotoObserver;
+function observeMenuPhotos(){
+ if(menuPhotoObserver)menuPhotoObserver.disconnect();
+ const images=document.querySelectorAll('#menu img[data-menu-src]');
+ const load=img=>{img.src=img.dataset.menuSrc;delete img.dataset.menuSrc;};
+ if(!('IntersectionObserver' in window)){images.forEach(load);return;}
+ menuPhotoObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{
+  if(entry.isIntersecting){load(entry.target);menuPhotoObserver.unobserve(entry.target);}
+ }),{rootMargin:'220px 0px'});
+ images.forEach(img=>menuPhotoObserver.observe(img));
 }
-document.getElementById('coastNav').addEventListener('click',e=>{const b=e.target.closest('[data-coast-group]');if(b)setGroup(b.dataset.coastGroup)});
