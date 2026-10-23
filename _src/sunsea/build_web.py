@@ -67,11 +67,9 @@ BAND = 'hero.webp?v=' + hashlib.sha256(open(os.path.join(OUT, 'hero.webp'), 'rb'
 MOBILE = 'hero-mobile.webp?v=' + hashlib.sha256(open(os.path.join(OUT, 'hero-mobile.webp'), 'rb').read()).hexdigest()[:10]
 shutil.copyfile('ICON_LICENSES.md', os.path.join(OUT, 'ICON_LICENSES.md'))
 shutil.copyfile('amb/squid.svg', os.path.join(OUT, 'squid.svg'))
-shutil.copyfile('amb/palm-shadow.svg', os.path.join(OUT, 'palm-shadow.svg'))
-shutil.copyfile('amb/waves.svg', os.path.join(OUT, 'waves.svg'))
-shutil.copyfile('amb/sea-ripple.svg', os.path.join(OUT, 'sea-ripple.svg'))
-for asset in ['coast-ship.svg','coast-flower.svg','coast-lighthouse.svg']:
-    shutil.copyfile('amb/' + asset, os.path.join(OUT, asset))
+shutil.copytree('fonts', os.path.join(OUT, 'fonts'))
+for asset in ['coast-right','botanical-edge']:
+    Image.open('amb/' + asset + '.png').save(os.path.join(OUT, asset + '.webp'), 'WEBP', lossless=True, method=6)
 
 s = open('../chez/tpl.html', encoding='utf-8').read()
 def rep(a, b, cnt=1):
@@ -140,7 +138,8 @@ rep('function openState(){', 'function openState(){$("open").hidden=true;return;
 
 # ---- Sun&Sea-only visual layer: leave the shared Chez Oanh engine untouched.
 rep('  color-scheme:dark;', '  color-scheme:light;')
-rep('</style>', open('skin.css', encoding='utf-8').read() + '\n</style>')
+font_css = open('fonts/fonts.css', encoding='utf-8').read()
+rep('</style>', font_css + '\n' + open('skin.css', encoding='utf-8').read() + '\n</style>')
 
 rep('<h3 id="sheetH"></h3>', '<h3 id="sheetH"></h3><span class="cart-shadow" aria-hidden="true"><svg viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" d="M2 17h20"/><path stroke-linejoin="round" d="M12 7s1.5-1.034 1.5-2.309c0-2.255-3-2.255-3 0C10.5 5.966 12 7 12 7Z"/><path stroke-linecap="round" d="m3 17l.621 2.485A2 2 0 0 0 5.561 21h12.877a2 2 0 0 0 1.94-1.515L21 17m-.5-2.5C20.002 10.277 16.386 7 12 7s-8.002 3.277-8.5 7.5"/></g></svg></span>')
 rep('const GC=["#f2b65c","#7fd6d0","#e9846f","#b9a1e6","#9fd49a","#f0c3a0"];', 'const GC=["#dfded4","#cbcbbf","#b8baad","#e9e7df","#d4d3c8","#c1c2b6"];')
@@ -182,8 +181,16 @@ rep('const PH=new Proxy', 'const FULL=' + json.dumps(full) + ';\nconst PH=new Pr
 rep('$("dImg").src=PH[ph]', '$("dImg").src=FULL[ph]||PH[ph]')
 rep('$("lbImg").src=PH[it[6]]', '$("lbImg").src=FULL[it[6]]||PH[it[6]]')
 rep('$("lbImg").src=PH[b.dataset.ph]', '$("lbImg").src=FULL[b.dataset.ph]||PH[b.dataset.ph]')
-# Font delivery must not hold the first menu paint behind a third-party stylesheet.
-rep('<link rel="stylesheet" href="https://fonts.googleapis.com/', '<link rel="stylesheet" media="print" onload="this.media=\'all\'" href="https://fonts.googleapis.com/')
+# Local font subsets load directly from the site, without a late external stylesheet.
+font_link = re.search(r'<link rel="stylesheet" href="https://fonts.googleapis.com/[^"]+">', s).group(0)
+preloads = []
+for subset, block in re.findall(r'/\* ([^*]+) \*/\s*(@font-face\s*\{[^}]+\})', font_css):
+    family = re.search(r"font-family: '([^']+)'", block).group(1)
+    if subset in ['latin', 'cyrillic'] and (family != 'Cormorant Garamond' or subset == 'latin'):
+        url = re.search(r'url\(([^)]+)\)', block).group(1)
+        preloads.append(f'<link rel="preload" href="{url}" as="font" type="font/woff2" crossorigin>')
+rep(font_link, '\n'.join(preloads))
+s = re.sub(r'<link rel="preconnect" href="https://fonts\.(?:googleapis|gstatic)\.com"[^>]*>', '', s)
 # Select the correct hero before the first background request, avoiding two downloads.
 rep('$("heroBg").style.backgroundImage=`url(${AMB.lion})`;$("gateBg").style.backgroundImage=`url(${AMB.lion})`;',
     'const heroMedia=matchMedia("(max-width:699px)");function updateHero(){const heroURL=heroMedia.matches?' + json.dumps(MOBILE) + ':AMB.lion;$("heroBg").style.backgroundImage=`url(${heroURL})`;$("gateBg").style.backgroundImage=`url(${heroURL})`;}updateHero();heroMedia.addEventListener("change",updateHero);')

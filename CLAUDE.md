@@ -165,3 +165,9 @@ _src/                   исходники и сборка — править Т
 - Final build:268KB HTML;120 photos;5967KB total thumbnails, loaded only near viewport; detail files only on tap. All240 WebP files have genuine alpha and correct max480/960px dimensions.
 - Fresh tests with full120-photo menu passed:70 grid combinations (7 widths x5 languages xfood/drinks), identical photo/text price typography,25 sections179 positions, local QR order to correct venue/table, staff light/dark, five languages, currency, search, stop list, cart motion/reduced motion, split-check shades, no page JS errors.
 - No remaining generation queue. Production prompt/report artifacts saved under this chat outputs; all project assets copied into repository. Root work/generated-food retains candidates/metadata outside repository for audit only.
+
+### Sun&Sea — right-only supplied line art and stable fonts
+- Client supplied two transparent PNG borders (23 Oct,15:12), now amb/coast-right.png and botanical-edge.png. Built lossless WebP; botanical border mirrored in CSS. Every section has faint right-only absolute artwork scrolling with document, no fixed background or left decoration. Old six background SVG assets removed. Unique category header icons retained.
+- All four selected fonts bundled locally with OFL licenses, hashed WOFF2 subsets and seven Latin/Cyrillic preloads; no Google Fonts runtime dependency. Real font loading verified; layout coordinates stable after loading.
+- Price controls align at top on desktop; mobile main price has its own row, converted price and add/quantity share second row, variant label third. Buttons align across the row including variant dishes.
+- Fresh Chromium verification passed70 width/language/group grid combinations, all120 photos/179records, order/cart/stoplist/staff checks; no page errors. Supplied art checked visually at390/1440.

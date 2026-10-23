@@ -18,9 +18,4 @@ Source: https://openmoji.org/library/emoji-1F991/ — OpenMoji contributors, htt
 Additional Hugeicons (MIT): sushi-03, carrot, tea-pod, soft-drink-02,
 soft-drink-01, yogurt, beer, soda-can, bottle-wine, dish-01.
 
-Background silhouettes:
-- Caravel and Lighthouse from Game-icons.net / Iconify game-icons collection,
-  Delapouite, CC BY 3.0: https://game-icons.net/ ; https://creativecommons.org/licenses/by/3.0/
-- Spa (flower) by Font Awesome, CC BY 4.0:
-  https://fontawesome.com/icons/spa ; https://creativecommons.org/licenses/by/4.0/
-Silhouettes recolored for Sun&Sea.
+Background line art supplied by the client, 23 October 2026.

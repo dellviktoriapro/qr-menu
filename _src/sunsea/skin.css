@@ -214,7 +214,7 @@ li.it .pv .main{font-size:16px;font-weight:600;color:var(--ink)}
 .srow .rate .cur{font-size:10px;padding:6px;border-radius:999px}
 .sh .vi{display:none}
 section.s .note{max-width:84ch;font-size:11px;line-height:1.5;margin-top:10px}
-body::before,body::after{background:url(palm-shadow.svg) no-repeat center/contain;width:340px;height:600px;opacity:.055;filter:blur(1px);border-radius:0;mask-image:none;-webkit-mask-image:none}
+body::before,body::after{background:none no-repeat center/contain;width:340px;height:600px;opacity:.055;filter:blur(1px);border-radius:0;mask-image:none;-webkit-mask-image:none}
 body::before{top:310px;right:0;max-width:40vw}body::after{top:1350px;left:0;max-width:40vw;transform:scaleX(-1)}
 @media(min-width:1100px){
  :root{--side:164px}
@@ -273,7 +273,7 @@ body::before{top:310px;right:0;max-width:40vw}body::after{top:1350px;left:0;max-
 
 /* User-requested visible coastal details and a single category navigation. */
 body::before{position:fixed;top:285px;right:0;width:330px;height:440px;opacity:.13;filter:none;pointer-events:none}
-body::after{position:fixed;top:auto;bottom:0;left:0;width:440px;max-width:50vw;height:200px;background:url(waves.svg) no-repeat left bottom/contain;opacity:.8;transform:none;filter:none;pointer-events:none}
+body::after{position:fixed;top:auto;bottom:0;left:0;width:440px;max-width:50vw;height:200px;background:none no-repeat left bottom/contain;opacity:.8;transform:none;filter:none;pointer-events:none}
 .hsub{pointer-events:none}.hsub .tchip{pointer-events:auto}
 .restaurant-info{font-size:11px;color:var(--ink);text-decoration:none;white-space:normal;padding:8px 2px;border-bottom:1px solid transparent;line-height:1.35}
 .restaurant-info:hover,.restaurant-info:focus-visible{color:var(--teal);border-bottom-color:var(--teal)}
@@ -394,7 +394,7 @@ section.s h2{font-size:46px!important;line-height:1.15}
 .tile .pv .main{font-size:28px;font-weight:500}
 #ss_pies .sh,#ss_pizza .sh{display:flex;align-items:center;gap:18px 36px;flex-wrap:wrap;padding-bottom:12px}
 #ss_pies .note,#ss_pizza .note{display:block;font-family:"Caveat",cursive;font-size:32px;font-weight:600;line-height:1.1;color:#80583d;transform:rotate(-4deg);margin:0 6px 5px;max-width:25ch;border-bottom:1px solid rgba(128,88,61,.45);padding:0 0 5px;background:none}
-main.wrap{background-image:url(sea-ripple.svg);background-size:440px auto;background-repeat:no-repeat;background-position:right 160px}
+main.wrap{background-image:none;background-size:440px auto;background-repeat:no-repeat;background-position:right 160px}
 @media(max-width:699px){
  section.s h2{font-size:31px!important}
  .tile .nm{font-size:21px}.tile .pv .main{font-size:23px}li.it .nm{font-size:23px}
@@ -512,3 +512,24 @@ section.s h2{overflow-wrap:anywhere;hyphens:auto}
  #menu .opt{flex-wrap:wrap;gap:6px}
  #menu .pv{min-width:0}
 }
+
+/* Controls keep their baseline when a price has variants or quantity changes. */
+#menu .opt{align-items:flex-start}
+#menu .opt>.add,#menu .opt>.step{margin-top:0}
+#menu .step{height:38px;padding:3px;gap:0}
+@media(max-width:699px){
+ #menu .opt{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:minmax(36px,auto) 36px auto;gap:4px 6px;align-items:center}
+ #menu .opt>.pv{display:contents}
+ #menu .opt .main,#menu .opt .ask{grid-column:1/-1;grid-row:1}
+ #menu .opt .sub{grid-column:1;grid-row:2;margin:0;min-width:0}
+ #menu .opt .lbl{grid-column:1/-1;grid-row:3;margin:0}
+ #menu .opt>.add,#menu .opt>.step,#menu .opt>.sold{grid-column:2;grid-row:2;justify-self:end}
+ #menu .step{height:34px;padding:2px}
+ #menu .step button{width:24px;height:30px}
+ #menu .step b{min-width:18px;font-size:13px}
+}
+
+/* User supplied line art: one quiet border on the right, in document flow. */
+#menu section.s .coast-scenery{position:absolute;inset:0 calc(-1 * var(--section-inset)) 0 auto;width:min(460px,42vw);height:auto;background-image:url(coast-right.webp);background-repeat:repeat-y;background-size:100% auto;opacity:.18;transform:none;filter:none;pointer-events:none;z-index:-1}
+#menu section.s .coast-scenery.botanical{background-image:url(botanical-edge.webp);transform:scaleX(-1)}
+@media(max-width:699px){#menu section.s .coast-scenery{width:220px;opacity:.13}}

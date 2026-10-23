@@ -33,9 +33,12 @@ function coastIcon(id){
 // Strict near-viewport loading: total menu size does not determine initial downloads.
 let menuPhotoObserver;
 function observeMenuPhotos(){
- const scenery=['palm-shadow.svg','coast-ship.svg','coast-flower.svg','coast-lighthouse.svg'];
  document.querySelectorAll('#menu section.s').forEach((section,i)=>{
-  if(i%3===0){const art=document.createElement('span');art.className='coast-scenery';art.setAttribute('aria-hidden','true');art.style.backgroundImage=`url(${scenery[Math.floor(i/3)%4]})`;section.appendChild(art);}
+  const art=document.createElement('span');
+  art.className='coast-scenery'+(i%2?' botanical':'');
+  art.setAttribute('aria-hidden','true');
+  art.style.backgroundPosition=`right -${(i%4)*180}px`;
+  section.appendChild(art);
  });
  for(const id of ['ss_pies','ss_pizza']){const section=document.getElementById(id),note=section?.querySelector('.note');if(note)section.querySelector('.sh').appendChild(note);}
 
