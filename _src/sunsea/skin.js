@@ -19,6 +19,8 @@ function coastIcon(id){
 // Strict near-viewport loading: total menu size does not determine initial downloads.
 let menuPhotoObserver;
 function observeMenuPhotos(){
+ for(const id of ['ss_pies','ss_pizza']){const section=document.getElementById(id),note=section?.querySelector('.note');if(note)section.querySelector('.sh').appendChild(note);}
+
  if(menuPhotoObserver)menuPhotoObserver.disconnect();
  const images=document.querySelectorAll('#menu img[data-menu-src]');
  const load=img=>{img.src=img.dataset.menuSrc;delete img.dataset.menuSrc;};

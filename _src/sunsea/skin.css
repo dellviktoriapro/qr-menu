@@ -373,3 +373,33 @@ section.s h2{max-width:26ch}
 @media(max-width:699px){section.s .sh{padding:18px 0 0;min-height:0}section.s h2{max-width:26ch}.tile{padding-bottom:18px}}
 @supports not (grid-template-rows:subgrid){.tile{display:flex}.tile .txt{display:flex;flex:1}.tile .nm{min-height:2.3em}.tile .dish-description{min-height:3.1em}.tile .opts{margin-top:8px}}
 .tile .pv{display:flex;flex-direction:column}.tile .pv .main{order:1}.tile .pv .sub{order:2}.tile .pv .lbl{order:3;margin-top:2px}
+
+/* Order controls: responsive hover/press without moving layout. */
+#sheet button{transition:transform 160ms ease,box-shadow 160ms ease,background-color 160ms ease,border-color 160ms ease,filter 160ms ease;transform-origin:center}
+@media(hover:hover) and (pointer:fine){
+ #sheet button:not(:disabled):hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(38,64,28,.14);filter:brightness(1.04)}
+ #sheet .step button:not(:disabled):hover,#sheet .x:not(:disabled):hover{transform:scale(1.08);box-shadow:none}
+ #sheet .step button:not(:disabled):hover{background:rgba(255,255,255,.16)}
+ #sheet .chips button:not(:disabled):hover,#sheet .ghost:not(:disabled):hover,#sheet .splitb:not(:disabled):hover{border-color:#708368;background-color:#e9eee4}
+}
+#sheet button:not(:disabled):active{transform:scale(.97);box-shadow:none;filter:brightness(.97)}
+#sheet button:focus-visible{outline:2px solid #708368;outline-offset:3px}
+@media(prefers-reduced-motion:reduce){#sheet button{transition:none!important}#sheet button:hover,#sheet button:active{transform:none!important}}
+
+/* Selected type sample B: Lora; handwritten signatures remain accents. */
+:root{--f-display:"Lora",Georgia,"Times New Roman",serif}
+.logo{font-family:"Cormorant Garamond",Georgia,serif!important}
+section.s h2{font-size:46px!important;line-height:1.15}
+.tile .nm,li.it .nm{font-weight:500;font-size:25px;line-height:1.25}
+.tile .pv .main{font-size:28px;font-weight:500}
+#ss_pies .sh,#ss_pizza .sh{display:flex;align-items:center;gap:18px 36px;flex-wrap:wrap;padding-bottom:12px}
+#ss_pies .note,#ss_pizza .note{display:block;font-family:"Caveat",cursive;font-size:32px;font-weight:600;line-height:1.1;color:#80583d;transform:rotate(-4deg);margin:0 6px 5px;max-width:25ch;border-bottom:1px solid rgba(128,88,61,.45);padding:0 0 5px;background:none}
+main.wrap{background-image:url(sea-ripple.svg);background-size:440px auto;background-repeat:no-repeat;background-position:right 160px}
+@media(max-width:699px){
+ section.s h2{font-size:31px!important}
+ .tile .nm{font-size:21px}.tile .pv .main{font-size:23px}li.it .nm{font-size:23px}
+ #ss_pies .sh,#ss_pizza .sh{gap:12px;padding-bottom:12px}
+ #ss_pies .note,#ss_pizza .note{font-size:29px;margin:0 3px 5px;max-width:24ch}
+ main.wrap{background-size:260px auto}
+}
+@media(max-width:699px){section.s .note{display:block}}

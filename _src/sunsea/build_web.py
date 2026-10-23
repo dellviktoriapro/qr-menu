@@ -52,6 +52,7 @@ BAND = 'hero.webp?v=' + hashlib.sha256(open(os.path.join(OUT, 'hero.webp'), 'rb'
 MOBILE = 'hero-mobile.webp?v=' + hashlib.sha256(open(os.path.join(OUT, 'hero-mobile.webp'), 'rb').read()).hexdigest()[:10]
 shutil.copyfile('amb/palm-shadow.svg', os.path.join(OUT, 'palm-shadow.svg'))
 shutil.copyfile('amb/waves.svg', os.path.join(OUT, 'waves.svg'))
+shutil.copyfile('amb/sea-ripple.svg', os.path.join(OUT, 'sea-ripple.svg'))
 
 s = open('../chez/tpl.html', encoding='utf-8').read()
 def rep(a, b, cnt=1):
@@ -64,7 +65,7 @@ rep('<span class="vi">${esc(lang==="vi"?s.n.en:s.n.vi)}</span><h2>${esc(title)}<
 # ---- identity
 rep('<title>Café Chez Oanh Menu</title>', '<title>Sun&amp;Sea Restaurant · Mui Ne · Menu</title>')
 rep('family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Montserrat:wght@400;500;600;700',
-    'family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800')
+    'family=Cormorant+Garamond:wght@600&family=Lora:wght@500;600&family=Caveat:wght@600&family=Manrope:wght@400;500;600;700;800')
 rep('    <div class="eyebrow">Phan Thiết · Hàm Tiến</div>\n    <h2>Café Chez Oanh<em>Sofa Café</em></h2>',
     '    <div class="eyebrow">Mui Ne · Phan Thiết</div>\n    <h2 class="logo">Sun&amp;Sea<em>Mũi Né</em></h2>')
 rep('''    <h1>Café Chez Oanh<em>Sofa Café · Hàm Tiến</em></h1>
@@ -106,11 +107,11 @@ NEW = {
             abE='关于我们', aboutL='关于餐厅', addr='位置', foot='价格以越南盾（VND）计。感谢选择 Sun&Sea，期待再见！', cur='价格单位 VND'),
 }
 NOTES = {
- 'ru': dict(chef='Фирменные блюда нашего шефа. Рыба и креветки горячего копчения — по предзаказу за 1 день, цену уточняйте у официанта.', pies='Съешь меня 😋 Фирменные пироги от шефа.', pizza='Good pizza brings good people.', oysters='Свежие — сочные — незабываемые! Цена за одну устрицу.', souvenir='Сувенир из Вьетнама: сделано во Вьетнаме, удобно взять с собой. Продаётся с 18 лет.'),
- 'en': dict(chef="Our chef's signature dishes. Hot smoked fish and shrimps: pre-order 1 day in advance, please check the price with us.", pies='Eat me 😋 Signature pies by the chef.', pizza='Good pizza brings good people.', oysters='Fresh, juicy, unforgettable! Price per oyster.', souvenir='Made in Vietnam, a perfect souvenir, easy to carry. 18+ only.'),
- 'vi': dict(chef='Món đặc biệt của bếp trưởng. Cá và tôm hun khói: đặt trước 1 ngày, vui lòng hỏi giá tại nhà hàng.', pies='Ăn tôi 😋 Bánh pie đặc trưng từ bếp trưởng.', pizza='Good pizza brings good people.', oysters='Tươi ngon, đậm đà, khó quên! Giá cho 1 con.', souvenir='Sản xuất tại Việt Nam, quà lưu niệm tiện mang theo. Chỉ bán cho người từ 18 tuổi.'),
- 'ko': dict(chef='셰프의 시그니처 요리. 훈제 생선과 새우는 하루 전 예약, 가격은 직원에게 문의하세요.', pies='먹어 봐요 😋 셰프의 시그니처 파이.', pizza='Good pizza brings good people.', oysters='신선하고 잊을 수 없는 맛! 1개 가격.', souvenir='베트남산 기념품, 휴대하기 좋아요. 18세 이상.'),
- 'zh': dict(chef='主厨招牌菜。热熏鱼和熏虾需提前1天预订，价格请向店员咨询。', pies='吃我 😋 主厨招牌馅饼。', pizza='Good pizza brings good people.', oysters='新鲜多汁，难以忘怀！单只价格。', souvenir='越南制造，伴手礼首选，方便携带。仅限18岁以上。'),
+ 'ru': dict(chef='Фирменные блюда нашего шефа. Рыба и креветки горячего копчения — по предзаказу за 1 день, цену уточняйте у официанта.', pies='Съешь меня 😋', pizza='Good pizza brings good people.', oysters='Свежие — сочные — незабываемые! Цена за одну устрицу.', souvenir='Сувенир из Вьетнама: сделано во Вьетнаме, удобно взять с собой. Продаётся с 18 лет.'),
+ 'en': dict(chef="Our chef's signature dishes. Hot smoked fish and shrimps: pre-order 1 day in advance, please check the price with us.", pies='Eat me 😋', pizza='Good pizza brings good people.', oysters='Fresh, juicy, unforgettable! Price per oyster.', souvenir='Made in Vietnam, a perfect souvenir, easy to carry. 18+ only.'),
+ 'vi': dict(chef='Món đặc biệt của bếp trưởng. Cá và tôm hun khói: đặt trước 1 ngày, vui lòng hỏi giá tại nhà hàng.', pies='Ăn tôi 😋', pizza='Good pizza brings good people.', oysters='Tươi ngon, đậm đà, khó quên! Giá cho 1 con.', souvenir='Sản xuất tại Việt Nam, quà lưu niệm tiện mang theo. Chỉ bán cho người từ 18 tuổi.'),
+ 'ko': dict(chef='셰프의 시그니처 요리. 훈제 생선과 새우는 하루 전 예약, 가격은 직원에게 문의하세요.', pies='먹어 봐요 😋', pizza='Good pizza brings good people.', oysters='신선하고 잊을 수 없는 맛! 1개 가격.', souvenir='베트남산 기념품, 휴대하기 좋아요. 18세 이상.'),
+ 'zh': dict(chef='主厨招牌菜。热熏鱼和熏虾需提前1天预订，价格请向店员咨询。', pies='吃我 😋', pizza='Good pizza brings good people.', oysters='新鲜多汁，难以忘怀！单只价格。', souvenir='越南制造，伴手礼首选，方便携带。仅限18岁以上。'),
 }
 inj = ''.join(f'Object.assign(T.{L},{json.dumps(d, ensure_ascii=False)});Object.assign(T.{L}.notes||(T.{L}.notes={{}}),{json.dumps(NOTES[L], ensure_ascii=False)});\n' for L, d in NEW.items())
 rep('\nfunction pl(n,f){', '\n' + inj + 'function pl(n,f){')
