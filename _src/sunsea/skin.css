@@ -533,3 +533,14 @@ section.s h2{overflow-wrap:anywhere;hyphens:auto}
 #menu section.s .coast-scenery{position:absolute;inset:0 calc(-1 * var(--section-inset)) 0 auto;width:min(460px,42vw);height:auto;background-image:url(coast-right.webp);background-repeat:repeat-y;background-size:100% auto;opacity:.18;transform:none;filter:none;pointer-events:none;z-index:-1}
 #menu section.s .coast-scenery.botanical{background-image:url(botanical-edge.webp);transform:scaleX(-1)}
 @media(max-width:699px){#menu section.s .coast-scenery{width:220px;opacity:.13}}
+
+/* The category drawing travels with its title, rather than the far edge. */
+#menu section.s .sh{padding-right:var(--section-inset)}
+#menu .sh .tt{min-width:0;max-width:100%}
+.section-heading-line{display:flex;align-items:center;gap:18px;max-width:100%;min-width:0}
+#menu .section-heading-line h2{flex:0 1 auto;min-width:0;margin:0;overflow-wrap:anywhere}
+#menu .section-heading-line .section-shadow{position:static;inset:auto;transform:rotate(-10deg);flex:0 0 64px;width:64px;height:64px;opacity:.12}
+@media(max-width:699px){
+ .section-heading-line{gap:12px}
+ #menu .section-heading-line .section-shadow{flex-basis:44px;width:44px;height:44px}
+}

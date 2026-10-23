@@ -171,3 +171,4 @@ _src/                   исходники и сборка — править Т
 - All four selected fonts bundled locally with OFL licenses, hashed WOFF2 subsets and seven Latin/Cyrillic preloads; no Google Fonts runtime dependency. Real font loading verified; layout coordinates stable after loading.
 - Price controls align at top on desktop; mobile main price has its own row, converted price and add/quantity share second row, variant label third. Buttons align across the row including variant dishes.
 - Fresh Chromium verification passed70 width/language/group grid combinations, all120 photos/179records, order/cart/stoplist/staff checks; no page errors. Supplied art checked visually at390/1440.
+- Category shadow drawings now follow the heading text in a flex row (64px desktop/44px mobile), instead of being pinned to the far right. Verified70 responsive/language/group combinations after change.
