@@ -161,9 +161,8 @@ rep('function renderCats(){', open('skin.js', encoding='utf-8').read() + '\nfunc
 # The existing currency selector remains available in the search toolbar.
 rate='<div class="rate"><select class="cur" id="cur" aria-label="Currency"></select><span id="rate"></span></div>'
 rep('  ' + rate + '\n', '')
-rep('<div class="srow">', '<div class="srow">' + rate)
+rep('<div class="srow">', '<div class="srow"><a class="restaurant-info" href="#about" id="aboutLnk"></a>' + rate)
 rep('<a class="hlink" href="#about" id="aboutLnk"></a>', '')
-rep('<button type="button" id="gDrinks" role="tab"></button></div>', '<button type="button" id="gDrinks" role="tab"></button><a class="restaurant-info" href="#about" id="aboutLnk"></a></div>')
 # Hidden section medals were still requesting images, despite display:none.
 rep('<div class="medals">${md.map(p=>`<img src="${PH[p]}" alt="">`).join("")}</div>', '')
 rep('<img loading="lazy" src="${PH[ph]}" alt="${esc(name)}">', '<img loading="lazy" decoding="async" src="${BL}" data-menu-src="${PH[ph]}" alt="${esc(name)}">')

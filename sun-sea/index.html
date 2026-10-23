@@ -1270,6 +1270,20 @@ section.s h2{overflow-wrap:anywhere;hyphens:auto}
  #menu .section-heading-line .section-shadow{flex-basis:44px;width:44px;height:44px}
 }
 
+/* Restaurant information precedes the food/drink navigation. */
+.srow{display:grid;grid-template-columns:minmax(0,1fr) 72px;gap:8px 12px}
+.srow>.restaurant-info{grid-column:1/-1;grid-row:1;justify-self:start;margin:0;padding:4px 2px 8px;font-size:13px;max-width:100%;order:0}
+.srow>.groups{display:flex;grid-column:1;grid-row:2;justify-content:flex-start;min-width:0;gap:16px;order:0}
+.srow>.rate{grid-column:2;grid-row:2;justify-self:end;align-self:center;margin:0;width:72px;order:0}
+.srow>.search{grid-column:1/-1;grid-row:3;max-width:100%;width:100%;min-width:0;order:0}
+@media(max-width:699px){
+ .srow{grid-template-columns:minmax(0,1fr) 64px;gap:6px 12px}
+ .srow>.restaurant-info{font-size:12px;padding-bottom:3px}
+ .srow>.groups button{font-size:14px}
+ .srow>.rate{width:64px}
+ .srow>.rate .cur{width:64px;max-width:64px;font-size:11px;padding:7px 5px}
+}
+
 </style>
 
 <div class="gate" id="gate" hidden>
@@ -1295,7 +1309,7 @@ section.s h2{overflow-wrap:anywhere;hyphens:auto}
 <div class="wrap hsub"><div class="hmeta"><span class="tchip" id="tChip" hidden></span></div></div>
 <!-- search, food / drinks and the section circles stay pinned to the top while the guest scrolls -->
 <div class="stick" id="stick"><div class="wrap">
-  <div class="srow"><div class="rate"><select class="cur" id="cur" aria-label="Currency"></select><span id="rate"></span></div><input class="search" id="q" type="search" autocomplete="off"><div class="groups" role="tablist" id="menuTop"><button type="button" id="gFood" role="tab"></button><button type="button" id="gDrinks" role="tab"></button><a class="restaurant-info" href="#about" id="aboutLnk"></a></div></div>
+  <div class="srow"><a class="restaurant-info" href="#about" id="aboutLnk"></a><div class="rate"><select class="cur" id="cur" aria-label="Currency"></select><span id="rate"></span></div><input class="search" id="q" type="search" autocomplete="off"><div class="groups" role="tablist" id="menuTop"><button type="button" id="gFood" role="tab"></button><button type="button" id="gDrinks" role="tab"></button></div></div>
   <div class="hwrap cw"><div class="cats" id="cats"></div><button class="harr l" type="button" aria-label="‹"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 6l-6 6 6 6"/></svg></button><button class="harr r" type="button" aria-label="›"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 6l6 6-6 6"/></svg></button></div>
 </div></div>
 <main class="wrap">

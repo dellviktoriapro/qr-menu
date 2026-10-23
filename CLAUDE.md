@@ -172,3 +172,4 @@ _src/                   исходники и сборка — править Т
 - Price controls align at top on desktop; mobile main price has its own row, converted price and add/quantity share second row, variant label third. Buttons align across the row including variant dishes.
 - Fresh Chromium verification passed70 width/language/group grid combinations, all120 photos/179records, order/cart/stoplist/staff checks; no page errors. Supplied art checked visually at390/1440.
 - Category shadow drawings now follow the heading text in a flex row (64px desktop/44px mobile), instead of being pinned to the far right. Verified70 responsive/language/group combinations after change.
+- Restaurant information link is its own first navigation row, above food/drinks; currency remains to the right of food/drinks, search below. Verified exact row positions at390/1440 and70 grid combinations.
