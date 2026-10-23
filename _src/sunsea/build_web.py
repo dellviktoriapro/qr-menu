@@ -4,6 +4,7 @@ separate checks, bill / QR payment / tips, live status, stop list, review reques
 Run from the repo root through build_all.py, or:  cd _src/sunsea && python build_web.py ../../sun-sea"""
 import json, os, shutil, hashlib, sys, re
 from PIL import Image
+from concurrent.futures import ThreadPoolExecutor
 import data
 
 OUT = sys.argv[1] if len(sys.argv) > 1 else '../../sun-sea'
@@ -54,8 +55,12 @@ order = [k for k in CAT.values() if k] + [i[6] for s in data.S for i in s['items
 order = list(dict.fromkeys(order))
 # Independent cacheable images: thumbnails load lazily, full-size only on tap.
 os.makedirs(os.path.join(OUT, 'images'))
-photos = {k: save_webp(photo_path(k), 480, 76, f'images/{k}-480.webp', True) for k in order}
-full = {k: save_webp(photo_path(k), 960, 82, f'images/{k}-960.webp', True) for k in order}
+# Independent files encode concurrently; preserve stable data order in the final maps.
+with ThreadPoolExecutor(max_workers=4) as pool:
+    thumbs = {k: pool.submit(save_webp, photo_path(k), 480, 76, f'images/{k}-480.webp', True) for k in order}
+    details = {k: pool.submit(save_webp, photo_path(k), 960, 82, f'images/{k}-960.webp', True) for k in order}
+    photos = {k: job.result() for k, job in thumbs.items()}
+    full = {k: job.result() for k, job in details.items()}
 save_webp('amb/hero.webp', 1600, 76, 'hero.webp')
 save_webp('amb/hero-mobile.webp' if os.path.isfile('amb/hero-mobile.webp') else 'amb/hero.webp', 640, 72, 'hero-mobile.webp')
 BAND = 'hero.webp?v=' + hashlib.sha256(open(os.path.join(OUT, 'hero.webp'), 'rb').read()).hexdigest()[:10]
