@@ -146,6 +146,7 @@ rep('<div class="medals">${md.map(p=>`<img src="${PH[p]}" alt="">`).join("")}</d
 rep('<img loading="lazy" src="${PH[ph]}" alt="${esc(name)}">', '<img loading="lazy" decoding="async" src="${BL}" data-menu-src="${PH[ph]}" alt="${esc(name)}">')
 rep('  $("menu").innerHTML=html||`<div class="empty">${esc(t.none)}</div>`;', '  $("menu").innerHTML=html||`<div class="empty">${esc(t.none)}</div>`;observeMenuPhotos();')
 
+rep('<h2>${esc(title)}</h2>', '<h2>${esc(title)}</h2><span class="section-mark" aria-hidden="true">${coastIcon(s.id)}</span>')
 # Keep order IDs stable: sort the display tuples, never the underlying dish data.
 rep('items.forEach(([it,i])=>{', 'items.sort(([a],[b])=>{const rank=k=>({fish_beer:0,fish_lemon:1,smoked_mash:2,fish_corn:3})[k]??99;return rank(a[6])-rank(b[6])}).forEach(([it,i])=>{')
 # Three large dishes per row as in the approved preview, even on wide screens.
