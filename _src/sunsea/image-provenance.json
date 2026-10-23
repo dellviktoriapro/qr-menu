@@ -1,172 +1,1019 @@
 [
   {
+    "key": "bo_la_lot",
+    "reference": "bo_la_lot.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "borscht",
+    "reference": "borscht.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "bun_bo",
+    "reference": "bun_bo.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "bun_cha",
+    "reference": "bun_cha.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "chowder",
+    "reference": "chowder.jpg",
+    "pixels": [
+      874,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "ck_breast",
+    "reference": "photo_5388814128660553456_y.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "ck_satay",
+    "reference": "photo_5388814128660553456_y.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "ck_sweetsour",
+    "reference": "photo_5388814128660553456_y.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "ck_wings",
+    "reference": "ck_wings.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "curry_chicken",
+    "reference": "curry_chicken.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "curry_shrimp",
+    "reference": "curry_shrimp.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
     "key": "fish_tamarind",
     "reference": "fish_tamarind.jpg",
-    "rule": "Original menu plating. Onion omitted or tidy rings. Generated illustration; not actual kitchen photograph."
+    "pixels": [
+      1327,
+      1185
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "ma_avo",
+    "reference": "photo_5388814128660553447_y.jpg",
+    "pixels": [
+      908,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "ma_potato",
+    "reference": "photo_5388814128660553447_y.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "ma_salad",
+    "reference": "photo_5388814128660553447_y.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "ma_sashimi",
+    "reference": "photo_5388814128660553447_y.jpg",
+    "pixels": [
+      866,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "mt_burger_beef",
+    "reference": "photo_5388814128660553452_y.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "mt_burger_chicken",
+    "reference": "photo_5388814128660553452_y.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "mt_croc",
+    "reference": "photo_5388814128660553452_y.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "mt_ribs",
+    "reference": "mt_ribs.jpg",
+    "pixels": [
+      907,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "mt_ribs_ss",
+    "reference": "photo_5388814128660553452_y.jpg",
+    "pixels": [
+      875,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "mt_sausage",
+    "reference": "mt_sausage.jpg",
+    "pixels": [
+      867,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "mt_skewers",
+    "reference": "mt_skewers.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "mussels",
+    "reference": "photo_5388814128660553449_y.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "nd_pho_beef",
+    "reference": "nd_pho_beef.jpg",
+    "pixels": [
+      900,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "nd_pho_sea",
+    "reference": "nd_pho_sea.jpg",
+    "pixels": [
+      899,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "oy_cheese",
+    "reference": "photo_5388814128660553445_y.jpg",
+    "pixels": [
+      883,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "oy_corn",
+    "reference": "photo_5388814128660553445_y.jpg",
+    "pixels": [
+      894,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "oy_raw",
+    "reference": "photo_5388814128660553445_y.jpg",
+    "pixels": [
+      891,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "pa_aglio",
+    "reference": "pa_aglio.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "pa_bolognese",
+    "reference": "photo_5388814128660553446_y.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "pa_carbonara",
+    "reference": "pa_carbonara.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "pa_mushroom",
+    "reference": "pa_mushroom.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "pa_pink",
+    "reference": "pa_pink.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "pa_sea_cream",
+    "reference": "pa_sea_cream.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "pa_sea_tomato",
+    "reference": "pa_sea_tomato.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "pa_tomato",
+    "reference": "pa_tomato.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "pa_tomyum",
+    "reference": "pa_tomyum.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "padthai_chicken",
+    "reference": "padthai_chicken.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "padthai_shrimp",
+    "reference": "padthai_shrimp.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "pho_bo",
+    "reference": "photo_5388814128660553457_y.jpg",
+    "pixels": [
+      920,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
   },
   {
     "key": "pie_cabbage",
     "reference": "photo_5388814128660553441_y.jpg",
-    "rule": "Original menu plating. Onion omitted or tidy rings. Generated illustration; not actual kitchen photograph."
+    "pixels": [
+      1536,
+      1024
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
   },
   {
     "key": "pie_mango",
     "reference": "photo_5388814128660553441_y.jpg",
-    "rule": "Original menu plating. Onion omitted or tidy rings. Generated illustration; not actual kitchen photograph."
+    "pixels": [
+      1536,
+      1024
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
   },
   {
     "key": "pie_meat",
     "reference": "photo_5388814128660553441_y.jpg",
-    "rule": "Original menu plating. Onion omitted or tidy rings. Generated illustration; not actual kitchen photograph."
+    "pixels": [
+      1536,
+      1024
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
   },
   {
     "key": "pie_pineapple",
     "reference": "photo_5388814128660553441_y.jpg",
-    "rule": "Original menu plating. Onion omitted or tidy rings. Generated illustration; not actual kitchen photograph."
+    "pixels": [
+      1536,
+      1024
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
   },
   {
     "key": "prawns_beer",
     "reference": "prawns_beer.jpg",
-    "rule": "Original menu plating. Onion omitted or tidy rings. Generated illustration; not actual kitchen photograph."
+    "pixels": [
+      1483,
+      1061
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
   },
   {
     "key": "pz_4cheese",
     "reference": "photo_5388814128660553443_y.jpg",
-    "rule": "Original menu plating. Onion omitted or tidy rings. Generated illustration; not actual kitchen photograph."
+    "pixels": [
+      1374,
+      1145
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
   },
   {
     "key": "pz_beef",
     "reference": "photo_5388814128660553440_y.jpg",
-    "rule": "Original menu plating. Onion omitted or tidy rings. Generated illustration; not actual kitchen photograph."
+    "pixels": [
+      1374,
+      1145
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
   },
   {
     "key": "pz_carbonara",
     "reference": "photo_5388814128660553438_y.jpg",
-    "rule": "Original menu plating. Onion omitted or tidy rings. Generated illustration; not actual kitchen photograph."
+    "pixels": [
+      1536,
+      1024
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
   },
   {
     "key": "pz_ham",
     "reference": "photo_5388814128660553442_y.jpg",
-    "rule": "Original menu plating. Onion omitted or tidy rings. Generated illustration; not actual kitchen photograph."
+    "pixels": [
+      1374,
+      1145
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
   },
   {
     "key": "pz_hawaii",
     "reference": "photo_5388814128660553435_y.jpg",
-    "rule": "Original menu plating. Onion omitted or tidy rings. Generated illustration; not actual kitchen photograph."
+    "pixels": [
+      1536,
+      1024
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
   },
   {
     "key": "pz_mortadella",
     "reference": "photo_5388814128660553438_y.jpg",
-    "rule": "Original menu plating. Onion omitted or tidy rings. Generated illustration; not actual kitchen photograph."
+    "pixels": [
+      1536,
+      1024
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
   },
   {
     "key": "pz_pepperoni",
     "reference": "photo_5388814128660553443_y.jpg",
-    "rule": "Original menu plating. Onion omitted or tidy rings. Generated illustration; not actual kitchen photograph."
+    "pixels": [
+      1386,
+      1135
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
   },
   {
     "key": "pz_pork",
     "reference": "photo_5388814128660553440_y.jpg",
-    "rule": "Original menu plating. Onion omitted or tidy rings. Generated illustration; not actual kitchen photograph."
+    "pixels": [
+      1536,
+      1024
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
   },
   {
     "key": "pz_salmon",
     "reference": "photo_5388814128660553438_y.jpg",
-    "rule": "Original menu plating. Onion omitted or tidy rings. Generated illustration; not actual kitchen photograph."
+    "pixels": [
+      1536,
+      1024
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
   },
   {
     "key": "pz_seafood",
     "reference": "photo_5388814128660553442_y.jpg",
-    "rule": "Original menu plating. Onion omitted or tidy rings. Generated illustration; not actual kitchen photograph."
+    "pixels": [
+      1312,
+      1199
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
   },
   {
     "key": "pz_shrimp",
     "reference": "photo_5388814128660553435_y.jpg",
-    "rule": "Original menu plating. Onion omitted or tidy rings. Generated illustration; not actual kitchen photograph."
+    "pixels": [
+      1312,
+      1199
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
   },
   {
     "key": "pz_veg",
     "reference": "photo_5388814128660553439_y.jpg",
-    "rule": "Original menu plating. Onion omitted or tidy rings. Generated illustration; not actual kitchen photograph."
+    "pixels": [
+      1374,
+      1145
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "ri_beef",
+    "reference": "ri_beef.jpg",
+    "pixels": [
+      895,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "ri_chicken",
+    "reference": "ri_chicken.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "ri_garlic",
+    "reference": "ri_garlic.jpg",
+    "pixels": [
+      879,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "ri_pineapple",
+    "reference": "ri_pineapple.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "ri_seafood",
+    "reference": "ri_seafood.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "ri_shrimp",
+    "reference": "ri_shrimp.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "ro_crab",
+    "reference": "photo_5388814128660553457_y.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "ro_fresh",
+    "reference": "photo_5388814128660553457_y.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "ro_spring",
+    "reference": "photo_5388814128660553457_y.jpg",
+    "pixels": [
+      854,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "rs_seafood",
+    "reference": "photo_5388814128660553446_y.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "rs_shrimp",
+    "reference": "photo_5388814128660553446_y.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "sd_bread",
+    "reference": "photo_5388814128660553446_y.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "sd_croquettes",
+    "reference": "photo_5388814128660553453_y.jpg",
+    "pixels": [
+      874,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "sd_fries",
+    "reference": "photo_5388814128660553451_y.jpg",
+    "pixels": [
+      968,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "sd_mash",
+    "reference": "photo_5388814128660553453_y.jpg",
+    "pixels": [
+      806,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "sd_mash_cheese",
+    "reference": "photo_5388814128660553453_y.jpg",
+    "pixels": [
+      900,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "sd_pot_mush",
+    "reference": "photo_5388814128660553453_y.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "sea_assort",
+    "reference": "photo_5388814128660553449_y.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "sh_beer",
+    "reference": "sh_beer.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "sh_cheese",
+    "reference": "sh_cheese.jpg",
+    "pixels": [
+      913,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "sh_fried",
+    "reference": "sh_fried.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "sh_garlic",
+    "reference": "sh_garlic.jpg",
+    "pixels": [
+      819,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "sh_raw",
+    "reference": "sh_raw.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "sh_saltchili",
+    "reference": "sh_saltchili.jpg",
+    "pixels": [
+      955,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "sh_sweetsour",
+    "reference": "sh_sweetsour.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "sh_tamarind",
+    "reference": "sh_tamarind.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
   },
   {
     "key": "sl_beef",
     "reference": "sl_beef.jpg",
-    "rule": "Original menu plating. Onion omitted or tidy rings. Generated illustration; not actual kitchen photograph."
+    "pixels": [
+      1520,
+      1035
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "sl_caesar",
+    "reference": "photo_5388814128660553451_y.jpg",
+    "pixels": [
+      991,
+      793
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
   },
   {
     "key": "sl_chicken",
     "reference": "photo_5388814128660553456_y.jpg",
-    "rule": "Original menu plating. Onion omitted or tidy rings. Generated illustration; not actual kitchen photograph."
+    "pixels": [
+      1536,
+      1024
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
   },
   {
     "key": "sl_green",
     "reference": "photo_5388814128660553451_y.jpg",
-    "rule": "Original menu plating. Onion omitted or tidy rings. Generated illustration; not actual kitchen photograph."
+    "pixels": [
+      1374,
+      1145
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
   },
   {
     "key": "sl_lotus",
     "reference": "sl_lotus.jpg",
-    "rule": "Original menu plating. Onion omitted or tidy rings. Generated illustration; not actual kitchen photograph."
+    "pixels": [
+      1570,
+      1002
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
   },
   {
     "key": "sl_mango",
     "reference": "photo_5388814128660553451_y.jpg",
-    "rule": "Original menu plating. Onion omitted or tidy rings. Generated illustration; not actual kitchen photograph."
+    "pixels": [
+      1335,
+      1178
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
   },
   {
     "key": "sl_papaya",
     "reference": "sl_papaya.jpg",
-    "rule": "Original menu plating. Onion omitted or tidy rings. Generated illustration; not actual kitchen photograph."
+    "pixels": [
+      1459,
+      1078
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
   },
   {
     "key": "sl_seafood",
     "reference": "sl_seafood.jpg",
-    "rule": "Original menu plating. Onion omitted or tidy rings. Generated illustration; not actual kitchen photograph."
+    "pixels": [
+      1528,
+      1029
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
   },
   {
     "key": "sl_squid",
     "reference": "sl_squid.jpg",
-    "rule": "Original menu plating. Onion omitted or tidy rings. Generated illustration; not actual kitchen photograph."
+    "pixels": [
+      1512,
+      1040
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
   },
   {
     "key": "smoked_fish",
     "reference": "photo_5388814128660553436_y.jpg",
-    "rule": "Original menu plating. Onion omitted or tidy rings. Generated illustration; not actual kitchen photograph."
+    "pixels": [
+      1536,
+      1024
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
   },
   {
     "key": "smoked_pasta",
     "reference": "photo_5388814128660553444_y.jpg",
-    "rule": "Original menu plating. Onion omitted or tidy rings. Generated illustration; not actual kitchen photograph."
+    "pixels": [
+      1536,
+      1024
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
   },
   {
     "key": "smoked_shrimp",
     "reference": "photo_5388814128660553436_y.jpg",
-    "rule": "Original menu plating. Onion omitted or tidy rings. Generated illustration; not actual kitchen photograph."
+    "pixels": [
+      1426,
+      1103
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
   },
   {
     "key": "sq_fried",
     "reference": "sq_fried.jpg",
-    "rule": "Original menu plating. Onion omitted or tidy rings. Generated illustration; not actual kitchen photograph."
+    "pixels": [
+      1375,
+      1144
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
   },
   {
     "key": "sq_garlic",
     "reference": "sq_garlic.jpg",
-    "rule": "Original menu plating. Onion omitted or tidy rings. Generated illustration; not actual kitchen photograph."
+    "pixels": [
+      1536,
+      1024
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
   },
   {
     "key": "sq_steam",
     "reference": "sq_steam.jpg",
-    "rule": "Original menu plating. Onion omitted or tidy rings. Generated illustration; not actual kitchen photograph."
+    "pixels": [
+      1536,
+      1024
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
   },
   {
     "key": "sq_sweetsour",
     "reference": "sq_sweetsour.jpg",
-    "rule": "Original menu plating. Onion omitted or tidy rings. Generated illustration; not actual kitchen photograph."
+    "pixels": [
+      1536,
+      1024
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "tomkha_chicken",
+    "reference": "tomkha_chicken.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "tomkha_shrimp",
+    "reference": "tomkha_shrimp.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "tomyum",
+    "reference": "tomyum.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "tu_avo",
+    "reference": "photo_5388814128660553448_y.jpg",
+    "pixels": [
+      992,
+      793
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "tu_potato",
+    "reference": "photo_5388814128660553448_y.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
   },
   {
     "key": "tu_salad",
     "reference": "photo_5388814128660553448_y.jpg",
-    "rule": "Original menu plating. Onion omitted or tidy rings. Generated illustration; not actual kitchen photograph."
+    "pixels": [
+      1448,
+      1086
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "tu_sashimi",
+    "reference": "photo_5388814128660553448_y.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "vg_beans",
+    "reference": "photo_5388814128660553449_y.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "vg_broccoli",
+    "reference": "photo_5388814128660553450_y.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "vg_gourd",
+    "reference": "photo_5388814128660553449_y.jpg",
+    "pixels": [
+      881,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "vg_mix",
+    "reference": "photo_5388814128660553450_y.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "vg_pumpkin",
+    "reference": "photo_5388814128660553450_y.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
+  },
+  {
+    "key": "vg_spinach",
+    "reference": "photo_5388814128660553450_y.jpg",
+    "pixels": [
+      887,
+      887
+    ],
+    "rule": "Original menu plating. Onion omitted or closed rings. Generated illustration, not actual kitchen photograph."
   }
 ]
