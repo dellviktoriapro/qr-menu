@@ -10,11 +10,21 @@ OUT = sys.argv[1] if len(sys.argv) > 1 else '../../sun-sea'
 shutil.rmtree(OUT, ignore_errors=True); os.makedirs(OUT)
 
 def save_webp(src, maxw, quality, name, fingerprint=False):
+    cache_root = os.environ.get('SUNSEA_WEBP_CACHE')
+    cache_key = hashlib.sha256(open(src, 'rb').read() + f'|{maxw}|{quality}|webp6'.encode()).hexdigest()
+    cache_file = os.path.join(cache_root, cache_key + '.webp') if cache_root else None
+    if cache_root:
+        os.makedirs(cache_root, exist_ok=True)
     im = Image.open(src)
     im = im.convert('RGBA' if 'A' in im.getbands() else 'RGB')
     im.thumbnail((maxw, maxw), Image.Resampling.LANCZOS)
     path = os.path.join(OUT, name)
-    im.save(path, 'WEBP', quality=quality, method=6)
+    if cache_file and os.path.isfile(cache_file):
+        shutil.copyfile(cache_file, path)
+    else:
+        im.save(path, 'WEBP', quality=quality, method=6)
+        if cache_file:
+            shutil.copyfile(path, cache_file)
     if fingerprint:
         stem, ext = os.path.splitext(name)
         final = stem + '-' + hashlib.sha256(open(path, 'rb').read()).hexdigest()[:10] + ext
@@ -157,6 +167,8 @@ rep('  $("menu").innerHTML=html||`<div class="empty">${esc(t.none)}</div>`;', ' 
 
 # Always provide a description slot; shared rows align without inventing ingredients.
 rep('${descHTML(it)}${noteHTML(it)}${optsHTML(s,i,it,t)}</div></article>', '<div class="dish-description">${descHTML(it)}${noteHTML(it)}</div>${optsHTML(s,i,it,t)}</div></article>')
+# Text-only dishes share the same description slot and price rhythm as photo dishes.
+rep('${descHTML(it)}${noteHTML(it)}${optsHTML(s,i,it,t)}</div></li>', '<div class="dish-description">${descHTML(it)}${noteHTML(it)}</div>${optsHTML(s,i,it,t)}</div></li>')
 # Keep order IDs stable: sort the display tuples, never the underlying dish data.
 rep('items.forEach(([it,i])=>{', 'items.sort(([a],[b])=>{const rank=k=>({fish_beer:0,fish_lemon:1,smoked_mash:2,fish_corn:3})[k]??99;return rank(a[6])-rank(b[6])}).forEach(([it,i])=>{')
 # Three large dishes per row as in the approved preview, even on wide screens.

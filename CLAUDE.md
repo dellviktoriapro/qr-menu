@@ -140,3 +140,12 @@ _src/                   исходники и сборка — править Т
 - Scenery is anchored to every third rendered section: palm, caravel, flower, lighthouse. Absolute decoration scrolls with content; no fixed palm or scroll listener. Opacity .035–.045 and aria-hidden / pointer-events:none.
 - Cart header has a faint serving cloche; split checks have separate rounded blocks in three neutral shades. Guest avatar palette is neutral too. Order logic, IDs, prices and translations unchanged.
 - Sources only _src/sunsea; asset attribution in ICON_LICENSES.md. Local browser checks cover 25 unique SVGs, 179 dishes, mobile/desktop widths, languages, order submission, cart motion and three split-check shades.
+
+
+### Sun&Sea image production and consistent dish layout — 23 Oct 2026
+- User authorized ALL 113 remaining food images, based strictly on original menu pictures. Onion: omit or use tidy closed rings; never long worm-like slivers. Original pages available in D:/Users/Николай/Downloads/photo_53888141286605534*_y.jpg. Printed raw ingredient props must not become part of a plated dish.
+- First verified batch adds fish_tamarind, prawns_beer, sq_fried, sq_steam (11 photos total). Corresponding obsolete JPG crops removed; menu IDs/prices unchanged. Remaining generated candidates staged in the chat workspace work/generated-food, manifest.jsonl and food-generation-jobs.json; not all published yet.
+- User raised generation-limit cost. Stopped the single-image queue; no further generations until choosing individual quality vs testing two dishes per sheet. 28 new single assets plus first six generated before stop, with corrected meat/cabbage pies and onion-free garlic/sweet-sour squid replacements.
+- Unified photo/text dish font, title, main/sub prices, variant labels and add buttons. Text-only rows use a shared description/price subgrid, no invented descriptions. Menu-only badges/original-language labels hidden consistently; detail sheet keeps them. Explicit inner tile minmax(0,1fr) and title wrapping prevent long seafood name overflowing 320px.
+- Optional SUNSEA_WEBP_CACHE caches by source content + size + quality. Warmed from byte-identical existing built assets, no image quality change; repeated build takes seconds. Cache lives outside repo in this chat work/webp-cache.
+- Verified in Chromium at 320/390/768/1440; consistent Lora price fonts 23px mobile/28px desktop; text-row title/description/price align; 179 dishes/25 sections; local order submission and staff light/dark unaffected.

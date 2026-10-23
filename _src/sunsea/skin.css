@@ -463,3 +463,31 @@ section.s:nth-of-type(6n+4) .coast-scenery{right:auto;left:0;transform:rotate(-9
 }
 
 section.s h2{overflow-wrap:anywhere;hyphens:auto}
+
+/* One menu typography and rhythm, whether a dish has a photo or not. */
+#menu .orig,#menu .tgs{display:none}
+#menu .pv{display:flex;flex-direction:column}
+#menu .pv .main{font-family:var(--f-display);font-size:28px;font-weight:500;line-height:1.2;color:var(--ink);order:1;white-space:nowrap}
+#menu .pv .sub{order:2;font-size:14px;line-height:1.4;margin-top:3px}
+#menu .pv .lbl{order:3;font-size:12px;line-height:1.4;margin-top:3px}
+#menu .add{width:38px;height:38px;flex-shrink:0}
+#menu .tile .nm,#menu li.it .nm{font-size:25px;line-height:1.25}
+#menu .dish-description .ds{margin:0;font-size:14px;line-height:1.55;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+#menu ul.items{row-gap:8px;align-items:stretch}
+#menu li.it:not(.extra){grid-template-rows:subgrid;grid-row:span 3;row-gap:8px;padding:18px 0 22px}
+#menu li.it:not(.extra) .txt{display:contents}
+#menu li.it:not(.extra) .nm{grid-row:1;align-self:start}
+#menu li.it:not(.extra) .dish-description{grid-row:2;align-self:start;min-width:0}
+#menu li.it:not(.extra) .opts{grid-row:3;align-self:start;margin:0;padding:0}
+#menu .tiles+.items{border-top:1px solid var(--line);padding-top:12px;margin-top:8px}
+@media(max-width:699px){
+ #menu .tile .nm,#menu li.it .nm{font-size:21px}
+ #menu .pv .main{font-size:23px}
+ #menu .pv .sub{font-size:13px}
+ #menu .add{width:34px;height:34px}
+ #menu .pv .lbl{font-size:11px}
+}
+
+#menu .tile{grid-template-columns:minmax(0,1fr);min-width:0}
+#menu .tile .nm{overflow-wrap:anywhere}
+#menu .tile .ph,#menu .tile .opt{min-width:0}
