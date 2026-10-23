@@ -2,17 +2,25 @@
 Same engine as Chez Oanh: takes ../chez/tpl.html, applies the coastal skin in skin.css and swaps the cafe-specific texts. All features stay: language choice, table QR orders,
 separate checks, bill / QR payment / tips, live status, stop list, review request.
 Run from the repo root through build_all.py, or:  cd _src/sunsea && python build_web.py ../../sun-sea"""
-import json, os, shutil, base64, io, sys, re
+import json, os, shutil, hashlib, sys, re
 from PIL import Image
 import data
 
 OUT = sys.argv[1] if len(sys.argv) > 1 else '../../sun-sea'
 shutil.rmtree(OUT, ignore_errors=True); os.makedirs(OUT)
 
-def webp(src, maxw, q=80):
-    im = Image.open(src).convert('RGBA')
-    if im.width > maxw: im = im.resize((maxw, round(im.height * maxw / im.width)), Image.LANCZOS)
-    b = io.BytesIO(); im.save(b, 'WEBP', quality=q, method=6); return 'data:image/webp;base64,' + base64.b64encode(b.getvalue()).decode()
+def save_webp(src, maxw, quality, name, fingerprint=False):
+    im = Image.open(src)
+    im = im.convert('RGBA' if 'A' in im.getbands() else 'RGB')
+    im.thumbnail((maxw, maxw), Image.Resampling.LANCZOS)
+    path = os.path.join(OUT, name)
+    im.save(path, 'WEBP', quality=quality, method=6)
+    if fingerprint:
+        stem, ext = os.path.splitext(name)
+        final = stem + '-' + hashlib.sha256(open(path, 'rb').read()).hexdigest()[:10] + ext
+        os.replace(path, os.path.join(OUT, final))
+        return final
+    return name
 
 # Only approved cutouts enter the new menu; original JPG scans remain source material.
 # New PNG/WebP cutouts are picked up automatically without changing menu IDs or prices.
@@ -34,17 +42,15 @@ CAT = {s['id']: next((i[6] for i in s['items'] if has(i[6])), None) for s in dat
 next(s for s in D if s['id'] == 'ss_chef')['n'] = dict(next(s for s in D if s['id'] == 'ss_chef')['n'], ru='От шефа')
 order = [k for k in CAT.values() if k] + [i[6] for s in data.S for i in s['items'] if has(i[6])]
 order = list(dict.fromkeys(order))
-items = [(k, webp(photo_path(k), 1000, 88)) for k in order]
-chunks = []; cur = []; size = 0
-for k, v in items:
-    cur.append((k, v)); size += len(v)
-    if size > 650_000: chunks.append(cur); cur = []; size = 0
-if cur: chunks.append(cur)
-for n, c in enumerate(chunks, 1):
-    open(f'{OUT}/ph{n}.js', 'w').write('__ph(' + json.dumps(dict(c)) + ');')
-# Hero is a separate cacheable WebP; keep the menu text light.
-shutil.copyfile('amb/hero.webp', os.path.join(OUT, 'hero.webp'))
-BAND = 'hero.webp'
+# Independent cacheable images: thumbnails load lazily, full-size only on tap.
+os.makedirs(os.path.join(OUT, 'images'))
+photos = {k: save_webp(photo_path(k), 480, 76, f'images/{k}-480.webp', True) for k in order}
+full = {k: save_webp(photo_path(k), 960, 82, f'images/{k}-960.webp', True) for k in order}
+save_webp('amb/hero.webp', 1600, 76, 'hero.webp')
+save_webp('amb/hero-mobile.webp' if os.path.isfile('amb/hero-mobile.webp') else 'amb/hero.webp', 960, 74, 'hero-mobile.webp')
+BAND = 'hero.webp?v=' + hashlib.sha256(open(os.path.join(OUT, 'hero.webp'), 'rb').read()).hexdigest()[:10]
+MOBILE = 'hero-mobile.webp?v=' + hashlib.sha256(open(os.path.join(OUT, 'hero-mobile.webp'), 'rb').read()).hexdigest()[:10]
+shutil.copyfile('amb/palm-shadow.svg', os.path.join(OUT, 'palm-shadow.svg'))
 
 s = open('../chez/tpl.html', encoding='utf-8').read()
 def rep(a, b, cnt=1):
@@ -117,7 +123,7 @@ rep('</style>', open('skin.css', encoding='utf-8').read() + '\n</style>')
 
 # Lightweight category links, no circular crops of plates or initial-letter placeholders.
 old_cat = '${p?`<img src="${PH[p]}" alt="">`:`<i class="ini">${esc(s.n[lang][0])}</i>`}'
-rep(old_cat, '')
+rep(old_cat, '${coastIcon(s.id)}')
 rep('<a class="cat" href="#${s.id}"', '<a class="cat${s.id===DATA.find(x=>x.g===group).id?" on":""}" href="#${s.id}"')
 # On desktop the sidebar is below the panoramic header. Its height must not be
 # subtracted from section anchors; mobile uses the real two-row sticky toolbar.
@@ -126,8 +132,30 @@ rep('$("stick").offsetHeight', '(matchMedia("(min-width:1100px)").matches?16:$("
 rep('r.scrollTo({left:a.offsetLeft-r.clientWidth/2+a.clientWidth/2,behavior:"smooth"})',
     'r.scrollTo({left:a.offsetLeft-r.clientWidth/2+a.clientWidth/2,top:a.offsetTop-r.clientHeight/2+a.clientHeight/2,behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"instant":"smooth"})')
 
-s = s.replace('__DATA__', json.dumps(D, ensure_ascii=False)).replace('__PH__', json.dumps({'amb_lion': BAND})).replace('__AMB__', json.dumps({'lion': BAND})).replace('__GEN__', json.dumps(order)).replace('__CATPH__', '{}')
-s += '<script>(function n(i){if(i>%d)return;var e=document.createElement("script");e.src="ph"+i+".js";e.onload=e.onerror=function(){n(i+1)};document.body.appendChild(e)})(1)</script>' % len(chunks)
+# Approved concept: panoramic hero, horizontal food/drink navigation, icon sidebar.
+rep('</header>', '</header><nav class="coastnav" id="coastNav" aria-label="Menu"><div class="coastgroups"><button type="button" data-coast-group="food"></button><button type="button" data-coast-group="drinks"></button></div><div class="coastcats" id="coastCats"></div></nav>')
+rep('function renderCats(){', open('skin.js', encoding='utf-8').read() + '\nfunction renderCats(){')
+rep('function render(){', 'function render(){syncCoastNav();')
+# The existing currency selector remains available in the search toolbar.
+rate='<div class="rate"><select class="cur" id="cur" aria-label="Currency"></select><span id="rate"></span></div>'
+rep('  ' + rate + '\n', '')
+rep('<div class="srow">', '<div class="srow">' + rate)
+# Keep order IDs stable: sort the display tuples, never the underlying dish data.
+rep('items.forEach(([it,i])=>{', 'items.sort(([a],[b])=>{const rank=k=>({fish_beer:0,fish_lemon:1,smoked_mash:2,fish_corn:3})[k]??99;return rank(a[6])-rank(b[6])}).forEach(([it,i])=>{')
+# Three large dishes per row as in the approved preview, even on wide screens.
+# Full-resolution images are requested only from the dish sheet/lightbox.
+rep('const PH=new Proxy', 'const FULL=' + json.dumps(full) + ';\nconst PH=new Proxy')
+rep('$("dImg").src=PH[ph]', '$("dImg").src=FULL[ph]||PH[ph]')
+rep('$("lbImg").src=PH[it[6]]', '$("lbImg").src=FULL[it[6]]||PH[it[6]]')
+rep('$("lbImg").src=PH[b.dataset.ph]', '$("lbImg").src=FULL[b.dataset.ph]||PH[b.dataset.ph]')
+# Font delivery must not hold the first menu paint behind a third-party stylesheet.
+rep('<link rel="stylesheet" href="https://fonts.googleapis.com/', '<link rel="stylesheet" media="print" onload="this.media=\'all\'" href="https://fonts.googleapis.com/')
+# Select the correct hero before the first background request, avoiding two downloads.
+rep('$("heroBg").style.backgroundImage=`url(${AMB.lion})`;$("gateBg").style.backgroundImage=`url(${AMB.lion})`;',
+    'const heroMedia=matchMedia("(max-width:699px)");function updateHero(){const heroURL=heroMedia.matches?' + json.dumps(MOBILE) + ':AMB.lion;$("heroBg").style.backgroundImage=`url(${heroURL})`;$("gateBg").style.backgroundImage=`url(${heroURL})`;}updateHero();heroMedia.addEventListener("change",updateHero);')
+
+s = s.replace('__DATA__', json.dumps(D, ensure_ascii=False)).replace('__PH__', json.dumps(dict(photos, amb_lion=BAND))).replace('__AMB__', json.dumps({'lion': BAND})).replace('__GEN__', json.dumps(order)).replace('__CATPH__', '{}')
+
 s = '<!doctype html>\n<html lang="ru">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">\n</head>\n<body>\n' + s + '</body></html>'
 open(OUT + '/index.html', 'w', encoding='utf-8').write(s)
-print('sun-sea', len(s.encode()) // 1024, 'KB;', len(items), 'photos;', [os.path.getsize(f'{OUT}/ph{n}.js') // 1024 for n in range(1, len(chunks) + 1)])
+print('sun-sea', len(s.encode()) // 1024, 'KB HTML;', len(photos), 'photos;', sum(os.path.getsize(os.path.join(OUT, x)) for x in photos.values()) // 1024, 'KB thumbnails')

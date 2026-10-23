@@ -192,3 +192,81 @@ li.it .pv .main{font-size:16px;font-weight:600;color:var(--ink)}
   .bar .capin .gs i{width:27px;height:27px}
 }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}.tile:hover .ph img{transform:none}}
+
+/* Match the approved desktop/mobile composition rather than the earlier draft. */
+.hero{height:310px}.hero .txt{padding-top:68px!important}
+.hero h1.logo{font-size:clamp(65px,7vw,92px)!important;letter-spacing:-.045em}
+.hero::before{background:linear-gradient(180deg,rgba(246,243,235,.06),transparent 40%,transparent 66%,var(--bg) 100%)!important}
+.coastnav{display:none}
+.coast-icon{width:22px;height:22px;flex:none}
+.tile .ph{aspect-ratio:1.12!important}.tile .tgs{display:none}
+.tile .txt{padding-top:4px}.tile .orig{display:none}
+.tile .nm{font-size:24px;font-weight:600;line-height:1.08}
+.tile .ds{font-size:11px;line-height:1.5;-webkit-line-clamp:2;margin-top:6px}
+.tiles{margin-top:12px;gap:26px 22px;grid-template-columns:repeat(3,minmax(0,1fr))}
+.tile .pv .main{font-size:25px}.tile .pv .sub{font-size:9px}
+.tile .opts{padding-top:13px}.tile .add{width:35px;height:35px}
+.tile .ph img{filter:drop-shadow(0 5px 6px rgba(64,54,35,.06))}
+.tile .ph{position:relative}
+.tile .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.srow .rate{padding:0;flex:none;margin:0;align-self:center}
+.srow .rate #rate{display:none}
+.srow .rate .cur{font-size:10px;padding:6px;border-radius:999px}
+.sh .vi{display:none}
+section.s .note{max-width:84ch;font-size:11px;line-height:1.5;margin-top:10px}
+body::before,body::after{background:url(palm-shadow.svg) no-repeat center/contain;width:340px;height:600px;opacity:.055;filter:blur(1px);border-radius:0;mask-image:none;-webkit-mask-image:none}
+body::before{top:310px;right:0;max-width:40vw}body::after{top:1350px;left:0;max-width:40vw;transform:scaleX(-1)}
+@media(min-width:1100px){
+ :root{--side:164px}
+ .hero{height:330px}.hero .txt{padding-top:65px!important}
+ .coastnav{display:block;max-width:1320px;margin:0 auto;padding:0 24px 16px}
+ .coastgroups{display:flex;justify-content:center;gap:44px;margin-top:-4px}
+ .coastgroups button{font:inherit;font-size:14px;font-weight:500;background:none;border:0;border-bottom:2px solid transparent;padding:12px 5px 10px;color:var(--muted)}
+ .coastgroups button.on{border-color:var(--teal);color:var(--teal)}
+ .coastcats{display:flex;justify-content:flex-start;gap:22px;overflow:auto;padding:16px 0 8px;scrollbar-width:thin;max-width:960px;margin:auto}
+ .coastcats a{flex:none;color:var(--muted);font-size:11px;text-decoration:none;white-space:nowrap;padding:3px 0 7px;border-bottom:1px solid transparent}
+ .coastcats a.on{color:var(--ink);border-color:var(--teal)}
+ .stick{margin-top:14px;margin-left:18px;padding-top:4px}
+ .stick .wrap{padding-right:14px}
+ .srow{gap:8px;display:grid;grid-template-columns:1fr 52px;align-items:center}
+ .srow .groups{display:none}.srow .search{grid-column:1/-1;font-size:10px;padding:8px 10px;order:0}
+ .srow .rate{grid-column:2;margin:0;justify-self:end;order:1}
+ .cats{max-height:calc(100vh - 120px);padding-top:8px!important;gap:10px!important}
+ .cat{padding:10px 4px!important;border-radius:0!important;gap:13px;border-right:1px solid transparent!important}
+ .cat span{font-size:11px!important;font-weight:500!important}
+ .cat.on{background:none!important;border-right-color:var(--teal)!important}.cat.on span,.cat.on svg{color:var(--teal)}
+ main.wrap{margin-left:calc(var(--side) + 18px);padding-inline:36px;max-width:1580px}
+ section.s{padding-top:8px;scroll-margin-top:18px!important}
+ section.s h2{font-size:58px!important}
+ .sh .tt::before{margin-bottom:12px}
+ .tiles{gap:30px 26px;grid-template-columns:repeat(3,minmax(0,1fr))!important}
+ .tile .nm{font-size:23px}.tile .pv .main{font-size:26px}
+ .about{margin:40px 0 0!important}
+ footer.wrap{margin-left:calc(var(--side) + 54px)}
+ .bar{left:calc(var(--side) + 18px)}
+}
+@media(max-width:1099px){.coast-icon{display:none}}
+@media(min-width:700px) and (max-width:1099px){.hero{height:300px}}
+@media(max-width:699px){
+ .hero{height:245px}.hero .bg{background-size:cover!important;background-position:center!important}
+ .hero .txt{padding-top:76px!important}.hero h1.logo{font-size:58px!important}
+ .logo em{font-size:9px!important;margin-top:10px!important}
+ .stick .wrap{padding-inline:16px}.srow{gap:7px;flex-wrap:nowrap}
+ .stick .cw{margin-inline:-16px}
+ .srow .groups{gap:16px;flex:1;order:0}.srow .groups button{font-size:12px;padding:8px 1px}
+ .srow .rate{order:1;width:49px}.srow .rate .cur{max-width:49px;padding:6px 3px;font-size:9px}
+ .srow .search{order:2;flex:0 1 35%;max-width:35%;padding:8px 10px;font-size:9px}
+ .cats{padding-block:8px!important}.cat{padding:7px 10px}.cat span{font-size:10px!important}
+ main.wrap{padding-inline:16px}
+ section.s{padding-top:24px}.sh .tt::before{width:24px;margin-bottom:9px}
+ section.s h2{font-size:39px!important}.sh .vi{display:none}
+ section.s .note{display:none}
+ .tiles{grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 16px;margin-top:8px}
+ .tile .ph{aspect-ratio:1.06!important}.tile .txt{padding:0}
+ .tile .nm{font-size:19px;line-height:1.08;min-height:42px}
+ .tile .ds{display:none}.tile .orig{display:none}
+ .tile .opts{padding-top:8px}.tile .pv .main{font-size:20px}.tile .pv .sub{display:none}
+ .tile .add{width:31px;height:31px}.tile .step button{width:22px}.tile .step b{font-size:12px}
+ .tile .pv .lbl{font-size:8px}
+ body::before{top:315px;right:0;max-width:42vw;height:300px}
+}
