@@ -314,12 +314,8 @@ li.it .orig{font-size:12px}
 section.s{margin-top:38px;padding-top:16px!important}
 section.s:first-child{margin-top:0}
 section.s .sh{position:relative;isolation:isolate;overflow:hidden;min-height:90px;padding:19px 24px 20px;margin-bottom:16px;border-top:1px solid #c3cfc2;border-bottom:1px solid #c3cfc2;background:linear-gradient(110deg,#e0e9dd 0%,rgba(224,233,221,.65) 55%,rgba(246,243,235,0) 100%)}
-section.s:nth-child(3n+2) .sh{background:linear-gradient(110deg,#f0e3cb,rgba(240,227,203,.48) 60%,transparent);border-color:#deceb5}
-section.s:nth-child(3n) .sh{background:linear-gradient(110deg,#dce9e7,rgba(220,233,231,.48) 60%,transparent);border-color:#c1d4cf}
 .sh .tt::before{display:none}
 section.s h2{font-size:54px!important;max-width:calc(100% - 90px)}
-.section-mark{position:absolute;right:22px;top:50%;transform:translateY(-50%) rotate(-9deg);color:#456445;opacity:.26;pointer-events:none}
-.section-mark .coast-icon{display:block;width:76px;height:76px;stroke-width:.9}
 section.s .note{font-size:13px;line-height:1.55;margin-bottom:10px}
 @media(min-width:1100px){
  :root{--side:244px}
@@ -352,10 +348,28 @@ section.s .note{font-size:13px;line-height:1.55;margin-bottom:10px}
  section.s{margin-top:30px}
  section.s .sh{padding:15px 14px;min-height:70px;margin-bottom:12px}
  section.s h2{font-size:36px!important;max-width:calc(100% - 52px)}
- .section-mark{right:12px}.section-mark .coast-icon{width:48px;height:48px}
  .srow .search{font-size:12px;box-sizing:border-box;min-width:0}
  .cat span{font-size:12px!important}
  body::before{opacity:.08}
 }
 
 @media(max-width:699px){.tile .opt{flex-wrap:wrap;gap:6px}.tile .pv{min-width:0}}
+
+/* Quiet section rules; restore the original fine-line navigation icons. */
+section.s .sh{background:none;border:0;border-top:1px solid rgba(36,48,34,.2);min-height:0;padding:22px 0 0;margin-bottom:16px;overflow:visible}
+section.s:first-child .sh{border-top:0;padding-top:0}
+section.s h2{max-width:26ch}
+.coast-icon{width:22px;height:22px}
+/* Photo, title, description and price share tracks within each visual row. */
+.tiles{align-items:stretch;grid-auto-flow:row;row-gap:8px}
+.tile{display:grid;grid-template-rows:subgrid;grid-row:span 4;row-gap:8px;padding-bottom:22px}
+.tile .ph{grid-row:1}
+.tile .txt{display:contents}
+.tile .nm{grid-row:2;min-height:0;align-self:start}
+.tile .dish-description{grid-row:3;min-width:0;align-self:start}
+.tile .ds{margin:0}
+.tile .pnote{margin:0}
+.tile .opts{grid-row:4;align-self:start;margin:0;padding-top:0}
+@media(max-width:699px){section.s .sh{padding:18px 0 0;min-height:0}section.s h2{max-width:26ch}.tile{padding-bottom:18px}}
+@supports not (grid-template-rows:subgrid){.tile{display:flex}.tile .txt{display:flex;flex:1}.tile .nm{min-height:2.3em}.tile .dish-description{min-height:3.1em}.tile .opts{margin-top:8px}}
+.tile .pv{display:flex;flex-direction:column}.tile .pv .main{order:1}.tile .pv .sub{order:2}.tile .pv .lbl{order:3;margin-top:2px}
