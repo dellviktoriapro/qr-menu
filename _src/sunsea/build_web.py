@@ -131,11 +131,11 @@ NEW = {
             abE='关于我们', aboutL='关于餐厅', addr='位置', foot='价格以越南盾（VND）计。感谢选择 Sun&Sea，期待再见！', cur='价格单位 VND'),
 }
 NOTES = {
- 'ru': dict(chef='Фирменные блюда нашего шефа. Рыба и креветки горячего копчения — по предзаказу за 1 день, цену уточняйте у официанта.', pies='Съешь меня 😋', pizza='Good pizza brings good people.', oysters='Свежие — сочные — незабываемые! Цена за одну устрицу.', souvenir='Сувенир из Вьетнама: сделано во Вьетнаме, удобно взять с собой. Продаётся с 18 лет.'),
- 'en': dict(chef="Our chef's signature dishes. Hot smoked fish and shrimps: pre-order 1 day in advance, please check the price with us.", pies='Eat me 😋', pizza='Good pizza brings good people.', oysters='Fresh, juicy, unforgettable! Price per oyster.', souvenir='Made in Vietnam, a perfect souvenir, easy to carry. 18+ only.'),
- 'vi': dict(chef='Món đặc biệt của bếp trưởng. Cá và tôm hun khói: đặt trước 1 ngày, vui lòng hỏi giá tại nhà hàng.', pies='Ăn tôi 😋', pizza='Good pizza brings good people.', oysters='Tươi ngon, đậm đà, khó quên! Giá cho 1 con.', souvenir='Sản xuất tại Việt Nam, quà lưu niệm tiện mang theo. Chỉ bán cho người từ 18 tuổi.'),
- 'ko': dict(chef='셰프의 시그니처 요리. 훈제 생선과 새우는 하루 전 예약, 가격은 직원에게 문의하세요.', pies='먹어 봐요 😋', pizza='Good pizza brings good people.', oysters='신선하고 잊을 수 없는 맛! 1개 가격.', souvenir='베트남산 기념품, 휴대하기 좋아요. 18세 이상.'),
- 'zh': dict(chef='主厨招牌菜。热熏鱼和熏虾需提前1天预订，价格请向店员咨询。', pies='吃我 😋', pizza='Good pizza brings good people.', oysters='新鲜多汁，难以忘怀！单只价格。', souvenir='越南制造，伴手礼首选，方便携带。仅限18岁以上。'),
+ 'ru': dict(chef='Фирменные блюда нашего шефа.', pies='Съешь меня 😋', pizza='Good pizza brings good people.', oysters='Свежие — сочные — незабываемые! Цена за одну устрицу.', souvenir='Сувенир из Вьетнама: сделано во Вьетнаме, удобно взять с собой. Продаётся с 18 лет.'),
+ 'en': dict(chef="Our chef's signature dishes.", pies='Eat me 😋', pizza='Good pizza brings good people.', oysters='Fresh, juicy, unforgettable! Price per oyster.', souvenir='Made in Vietnam, a perfect souvenir, easy to carry. 18+ only.'),
+ 'vi': dict(chef='Món đặc biệt của bếp trưởng.', pies='Ăn tôi 😋', pizza='Good pizza brings good people.', oysters='Tươi ngon, đậm đà, khó quên! Giá cho 1 con.', souvenir='Sản xuất tại Việt Nam, quà lưu niệm tiện mang theo. Chỉ bán cho người từ 18 tuổi.'),
+ 'ko': dict(chef='셰프의 시그니처 요리.', pies='먹어 봐요 😋', pizza='Good pizza brings good people.', oysters='신선하고 잊을 수 없는 맛! 1개 가격.', souvenir='베트남산 기념품, 휴대하기 좋아요. 18세 이상.'),
+ 'zh': dict(chef='主厨招牌菜。', pies='吃我 😋', pizza='Good pizza brings good people.', oysters='新鲜多汁，难以忘怀！单只价格。', souvenir='越南制造，伴手礼首选，方便携带。仅限18岁以上。'),
 }
 inj = ''.join(f'Object.assign(T.{L},{json.dumps(d, ensure_ascii=False)});Object.assign(T.{L}.notes||(T.{L}.notes={{}}),{json.dumps(NOTES[L], ensure_ascii=False)});\n' for L, d in NEW.items())
 rep('\nfunction pl(n,f){', '\n' + inj + 'function pl(n,f){')
@@ -168,7 +168,9 @@ rep('function renderCats(){', open('skin.js', encoding='utf-8').read() + '\nfunc
 # The existing currency selector remains available in the search toolbar.
 rate='<div class="rate"><select class="cur" id="cur" aria-label="Currency"></select><span id="rate"></span></div>'
 rep('  ' + rate + '\n', '')
-rep('<div class="srow">', '<div class="srow"><a class="restaurant-info" href="#about" id="aboutLnk"></a>' + rate)
+language_button=re.search(r'<button class="langbtn".*?</button>', s).group(0)
+rep(language_button, '')
+rep('<div class="srow">', '<div class="srow"><div class="nav-info"><a class="restaurant-info" href="#about" id="aboutLnk"></a>' + language_button + '</div>' + rate)
 rep('<a class="hlink" href="#about" id="aboutLnk"></a>', '')
 # Hidden section medals were still requesting images, despite display:none.
 rep('<div class="medals">${md.map(p=>`<img src="${PH[p]}" alt="">`).join("")}</div>', '')
