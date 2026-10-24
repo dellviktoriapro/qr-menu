@@ -603,3 +603,8 @@ body{background:radial-gradient(ellipse at right 20%,rgba(218,157,45,.25),transp
 .nav-info #langBtn #langName .ln{display:none!important}
 .nav-info #langBtn svg{width:15px;height:15px}
 .nav-info #langBtn .cv{width:10px;height:10px}
+
+/* Only nearby border art should compete with the first dish photographs. */
+#menu section.s .coast-scenery{background-image:none}
+#menu section.s .coast-scenery.scenery-ready{background-image:url(coast-right.webp)}
+#menu section.s .coast-scenery.scenery-ready.botanical{background-image:url(botanical-edge.webp)}

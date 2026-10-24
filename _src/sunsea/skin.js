@@ -31,7 +31,7 @@ function coastIcon(id){
  return `<svg class="coast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${COAST_ICONS[kind]}</svg>`;
 }
 // Strict near-viewport loading: total menu size does not determine initial downloads.
-let menuPhotoObserver;
+let menuPhotoObserver,sceneryObserver;
 function observeMenuPhotos(){
  document.querySelectorAll('#menu section.s').forEach((section,i)=>{
   const art=document.createElement('span');
@@ -40,11 +40,17 @@ function observeMenuPhotos(){
   art.style.backgroundPosition=`right -${(i%4)*180}px`;
   section.appendChild(art);
  });
+ if(sceneryObserver)sceneryObserver.disconnect();
+ const scenery=document.querySelectorAll('#menu .coast-scenery');
+ if('IntersectionObserver' in window){
+  sceneryObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('scenery-ready');sceneryObserver.unobserve(entry.target)}}),{rootMargin:'360px 0px'});
+  scenery.forEach(art=>sceneryObserver.observe(art));
+ }else scenery.forEach(art=>art.classList.add('scenery-ready'));
  for(const id of ['ss_pies','ss_pizza']){const section=document.getElementById(id),note=section?.querySelector('.note');if(note)section.querySelector('.sh').appendChild(note);}
 
  if(menuPhotoObserver)menuPhotoObserver.disconnect();
  const images=document.querySelectorAll('#menu img[data-menu-src]');
- const load=img=>{img.src=img.dataset.menuSrc;delete img.dataset.menuSrc;};
+ const load=img=>{const rect=img.getBoundingClientRect();if(rect.top<innerHeight&&rect.bottom>0)img.fetchPriority='high';img.loading='eager';img.src=img.dataset.menuSrc;delete img.dataset.menuSrc;};
  if(!('IntersectionObserver' in window)){images.forEach(load);return;}
  menuPhotoObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{
   if(entry.isIntersecting){load(entry.target);menuPhotoObserver.unobserve(entry.target);}

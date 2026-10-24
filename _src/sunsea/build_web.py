@@ -7,6 +7,11 @@ from PIL import Image
 from concurrent.futures import ThreadPoolExecutor
 import data
 
+SERVICE_CONFIG=json.load(open('service-mode.json',encoding='utf-8-sig'))
+SERVICE_MODE=os.environ.get('SUNSEA_SERVICE_MODE',SERVICE_CONFIG['mode'])
+assert SERVICE_MODE in ('menu_only','full'), SERVICE_MODE
+MENU_ONLY=SERVICE_MODE=='menu_only'
+
 OUT = sys.argv[1] if len(sys.argv) > 1 else '../../sun-sea'
 shutil.rmtree(OUT, ignore_errors=True); os.makedirs(OUT)
 
@@ -75,8 +80,22 @@ MOBILE = 'hero-mobile.webp?v=' + hashlib.sha256(open(os.path.join(OUT, 'hero-mob
 shutil.copyfile('ICON_LICENSES.md', os.path.join(OUT, 'ICON_LICENSES.md'))
 shutil.copyfile('amb/squid.svg', os.path.join(OUT, 'squid.svg'))
 shutil.copytree('fonts', os.path.join(OUT, 'fonts'))
+COAST={}
 for asset in ['coast-right','botanical-edge']:
-    Image.open('amb/' + asset + '.png').save(os.path.join(OUT, asset + '.webp'), 'WEBP', lossless=True, method=6)
+    source='amb/' + asset + '.png'
+    key=hashlib.sha256(open(source,'rb').read()+b'|coast640q80webp6').hexdigest()
+    cache_root=os.environ.get('SUNSEA_WEBP_CACHE')
+    cached=os.path.join(cache_root,key+'.webp') if cache_root else None
+    target=os.path.join(OUT,asset+'.webp')
+    if cached and os.path.isfile(cached):
+        shutil.copyfile(cached,target)
+    else:
+        art=Image.open(source).convert('RGBA')
+        art.thumbnail((640,1280),Image.Resampling.LANCZOS)
+        art.save(target,'WEBP',quality=80,method=6)
+        if cached: shutil.copyfile(target,cached)
+    name=asset+'-'+hashlib.sha256(open(target,'rb').read()).hexdigest()[:10]+'.webp'
+    os.replace(target,os.path.join(OUT,name));COAST[asset+'.webp']=name
 
 s = open('../chez/tpl.html', encoding='utf-8').read()
 def rep(a, b, cnt=1):
@@ -146,7 +165,10 @@ rep('function openState(){', 'function openState(){$("open").hidden=true;return;
 # ---- Sun&Sea-only visual layer: leave the shared Chez Oanh engine untouched.
 rep('  color-scheme:dark;', '  color-scheme:light;')
 font_css = open('fonts/fonts.css', encoding='utf-8').read()
-rep('</style>', font_css + '\n' + open('skin.css', encoding='utf-8').read() + '\n</style>')
+skin_css=open('skin.css',encoding='utf-8').read()
+for original,optimized in COAST.items(): skin_css=skin_css.replace(original,optimized)
+skin_css=skin_css.replace('url(hero-mobile.webp)','url('+MOBILE+')')
+rep('</style>', font_css + '\n' + skin_css + '\n</style>')
 
 rep('<h3 id="sheetH"></h3>', '<h3 id="sheetH"></h3><span class="cart-shadow" aria-hidden="true"><svg viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" d="M2 17h20"/><path stroke-linejoin="round" d="M12 7s1.5-1.034 1.5-2.309c0-2.255-3-2.255-3 0C10.5 5.966 12 7 12 7Z"/><path stroke-linecap="round" d="m3 17l.621 2.485A2 2 0 0 0 5.561 21h12.877a2 2 0 0 0 1.94-1.515L21 17m-.5-2.5C20.002 10.277 16.386 7 12 7s-8.002 3.277-8.5 7.5"/></g></svg></span>')
 rep('const GC=["#f2b65c","#7fd6d0","#e9846f","#b9a1e6","#9fd49a","#f0c3a0"];', 'const GC=["#dfded4","#cbcbbf","#b8baad","#e9e7df","#d4d3c8","#c1c2b6"];')
@@ -203,8 +225,23 @@ s = re.sub(r'<link rel="preconnect" href="https://fonts\.(?:googleapis|gstatic)\
 rep('$("heroBg").style.backgroundImage=`url(${AMB.lion})`;$("gateBg").style.backgroundImage=`url(${AMB.lion})`;',
     'const heroMedia=matchMedia("(max-width:699px)");function updateHero(){const heroURL=heroMedia.matches?' + json.dumps(MOBILE) + ':AMB.lion;$("heroBg").style.backgroundImage=`url(${heroURL})`;$("gateBg").style.backgroundImage=`url(${heroURL})`;}updateHero();heroMedia.addEventListener("change",updateHero);')
 
+# Standalone sales mode is a reversible layer; the shared engine stays intact.
+if MENU_ONLY:
+    for key in ['cart','wish','ck','guest','tbl']:
+        s=s.replace('ss_'+key,'ss_menu_'+key)
+    rep('loadStop();\n','STOP=new Set();\n')
+    rep('</style>',open('menu-only.css',encoding='utf-8-sig').read()+'\n</style>')
+    config=dict(SERVICE_CONFIG)
+    qr=config.get('paymentQr')
+    if qr and not qr.startswith(('https://','data:image/')):
+        assert re.fullmatch(r'[\w.-]+',qr), 'Use a QR image filename in amb/ or an HTTPS URL'
+        shutil.copyfile('amb/'+qr,os.path.join(OUT,qr))
+    mode_js='const SERVICE_CONFIG='+json.dumps(config,ensure_ascii=False).replace('<','\\u003c')+';\n'+open('menu-only.js',encoding='utf-8-sig').read()
+    rep('(function init(){',mode_js+'\n(function init(){')
+
 s = s.replace('__DATA__', json.dumps(D, ensure_ascii=False)).replace('__PH__', json.dumps(dict(photos, amb_lion=BAND))).replace('__AMB__', json.dumps({'lion': BAND})).replace('__GEN__', json.dumps(order)).replace('__CATPH__', '{}')
 
 s = '<!doctype html>\n<html lang="ru">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">\n</head>\n<body>\n' + s + '</body></html>'
+if MENU_ONLY: s=s.replace('<body>','<body class="menu-only">',1)
 open(OUT + '/index.html', 'w', encoding='utf-8').write(s)
 print('sun-sea', len(s.encode()) // 1024, 'KB HTML;', len(photos), 'photos;', sum(os.path.getsize(os.path.join(OUT, x)) for x in photos.values()) // 1024, 'KB thumbnails')
