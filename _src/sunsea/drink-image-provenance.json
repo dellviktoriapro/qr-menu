@@ -1,0 +1,710 @@
+[
+  {
+    "key": "cf_black",
+    "section": "ss_coffee",
+    "index": 0,
+    "name": "Black coffee",
+    "ru": "Чёрный кофе",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553432_y.jpg",
+    "pixels": [
+      887,
+      887
+    ]
+  },
+  {
+    "key": "cf_milk",
+    "section": "ss_coffee",
+    "index": 1,
+    "name": "Vietnamese milk coffee (iced / hot)",
+    "ru": "Вьетнамский кофе с молоком (со льдом / горячий)",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553432_y.jpg",
+    "pixels": [
+      887,
+      887
+    ]
+  },
+  {
+    "key": "cf_bacxiu",
+    "section": "ss_coffee",
+    "index": 2,
+    "name": "Coffee with milk (bạc xỉu)",
+    "ru": "Кофе с молоком (баксыу)",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553432_y.jpg",
+    "pixels": [
+      887,
+      887
+    ]
+  },
+  {
+    "key": "cf_salted",
+    "section": "ss_coffee",
+    "index": 3,
+    "name": "Salted coffee",
+    "ru": "Солёный кофе",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553432_y.jpg",
+    "pixels": [
+      887,
+      887
+    ]
+  },
+  {
+    "key": "cf_caramel",
+    "section": "ss_coffee",
+    "index": 4,
+    "name": "Salted caramel coffee",
+    "ru": "Кофе с солёной карамелью",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553432_y.jpg",
+    "pixels": [
+      887,
+      887
+    ]
+  },
+  {
+    "key": "cf_americano",
+    "section": "ss_coffee",
+    "index": 5,
+    "name": "Americano (hot / cold)",
+    "ru": "Американо (горячий / холодный)",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553432_y.jpg",
+    "pixels": [
+      887,
+      887
+    ]
+  },
+  {
+    "key": "cf_coconut",
+    "section": "ss_coffee",
+    "index": 6,
+    "name": "Coconut milk coffee",
+    "ru": "Кофе с кокосовым молоком",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553432_y.jpg",
+    "pixels": [
+      887,
+      887
+    ]
+  },
+  {
+    "key": "cf_matcha",
+    "section": "ss_coffee",
+    "index": 7,
+    "name": "Matcha green tea (blended)",
+    "ru": "Матча зелёный чай (фраппе)",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553432_y.jpg",
+    "pixels": [
+      887,
+      887
+    ]
+  },
+  {
+    "key": "cf_cacao",
+    "section": "ss_coffee",
+    "index": 8,
+    "name": "Cacao (hot / iced)",
+    "ru": "Какао (горячее / со льдом)",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553432_y.jpg",
+    "pixels": [
+      887,
+      887
+    ]
+  },
+  {
+    "key": "cf_cacaolatte",
+    "section": "ss_coffee",
+    "index": 9,
+    "name": "Cacao latte",
+    "ru": "Какао латте",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553432_y.jpg",
+    "pixels": [
+      887,
+      887
+    ]
+  },
+  {
+    "key": "cf_matchacoco",
+    "section": "ss_coffee",
+    "index": 10,
+    "name": "Matcha coconut",
+    "ru": "Матча с кокосовым молоком",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553432_y.jpg",
+    "pixels": [
+      887,
+      887
+    ]
+  },
+  {
+    "key": "ju_orange",
+    "section": "ss_juice",
+    "index": 0,
+    "name": "Orange juice",
+    "ru": "Апельсиновый сок",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553433_y.jpg",
+    "pixels": [
+      887,
+      887
+    ]
+  },
+  {
+    "key": "ju_passion",
+    "section": "ss_juice",
+    "index": 1,
+    "name": "Passion fruit juice",
+    "ru": "Сок маракуйи",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553433_y.jpg",
+    "pixels": [
+      768,
+      1024
+    ]
+  },
+  {
+    "key": "ju_pineapple",
+    "section": "ss_juice",
+    "index": 2,
+    "name": "Pineapple juice",
+    "ru": "Ананасовый сок",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553433_y.jpg",
+    "pixels": [
+      768,
+      1024
+    ]
+  },
+  {
+    "key": "ju_watermelon",
+    "section": "ss_juice",
+    "index": 3,
+    "name": "Watermelon juice",
+    "ru": "Арбузный сок",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553433_y.jpg",
+    "pixels": [
+      767,
+      1024
+    ]
+  },
+  {
+    "key": "ju_mix",
+    "section": "ss_juice",
+    "index": 4,
+    "name": "Mix juice: orange, pineapple, carrot",
+    "ru": "Смесь соков: апельсин, ананас, морковь",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553433_y.jpg",
+    "pixels": [
+      768,
+      1024
+    ]
+  },
+  {
+    "key": "ju_carrot",
+    "section": "ss_juice",
+    "index": 5,
+    "name": "Carrot juice",
+    "ru": "Морковный сок",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553433_y.jpg",
+    "pixels": [
+      887,
+      887
+    ]
+  },
+  {
+    "key": "te_mango",
+    "section": "ss_tea",
+    "index": 0,
+    "name": "Mango tea",
+    "ru": "Чай с манго",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553433_y.jpg",
+    "pixels": [
+      887,
+      887
+    ]
+  },
+  {
+    "key": "te_peach",
+    "section": "ss_tea",
+    "index": 1,
+    "name": "Peach tea",
+    "ru": "Чай с персиком",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553433_y.jpg",
+    "pixels": [
+      768,
+      1024
+    ]
+  },
+  {
+    "key": "te_lychee",
+    "section": "ss_tea",
+    "index": 2,
+    "name": "Lychee tea",
+    "ru": "Чай с личи",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553433_y.jpg",
+    "pixels": [
+      768,
+      1024
+    ]
+  },
+  {
+    "key": "te_kumquat",
+    "section": "ss_tea",
+    "index": 3,
+    "name": "Kumquat tea",
+    "ru": "Чай с кумкватом",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553433_y.jpg",
+    "pixels": [
+      768,
+      1024
+    ]
+  },
+  {
+    "key": "te_mangopassion",
+    "section": "ss_tea",
+    "index": 4,
+    "name": "Mango & passion fruit tea",
+    "ru": "Чай с манго и маракуйей",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553433_y.jpg",
+    "pixels": [
+      768,
+      1024
+    ]
+  },
+  {
+    "key": "sm_mango",
+    "section": "ss_smoothie",
+    "index": 0,
+    "name": "Mango",
+    "ru": "Манго",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553430_y.jpg",
+    "pixels": [
+      768,
+      1024
+    ]
+  },
+  {
+    "key": "sm_banana",
+    "section": "ss_smoothie",
+    "index": 1,
+    "name": "Banana with cacao and peanut butter",
+    "ru": "Банан с какао и арахисовым маслом",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553430_y.jpg",
+    "pixels": [
+      768,
+      1024
+    ]
+  },
+  {
+    "key": "sm_strawberry",
+    "section": "ss_smoothie",
+    "index": 2,
+    "name": "Strawberry",
+    "ru": "Клубника",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553430_y.jpg",
+    "pixels": [
+      887,
+      887
+    ]
+  },
+  {
+    "key": "sm_berry",
+    "section": "ss_smoothie",
+    "index": 3,
+    "name": "Strawberry, mulberry, blueberry",
+    "ru": "Клубника, шелковица, черника",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553430_y.jpg",
+    "pixels": [
+      887,
+      887
+    ]
+  },
+  {
+    "key": "sm_mangopassion",
+    "section": "ss_smoothie",
+    "index": 4,
+    "name": "Mango & passion fruit",
+    "ru": "Манго и маракуйя",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553430_y.jpg",
+    "pixels": [
+      768,
+      1024
+    ]
+  },
+  {
+    "key": "sm_avocado",
+    "section": "ss_smoothie",
+    "index": 5,
+    "name": "Avocado",
+    "ru": "Авокадо",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553430_y.jpg",
+    "pixels": [
+      768,
+      1024
+    ]
+  },
+  {
+    "key": "sm_pineapple",
+    "section": "ss_smoothie",
+    "index": 6,
+    "name": "Pineapple & mint",
+    "ru": "Ананас с мятой",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553430_y.jpg",
+    "pixels": [
+      768,
+      1024
+    ]
+  },
+  {
+    "key": "yg_blueberry",
+    "section": "ss_yogurt",
+    "index": 0,
+    "name": "Blueberry",
+    "ru": "Черника",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553430_y.jpg",
+    "pixels": [
+      768,
+      1024
+    ]
+  },
+  {
+    "key": "yg_mulberry",
+    "section": "ss_yogurt",
+    "index": 1,
+    "name": "Mulberry",
+    "ru": "Шелковица",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553430_y.jpg",
+    "pixels": [
+      768,
+      1024
+    ]
+  },
+  {
+    "key": "yg_mango",
+    "section": "ss_yogurt",
+    "index": 2,
+    "name": "Mango",
+    "ru": "Манго",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553430_y.jpg",
+    "pixels": [
+      768,
+      1024
+    ]
+  },
+  {
+    "key": "yg_passion",
+    "section": "ss_yogurt",
+    "index": 3,
+    "name": "Passion fruit",
+    "ru": "Маракуйя",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553430_y.jpg",
+    "pixels": [
+      768,
+      1024
+    ]
+  },
+  {
+    "key": "yg_mangopassion",
+    "section": "ss_yogurt",
+    "index": 4,
+    "name": "Mango & passion fruit",
+    "ru": "Манго и маракуйя",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553430_y.jpg",
+    "pixels": [
+      887,
+      887
+    ]
+  },
+  {
+    "key": "yg_berry",
+    "section": "ss_yogurt",
+    "index": 5,
+    "name": "Mixed berry",
+    "ru": "Ягодный микс",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553430_y.jpg",
+    "pixels": [
+      768,
+      1024
+    ]
+  },
+  {
+    "key": "beer_1",
+    "section": "ss_beer",
+    "index": 0,
+    "name": "Saigon green",
+    "ru": "Сайгон зелёное",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553431_y.jpg",
+    "pixels": [
+      768,
+      1024
+    ]
+  },
+  {
+    "key": "beer_2",
+    "section": "ss_beer",
+    "index": 1,
+    "name": "Saigon Special",
+    "ru": "Сайгон Спешл",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553431_y.jpg",
+    "pixels": [
+      768,
+      1024
+    ]
+  },
+  {
+    "key": "beer_3",
+    "section": "ss_beer",
+    "index": 2,
+    "name": "Tiger",
+    "ru": "Тайгер",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553431_y.jpg",
+    "pixels": [
+      768,
+      1024
+    ]
+  },
+  {
+    "key": "beer_4",
+    "section": "ss_beer",
+    "index": 3,
+    "name": "Tiger Gold",
+    "ru": "Тайгер Голд",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553431_y.jpg",
+    "pixels": [
+      768,
+      1024
+    ]
+  },
+  {
+    "key": "beer_5",
+    "section": "ss_beer",
+    "index": 4,
+    "name": "Heineken",
+    "ru": "Хайнекен",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553431_y.jpg",
+    "pixels": [
+      768,
+      1024
+    ]
+  },
+  {
+    "key": "beer_6",
+    "section": "ss_beer",
+    "index": 5,
+    "name": "Corona",
+    "ru": "Корона",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553431_y.jpg",
+    "pixels": [
+      768,
+      1024
+    ]
+  },
+  {
+    "key": "soft_1",
+    "section": "ss_soft",
+    "index": 0,
+    "name": "Coca-Cola",
+    "ru": "Кока-кола",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553431_y.jpg",
+    "pixels": [
+      768,
+      1024
+    ]
+  },
+  {
+    "key": "soft_2",
+    "section": "ss_soft",
+    "index": 1,
+    "name": "Coca-Cola light",
+    "ru": "Кока-кола лайт",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553431_y.jpg",
+    "pixels": [
+      768,
+      1024
+    ]
+  },
+  {
+    "key": "soft_3",
+    "section": "ss_soft",
+    "index": 2,
+    "name": "Soda",
+    "ru": "Сода",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553431_y.jpg",
+    "pixels": [
+      768,
+      1024
+    ]
+  },
+  {
+    "key": "soft_4",
+    "section": "ss_soft",
+    "index": 3,
+    "name": "Sprite",
+    "ru": "Спрайт",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553431_y.jpg",
+    "pixels": [
+      768,
+      1024
+    ]
+  },
+  {
+    "key": "soft_5",
+    "section": "ss_soft",
+    "index": 4,
+    "name": "Lavie still water",
+    "ru": "Лави (питьевая вода)",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553431_y.jpg",
+    "pixels": [
+      768,
+      1024
+    ]
+  },
+  {
+    "key": "soft_6",
+    "section": "ss_soft",
+    "index": 5,
+    "name": "Sparkling water",
+    "ru": "Газированная вода",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553431_y.jpg",
+    "pixels": [
+      887,
+      887
+    ]
+  },
+  {
+    "key": "soft_7",
+    "section": "ss_soft",
+    "index": 6,
+    "name": "Tonic",
+    "ru": "Тоник",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553431_y.jpg",
+    "pixels": [
+      768,
+      1024
+    ]
+  },
+  {
+    "key": "souvenir_1",
+    "section": "ss_souvenir",
+    "index": 0,
+    "name": "Caravelle citrus rum",
+    "ru": "Цитрусовый ром Caravelle",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553437_y.jpg",
+    "pixels": [
+      768,
+      1024
+    ]
+  },
+  {
+    "key": "souvenir_2",
+    "section": "ss_souvenir",
+    "index": 1,
+    "name": "Caravelle mango rum",
+    "ru": "Манговый ром Caravelle",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553437_y.jpg",
+    "pixels": [
+      768,
+      1024
+    ]
+  },
+  {
+    "key": "souvenir_3",
+    "section": "ss_souvenir",
+    "index": 2,
+    "name": "Caravelle red rhum",
+    "ru": "Красный ром Caravelle",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553437_y.jpg",
+    "pixels": [
+      768,
+      1024
+    ]
+  },
+  {
+    "key": "souvenir_4",
+    "section": "ss_souvenir",
+    "index": 3,
+    "name": "Caravelle pineapple rum",
+    "ru": "Ананасовый ром Caravelle",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553437_y.jpg",
+    "pixels": [
+      768,
+      1024
+    ]
+  },
+  {
+    "key": "souvenir_5",
+    "section": "ss_souvenir",
+    "index": 4,
+    "name": "Caravelle passion fruit rum",
+    "ru": "Ром маракуйя Caravelle",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553437_y.jpg",
+    "pixels": [
+      768,
+      1024
+    ]
+  },
+  {
+    "key": "souvenir_6",
+    "section": "ss_souvenir",
+    "index": 5,
+    "name": "Napoleon brandy XO",
+    "ru": "Бренди XO «Наполеон»",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553437_y.jpg",
+    "pixels": [
+      768,
+      1024
+    ]
+  },
+  {
+    "key": "souvenir_7",
+    "section": "ss_souvenir",
+    "index": 6,
+    "name": "Premium rice sake, original",
+    "ru": "Рисовый напиток «Оригинал»",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553434_y.jpg",
+    "pixels": [
+      768,
+      1024
+    ]
+  },
+  {
+    "key": "souvenir_8",
+    "section": "ss_souvenir",
+    "index": 7,
+    "name": "Premium rice sake, melon",
+    "ru": "Рисовый напиток «Дыня»",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553434_y.jpg",
+    "pixels": [
+      768,
+      1024
+    ]
+  },
+  {
+    "key": "souvenir_9",
+    "section": "ss_souvenir",
+    "index": 8,
+    "name": "Premium rice sake, peach",
+    "ru": "Рисовый напиток «Персик»",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553434_y.jpg",
+    "pixels": [
+      768,
+      1024
+    ]
+  },
+  {
+    "key": "souvenir_10",
+    "section": "ss_souvenir",
+    "index": 9,
+    "name": "Premium rice sake, guava",
+    "ru": "Рисовый напиток «Гуава»",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553434_y.jpg",
+    "pixels": [
+      768,
+      1024
+    ]
+  },
+  {
+    "key": "souvenir_11",
+    "section": "ss_souvenir",
+    "index": 10,
+    "name": "Tequila 1902's collection",
+    "ru": "Текила 1902",
+    "ref": "D:/Users/Николай/Downloads/photo_5388814128660553434_y.jpg",
+    "pixels": [
+      1536,
+      1024
+    ]
+  }
+]

@@ -259,3 +259,12 @@ _src/                   исходники и сборка — править Т
 - Fresh Chromium verification passed70 width/language/group grid combinations, all120 photos/179records, order/cart/stoplist/staff checks; no page errors. Supplied art checked visually at390/1440.
 - Category shadow drawings now follow the heading text in a flex row (64px desktop/44px mobile), instead of being pinned to the far right. Verified70 responsive/language/group combinations after change.
 - Restaurant information link is its own first navigation row, above food/drinks; currency remains to the right of food/drinks, search below. Verified exact row positions at390/1440 and70 grid combinations.
+
+### Sun&Sea — brighter coastal design and all drink imagery (24 Oct 2026)
+- User requested stronger warmth/art based on original golden printed menu. Background now #f4e9d1, neutral warm section headers #ecdfc3, right line art .31/.24 and title art .25. No texture/grunge or left-side decoration.
+- Mobile sticky navigation has a compact scenic ribbon from existing hero-mobile, with a cream fade to protect text contrast. Restaurant information block has right-side ship/coast artwork on a warm cream background.
+- All59 drinks now have transparent illustrations referenced to original menu pages3430/31/32/33/34/37. Built-in imagegen in two-item sheets per user's economical preference; mapping in drink-photos.json, provenance in drink-image-provenance.json. Source records and order IDs/prices unchanged; builder applies image keys to its copied DATA only.
+- Brand/container review corrected sparkling water (green glass bottle, not plastic still water), mango-passion yogurt color and removed extra glasses on peach/guava rice drinks. Asset files in ph; old generated hashes removed on rebuild.
+- Permanent URL only https://dellviktoriapro.github.io/qr-menu/sun-sea/ ; do not append ?v links. Previous query suffixes were cache-busting aliases, not separate sites. Production constant URL confirmed200 and opened in Chrome; publication was successful.
+- User's unsubmitted three-item cart was cleared through Chrome UI with its confirmation. Prior sent-order status135000 remains intentionally untouched.
+- Final verification:179 photos/179 records;358 alpha WebP files at480/960max;290KB HTML;7737KB thumbnails loaded near viewport only. Chromium functional/order tests pass,70 responsive/language/group grid combinations pass; mobile navigation and about artwork inspected visually.

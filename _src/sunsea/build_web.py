@@ -49,9 +49,16 @@ D = [dict(id=s['id'], n=s['n'], note=s['note'], g=s['g'], items=[[i[0], i[1], i[
       ([[l, p] for l, p in i[5]] if isinstance(i[5], list) else i[5]), i[6] if has(i[6]) else None] + ([i[7]] if len(i) > 7 and i[7] else [])
       for i in s['items']]) for s in data.S]
 CAT = {s['id']: next((i[6] for i in s['items'] if has(i[6])), None) for s in data.S}
+# Drink photograph mapping preserves the source records and order keys.
+drink_photos=json.load(open('drink-photos.json',encoding='utf-8'))
+for section in D:
+    for index,item in enumerate(section['items']):
+        key=drink_photos.get(f"{section['id']}|{index}")
+        if key and has(key): item[6]=key
+CAT={section['id']:next((item[6] for item in section['items'] if item[6]),None) for section in D}
 # Short Russian navigation/title, without altering the original dish records.
 next(s for s in D if s['id'] == 'ss_chef')['n'] = dict(next(s for s in D if s['id'] == 'ss_chef')['n'], ru='От шефа')
-order = [k for k in CAT.values() if k] + [i[6] for s in data.S for i in s['items'] if has(i[6])]
+order = [k for k in CAT.values() if k] + [i[6] for s in D for i in s['items'] if has(i[6])]
 order = list(dict.fromkeys(order))
 # Independent cacheable images: thumbnails load lazily, full-size only on tap.
 os.makedirs(os.path.join(OUT, 'images'))

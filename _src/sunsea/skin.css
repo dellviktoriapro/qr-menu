@@ -558,3 +558,25 @@ section.s h2{overflow-wrap:anywhere;hyphens:auto}
  .srow>.rate{width:64px}
  .srow>.rate .cur{width:64px;max-width:64px;font-size:11px;padding:7px 5px}
 }
+/* Warmer palette drawn from the restaurant's golden printed menu. */
+:root{--bg:#f4e9d1;--bg-2:#fbf5e8;--card:#fffaf0;--line:#d4c8ad;--muted:#5a6353;--dim:#68705f}
+body{background:radial-gradient(ellipse at 100% 15%,rgba(216,174,91,.16),transparent 48%),var(--bg)}
+.stick{background:rgba(244,233,209,.97)}
+#menu section.s .sh{background:#ecdfc3;border-bottom-color:#cfc2a5;box-shadow:inset 0 1px 0 rgba(255,251,237,.8),0 4px 10px rgba(73,63,35,.035)}
+#menu section.s .coast-scenery{opacity:.31}
+#menu .section-heading-line .section-shadow{opacity:.25}
+@media(max-width:699px){#menu section.s .coast-scenery{opacity:.24}}
+/* A scenic coastal ribbon gives the pinned mobile navigation its own identity. */
+@media(max-width:699px){
+ .stick{position:sticky;isolation:isolate;background:#f4e9d1;box-shadow:0 4px 18px rgba(72,61,31,.09)}
+ .stick::before{content:"";position:absolute;inset:0 0 auto;height:84px;background:linear-gradient(90deg,#f4e9d1 8%,rgba(244,233,209,.91) 42%,rgba(244,233,209,.18) 100%),url(hero-mobile.webp) right 45%/cover no-repeat;pointer-events:none;z-index:-1}
+ .stick .wrap{position:relative}
+ .srow>.restaurant-info{color:#243b23;font-weight:600}
+ .srow>.rate .cur{background:rgba(255,250,238,.93)}
+}
+/* Restaurant story echoes the same right-side coastal artwork. */
+.about{position:relative;isolation:isolate;overflow:hidden;background:#f8efd9}
+.about::before{content:"";position:absolute;inset:0 0 0 auto;width:min(390px,65%);background:url(coast-right.webp) right -340px/390px auto no-repeat;opacity:.28;pointer-events:none;z-index:-1}
+.about .fact{background:rgba(251,245,232,.9)}
+.about .feat{position:relative}
+@media(max-width:699px){.about::before{width:75%;background-size:320px auto;background-position:right -270px;opacity:.21}}
