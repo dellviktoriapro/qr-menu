@@ -31,6 +31,6 @@ To attach the restaurant's real bank QR without the staff app, put its image int
 
 The client requested a shared cart for all phones scanning one table QR, with optional separate named checks. This is implemented as a menu-only overlay in shared-cart.js, backed by a Sites D1 service. It activates only when `room` is present in the table QR; ordinary links retain local cart behavior. No staff app sending is restored.
 
-Public server access is currently blocked pending explicit user approval requested on25October2026. The server is deployed owner-private; do not present table links as live until public access is authorized and verified. See AGENTS.md for exact Site ID, source checkout and remaining release steps.
+Public server access was explicitly approved by the user on25October2026. The deployed server is now public, with access to each cart restricted by its table QR capability. Direct browser CORS and five-client synchronization checks against the hosted service pass. See AGENTS.md for exact Site ID, source checkout and remaining release steps.
 
 Switching mode to full omits BOTH standalone client layers and restores the earlier full workflow, rather than migrating shared-server carts into staff orders. Existing cart data must not be sent to staff automatically during restoration.
