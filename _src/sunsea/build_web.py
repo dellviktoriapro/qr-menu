@@ -156,6 +156,15 @@ NOTES = {
  'ko': dict(chef='셰프의 시그니처 요리.', pies='먹어 봐요 😋', pizza='Good pizza brings good people.', oysters='신선하고 잊을 수 없는 맛! 1개 가격.', souvenir='베트남산 기념품, 휴대하기 좋아요. 18세 이상.'),
  'zh': dict(chef='主厨招牌菜。', pies='吃我 😋', pizza='Good pizza brings good people.', oysters='新鲜多汁，难以忘怀！单只价格。', souvenir='越南制造，伴手礼首选，方便携带。仅限18岁以上。'),
 }
+PLATING_NOTE = {
+    'ru': 'Подача в кафе может отличаться.',
+    'en': 'Plating at the café may vary.',
+    'vi': 'Cách trình bày tại quán có thể khác.',
+    'ko': '매장에서의 플레이팅은 다를 수 있습니다.',
+    'zh': '店内实际摆盘可能有所不同。',
+}
+for language, note in PLATING_NOTE.items():
+    NEW[language]['ph2'] = note
 inj = ''.join(f'Object.assign(T.{L},{json.dumps(d, ensure_ascii=False)});Object.assign(T.{L}.notes||(T.{L}.notes={{}}),{json.dumps(NOTES[L], ensure_ascii=False)});\n' for L, d in NEW.items())
 rep('\nfunction pl(n,f){', '\n' + inj + 'function pl(n,f){')
 rep('$("foot").textContent=t.foot;', '$("foot").textContent=t.foot;if($("f2s"))$("f2s").textContent=t.f2s;$("fCur").textContent=t.cur;$("ftC").textContent=t.cur;')
