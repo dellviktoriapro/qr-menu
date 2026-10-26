@@ -313,3 +313,5 @@ _src/                   исходники и сборка — править Т
 - Verified real browser local/shared adapters, split-only-one portion, reload, HTML escaping, all5languages, Vietnamese waiter notes, food/drink flag separation and exclusivity, unknown-price entry/recalculation/sync, visible unorderable preorder dishes,4widths.70 menu grid cases and menu-only regression pass. Backend state tests cover isolation, idempotency, invalid metadata/prices, preorder rejection, deletion/clear. Test scripts chat work/check_item_preferences.cjs and backend check-item-notes.cjs. Screenshots chat outputs/sunsea-item-preferences-390.png, sunsea-item-preferences-cart-390.png, sunsea-enter-item-price-390.png.
 
 - 26 Oct: waiter-summary dish names prioritize Vietnamese:22px desktop /20px mobile, bold dark; guest-language counterpart16px /14px muted. Vietnamese-only view keeps the large primary size. Scoped to #waiterView; both local and shared check markup supported. Verified5languages x4widths.
+
+- 26 Oct: bottom cart capsule button uses t.order (RU «Мой заказ») in local and shared table carts. Inside the cart, Show the waiter remains t.showW. Verified all5languages.
