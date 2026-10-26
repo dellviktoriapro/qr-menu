@@ -1,6 +1,10 @@
 /* Table QR capability is sent only to the cart API. Full ordering mode omits this layer. */
 {
- const room=new URLSearchParams(location.search).get('room');
+ const qrParams=new URLSearchParams(location.search),qrTable=qrParams.get('t');
+ let room=qrParams.get('room');
+ // Retain QR access across reloads after analytics removes the secret from the URL.
+ try{if(/^\d{1,2}$/.test(qrTable||'')){const storageKey='ss_table_room_'+qrTable;if(room&&/^[a-f0-9]{64}$/.test(room))sessionStorage.setItem(storageKey,room);else if(!room)room=sessionStorage.getItem(storageKey)}}catch{}
+
  if(room&&/^[a-f0-9]{64}$/.test(room)&&SERVICE_CONFIG.cartApi){
  document.body.classList.add('shared-cart');
  const copy={

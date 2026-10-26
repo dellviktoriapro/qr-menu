@@ -245,12 +245,12 @@ if MENU_ONLY:
     if qr and not qr.startswith(('https://','data:image/')):
         assert re.fullmatch(r'[\w.-]+',qr), 'Use a QR image filename in amb/ or an HTTPS URL'
         shutil.copyfile('amb/'+qr,os.path.join(OUT,qr))
-    mode_js='const SERVICE_CONFIG='+json.dumps(config,ensure_ascii=False).replace('<','\\u003c')+';\n'+open('menu-only.js',encoding='utf-8-sig').read()+'\n'+open('item-preferences.js',encoding='utf-8-sig').read()+'\n'+open('item-availability.js',encoding='utf-8-sig').read()+'\n'+open('shared-cart.js',encoding='utf-8-sig').read()
+    mode_js='const SERVICE_CONFIG='+json.dumps(config,ensure_ascii=False).replace('<','\\u003c')+';\n'+open('menu-only.js',encoding='utf-8-sig').read()+'\n'+open('item-preferences.js',encoding='utf-8-sig').read()+'\n'+open('item-availability.js',encoding='utf-8-sig').read()+'\n'+open('shared-cart.js',encoding='utf-8-sig').read()+'\n'+open('analytics.js',encoding='utf-8-sig').read()
     rep('(function init(){',mode_js+'\n(function init(){')
 
 s = s.replace('__DATA__', json.dumps(D, ensure_ascii=False)).replace('__PH__', json.dumps(dict(photos, amb_lion=BAND))).replace('__AMB__', json.dumps({'lion': BAND})).replace('__GEN__', json.dumps(order)).replace('__CATPH__', '{}')
 
-s = '<!doctype html>\n<html lang="ru">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">\n</head>\n<body>\n' + s + '</body></html>'
+s = '<!doctype html>\n<html lang="ru">\n<head>\n<meta charset="utf-8">\n<meta name="referrer" content="no-referrer">\n<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">\n</head>\n<body>\n' + s + '</body></html>'
 if MENU_ONLY: s=s.replace('<body>','<body class="menu-only">',1)
 open(OUT + '/index.html', 'w', encoding='utf-8').write(s)
 print('sun-sea', len(s.encode()) // 1024, 'KB HTML;', len(photos), 'photos;', sum(os.path.getsize(os.path.join(OUT, x)) for x in photos.values()) // 1024, 'KB thumbnails')

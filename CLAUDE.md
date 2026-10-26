@@ -229,3 +229,5 @@ _src/                   исходники и сборка — править Т
 - 26 Oct: waiter-summary dish names prioritize Vietnamese:22px desktop /20px mobile, bold dark; guest-language counterpart16px /14px muted. Vietnamese-only view keeps the large primary size. Scoped to #waiterView; both local and shared check markup supported. Verified5languages x4widths.
 
 - 26 Oct: bottom cart capsule button uses t.order (RU «Мой заказ») in local and shared table carts. Inside the cart, Show the waiter remains t.showW. Verified all5languages.
+
+Sun&Sea analytics26Oct2026: owner approved Terms; free Metrica counter113805286 (UTC+7), goals674689017 add_to_cart and674689314 waiter_view_opened. menu_only async analytics layer only. Pageviews/actions with amount_vnd, NOT confirmed sales/revenue; different phone opens are not deduplicated orders. No Webvisor/clickmap/link tracking or comments/check names in events. Strip query secrets/hash before SDK, retain table number; tab sessionStorage preserves QR room across sanitized reloads; ordinary root private cart unchanged. Original QR URLs remain valid. See AGENTS.md analytics section. Full restore excludes layer.

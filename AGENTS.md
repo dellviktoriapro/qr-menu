@@ -315,3 +315,9 @@ _src/                   исходники и сборка — править Т
 - 26 Oct: waiter-summary dish names prioritize Vietnamese:22px desktop /20px mobile, bold dark; guest-language counterpart16px /14px muted. Vietnamese-only view keeps the large primary size. Scoped to #waiterView; both local and shared check markup supported. Verified5languages x4widths.
 
 - 26 Oct: bottom cart capsule button uses t.order (RU «Мой заказ») in local and shared table carts. Inside the cart, Show the waiter remains t.showW. Verified all5languages.
+
+### Sun&Sea Metrica — 26 October 2026
+- Owner approved Terms at action time. Created free Yandex Metrica counter113805286 in owner account; timezone Asia/Bangkok (UTC+7). Webvisor remains off. Goals674689017 add_to_cart and674689314 waiter_view_opened created through UI.
+- analytics.js is injected only in menu_only mode after shared-cart. Async official tag; no recording/clickmap/link tracking. Pageviews, user additions and opening waiter summary tracked. Amounts use explicit amount_vnd/item_count/unpriced_items parameters, NOT ecommerce purchases/revenue. Opens across different phones/reopens are actions, not unique confirmed orders or sales; do not sum them as revenue. Server deduplication of confirmed orders is not implemented.
+- QR room capability captured into tab-scoped sessionStorage keyed by table before analytics removes query secrets/hash. Sanitized URL retains only table number. Reload restores cart access in same tab, ordinary root link stays private; original printed QR unchanged. Referrer policy no-referrer and origin-only analytics referrer. Never pass comments/check names/capabilities to analytics.
+- VM tests cover sanitized URLs/referrer, async initialization, add/show triggers and duplicate open guard, VND parameters, session reload/table isolation and compiled built scripts. Browser local add/cart/waiter checked with no console errors. Full-order restore mode excludes analytics layer.

@@ -2,6 +2,7 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8">
+<meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 </head>
 <body class="menu-only">
@@ -2111,7 +2112,11 @@ const ITEM_PREFS={};
 
 /* Table QR capability is sent only to the cart API. Full ordering mode omits this layer. */
 {
- const room=new URLSearchParams(location.search).get('room');
+ const qrParams=new URLSearchParams(location.search),qrTable=qrParams.get('t');
+ let room=qrParams.get('room');
+ // Retain QR access across reloads after analytics removes the secret from the URL.
+ try{if(/^\d{1,2}$/.test(qrTable||'')){const storageKey='ss_table_room_'+qrTable;if(room&&/^[a-f0-9]{64}$/.test(room))sessionStorage.setItem(storageKey,room);else if(!room)room=sessionStorage.getItem(storageKey)}}catch{}
+
  if(room&&/^[a-f0-9]{64}$/.test(room)&&SERVICE_CONFIG.cartApi){
  document.body.classList.add('shared-cart');
  const copy={
@@ -2157,6 +2162,26 @@ const ITEM_PREFS={};
  CK.mode='split';CK.names=['common'];CK.act='common';CK.carts={common:{}};cart={};wish={};
  paintStatus();poll();setInterval(()=>{if(!document.hidden)poll()},2000);addEventListener('online',()=>{queue.length?flush():poll()});document.addEventListener('visibilitychange',()=>{if(!document.hidden)poll()});
  }
+}
+
+/* No personal text, capability URLs, recordings or purchase/revenue events. */
+{
+ const counter=113805286;
+ const safe=new URL(location.href);
+ const table=safe.searchParams.get('t');
+ safe.search='';safe.hash='';
+ if(/^\d{1,2}$/.test(table||''))safe.searchParams.set('t',table);
+ history.replaceState(history.state,'',safe.href);
+ const ref=(()=>{try{return new URL(document.referrer).origin+'/'}catch{return ''}})();
+ window.ym=window.ym||function(){(window.ym.a=window.ym.a||[]).push(arguments)};
+ window.ym.l=Date.now();
+ window.ym(counter,'init',{url:safe.href,referrer:ref,webvisor:false,clickmap:false,trackLinks:false,accurateTrackBounce:true});
+ const script=document.createElement('script');script.async=true;script.src='https://mc.yandex.ru/metrika/tag.js?id='+counter;script.referrerPolicy='no-referrer';document.head.appendChild(script);
+ function goal(name,params={}){try{window.ym(counter,'reachGoal',name,{...params,language:lang||'unknown',...(table?{table:Number(table)}:{})})}catch{}}
+ const previousBump=bump;
+ bump=function(key,delta,...args){const before=allTotals().n;const result=previousBump(key,delta,...args);if(delta>0&&allTotals().n>before)goal('add_to_cart',{category:String(key).split('|')[0],quantity:allTotals().n-before});return result};
+ const previousShow=sendOrder;
+ sendOrder=openPick=function(...args){const alreadyOpen=!document.getElementById('waiterView').hidden;const result=previousShow(...args);const x=allTotals();if(!alreadyOpen&&!document.getElementById('waiterView').hidden&&x.n)goal('waiter_view_opened',{amount_vnd:x.sum,item_count:x.n,unpriced_items:x.extra||0,currency:'VND'});return result};
 }
 
 (function init(){const l=ls.get("ss_lang"),c=ls.get("ss_cur");
