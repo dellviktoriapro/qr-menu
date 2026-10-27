@@ -141,7 +141,20 @@
     "pixels": [
       887,
       887
-    ]
+    ],
+    "fruit_refresh": {
+      "date": "2026-10-27",
+      "sheet": "C:\\Users\\Николай\\.codex\\generated_images\\01a16898-8be6-7343-a4b9-3afb5866a517\\exec-a41eda1b-1e67-4ffe-8272-a8e602642d35.png",
+      "source_sha256": "07975fd29c10ab5679057c8330232cfa39c29c980aadfd19d467ef1d8cafe4c6",
+      "crop": [
+        0,
+        0,
+        887,
+        887
+      ],
+      "request": "Fruit alongside glass based on printed menu",
+      "detail": "LEFT: orange juice in a clear tumbler, one fresh orange half with juicy segmented cut face and one small orange wedge beside the glass at its lower left, two restrained green orange leaves. RIGHT: passion fruit juice in the clear tumbler with a few natural dark seeds, a purple passion fruit half with golden seeded pulp plus one whole purple fruit beside its lower right. No other fruits."
+    }
   },
   {
     "key": "ju_passion",
@@ -151,9 +164,22 @@
     "ru": "Сок маракуйи",
     "ref": "D:/Users/Николай/Downloads/photo_5388814128660553433_y.jpg",
     "pixels": [
-      768,
-      1024
-    ]
+      887,
+      887
+    ],
+    "fruit_refresh": {
+      "date": "2026-10-27",
+      "sheet": "C:\\Users\\Николай\\.codex\\generated_images\\01a16898-8be6-7343-a4b9-3afb5866a517\\exec-a41eda1b-1e67-4ffe-8272-a8e602642d35.png",
+      "source_sha256": "07975fd29c10ab5679057c8330232cfa39c29c980aadfd19d467ef1d8cafe4c6",
+      "crop": [
+        887,
+        0,
+        1774,
+        887
+      ],
+      "request": "Fruit alongside glass based on printed menu",
+      "detail": "LEFT: orange juice in a clear tumbler, one fresh orange half with juicy segmented cut face and one small orange wedge beside the glass at its lower left, two restrained green orange leaves. RIGHT: passion fruit juice in the clear tumbler with a few natural dark seeds, a purple passion fruit half with golden seeded pulp plus one whole purple fruit beside its lower right. No other fruits."
+    }
   },
   {
     "key": "ju_pineapple",
@@ -163,9 +189,22 @@
     "ru": "Ананасовый сок",
     "ref": "D:/Users/Николай/Downloads/photo_5388814128660553433_y.jpg",
     "pixels": [
-      768,
-      1024
-    ]
+      887,
+      887
+    ],
+    "fruit_refresh": {
+      "date": "2026-10-27",
+      "sheet": "C:\\Users\\Николай\\.codex\\generated_images\\01a16898-8be6-7343-a4b9-3afb5866a517\\exec-55970c3a-28c3-4a4b-8b89-e2bee4f408fc.png",
+      "source_sha256": "fc771ca1ab501f7fe6b5bfceec3067f4abc82b3bbcec5e0228c878740c38c91a",
+      "crop": [
+        0,
+        0,
+        887,
+        887
+      ],
+      "request": "Fruit alongside glass based on printed menu",
+      "detail": "LEFT: pineapple juice in a clear tumbler, a small pineapple with natural green crown partly behind the lower side and a clean yellow pineapple wedge in front beside the base. RIGHT: watermelon juice in a clear tumbler, a ripe triangular red watermelon slice with a few black seeds and green rind beside the base. No other fruits."
+    }
   },
   {
     "key": "ju_watermelon",
@@ -175,9 +214,22 @@
     "ru": "Арбузный сок",
     "ref": "D:/Users/Николай/Downloads/photo_5388814128660553433_y.jpg",
     "pixels": [
-      767,
-      1024
-    ]
+      887,
+      887
+    ],
+    "fruit_refresh": {
+      "date": "2026-10-27",
+      "sheet": "C:\\Users\\Николай\\.codex\\generated_images\\01a16898-8be6-7343-a4b9-3afb5866a517\\exec-55970c3a-28c3-4a4b-8b89-e2bee4f408fc.png",
+      "source_sha256": "fc771ca1ab501f7fe6b5bfceec3067f4abc82b3bbcec5e0228c878740c38c91a",
+      "crop": [
+        887,
+        0,
+        1774,
+        887
+      ],
+      "request": "Fruit alongside glass based on printed menu",
+      "detail": "LEFT: pineapple juice in a clear tumbler, a small pineapple with natural green crown partly behind the lower side and a clean yellow pineapple wedge in front beside the base. RIGHT: watermelon juice in a clear tumbler, a ripe triangular red watermelon slice with a few black seeds and green rind beside the base. No other fruits."
+    }
   },
   {
     "key": "ju_mix",
@@ -187,9 +239,22 @@
     "ru": "Смесь соков: апельсин, ананас, морковь",
     "ref": "D:/Users/Николай/Downloads/photo_5388814128660553433_y.jpg",
     "pixels": [
-      768,
-      1024
-    ]
+      905,
+      887
+    ],
+    "fruit_refresh": {
+      "date": "2026-10-27",
+      "sheet": "C:\\Users\\Николай\\.codex\\generated_images\\01a16898-8be6-7343-a4b9-3afb5866a517\\exec-2527507a-a76d-4751-aeae-5b4d3fb0c6ba.png",
+      "source_sha256": "b8ee6212829032f695587eb8548c0cd72958746485c9546303073da5c2e1bc7a",
+      "crop": [
+        0,
+        0,
+        905,
+        887
+      ],
+      "request": "Fruit alongside glass based on printed menu",
+      "detail": "LEFT: orange-pineapple-carrot mixed juice in a clear tumbler, one small orange half, a pineapple wedge with a modest green crown behind and two small whole carrots beside the base. RIGHT: carrot juice in a clear tumbler, two appetizing fresh whole orange carrots with short tidy green tops beside the base. No other ingredients."
+    }
   },
   {
     "key": "ju_carrot",
@@ -199,9 +264,22 @@
     "ru": "Морковный сок",
     "ref": "D:/Users/Николай/Downloads/photo_5388814128660553433_y.jpg",
     "pixels": [
-      887,
+      869,
       887
-    ]
+    ],
+    "fruit_refresh": {
+      "date": "2026-10-27",
+      "sheet": "C:\\Users\\Николай\\.codex\\generated_images\\01a16898-8be6-7343-a4b9-3afb5866a517\\exec-2527507a-a76d-4751-aeae-5b4d3fb0c6ba.png",
+      "source_sha256": "b8ee6212829032f695587eb8548c0cd72958746485c9546303073da5c2e1bc7a",
+      "crop": [
+        905,
+        0,
+        1774,
+        887
+      ],
+      "request": "Fruit alongside glass based on printed menu",
+      "detail": "LEFT: orange-pineapple-carrot mixed juice in a clear tumbler, one small orange half, a pineapple wedge with a modest green crown behind and two small whole carrots beside the base. RIGHT: carrot juice in a clear tumbler, two appetizing fresh whole orange carrots with short tidy green tops beside the base. No other ingredients."
+    }
   },
   {
     "key": "te_mango",
@@ -271,9 +349,22 @@
     "ru": "Манго",
     "ref": "D:/Users/Николай/Downloads/photo_5388814128660553430_y.jpg",
     "pixels": [
-      768,
-      1024
-    ]
+      887,
+      887
+    ],
+    "fruit_refresh": {
+      "date": "2026-10-27",
+      "sheet": "C:\\Users\\Николай\\.codex\\generated_images\\01a16898-8be6-7343-a4b9-3afb5866a517\\exec-58fc4299-7f5b-4a72-b5e7-c1d1c496d993.png",
+      "source_sha256": "a2efe57cab2352d0b312318aa41514de7b1c88e6723988f92e57d1d1fdeb00f5",
+      "crop": [
+        0,
+        0,
+        887,
+        887
+      ],
+      "request": "Fruit alongside glass based on printed menu",
+      "detail": "LEFT: yellow mango smoothie, beside its base one ripe mango cheek cut in neat cubes (hedgehog cut). RIGHT: chocolate banana cacao peanut-butter smoothie, beside its base a small ripe banana with a clean half peeled section, two banana slices and a few peanuts, a small cocoa/chocolate piece. No loose cream ribbons or long curled strips."
+    }
   },
   {
     "key": "sm_banana",
@@ -283,9 +374,22 @@
     "ru": "Банан с какао и арахисовым маслом",
     "ref": "D:/Users/Николай/Downloads/photo_5388814128660553430_y.jpg",
     "pixels": [
-      768,
-      1024
-    ]
+      887,
+      887
+    ],
+    "fruit_refresh": {
+      "date": "2026-10-27",
+      "sheet": "C:\\Users\\Николай\\.codex\\generated_images\\01a16898-8be6-7343-a4b9-3afb5866a517\\exec-58fc4299-7f5b-4a72-b5e7-c1d1c496d993.png",
+      "source_sha256": "a2efe57cab2352d0b312318aa41514de7b1c88e6723988f92e57d1d1fdeb00f5",
+      "crop": [
+        887,
+        0,
+        1774,
+        887
+      ],
+      "request": "Fruit alongside glass based on printed menu",
+      "detail": "LEFT: yellow mango smoothie, beside its base one ripe mango cheek cut in neat cubes (hedgehog cut). RIGHT: chocolate banana cacao peanut-butter smoothie, beside its base a small ripe banana with a clean half peeled section, two banana slices and a few peanuts, a small cocoa/chocolate piece. No loose cream ribbons or long curled strips."
+    }
   },
   {
     "key": "sm_strawberry",
@@ -297,7 +401,20 @@
     "pixels": [
       887,
       887
-    ]
+    ],
+    "fruit_refresh": {
+      "date": "2026-10-27",
+      "sheet": "C:\\Users\\Николай\\.codex\\generated_images\\01a16898-8be6-7343-a4b9-3afb5866a517\\exec-ebf7dd02-f6d4-4802-9f59-b3bb30ed28c7.png",
+      "source_sha256": "99ad7d7f8a59cdcae49fec4d59b71dd28287f6f741f1644209d9df3d24cb884f",
+      "crop": [
+        0,
+        0,
+        887,
+        887
+      ],
+      "request": "Fruit alongside glass based on printed menu",
+      "detail": "LEFT: pink strawberry smoothie, beside its base two ripe red strawberries and a strawberry half. RIGHT: purple mixed strawberry-mulberry-blueberry smoothie, beside its base a modest cluster of distinct red strawberries, elongated dark mulberries, and round blueberries. No raspberries, no other fruits."
+    }
   },
   {
     "key": "sm_berry",
@@ -309,7 +426,20 @@
     "pixels": [
       887,
       887
-    ]
+    ],
+    "fruit_refresh": {
+      "date": "2026-10-27",
+      "sheet": "C:\\Users\\Николай\\.codex\\generated_images\\01a16898-8be6-7343-a4b9-3afb5866a517\\exec-ebf7dd02-f6d4-4802-9f59-b3bb30ed28c7.png",
+      "source_sha256": "99ad7d7f8a59cdcae49fec4d59b71dd28287f6f741f1644209d9df3d24cb884f",
+      "crop": [
+        887,
+        0,
+        1774,
+        887
+      ],
+      "request": "Fruit alongside glass based on printed menu",
+      "detail": "LEFT: pink strawberry smoothie, beside its base two ripe red strawberries and a strawberry half. RIGHT: purple mixed strawberry-mulberry-blueberry smoothie, beside its base a modest cluster of distinct red strawberries, elongated dark mulberries, and round blueberries. No raspberries, no other fruits."
+    }
   },
   {
     "key": "sm_mangopassion",
@@ -319,9 +449,22 @@
     "ru": "Манго и маракуйя",
     "ref": "D:/Users/Николай/Downloads/photo_5388814128660553430_y.jpg",
     "pixels": [
-      768,
-      1024
-    ]
+      887,
+      887
+    ],
+    "fruit_refresh": {
+      "date": "2026-10-27",
+      "sheet": "C:\\Users\\Николай\\.codex\\generated_images\\01a16898-8be6-7343-a4b9-3afb5866a517\\exec-12fadcb2-34d0-4b66-8ea5-ffe8d0f969bf.png",
+      "source_sha256": "f90ed338802fc349b1476334e64491e4a36f9c3034b265de5a14e9ccd5226d3b",
+      "crop": [
+        0,
+        0,
+        887,
+        887
+      ],
+      "request": "Fruit alongside glass based on printed menu",
+      "detail": "LEFT: golden mango-passion-fruit smoothie, beside its base a small cubed mango cheek and a purple passion fruit half with yellow seeded pulp. RIGHT: pale green avocado smoothie, beside its base a ripe avocado half with a realistic brown stone and one small whole dark avocado. No other fruits."
+    }
   },
   {
     "key": "sm_avocado",
@@ -331,9 +474,22 @@
     "ru": "Авокадо",
     "ref": "D:/Users/Николай/Downloads/photo_5388814128660553430_y.jpg",
     "pixels": [
-      768,
-      1024
-    ]
+      887,
+      887
+    ],
+    "fruit_refresh": {
+      "date": "2026-10-27",
+      "sheet": "C:\\Users\\Николай\\.codex\\generated_images\\01a16898-8be6-7343-a4b9-3afb5866a517\\exec-12fadcb2-34d0-4b66-8ea5-ffe8d0f969bf.png",
+      "source_sha256": "f90ed338802fc349b1476334e64491e4a36f9c3034b265de5a14e9ccd5226d3b",
+      "crop": [
+        887,
+        0,
+        1774,
+        887
+      ],
+      "request": "Fruit alongside glass based on printed menu",
+      "detail": "LEFT: golden mango-passion-fruit smoothie, beside its base a small cubed mango cheek and a purple passion fruit half with yellow seeded pulp. RIGHT: pale green avocado smoothie, beside its base a ripe avocado half with a realistic brown stone and one small whole dark avocado. No other fruits."
+    }
   },
   {
     "key": "sm_pineapple",
@@ -343,9 +499,22 @@
     "ru": "Ананас с мятой",
     "ref": "D:/Users/Николай/Downloads/photo_5388814128660553430_y.jpg",
     "pixels": [
-      768,
-      1024
-    ]
+      887,
+      887
+    ],
+    "fruit_refresh": {
+      "date": "2026-10-27",
+      "sheet": "C:\\Users\\Николай\\.codex\\generated_images\\01a16898-8be6-7343-a4b9-3afb5866a517\\exec-eb777c93-eea8-4b38-a1dc-2a83b4a4c6f0.png",
+      "source_sha256": "8d58aadcff3191d796533a905260274eb384b6e1ed173d110ff3432752c272e1",
+      "crop": [
+        0,
+        0,
+        887,
+        887
+      ],
+      "request": "Fruit alongside glass based on printed menu",
+      "detail": "LEFT: yellow pineapple-mint smoothie, beside its base a small yellow pineapple wedge with rind, modest pineapple crown behind and a few natural mint leaves. RIGHT: pale purple blueberry yogurt shake, beside its base a small cluster of round fresh blueberries with their natural matte bloom, a couple tiny blueberry leaves. No mulberries, no other fruits."
+    }
   },
   {
     "key": "yg_blueberry",
@@ -355,9 +524,22 @@
     "ru": "Черника",
     "ref": "D:/Users/Николай/Downloads/photo_5388814128660553430_y.jpg",
     "pixels": [
-      768,
-      1024
-    ]
+      887,
+      887
+    ],
+    "fruit_refresh": {
+      "date": "2026-10-27",
+      "sheet": "C:\\Users\\Николай\\.codex\\generated_images\\01a16898-8be6-7343-a4b9-3afb5866a517\\exec-eb777c93-eea8-4b38-a1dc-2a83b4a4c6f0.png",
+      "source_sha256": "8d58aadcff3191d796533a905260274eb384b6e1ed173d110ff3432752c272e1",
+      "crop": [
+        887,
+        0,
+        1774,
+        887
+      ],
+      "request": "Fruit alongside glass based on printed menu",
+      "detail": "LEFT: yellow pineapple-mint smoothie, beside its base a small yellow pineapple wedge with rind, modest pineapple crown behind and a few natural mint leaves. RIGHT: pale purple blueberry yogurt shake, beside its base a small cluster of round fresh blueberries with their natural matte bloom, a couple tiny blueberry leaves. No mulberries, no other fruits."
+    }
   },
   {
     "key": "yg_mulberry",
@@ -367,9 +549,22 @@
     "ru": "Шелковица",
     "ref": "D:/Users/Николай/Downloads/photo_5388814128660553430_y.jpg",
     "pixels": [
-      768,
-      1024
-    ]
+      887,
+      887
+    ],
+    "fruit_refresh": {
+      "date": "2026-10-27",
+      "sheet": "C:\\Users\\Николай\\.codex\\generated_images\\01a16898-8be6-7343-a4b9-3afb5866a517\\exec-45404c4d-48af-4a1c-8e54-3b787cd30708.png",
+      "source_sha256": "a043acc9ba7ca67523fd974140bb2607aff11a5c71727fdf03847d9e99213e3c",
+      "crop": [
+        0,
+        0,
+        887,
+        887
+      ],
+      "request": "Fruit alongside glass based on printed menu",
+      "detail": "LEFT: purple mulberry yogurt shake, beside its base a small cluster of ripe elongated dark mulberries, clearly mulberries rather than raspberries. RIGHT: golden creamy mango yogurt shake, beside its base one ripe mango cheek cut in a neat cubed hedgehog shape. No other fruits."
+    }
   },
   {
     "key": "yg_mango",
@@ -379,9 +574,22 @@
     "ru": "Манго",
     "ref": "D:/Users/Николай/Downloads/photo_5388814128660553430_y.jpg",
     "pixels": [
-      768,
-      1024
-    ]
+      887,
+      887
+    ],
+    "fruit_refresh": {
+      "date": "2026-10-27",
+      "sheet": "C:\\Users\\Николай\\.codex\\generated_images\\01a16898-8be6-7343-a4b9-3afb5866a517\\exec-45404c4d-48af-4a1c-8e54-3b787cd30708.png",
+      "source_sha256": "a043acc9ba7ca67523fd974140bb2607aff11a5c71727fdf03847d9e99213e3c",
+      "crop": [
+        887,
+        0,
+        1774,
+        887
+      ],
+      "request": "Fruit alongside glass based on printed menu",
+      "detail": "LEFT: purple mulberry yogurt shake, beside its base a small cluster of ripe elongated dark mulberries, clearly mulberries rather than raspberries. RIGHT: golden creamy mango yogurt shake, beside its base one ripe mango cheek cut in a neat cubed hedgehog shape. No other fruits."
+    }
   },
   {
     "key": "yg_passion",
@@ -391,9 +599,22 @@
     "ru": "Маракуйя",
     "ref": "D:/Users/Николай/Downloads/photo_5388814128660553430_y.jpg",
     "pixels": [
-      768,
-      1024
-    ]
+      887,
+      887
+    ],
+    "fruit_refresh": {
+      "date": "2026-10-27",
+      "sheet": "C:\\Users\\Николай\\.codex\\generated_images\\01a16898-8be6-7343-a4b9-3afb5866a517\\exec-1a795ab1-7c42-4487-ab74-2545a8496360.png",
+      "source_sha256": "d4d5bd956e93cad19c5313071a70e59d96b3395734bce6f986ecf92e99e0b919",
+      "crop": [
+        0,
+        0,
+        887,
+        887
+      ],
+      "request": "Fruit alongside glass based on printed menu",
+      "detail": "LEFT: creamy pale yellow passion-fruit yogurt shake, beside its base a purple passion fruit half with golden seeded pulp and one whole purple passion fruit. RIGHT: creamy golden mango-passion-fruit yogurt shake, beside its base a neat small cubed mango cheek and a purple passion fruit half with golden seeded pulp. No other fruits."
+    }
   },
   {
     "key": "yg_mangopassion",
@@ -405,7 +626,20 @@
     "pixels": [
       887,
       887
-    ]
+    ],
+    "fruit_refresh": {
+      "date": "2026-10-27",
+      "sheet": "C:\\Users\\Николай\\.codex\\generated_images\\01a16898-8be6-7343-a4b9-3afb5866a517\\exec-1a795ab1-7c42-4487-ab74-2545a8496360.png",
+      "source_sha256": "d4d5bd956e93cad19c5313071a70e59d96b3395734bce6f986ecf92e99e0b919",
+      "crop": [
+        887,
+        0,
+        1774,
+        887
+      ],
+      "request": "Fruit alongside glass based on printed menu",
+      "detail": "LEFT: creamy pale yellow passion-fruit yogurt shake, beside its base a purple passion fruit half with golden seeded pulp and one whole purple passion fruit. RIGHT: creamy golden mango-passion-fruit yogurt shake, beside its base a neat small cubed mango cheek and a purple passion fruit half with golden seeded pulp. No other fruits."
+    }
   },
   {
     "key": "yg_berry",
@@ -415,9 +649,22 @@
     "ru": "Ягодный микс",
     "ref": "D:/Users/Николай/Downloads/photo_5388814128660553430_y.jpg",
     "pixels": [
-      768,
-      1024
-    ]
+      1254,
+      1254
+    ],
+    "fruit_refresh": {
+      "date": "2026-10-27",
+      "sheet": "C:\\Users\\Николай\\.codex\\generated_images\\01a16898-8be6-7343-a4b9-3afb5866a517\\exec-3b13c901-d062-4e36-bda7-9d2c0e6b4462.png",
+      "source_sha256": "5eccf642adb634b81ce291fb88a13e45f6d4f194045ede14cfcdcc0808fb8ef9",
+      "crop": [
+        0,
+        0,
+        1254,
+        1254
+      ],
+      "request": "Fruit alongside glass based on printed menu",
+      "detail": "Pink creamy mixed-berry yogurt shake in the original clear glass, beside its base a small appetizing cluster of red strawberries, round blueberries and elongated dark mulberries, like its printed menu reference. No other fruits."
+    }
   },
   {
     "key": "beer_1",
