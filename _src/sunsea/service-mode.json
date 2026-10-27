@@ -2,5 +2,6 @@
   "mode": "menu_only",
   "paymentQr": null,
   "restoreBaseline": "dba133a2e8f1fc1db9616b9c91b5d6e9bbe563c7",
-  "cartApi": "https://sunsea-table-cart.promokod4u.chatgpt.site/api/cart"
+  "cartApi": "https://sunsea-table-cart.promokod4u.chatgpt.site/api/cart",
+  "publicContact": null
 }

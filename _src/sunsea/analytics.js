@@ -2,8 +2,9 @@
 {
  const counter=113805286;
  const safe=new URL(location.href);
- const table=safe.searchParams.get('t');
+ const table=safe.searchParams.get('t'),preview=safe.searchParams.get('view')==='preview';
  safe.search='';safe.hash='';
+ if(preview)safe.searchParams.set('view','preview');
  if(/^\d{1,2}$/.test(table||''))safe.searchParams.set('t',table);
  history.replaceState(history.state,'',safe.href);
  const ref=(()=>{try{return new URL(document.referrer).origin+'/'}catch{return ''}})();

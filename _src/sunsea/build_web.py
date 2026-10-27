@@ -234,6 +234,10 @@ s = re.sub(r'<link rel="preconnect" href="https://fonts\.(?:googleapis|gstatic)\
 rep('$("heroBg").style.backgroundImage=`url(${AMB.lion})`;$("gateBg").style.backgroundImage=`url(${AMB.lion})`;',
     'const heroMedia=matchMedia("(max-width:699px)");function updateHero(){const heroURL=heroMedia.matches?' + json.dumps(MOBILE) + ':AMB.lion;$("heroBg").style.backgroundImage=`url(${heroURL})`;$("gateBg").style.backgroundImage=`url(${heroURL})`;}updateHero();heroMedia.addEventListener("change",updateHero);')
 
+# Banner preview is available in both standalone and restored full-order mode.
+public_js='const PUBLIC_CONTACT='+json.dumps(SERVICE_CONFIG.get('publicContact'),ensure_ascii=False).replace('<','\\u003c')+';\nconst BOOKING_LAYOUT='+json.dumps(json.load(open('table-layout.json',encoding='utf-8-sig')),ensure_ascii=False).replace('<','\\u003c')+';\n'+open('booking-core.js',encoding='utf-8-sig').read()+'\n'+open('public-preview.js',encoding='utf-8-sig').read()+'\n'+open('booking.js',encoding='utf-8-sig').read()
+rep('</style>',open('public-preview.css',encoding='utf-8-sig').read()+'\n'+open('booking.css',encoding='utf-8-sig').read()+'\n</style>')
+
 # Standalone sales mode is a reversible layer; the shared engine stays intact.
 if MENU_ONLY:
     for key in ['cart','wish','ck','guest','tbl']:
@@ -245,8 +249,10 @@ if MENU_ONLY:
     if qr and not qr.startswith(('https://','data:image/')):
         assert re.fullmatch(r'[\w.-]+',qr), 'Use a QR image filename in amb/ or an HTTPS URL'
         shutil.copyfile('amb/'+qr,os.path.join(OUT,qr))
-    mode_js='const SERVICE_CONFIG='+json.dumps(config,ensure_ascii=False).replace('<','\\u003c')+';\n'+open('menu-only.js',encoding='utf-8-sig').read()+'\n'+open('item-preferences.js',encoding='utf-8-sig').read()+'\n'+open('item-availability.js',encoding='utf-8-sig').read()+'\n'+open('shared-cart.js',encoding='utf-8-sig').read()+'\n'+open('finish-visit.js',encoding='utf-8-sig').read()+'\n'+open('analytics.js',encoding='utf-8-sig').read()
+    mode_js='const SERVICE_CONFIG='+json.dumps(config,ensure_ascii=False).replace('<','\\u003c')+';\n'+open('menu-only.js',encoding='utf-8-sig').read()+'\n'+open('item-preferences.js',encoding='utf-8-sig').read()+'\n'+open('item-availability.js',encoding='utf-8-sig').read()+'\n'+public_js+'\n'+open('shared-cart.js',encoding='utf-8-sig').read()+'\n'+open('finish-visit.js',encoding='utf-8-sig').read()+'\n'+open('analytics.js',encoding='utf-8-sig').read()
     rep('(function init(){',mode_js+'\n(function init(){')
+else:
+    rep('(function init(){',public_js+'\n(function init(){')
 
 s = s.replace('__DATA__', json.dumps(D, ensure_ascii=False)).replace('__PH__', json.dumps(dict(photos, amb_lion=BAND))).replace('__AMB__', json.dumps({'lion': BAND})).replace('__GEN__', json.dumps(order)).replace('__CATPH__', '{}')
 

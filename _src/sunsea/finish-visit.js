@@ -1,5 +1,5 @@
 /* The QR table adapter already supplies its own shared-visit action. */
-if(!document.body.classList.contains('shared-cart')){
+if(!document.body.classList.contains('shared-cart')&&!document.body.classList.contains('public-preview')){
  const finishCopy={
  ru:['Завершить визит','Завершить визит?','Все выбранные блюда и пожелания будут удалены из корзины на этом устройстве.'],
  en:['End visit','End this visit?','All selected dishes and preferences will be removed from the cart on this device.'],
