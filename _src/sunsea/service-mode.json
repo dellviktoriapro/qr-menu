@@ -3,5 +3,9 @@
   "paymentQr": null,
   "restoreBaseline": "dba133a2e8f1fc1db9616b9c91b5d6e9bbe563c7",
   "cartApi": "https://sunsea-table-cart.promokod4u.chatgpt.site/api/cart",
-  "publicContact": null
+  "publicContact": {
+    "whatsapp": "+84797074486",
+    "telegram": "+84797074486",
+    "zalo": "https://zalo.me/84797074486"
+  }
 }
