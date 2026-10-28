@@ -2182,7 +2182,12 @@ const BOOKING_CORE=(()=>{
 })();
 
 /* Banner QR: browsing and contacting the restaurant, never a table order. */
-const PUBLIC_PREVIEW=new URLSearchParams(location.search).get('view')==='preview';
+const PUBLIC_PREVIEW=(()=>{
+ const params=new URLSearchParams(location.search);if(params.get('view')==='preview')return true;
+ const table=params.get('t');if(!/^\d{1,2}$/.test(table||''))return true;
+ let token=params.get('room');try{if(!token)token=sessionStorage.getItem('ss_table_room_'+table)}catch{}
+ return !/^[a-f0-9]{64}$/.test(token||'');
+})();
 if(PUBLIC_PREVIEW){
  const copies={
  ru:{pre:'Сделать предзаказ',book:'Забронировать столик',note:'Бронь подтверждается рестораном.',missing:'Контакт ресторана ещё не подключён.'},
