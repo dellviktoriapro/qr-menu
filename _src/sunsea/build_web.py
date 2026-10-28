@@ -6,6 +6,7 @@ import json, os, shutil, hashlib, sys, re
 from PIL import Image
 from concurrent.futures import ThreadPoolExecutor
 import data
+from german import localize
 
 SERVICE_CONFIG=json.load(open('service-mode.json',encoding='utf-8-sig'))
 SERVICE_MODE=os.environ.get('SUNSEA_SERVICE_MODE',SERVICE_CONFIG['mode'])
@@ -53,6 +54,7 @@ has = lambda k: bool(photo_path(k))
 D = [dict(id=s['id'], n=s['n'], note=s['note'], g=s['g'], items=[[i[0], i[1], i[2], i[3], i[4],
       ([[l, p] for l, p in i[5]] if isinstance(i[5], list) else i[5]), i[6] if has(i[6]) else None] + ([i[7]] if len(i) > 7 and i[7] else [])
       for i in s['items']]) for s in data.S]
+localize(D)
 CAT = {s['id']: next((i[6] for i in s['items'] if has(i[6])), None) for s in data.S}
 # Drink photograph mapping preserves the source records and order keys.
 drink_photos=json.load(open('drink-photos.json',encoding='utf-8'))
@@ -132,6 +134,12 @@ s = s[:a] + '  <div class="cols"><div><b>Sun&amp;Sea Restaurant</b><br>Mũi Né,
 for k in ['co_cart', 'co_wish', 'co_ck', 'co_guest', 'co_tbl', 'co_lang', 'co_cur', 'co_inbox', 'co_pub']:
     s = s.replace(f'"{k}"', f'"ss_{k[3:]}"')
 
+# German is Sun&Sea-specific; existing tuple indices and other restaurants are unchanged.
+rep('const IDX={en:0,vi:1,ru:2,ko:3,zh:4};', 'const IDX={en:0,vi:1,ru:2,ko:3,zh:4,de:8};')
+rep('{k:"zh",n:"中文",c:"CNY"}];', '{k:"zh",n:"中文",c:"CNY"},{k:"de",n:"Deutsch",c:"VND"}];')
+rep('zh:"🇨🇳"', 'zh:"🇨🇳",de:"🇩🇪"')
+rep('it.slice(0,5).join(" ")', '[...it.slice(0,5),it[8]].join(" ")')
+
 # ---- texts
 NEW = {
  'ru': dict(tag='Sun&Sea Restaurant в Муйне: морепродукты, вьетнамская и тайская кухня, пицца, паста и фирменные блюда от шефа. Закажите прямо с телефона — официант подтвердит заказ у стола.',
@@ -166,7 +174,7 @@ PLATING_NOTE = {
 }
 for language, note in PLATING_NOTE.items():
     NEW[language]['ph2'] = note
-inj = ''.join(f'Object.assign(T.{L},{json.dumps(d, ensure_ascii=False)});Object.assign(T.{L}.notes||(T.{L}.notes={{}}),{json.dumps(NOTES[L], ensure_ascii=False)});\n' for L, d in NEW.items())
+inj = open('german.js', encoding='utf-8').read() + '\n' + ''.join(f'Object.assign(T.{L},{json.dumps(d, ensure_ascii=False)});Object.assign(T.{L}.notes||(T.{L}.notes={{}}),{json.dumps(NOTES[L], ensure_ascii=False)});\n' for L, d in NEW.items())
 rep('\nfunction pl(n,f){', '\n' + inj + 'function pl(n,f){')
 rep('$("foot").textContent=t.foot;', '$("foot").textContent=t.foot;if($("f2s"))$("f2s").textContent=t.f2s;$("fCur").textContent=t.cur;$("ftC").textContent=t.cur;')
 rep('$("gI1").src=AMB.interior;$("gI2").src=AMB.terrace;$("gI3").src=AMB.impala;$("gI4").src=AMB.zebras;', '')

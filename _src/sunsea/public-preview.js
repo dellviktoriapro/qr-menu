@@ -8,6 +8,7 @@ const PUBLIC_PREVIEW=(()=>{
 if(PUBLIC_PREVIEW){
  const copies={
  ru:{pre:'Сделать предзаказ',book:'Забронировать столик',note:'Бронь подтверждается рестораном.',missing:'Контакт ресторана ещё не подключён.'},
+ de:{"pre":"Vorbestellen","book":"Tisch reservieren","note":"Die Reservierung wird vom Restaurant bestätigt.","missing":"Die Kontaktdaten des Restaurants wurden noch nicht hinterlegt."},
  en:{pre:'Pre-order',book:'Book a table',note:'Table bookings are confirmed by the restaurant.',missing:'Restaurant contact has not been connected yet.'},
  vi:{pre:'Đặt món trước',book:'Đặt bàn',note:'Nhà hàng sẽ xác nhận yêu cầu đặt bàn.',missing:'Chưa kết nối thông tin liên hệ của nhà hàng.'},
  ko:{pre:'메뉴 사전 주문',book:'테이블 예약',note:'테이블 예약은 레스토랑 확인 후 확정됩니다.',missing:'레스토랑 연락처가 아직 연결되지 않았습니다.'},
@@ -15,7 +16,7 @@ if(PUBLIC_PREVIEW){
  };
  const copy=()=>copies[lang]||copies.ru;
  document.body.classList.add('public-preview');
- const descriptions={ru:'Sun&Sea Restaurant в Муйне: морепродукты, вьетнамская и тайская кухня, пицца, паста и фирменные блюда от шефа.',en:'Sun&Sea Restaurant in Mui Ne: seafood, Vietnamese and Thai cuisine, pizza, pasta and chef’s specials.',vi:'Nhà hàng Sun&Sea ở Mũi Né: hải sản, món Việt và Thái, pizza, mì Ý và món đặc biệt của bếp trưởng.',ko:'무이네의 Sun&Sea 레스토랑: 해산물, 베트남·태국 요리, 피자, 파스타, 셰프 스페셜.',zh:'美奈 Sun&Sea 餐厅：海鲜、越南与泰国菜、披萨、意面和主厨特色菜。'};
+ const descriptions={de:'Sun&Sea Restaurant in Mui Ne: Meeresfrüchte, vietnamesische und thailändische Küche, Pizza, Pasta und Empfehlungen des Küchenchefs.',ru:'Sun&Sea Restaurant в Муйне: морепродукты, вьетнамская и тайская кухня, пицца, паста и фирменные блюда от шефа.',en:'Sun&Sea Restaurant in Mui Ne: seafood, Vietnamese and Thai cuisine, pizza, pasta and chef’s specials.',vi:'Nhà hàng Sun&Sea ở Mũi Né: hải sản, món Việt và Thái, pizza, mì Ý và món đặc biệt của bếp trưởng.',ko:'무이네의 Sun&Sea 레스토랑: 해산물, 베트남·태국 요리, 피자, 파스타, 셰프 스페셜.',zh:'美奈 Sun&Sea 餐厅：海鲜、越南与泰国菜、披萨、意面和主厨特色菜。'};
  if(typeof T!=='undefined')for(const [lg,description] of Object.entries(descriptions))T[lg].tag=description;
 
  if(typeof SERVICE_CONFIG!=='undefined')SERVICE_CONFIG.cartApi=null;

@@ -3,13 +3,14 @@ const ITEM_PREFS={};
 {
  const copies={
  ru:{title:'Пожелания к блюду',edit:'Пожелания',comment:'Комментарий',placeholder:'Например: соус отдельно',save:'Сохранить',add:'Сохранить и добавить',one:'Только для одной порции',scope:'Остальные порции сохранят свои пожелания.',limit:'До 300 символов'},
+ de:{"title":"Wünsche zum Gericht","edit":"Wünsche","comment":"Kommentar","placeholder":"Zum Beispiel: Sauce separat","save":"Speichern","add":"Speichern und hinzufügen","one":"Nur für eine Portion","scope":"Die Wünsche der anderen Portionen bleiben erhalten.","limit":"Bis zu 300 Zeichen"},
  en:{title:'Item preferences',edit:'Preferences',comment:'Comment',placeholder:'For example: sauce on the side',save:'Save',add:'Save and add',one:'For one portion only',scope:'Other portions keep their own preferences.',limit:'Up to 300 characters'},
  vi:{title:'Yêu cầu cho món',edit:'Yêu cầu',comment:'Ghi chú',placeholder:'Ví dụ: để nước sốt riêng',save:'Lưu',add:'Lưu và thêm món',one:'Chỉ áp dụng cho một phần',scope:'Các phần khác giữ nguyên yêu cầu.',limit:'Tối đa 300 ký tự'},
  ko:{title:'메뉴별 요청사항',edit:'요청사항',comment:'메모',placeholder:'예: 소스는 따로 주세요',save:'저장',add:'저장하고 추가',one:'한 인분에만 적용',scope:'다른 인분의 요청사항은 유지됩니다.',limit:'최대 300자'},
  zh:{title:'菜品要求',edit:'要求',comment:'备注',placeholder:'例如：酱汁另放',save:'保存',add:'保存并添加',one:'仅适用于一份',scope:'其他份数保留各自的要求。',limit:'最多300个字符'}
  };
  const copy=()=>copies[lang]||copies.ru;
- WISH.push({k:'veryhot',ru:'Очень остро',en:'Very spicy',vi:'Rất cay',ko:'아주 맵게',zh:'特辣'},{k:'spicy',ru:'Остро',en:'Spicy',vi:'Cay',ko:'맵게',zh:'辣'},{k:'withice',ru:'Со льдом',en:'With ice',vi:'Có đá',ko:'얼음 넣기',zh:'加冰'});
+ WISH.push({k:'veryhot',de:'Sehr scharf',ru:'Очень остро',en:'Very spicy',vi:'Rất cay',ko:'아주 맵게',zh:'特辣'},{k:'spicy',de:'Scharf',ru:'Остро',en:'Spicy',vi:'Cay',ko:'맵게',zh:'辣'},{k:'withice',de:'Mit Eis',ru:'Со льдом',en:'With ice',vi:'Có đá',ko:'얼음 넣기',zh:'加冰'});
  let stored={};try{stored=JSON.parse(ls.get('ss_menu_item_notes')||'{}')}catch{}
  const saveNotes=()=>ls.set('ss_menu_item_notes',JSON.stringify(stored));
  ITEM_PREFS.get=(key)=>stored[key]||{comment:'',flags:{}};

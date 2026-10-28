@@ -2,6 +2,7 @@
 if(!document.body.classList.contains('shared-cart')&&!document.body.classList.contains('public-preview')){
  const finishCopy={
  ru:['Завершить визит','Завершить визит?','Все выбранные блюда и пожелания будут удалены из корзины на этом устройстве.'],
+ de:["Besuch beenden","Diesen Besuch beenden?","Alle ausgewählten Gerichte und Wünsche werden aus dem Warenkorb auf diesem Gerät entfernt."],
  en:['End visit','End this visit?','All selected dishes and preferences will be removed from the cart on this device.'],
  vi:['Kết thúc lượt dùng bàn','Kết thúc lượt dùng bàn?','Tất cả món đã chọn và yêu cầu sẽ được xóa khỏi giỏ hàng trên thiết bị này.'],
  ko:['방문 종료','방문을 종료할까요?','이 기기의 장바구니에서 선택한 메뉴와 요청사항이 모두 삭제됩니다.'],

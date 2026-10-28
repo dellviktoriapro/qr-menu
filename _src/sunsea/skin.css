@@ -623,3 +623,8 @@ body{background:radial-gradient(ellipse at right 20%,rgba(218,157,45,.25),transp
  #menu .meat-variants .opt .lbl,#dOpts .meat-variants .opt .lbl{font-size:12px}
  #menu .meat-variants .opt>.add,#menu .meat-variants .opt>.step,#dOpts .meat-variants .opt>.add,#dOpts .meat-variants .opt>.step{grid-column:1;grid-row:2;justify-self:start}
 }
+
+/* Language selection covers the booking capsule, including the sixth language. */
+.gate{z-index:320}.gate .in{flex-shrink:0}
+/* Longer German navigation labels still share a row with the currency selector. */
+@media(min-width:1100px){html[lang="de"] #menuTop{gap:8px;flex-wrap:nowrap}html[lang="de"] #gFood,html[lang="de"] #gDrinks{font-size:14px}}
