@@ -608,3 +608,18 @@ body{background:radial-gradient(ellipse at right 20%,rgba(218,157,45,.25),transp
 #menu section.s .coast-scenery{background-image:none}
 #menu section.s .coast-scenery.scenery-ready{background-image:url(coast-right.webp)}
 #menu section.s .coast-scenery.scenery-ready.botanical{background-image:url(botanical-edge.webp)}
+
+/* Keep pork/beef labels next to their prices, with the conversion below. */
+.meat-variants{container-type:inline-size}
+#menu .meat-variants .opt,#dOpts .meat-variants .opt{display:grid;grid-template-columns:auto minmax(0,1fr) auto;grid-template-rows:auto auto;gap:3px 10px;align-items:center}
+#menu .meat-variants .opt>.pv,#dOpts .meat-variants .opt>.pv{display:contents}
+#menu .meat-variants .opt .lbl,#dOpts .meat-variants .opt .lbl{grid-column:1;grid-row:1;margin:0;font:600 14px/1.4 var(--f-body,sans-serif);align-self:center}
+#menu .meat-variants .opt .main,#dOpts .meat-variants .opt .main{grid-column:2;grid-row:1;justify-self:end;font-size:26px;line-height:1.2;white-space:nowrap}
+#menu .meat-variants .opt .sub,#dOpts .meat-variants .opt .sub{grid-column:2;grid-row:2;justify-self:end;margin:0}
+#menu .meat-variants .opt>.add,#menu .meat-variants .opt>.step,#dOpts .meat-variants .opt>.add,#dOpts .meat-variants .opt>.step{grid-column:3;grid-row:1/span 2;justify-self:end}
+@container(max-width:260px){
+ #menu .meat-variants .opt,#dOpts .meat-variants .opt{grid-template-columns:minmax(0,1fr) auto;gap:3px 6px}
+ #menu .meat-variants .opt .main,#dOpts .meat-variants .opt .main{font-size:21px}
+ #menu .meat-variants .opt .lbl,#dOpts .meat-variants .opt .lbl{font-size:12px}
+ #menu .meat-variants .opt>.add,#menu .meat-variants .opt>.step,#dOpts .meat-variants .opt>.add,#dOpts .meat-variants .opt>.step{grid-column:1;grid-row:2;justify-self:start}
+}

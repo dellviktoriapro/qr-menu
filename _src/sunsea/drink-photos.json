@@ -57,5 +57,9 @@
   "ss_souvenir|7": "souvenir_8",
   "ss_souvenir|8": "souvenir_9",
   "ss_souvenir|9": "souvenir_10",
-  "ss_souvenir|10": "souvenir_11"
+  "ss_souvenir|10": "souvenir_11",
+  "ss_beer|6": "beer_fresh_pet",
+  "ss_beer|7": "beer_fresh_lager",
+  "ss_beer|8": "beer_fresh_gold",
+  "ss_beer|9": "beer_fresh_black"
 }

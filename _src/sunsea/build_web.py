@@ -209,6 +209,9 @@ rep('<div class="medals">${md.map(p=>`<img src="${PH[p]}" alt="">`).join("")}</d
 rep('<img loading="lazy" src="${PH[ph]}" alt="${esc(name)}">', '<img loading="lazy" decoding="async" src="${BL}" data-menu-src="${PH[ph]}" alt="${esc(name)}">')
 rep('  $("menu").innerHTML=html||`<div class="empty">${esc(t.none)}</div>`;', '  $("menu").innerHTML=html||`<div class="empty">${esc(t.none)}</div>`;observeMenuPhotos();')
 
+# Only the smoked meat cards use compact label/price rows.
+rep('return `<div class="opts">`+os.map', 'return `<div class="opts${["smoked_mash","smoked_pasta"].includes(it[6])?" meat-variants":""}">`+os.map')
+
 # Always provide a description slot; shared rows align without inventing ingredients.
 rep('${descHTML(it)}${noteHTML(it)}${optsHTML(s,i,it,t)}</div></article>', '<div class="dish-description">${descHTML(it)}${noteHTML(it)}</div>${optsHTML(s,i,it,t)}</div></article>')
 # Text-only dishes share the same description slot and price rhythm as photo dishes.

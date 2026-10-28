@@ -313,12 +313,16 @@ I('Mixed berry', 'Mix berry', 'Ягодный микс', '믹스 베리', '混�
 ], group='drinks')
 
 sec('ss_beer', L('Beer', 'Bia', 'Пиво', '맥주', '啤酒'), [
-I('Saigon green', 'Sài Gòn xanh', 'Сайгон зелёное', '사이공 그린', '西贡绿', 25000, None, n='01'),
+I('Saigon Lager', 'Sài Gòn Lager', 'Сайгон зелёное Лагер', '사이공 라거', '西贡拉格', 25000, None, n='01'),
 I('Saigon Special', 'Sài Gòn Special', 'Сайгон Спешл', '사이공 스페셜', '西贡特级', 35000, None, n='02'),
 I('Tiger', 'Tiger', 'Тайгер', '타이거', '虎牌', 35000, None, n='03'),
 I('Tiger Gold', 'Tiger Gold', 'Тайгер Голд', '타이거 골드', '虎牌金', 35000, None, n='04'),
 I('Heineken', 'Heineken', 'Хайнекен', '하이네켄', '喜力', 40000, None, n='05'),
 I('Corona', 'Corona', 'Корона', '코로나', '科罗娜', 60000, None, n='06'),
+I('Fresh Lager', 'Fresh Lager', 'Fresh Lager', '프레시 라거', 'Fresh Lager', 30000, 'beer_fresh_pet'),
+I('Fresh draught Lager · 1 L', 'Bia tươi Fresh Lager · 1 lít', 'Разливное Fresh Lager · 1 л', '프레시 라거 생맥주 · 1 L', 'Fresh Lager 鲜啤 · 1升', 70000, 'beer_fresh_lager'),
+I('Fresh draught Gold · 1 L', 'Bia tươi Fresh Gold · 1 lít', 'Разливное Fresh Gold · 1 л', '프레시 골드 생맥주 · 1 L', 'Fresh Gold 鲜啤 · 1升', 80000, 'beer_fresh_gold'),
+I('Fresh draught Black · 1 L', 'Bia tươi Fresh Black · 1 lít', 'Разливное Fresh Black · 1 л', '프레시 블랙 생맥주 · 1 L', 'Fresh Black 鲜啤 · 1升', 90000, 'beer_fresh_black'),
 ], group='drinks')
 
 sec('ss_soft', L('Soft drinks', 'Nước ngọt', 'Безалкогольные напитки', '청량음료', '软饮'), [

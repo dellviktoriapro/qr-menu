@@ -1,0 +1,26 @@
+{
+  "tool": "built-in image_gen",
+  "reference_based": true,
+  "pair_crop": "Two equal square halves, original pixels and alpha preserved, no resizing",
+  "assets": {
+    "beer_1": "Saigon Lager brown glass, user reference photo, original price25000",
+    "beer_2": "Saigon Special green glass, user reference photo, original price35000",
+    "beer_fresh_pet": "Fresh Lager green PET30000",
+    "beer_fresh_lager": "Fresh Lager silver1L green label70000",
+    "beer_fresh_gold": "Fresh Gold silver1L yellow label80000",
+    "beer_fresh_black": "Fresh Black silver1L black label90000"
+  },
+  "prompt_set": [
+    "Faithful photorealistic commercial product cutout of exact bottle supplied in reference; preserve packaging material, shape, brand name and label colors; full upright front-facing bottle, realistic condensation, studio lighting, genuine transparent alpha, no background/props/prices/UI.",
+    "Fresh sheets: two equal square panels side by side, independent bottles centered, no crossing middle. PET green left and aluminum green right; Gold left and Black right. Gold/Black framing correction: preserve product and labels, complete cap/base, clear transparent margin.",
+    "Saigon Special: green glass, short neck, gold dragon, dark green label and white diagonal lower band. Saigon Lager: brown glass, green neck label and silver cap, golden dragon, white and dark green label."
+  ],
+  "saved_paths": {
+    "beer_1": "D:\\Users\\Николай\\Desktop\\Меню\\qr-menu\\_src\\sunsea\\ph\\beer_1.png",
+    "beer_2": "D:\\Users\\Николай\\Desktop\\Меню\\qr-menu\\_src\\sunsea\\ph\\beer_2.png",
+    "beer_fresh_pet": "D:\\Users\\Николай\\Desktop\\Меню\\qr-menu\\_src\\sunsea\\ph\\beer_fresh_pet.png",
+    "beer_fresh_lager": "D:\\Users\\Николай\\Desktop\\Меню\\qr-menu\\_src\\sunsea\\ph\\beer_fresh_lager.png",
+    "beer_fresh_gold": "D:\\Users\\Николай\\Desktop\\Меню\\qr-menu\\_src\\sunsea\\ph\\beer_fresh_gold.png",
+    "beer_fresh_black": "D:\\Users\\Николай\\Desktop\\Меню\\qr-menu\\_src\\sunsea\\ph\\beer_fresh_black.png"
+  }
+}
