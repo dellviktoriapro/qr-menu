@@ -120,9 +120,10 @@ a = s.index('  <div class="facts">'); b = s.index('  <div class="feat">')
 s = s[:a] + '''  <div class="facts">
       <div class="fact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0119 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><div><small id="fAddr"></small>Mũi Né, Phan Thiết</div></div>
       <div class="fact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M12 8v8"/></svg><div><small id="fHours"></small><span id="fCur"></span></div></div>
-      <span hidden id="wifiBtn"></span>
+      <div class="fact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 8a16 16 0 0120 0M5 12a11 11 0 0114 0M8 16a6 6 0 018 0"/><circle cx="12" cy="20" r="1"/></svg><div><small>Wi-Fi</small><button type="button" id="wifiBtn" style="font:inherit;color:inherit;background:transparent;border:0;padding:4px 0;cursor:pointer;letter-spacing:.08em">83838383</button></div></div>
     </div>
 ''' + s[b:]
+s = s.replace('marina12345', '83838383')
 rep('<b id="f2t"></b><span>7:00 – 22:00</span>', '<b id="f2t"></b><span id="f2s"></span>')
 a = s.index('  <div class="cols">'); b = s.index('  <div class="small" id="foot"></div>')
 s = s[:a] + '  <div class="cols"><div><b>Sun&amp;Sea Restaurant</b><br>Mũi Né, Phan Thiết</div><div><b id="ftH"></b><br><span id="ftC"></span></div></div>\n' + s[b:]
