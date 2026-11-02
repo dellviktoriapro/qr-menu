@@ -38,28 +38,36 @@ def card(c,row,x,y,scale=1):
     c.setFillColor(cream);c.setStrokeColor(gold);c.setLineWidth(.7);c.roundRect(0,0,CW,CH,4*mm,fill=1,stroke=1)
     # Clip photo to the card's rounded outline.
     c.saveState();clip=c.beginPath();clip.roundRect(0,0,CW,CH,4*mm);c.clipPath(clip,stroke=0)
-    c.drawImage(heroReader,0,103*mm,width=CW,height=27*mm,preserveAspectRatio=False)
-    c.setFillColor(green);c.setFillAlpha(.28);c.rect(0,103*mm,CW,27*mm,stroke=0,fill=1);c.restoreState()
+    c.drawImage(heroReader,0,107*mm,width=CW,height=23*mm,preserveAspectRatio=False)
+    c.setFillColor(green);c.setFillAlpha(.28);c.rect(0,107*mm,CW,23*mm,stroke=0,fill=1);c.restoreState()
     # The bottom illustration echoes the site's coastal silhouettes.
     c.saveState();c.setFillAlpha(.10);c.setStrokeAlpha(.10);c.drawImage(coastReader,58*mm,0,width=32*mm,height=67*mm,mask='auto');c.restoreState()
     def label(text,y,size=9,font='Body',color=green):
         assert pdfmetrics.stringWidth(text,font,size)<CW-8*mm,text
         c.setFont(font,size);c.setFillColor(color);c.drawCentredString(CW/2,y*mm,text)
-    label('Sun&Sea',115,25,'Brand',HexColor('#ffffff'))
-    label('R E S T A U R A N T   ·   M Ũ I  N É',108.5,6.8,'Bold',HexColor('#ffffff'))
-    label('BÀN  ·  TABLE  ·  СТОЛ  ·  TISCH',96.5,7.5,'Bold',muted)
-    label(str(row['table']),82,36,'Brand')
-    c.setStrokeColor(gold);c.setLineWidth(.6);c.line(10*mm,90.5*mm,26*mm,90.5*mm);c.line(64*mm,90.5*mm,80*mm,90.5*mm)
+    label('Sun&Sea',117,25,'Brand',HexColor('#ffffff'))
+    label('R E S T A U R A N T   ·   M Ũ I  N É',110.5,6.8,'Bold',HexColor('#ffffff'))
+    label('BÀN  ·  TABLE  ·  СТОЛ  ·  TISCH',100.5,7.5,'Bold',muted)
+    label(str(row['table']),86,36,'Brand')
+    c.setStrokeColor(gold);c.setLineWidth(.6);c.line(10*mm,94.5*mm,26*mm,94.5*mm);c.line(64*mm,94.5*mm,80*mm,94.5*mm)
     qr=qrcode.QRCode(error_correction=qrcode.constants.ERROR_CORRECT_M,border=4);qr.add_data(row['url']);qr.make(fit=True)
-    mat=qr.get_matrix();size=50*mm;module=size/len(mat);qx=(CW-size)/2;qy=30*mm
+    mat=qr.get_matrix();size=50*mm;module=size/len(mat);qx=(CW-size)/2;qy=34*mm
     c.setFillColor(HexColor('#ffffff'));c.rect(qx,qy,size,size,fill=1,stroke=0);c.setFillColor(green)
     for iy,line in enumerate(mat):
         for ix,dark in enumerate(line):
             if dark:c.rect(qx+ix*module,qy+(len(mat)-1-iy)*module,module+.004,module+.004,stroke=0,fill=1)
     c.linkURL(row['url'],(qx,qy,qx+size,qy+size),relative=1,thickness=0)
-    for i,(text,font) in enumerate(ctas):label(text,25.7-i*4.1,8.7,font)
+    for i,(text,font) in enumerate(ctas):label(text,29.7-i*4.1,8.7,font)
+    # Universal Wi-Fi symbol and password, without language-dependent wording.
+    c.setFillColor(HexColor('#f3e8c9'));c.roundRect(24*mm,1.8*mm,42*mm,5.8*mm,2.9*mm,fill=1,stroke=0)
+    c.setStrokeColor(green);c.setFillColor(green);c.setLineWidth(.8);c.setLineCap(1)
+    cx,cy=34*mm,3.1*mm
+    for radius in [3.1,2.1,1.1]:
+        r=radius*mm;c.arc(cx-r,cy-r,cx+r,cy+r,startAng=45,extent=90)
+    c.circle(cx,cy,.25*mm,fill=1,stroke=0)
+    c.setFont('Bold',11);c.drawCentredString(48*mm,3.1*mm,'83838383')
     c.restoreState()
-    return {'table':row['table'],'modules':len(mat),'qr_rect_mm':[20,30,50,50]}
+    return {'table':row['table'],'modules':len(mat),'qr_rect_mm':[20,34,50,50]}
 
 pdf=output/'sunsea-table-qr.pdf'
 c=canvas.Canvas(str(pdf),pagesize=A4,pageCompression=1);c.setTitle('Sun&Sea — QR меню · 17 столов');c.setAuthor('Sun&Sea Restaurant')

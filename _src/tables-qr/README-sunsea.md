@@ -11,3 +11,5 @@ Python dependencies: Pillow, ReportLab, qrcode. Windows fonts: Georgia, Arial, M
 PDFs use vector QR modules, medium error correction and a full four-module white quiet zone. Never place art or a logo over the QR. Table-card instructions are RU / EN / VI / DE / KO / ZH. Artwork reuses the menu's hero and right-side coastal silhouette.
 
 Current print outputs are in the task workspace `outputs/`, with stable filenames `sunsea-table-qr.pdf`, `sunsea-table-qr-A6.pdf`, `sunsea-table-qr-images.zip`, `sunsea-menu-languages-A3.pdf` and its 300 dpi PNG. Print at actual size / 100%. All 17 A4 codes and 17 exported A6 PNGs were decoded and compared to their exact table URLs; all 17 live API responses matched their printed table number. The A3 QR was independently decoded and checked for public-preview mode.
+
+Each card also includes a vector Wi-Fi symbol and password `83838383`, without translated labels. The QR URLs and 50 mm white scan fields remain unchanged.
