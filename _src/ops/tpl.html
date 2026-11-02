@@ -549,6 +549,7 @@ body:has(.fab) .panes{padding-bottom:84px}
 .swp .oc{position:relative;z-index:1;transition:transform .25s cubic-bezier(.2,.9,.3,1);touch-action:pan-y}
 .swp .oc.drag{transition:none}
 .swp+.swp{margin-top:12px}
+.prep-status{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}.kc .prep-status{padding:0 14px}.kc .kf{flex-wrap:wrap;gap:8px}
 </style>
 
 <header class="top">
@@ -771,6 +772,7 @@ function detectEvents(prev){
     if(!p&&o.status==="new"&&ST.shift[ST.me]&&showsForMe()&&forMe(o)){toast((o.round>1?t("addMore"):t("newAlert"))+" · "+t("table")+" "+o.table,o.items.length+" × · "+vnd(tot(o)));beep("new")}
     if(p&&!p.reEsc&&o.reEsc&&o.status==="new"&&o.owner!==ST.me&&ST.shift[ST.me]&&showsForMe()){toast(t("addMore")+" · "+t("table")+" "+o.table,t("reEscT").replace("{w}",wname(o.owner)),"r");beep("new")}
     if(p&&p.status!=="cooking"&&o.status==="cooking"&&(ST.role==="kitchen"||ST.split)){toast(t("kNew")+" · "+t("table")+" "+o.table,wname(o.waiter),"b");beep("kitchen")}
+    if(p&&o.status==="cooking"&&readyTargets(o).includes(ST.me)&&showsForMe()){for(const scope of ["bar","kitchen"]){if(stationReady(o,scope)&&!stationReady(p,scope)){toast(t(scope==="bar"?"kBar":"kKitchen")+": "+t("sReady")+" · "+t("table")+" "+o.table,"#"+o.no,"g");beep("ready")}}}
     if(p&&p.status!=="ready"&&o.status==="ready"&&readyTargets(o).includes(ST.me)&&showsForMe()){toast(t("readyAlert")+" · "+t("table")+" "+o.table,"#"+o.no+" · "+wname(o.waiter),"g");beep("ready")}
     else if(p&&p.status!=="ready"&&o.status==="ready"&&ST.role==="kitchen"&&!ST.split){toast(t("kSentW").replace("{w}",readyTargets(o).map(wname).join(", ")||wname(o.waiter)),t("table")+" "+o.table+" · #"+o.no,"g")}
     if(p&&!p.escalated&&o.escalated&&o.status==="ready"&&ST.shift[ST.me]&&o.waiter!==ST.me&&showsForMe()&&ST.notify!=="taker"){toast(t("readyAll")+" · "+t("table")+" "+o.table,"#"+o.no+" · "+wname(o.waiter),"r");beep("ready")}
@@ -797,9 +799,14 @@ function toKitchen(id){mutate(()=>{const o=ST.orders.find(x=>x.id===id);if(!o||o
 function billOrders(bid){return ST.orders.filter(o=>o.bill===bid)}
 function billTotal(bid){return billOrders(bid).reduce((s,o)=>s+tot(o),0)}
 function closeBill(bid,pays){mutate(()=>{const b=ST.bills[bid];if(!b)return;b.pays=pays;const v=[...new Set(Object.values(pays))];b.pay=v.length===1?v[0]:"mix";b.closed=true;b.closedAt=Date.now();b.closedBy=ST.me;billOrders(bid).forEach(o=>{if(o.status!=="served"){o.status="served";o.servedAt=Date.now()}})})}
-function served(id){mutate(()=>{const o=ST.orders.find(x=>x.id===id);if(!o)return;o.status="served";o.servedAt=Date.now();o.servedBy=ST.me})}
-function kReady(id){mutate(()=>{const o=ST.orders.find(x=>x.id===id);if(!o||o.status!=="cooking")return;o.status="ready";o.readyAt=Date.now();o.items.forEach(i=>i.done=true)})}
-function kItem(id,idx){mutate(()=>{const o=ST.orders.find(x=>x.id===id);if(!o)return;o.items[idx].done=!o.items[idx].done})}
+function served(id){mutate(()=>{const o=ST.orders.find(x=>x.id===id);if(!o||o.status!=="ready")return;o.status="served";o.servedAt=Date.now();o.servedBy=ST.me})}
+function kReady(id,scope){if(!["bar","kitchen"].includes(scope))return;mutate(()=>{const o=ST.orders.find(x=>x.id===id);if(!o||o.status!=="cooking")return;stationItems(o,scope).forEach(i=>i.done=true);syncPrep(o)})}
+function kItem(id,idx){mutate(()=>{const o=ST.orders.find(x=>x.id===id);if(!o||o.status!=="cooking"||!o.items[idx])return;o.items[idx].done=!o.items[idx].done;syncPrep(o)})}
+function stationItems(o,scope){return o.items.filter(i=>scope==="all"||(M[i.mid]?.st==="b"?"bar":"kitchen")===scope)}
+function stationReady(o,scope){const items=stationItems(o,scope);return items.length>0&&items.every(i=>i.done)}
+function syncPrep(o){const now=Date.now();o.stationReadyAt=o.stationReadyAt||{};for(const scope of ["bar","kitchen"]){if(stationReady(o,scope)){if(!o.stationReadyAt[scope])o.stationReadyAt[scope]=now}else delete o.stationReadyAt[scope]}if(stationReady(o,"all")){o.status="ready";o.readyAt=now}}
+function prepSummary(o){if(!["cooking","ready"].includes(o.status))return "";return `<div class="prep-status">${["kitchen","bar"].filter(scope=>stationItems(o,scope).length).map(scope=>`<span class="pill ${stationReady(o,scope)?"st-ready":"st-cooking"}">${esc(t(scope==="bar"?"kBar":"kKitchen"))}: ${esc(t(stationReady(o,scope)?"sReady":"sCooking"))}</span>`).join("")}</div>`}
+function readyBanner(o){const full=o.status==="ready",label=full?t("readyAlert"):["kitchen","bar"].filter(scope=>stationReady(o,scope)).map(scope=>t(scope==="bar"?"kBar":"kKitchen")+": "+t("sReady")).join(" · ");return `<div class="alert"><span>✓ ${esc(label)} · <b>${esc(t("table"))} ${o.table}</b> #${o.no}${o.waiter!==ST.me?` (${esc(wname(o.waiter))})`:""}</span><span class="sp"></span>${full?`<button class="btn green sm" type="button" data-a="served" data-id="${o.id}">${esc(t("served"))}</button>`:""}</div>`}
 function simulate(more){const langs=["en","ru","ru","ko","zh","en"];const l=langs[Math.floor(Math.random()*langs.length)];
   const n=1+Math.floor(Math.random()*3);const items=[];for(let i=0;i<n;i++){const m=MENU[Math.floor(Math.random()*MENU.length)];items.push({mid:m.id,qty:1,note:"",done:false})}
   const w=Math.random()<.4?[WISH[Math.floor(Math.random()*4)].k]:[];
@@ -841,7 +848,7 @@ function render(){
   list.forEach(r=>({guest:rGuest,waiter:rWaiter,kitchen:rKitchen,owner:rOwnerWrap,join:rJoin})[r]($("pb-"+r)));
 }
 
-function orderLines(o,opts={}){const l=opts.lang||ST.lang;return `<ul class="lines">`+o.items.map(i=>`<li><span class="q">${i.qty}×</span><span class="n"><b>${esc(nm(i.mid,"vi"))}</b>${i.added?`<span class="badge-new">+</span>`:""}${ST.lang==="ru"?`<span class="tr">${esc(nm(i.mid,"ru"))}</span>`:o.lang!=="vi"?`<span class="tr">${esc(nm(i.mid,"en"))}</span>`:""}${i.note?`<span class="note">${esc(i.note)}</span>`:""}</span><span class="p">${vnd(M[i.mid].p*i.qty)}</span></li>`).join("")+`</ul>`}
+function orderLines(o,opts={}){const l=opts.lang||ST.lang;return `<ul class="lines">`+o.items.map(i=>`<li><span class="q">${i.qty}×</span><span class="n"><b>${esc(nm(i.mid,"vi"))}</b>${i.added?`<span class="badge-new">+</span>`:""}${ST.lang==="ru"?`<span class="tr">${esc(nm(i.mid,"ru"))}</span>`:o.lang!=="vi"?`<span class="tr">${esc(nm(i.mid,"en"))}</span>`:""}${i.note?`<span class="note">${esc(i.note)}</span>`:""}</span><span class="p">${vnd(M[i.mid].p*i.qty)}</span></li>`).join("")+`</ul>`+prepSummary(o)}
 function wishHTML(o,l){return o.wishes&&o.wishes.length?`<div class="wish">${o.wishes.map(k=>{const w=WISH.find(x=>x.k===k);return w?`<span>${esc(w[l])}</span>`:""}).join("")}</div>`:""}
 function stepsHTML(o){const idx={new:0,accepted:1,cooking:2,ready:3,served:4}[o.status];return `<div class="steps">${[0,1,2,3,4].map(i=>`<i class="${i<=idx?"on":""}"></i>`).join("")}</div>`}
 
@@ -891,12 +898,12 @@ function oCard(o,mode){const l=ST.lang;const mineO=o.waiter===ST.me;
     </div></article>`}
 function rWaiter(el){const meS=staffBy(ST.me);if(!meS||meS.status!=="active"){const alt=WAITERS()[0];if(alt&&(!meS||meS.status==="deleted")){ST.me=alt.id}else{el.innerHTML=`<div class="alert red"><span>${esc(t("blockedMsg").replace("{w}",meS?meS.name:""))}</span></div><div class="who"><label for="meSel" class="muted">${esc(t("me"))}</label><select id="meSel"><option></option>${WAITERS().map(w=>`<option value="${w.id}">${esc(w.name)}</option>`).join("")}</select></div>`;el.querySelector("#meSel").onchange=e=>{if(e.target.value){ST.me=e.target.value;save();render()}};return}}
   const on=ST.shift[ST.me];const L=live();
-  const myReady=L.filter(o=>o.status==="ready"&&readyTargets(o).includes(ST.me));
-  const tabs=[["new",t("tNew"),L.filter(o=>o.status==="new")],["mine",t("tMine"),L.filter(o=>o.waiter===ST.me&&["accepted","cooking"].includes(o.status))],["ready",t("tReady"),L.filter(o=>o.status==="ready")],["done",t("tDone"),L.filter(o=>o.status==="served"&&o.bill&&ST.bills[o.bill]&&!ST.bills[o.bill].closed).reverse()],["paid",t("tPaid"),L.filter(o=>o.status==="served"&&!(o.bill&&ST.bills[o.bill]&&!ST.bills[o.bill].closed)).slice(-20).reverse()],["tables",t("tTables"),Object.values(ST.bills).filter(b=>!b.closed&&billOrders(b.id).some(o=>!o.seed))]];
+  const myReady=L.filter(o=>(o.status==="ready"||(o.status==="cooking"&&["bar","kitchen"].some(scope=>stationReady(o,scope))))&&readyTargets(o).includes(ST.me));
+  const tabs=[["new",t("tNew"),L.filter(o=>o.status==="new")],["mine",t("tMine"),L.filter(o=>o.waiter===ST.me&&["accepted","cooking"].includes(o.status))],["ready",t("tReady"),L.filter(o=>o.status==="ready"||(o.status==="cooking"&&["bar","kitchen"].some(scope=>stationReady(o,scope))))],["done",t("tDone"),L.filter(o=>o.status==="served"&&o.bill&&ST.bills[o.bill]&&!ST.bills[o.bill].closed).reverse()],["paid",t("tPaid"),L.filter(o=>o.status==="served"&&!(o.bill&&ST.bills[o.bill]&&!ST.bills[o.bill].closed)).slice(-20).reverse()],["tables",t("tTables"),Object.values(ST.bills).filter(b=>!b.closed&&billOrders(b.id).some(o=>!o.seed))]];
   const cur=tabs.find(x=>x[0]===ST.wtab)||tabs[0];
   el.innerHTML=`<div class="who"><label for="meSel" class="muted">${esc(t("me"))}</label><select id="meSel">${WAITERS().map(w=>`<option value="${w.id}" ${w.id===ST.me?"selected":""}>${esc(w.name)}${ST.shift[w.id]?" ●":""}</option>`).join("")}</select><button type="button" class="btn sm ${meS.tipQr?"ghost":"tipneed"}" id="tipQrBtn" title="${meS.tipQr?"":esc(t("tipMiss"))}">${esc(t("tipQr"))}${meS.tipQr?" ✓":""}</button><span class="sp"></span><button type="button" class="shift ${on?"on":"off"}" id="shiftBtn">${on?"● "+esc(t("onShift"))+" · "+esc(t("endShift")):esc(t("startShift"))}</button></div>
    ${on?"":`<div class="alert red"><span>${esc(t("offNote"))}</span></div>`}
-   ${on&&myReady.length?myReady.map(o=>`<div class="alert"><span>✓ ${esc(t("readyAlert"))} · <b>${esc(t("table"))} ${o.table}</b> #${o.no}${o.waiter!==ST.me?` (${esc(wname(o.waiter))})`:""}</span><span class="sp"></span><button class="btn green sm" type="button" data-a="served" data-id="${o.id}">${esc(t("served"))}</button></div>`).join(""):""}
+   ${on&&myReady.length?myReady.map(readyBanner).join(""):""}
    ${Object.values(ST.bills).filter(b=>!b.closed&&b.req).sort((a,b)=>a.req.at-b.req.at).map(b=>`<div class="reqbar"><b>${esc(t("table"))} ${b.table} · ${esc(t("billReq"))}</b><span>${esc(reqTxt(b.req))} · ${vnd(billTotal(b.id))}</span><button class="btn green sm" type="button" data-a="bill" data-id="${b.id}">${esc(t("openBill"))}</button></div>`).join("")}<div class="row"><div class="tabs">${tabs.map(([k,lab,arr])=>`<button type="button" data-wt="${k}" class="${k===cur[0]?"on":""}">${esc(lab)} · ${arr.length}</button>`).join("")}</div></div><button class="fab" type="button" id="manualBtn" ${on?"":"disabled"} aria-label="${esc(t("manual"))}" title="${esc(t("manual"))}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span>${esc(t("fabT"))}</span></button>
    ${cur[0]==="tables"?`<div class="tview"><button type="button" data-tv="map" class="${ST.tview!=="list"?"on":""}">${esc(t("tvMap"))}</button><button type="button" data-tv="list" class="${ST.tview==="list"?"on":""}">${esc(t("tvList"))}</button></div>`+(ST.tview==="list"?(cur[2].length?`<div class="tgrid">${cur[2].sort((a,b)=>a.table-b.table).map(tCard).join("")}</div>`:`<div class="empty">${esc(t("noBills"))}</div>`):hallMap()):cur[2].length?cur[2].map(o=>`<div class="swp">${oCard(o)}</div>`).join(""):`<div class="empty">${esc(t("none"))}</div>`}`;
   el.querySelectorAll("[data-tv]").forEach(b=>b.onclick=()=>{ST.tview=b.dataset.tv;save();render()});
@@ -1009,15 +1016,16 @@ $("sheet").addEventListener("click",e=>{if(e.target===$("sheet"))closeEditor()})
 /* --- kitchen --- */
 function rKitchen(el){const f=ST.ktab;const L=live();
   const filt=o=>f==="all"||o.items.some(i=>M[i.mid].st===(f==="bar"?"b":"k"));
-  const cooking=L.filter(o=>o.status==="cooking"&&filt(o)).sort((a,b)=>a.sentAt-b.sentAt);
-  const ready=L.filter(o=>o.status==="ready"&&filt(o));
+  const cooking=L.filter(o=>["cooking","ready"].includes(o.status)&&!stationReady(o,f)&&filt(o)).sort((a,b)=>a.sentAt-b.sentAt);
+  const ready=L.filter(o=>["cooking","ready"].includes(o.status)&&stationReady(o,f)&&filt(o));
   const card=o=>{const its=o.items.map((i,k)=>[i,k]).filter(([i])=>f==="all"||M[i.mid].st===(f==="bar"?"b":"k"));
-    return `<article style="--tc:var(--t${(((+o.table||1)-1)%8+8)%8+1})" class="kc ${o.status==="ready"?"ready":""}" ${o.status==="cooking"?`data-slow="${o.sentAt}"`:""}>
-    <div class="kh"><span class="tb">${esc(t("table"))} ${o.table}</span><span>#${o.no}</span><span class="tm" ${o.status==="cooking"?`data-mmss="${o.sentAt}"`:""}>${o.status==="cooking"?mmss(o.sentAt):"✓"}</span></div>
-    <div class="kb">${its.map(([i,k])=>`<button type="button" class="ki ${i.done?"done":""}" data-ki="${o.id}" data-k="${k}" ${o.status!=="cooking"?"disabled":""}><span class="q">${i.qty}×</span><span><b>${esc(nm(i.mid,"vi"))}</b>${f==="all"?`<span class="stn ${M[i.mid].st==="b"?"sb":"sk"}">${esc(M[i.mid].st==="b"?t("bar"):t("kit"))}</span>`:""}${i.added?` <span class="badge-new">+</span>`:""}${i.note?`<span class="note">⚠ ${esc(i.note)}</span>`:""}${ST.lang==="ru"?`<span class="sub">${esc(nm(i.mid,"ru"))}</span>`:""}</span></button>`).join("")}
+    const done=stationReady(o,f),at=f==="all"?o.readyAt:o.stationReadyAt?.[f]||o.readyAt;
+    return `<article style="--tc:var(--t${(((+o.table||1)-1)%8+8)%8+1})" class="kc ${done?"ready":""}" ${!done?`data-slow="${o.sentAt}"`:""}>
+    <div class="kh"><span class="tb">${esc(t("table"))} ${o.table}</span><span>#${o.no}</span><span class="tm" ${!done?`data-mmss="${o.sentAt}"`:""}>${!done?mmss(o.sentAt):"✓"}</span></div>
+    <div class="kb">${its.map(([i,k])=>`<button type="button" class="ki ${i.done?"done":""}" data-ki="${o.id}" data-k="${k}" ${done?"disabled":""}><span class="q">${i.qty}×</span><span><b>${esc(nm(i.mid,"vi"))}</b>${f==="all"?`<span class="stn ${M[i.mid].st==="b"?"sb":"sk"}">${esc(M[i.mid].st==="b"?t("bar"):t("kit"))}</span>`:""}${i.added?` <span class="badge-new">+</span>`:""}${i.note?`<span class="note">⚠ ${esc(i.note)}</span>`:""}${ST.lang==="ru"?`<span class="sub">${esc(nm(i.mid,"ru"))}</span>`:""}</span></button>`).join("")}
     ${o.wishes&&o.wishes.length?`<div class="kw">⚠ ${o.wishes.map(k=>{const w=WISH.find(x=>x.k===k);return w?esc(w.vi)+(ST.lang==="ru"?" ("+esc(w.ru)+")":""):""}).join(" · ")}</div>`:""}
     ${o.comment?`<div class="kcm">${esc(o.comment)}</div>`:""}</div>
-    <div class="kf"><span class="meta">${esc(wname(o.waiter))}</span><span class="sp"></span>${o.status==="cooking"?`<button class="btn green sm" type="button" data-kr="${o.id}">${esc(t("kDone"))}</button>`:`<span class="meta">${esc(t("kReady"))} · <span data-since="${o.readyAt}">${since(o.readyAt)}</span></span>`}</div></article>`};
+    ${f==="all"?prepSummary(o):""}<div class="kf"><span class="meta">${esc(wname(o.waiter))}</span><span class="sp"></span>${!done?(f==="all"?["kitchen","bar"]:[f]).filter(scope=>stationItems(o,scope).length&&!stationReady(o,scope)).map(scope=>`<button class="btn green sm" type="button" data-kr="${o.id}" data-station="${scope}">${esc(t(scope==="bar"?"kBar":"kKitchen"))} · ${esc(t("kDone"))}</button>`).join(""):`<span class="meta">${esc(t("kReady"))}${at?` · <span data-since="${at}">${since(at)}</span>`:""}</span>`}</div></article>`};
   const ns=Object.keys(ST.stop||{}).length;
   const ktabs=`<div class="row"><div class="tabs">${[["all",t("kAll")],["kitchen",t("kKitchen")],["bar",t("kBar")],["stop",t("kStop")]].map(([k,lab])=>`<button type="button" data-kt="${k}" class="${k===f?"on":""}">${esc(lab)}${k==="stop"&&ns?`<span class="stopcnt">${ns}</span>`:""}</button>`).join("")}</div><span class="sp"></span>${f==="stop"?"":`<span class="dim">${esc(t("kTap"))}</span>`}</div>`;
   if(f==="stop"){el.innerHTML=ktabs+`<div id="stopIn"></div>`;el.querySelectorAll("[data-kt]").forEach(b=>b.onclick=()=>{ST.ktab=b.dataset.kt;save();render()});rStop(el.querySelector("#stopIn"));return}
@@ -1026,7 +1034,7 @@ function rKitchen(el){const f=ST.ktab;const L=live();
    ${ready.length?`<h3 class="muted">${esc(t("kReady"))} · ${ready.length}</h3><div class="kgrid">${ready.map(card).join("")}</div>`:""}`;
   el.querySelectorAll("[data-kt]").forEach(b=>b.onclick=()=>{ST.ktab=b.dataset.kt;save();render()});
   el.querySelectorAll("[data-ki]").forEach(b=>b.onclick=()=>kItem(b.dataset.ki,+b.dataset.k));
-  el.querySelectorAll("[data-kr]").forEach(b=>b.onclick=()=>kReady(b.dataset.kr));
+  el.querySelectorAll("[data-kr]").forEach(b=>b.onclick=()=>kReady(b.dataset.kr,b.dataset.station));
 }
 
 /* --- owner --- */
