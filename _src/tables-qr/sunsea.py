@@ -58,7 +58,8 @@ def card(c,row,x,y,scale=1):
             if dark:c.rect(qx+ix*module,qy+(len(mat)-1-iy)*module,module+.004,module+.004,stroke=0,fill=1)
     c.linkURL(row['url'],(qx,qy,qx+size,qy+size),relative=1,thickness=0)
     for i,(text,font) in enumerate(ctas):label(text,29.7-i*4.1,8.7,font)
-    # Universal Wi-Fi symbol and password, without language-dependent wording.
+    # Universal Wi-Fi strip, vertical along the left edge and outside the QR quiet zone.
+    c.saveState();c.translate(10*mm,38*mm);c.rotate(90);c.translate(-24*mm,-1.8*mm)
     c.setFillColor(HexColor('#f3e8c9'));c.roundRect(24*mm,1.8*mm,42*mm,5.8*mm,2.9*mm,fill=1,stroke=0)
     c.setStrokeColor(green);c.setFillColor(green);c.setLineWidth(.8);c.setLineCap(1)
     cx,cy=34*mm,3.1*mm
@@ -66,6 +67,7 @@ def card(c,row,x,y,scale=1):
         r=radius*mm;c.arc(cx-r,cy-r,cx+r,cy+r,startAng=45,extent=90)
     c.circle(cx,cy,.25*mm,fill=1,stroke=0)
     c.setFont('Bold',11);c.drawCentredString(48*mm,3.1*mm,'83838383')
+    c.restoreState()
     c.restoreState()
     return {'table':row['table'],'modules':len(mat),'qr_rect_mm':[20,34,50,50]}
 
