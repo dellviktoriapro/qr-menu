@@ -257,9 +257,6 @@
   "Heineken": "Heineken",
   "Corona": "Corona",
   "Fresh Lager": "Fresh Lager",
-  "Fresh draught Lager · 1 L": "Fresh Lager vom Fass · 1 l",
-  "Fresh draught Gold · 1 L": "Fresh Gold vom Fass · 1 l",
-  "Fresh draught Black · 1 L": "Fresh Black vom Fass · 1 l",
   "Soft drinks": "Alkoholfreie Getränke",
   "Coca-Cola": "Coca-Cola",
   "Coca-Cola light": "Coca-Cola light",
@@ -290,5 +287,8 @@
   "Premium rice sake, guava": "Premium-Reissake, Guave",
   "Tropical & fruity guava flavor. 365 ml, 12.5% vol.": "Tropischer, fruchtiger Guavengeschmack. 365 ml, 12,5 % vol.",
   "Tequila 1902's collection": "Tequila 1902’s Collection",
-  "Premium tequila from 1902, smooth & authentic. 175 ml, 39.5% vol.": "Premium-Tequila von 1902, mild und authentisch. 175 ml, 39,5 % vol."
+  "Premium tequila from 1902, smooth & authentic. 175 ml, 39.5% vol.": "Premium-Tequila von 1902, mild und authentisch. 175 ml, 39,5 % vol.",
+  "Fresh Lager · 1 L": "Fresh Lager · 1 l",
+  "Fresh Gold · 1 L": "Fresh Gold · 1 l",
+  "Fresh Black · 1 L": "Fresh Black · 1 l"
 }

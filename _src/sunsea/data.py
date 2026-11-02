@@ -320,9 +320,9 @@ I('Tiger Gold', 'Tiger Gold', 'Тайгер Голд', '타이거 골드', '虎�
 I('Heineken', 'Heineken', 'Хайнекен', '하이네켄', '喜力', 40000, None, n='05'),
 I('Corona', 'Corona', 'Корона', '코로나', '科罗娜', 60000, None, n='06'),
 I('Fresh Lager', 'Fresh Lager', 'Fresh Lager', '프레시 라거', 'Fresh Lager', 30000, 'beer_fresh_pet'),
-I('Fresh draught Lager · 1 L', 'Bia tươi Fresh Lager · 1 lít', 'Разливное Fresh Lager · 1 л', '프레시 라거 생맥주 · 1 L', 'Fresh Lager 鲜啤 · 1升', 70000, 'beer_fresh_lager'),
-I('Fresh draught Gold · 1 L', 'Bia tươi Fresh Gold · 1 lít', 'Разливное Fresh Gold · 1 л', '프레시 골드 생맥주 · 1 L', 'Fresh Gold 鲜啤 · 1升', 80000, 'beer_fresh_gold'),
-I('Fresh draught Black · 1 L', 'Bia tươi Fresh Black · 1 lít', 'Разливное Fresh Black · 1 л', '프레시 블랙 생맥주 · 1 L', 'Fresh Black 鲜啤 · 1升', 90000, 'beer_fresh_black'),
+I('Fresh Lager · 1 L', 'Bia Fresh Lager · 1 lít', 'Fresh Lager · 1 л', '프레시 라거 맥주 · 1 L', 'Fresh Lager 啤酒 · 1升', 70000, 'beer_fresh_lager'),
+I('Fresh Gold · 1 L', 'Bia Fresh Gold · 1 lít', 'Fresh Gold · 1 л', '프레시 골드 맥주 · 1 L', 'Fresh Gold 啤酒 · 1升', 80000, 'beer_fresh_gold'),
+I('Fresh Black · 1 L', 'Bia Fresh Black · 1 lít', 'Fresh Black · 1 л', '프레시 블랙 맥주 · 1 L', 'Fresh Black 啤酒 · 1升', 90000, 'beer_fresh_black'),
 ], group='drinks')
 
 sec('ss_soft', L('Soft drinks', 'Nước ngọt', 'Безалкогольные напитки', '청량음료', '软饮'), [
