@@ -374,3 +374,7 @@ _src/                   исходники и сборка — править Т
 03.11.2026: Zalo бронирования Sun&Sea заменён по просьбе Марго на +84 788 98 09 09 (https://zalo.me/84788980909). WhatsApp и Telegram сохранены.
 
 
+
+### 03.11.2026 — Supabase staff platform foundation
+User chose Supabase for independent multi-restaurant staff app, owner analytics persists. Organization Restaurant Platform, development project restaurant-platform-dev / vppgtrbewgqigfinknex, Singapore, Free. _src/platform contains bootstrap, rollback-only SQL security test, design and plan. Ten rp_* tables installed with RLS, composite tenant FKs and NO client grants. Two-cafe owner/waiter/anonymous/revoked membership tests passed; fixture users and grants rolled back (0 cafes, 0 test users, 10 protected tables, 0 exposed). Logical DB11MB, not total disk. Existing demo remains local browser storage; no live sync/auth/analytics integration yet, no SunSea menu integration. Next: real auth/invitations and transactional role-scoped commands, then app adapter, realtime, analytics and production readiness. Prior claims that Free is sufficient long-term or push/Zalo delivery guaranteed are superseded: production capacity/pricing/delivery require measured checks. No credentials in repository. Bootstrap is not CLI migration history; establish versioned migrations before later changes.
+
