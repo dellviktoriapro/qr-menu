@@ -26,4 +26,10 @@ for(const match of html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g))ne
 assert(html.indexOf('function waiterMenuRef')<html.indexOf('const lines=x.L.map'));
 // Special printed codes must remain strings, including leading zero and decimals.
 for(const n of ['025','51.1','51.2','01','96','97'])assert(Object.values(audit.items).some(x=>x.number===n));
+// Explicit user-confirmed leading-zero distinctions must never be normalized.
+for(const [key,number]of Object.entries({'ss_pasta|9':'096','ss_pasta|10':'097','ss_coffee|9':'010','ss_coffee|10':'011','ss_tuna|6':'96','ss_tuna|7':'97','ss_noodles|3':'10','ss_rolls|1':'11'})){
+ const [sid,index]=key.split('|'),it=DATA.find(s=>s.id===sid).items[+index];
+ assert.equal(it[7].n,number,key+' user-confirmed number');
+ assert(context.waiterMenuRef(it,key+'|0').includes('№ '+number));
+}
 console.log('PASS: 183 identities matched independently reviewed print audit; 135 exact codes, 48 unnumbered; customized/variant keys; both waiter renderers; inline JS compiles.');

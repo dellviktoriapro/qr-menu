@@ -1,6 +1,6 @@
 {
   "reviewed": "2026-11-05",
-  "scope": "Every catalog item checked. Numbers absent in print remain absent. Fresh beer additions have no supplied printed numbers.",
+  "scope": "All catalog items reviewed against supplied pages; four leading-zero corrections confirmed by user 2026-11-05 override poster values. Unnumbered positions remain unnumbered.",
   "items": {
     "ss_chef|0": {
       "number": null,
@@ -1097,24 +1097,28 @@
       ]
     },
     "ss_pasta|9": {
-      "number": "96",
+      "number": "096",
       "vi": "Cơm risotto tôm",
       "photo": "rs_shrimp",
       "sourcePages": [
         "3463",
         "3462",
         "3446"
-      ]
+      ],
+      "printedNumber": "96",
+      "numberAuthority": "User clarification 2026-11-05; supersedes supplied poster number"
     },
     "ss_pasta|10": {
-      "number": "97",
+      "number": "097",
       "vi": "Cơm risotto hải sản",
       "photo": "rs_seafood",
       "sourcePages": [
         "3463",
         "3462",
         "3446"
-      ]
+      ],
+      "printedNumber": "97",
+      "numberAuthority": "User clarification 2026-11-05; supersedes supplied poster number"
     },
     "ss_veg|0": {
       "number": "66",
@@ -1303,20 +1307,24 @@
       ]
     },
     "ss_coffee|9": {
-      "number": "10",
+      "number": "010",
       "vi": "Cacao latte",
       "photo": "cf_cacaolatte",
       "sourcePages": [
         "3432"
-      ]
+      ],
+      "printedNumber": "10",
+      "numberAuthority": "User clarification 2026-11-05; supersedes supplied poster number"
     },
     "ss_coffee|10": {
-      "number": "11",
+      "number": "011",
       "vi": "Matcha sữa dừa",
       "photo": "cf_matchacoco",
       "sourcePages": [
         "3432"
-      ]
+      ],
+      "printedNumber": "11",
+      "numberAuthority": "User clarification 2026-11-05; supersedes supplied poster number"
     },
     "ss_juice|0": {
       "number": "01",

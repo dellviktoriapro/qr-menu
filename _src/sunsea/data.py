@@ -238,8 +238,8 @@ I('Spaghetti seafood tom yum sauce', 'Spaghetti hải sản tomyum', 'Паста
 I('Spaghetti with grilled shrimp in pink sauce', 'Spaghetti tôm nướng sốt kem cà chua', 'Паста с креветками на гриле в розовом соусе', '로제 소스 새우 파스타', '粉红酱烤虾意面', 160000, 'pa_pink', n='55', d=L('Pink sauce.', 'Sốt kem cà chua.', 'Розовый соус.', '로제 소스.', '粉红酱。')),
 I('Spaghetti aglio e olio', 'Spaghetti sốt tỏi', 'Паста в чесночно-масляном соусе', '알리오 올리오', '蒜香橄榄油意面', 110000, 'pa_aglio', n='56', d=L('Garlic, olive oil, chili.', 'Tỏi, dầu ô liu, ớt.', 'Чеснок, оливковое масло, чили.', '마늘, 올리브오일, 고추.', '大蒜、橄榄油、辣椒。')),
 I('Spaghetti bolognese', 'Mì spaghetti bò bằm sốt cà chua', 'Спагетти болоньезе', '볼로네제 스파게티', '肉酱意面', 170000, 'pa_bolognese', n='98'),
-I('Risotto with shrimp', 'Cơm risotto tôm', 'Ризотто с креветками', '새우 리조또', '鲜虾烩饭', 210000, 'rs_shrimp', n='96'),
-I('Risotto with seafood', 'Cơm risotto hải sản', 'Ризотто с морепродуктами', '해산물 리조또', '海鲜烩饭', 210000, 'rs_seafood', n='97'),
+I('Risotto with shrimp', 'Cơm risotto tôm', 'Ризотто с креветками', '새우 리조또', '鲜虾烩饭', 210000, 'rs_shrimp', n='096'),
+I('Risotto with seafood', 'Cơm risotto hải sản', 'Ризотто с морепродуктами', '해산물 리조또', '海鲜烩饭', 210000, 'rs_seafood', n='097'),
 ])
 
 sec('ss_veg', L('Vegetables', 'Rau củ xào', 'Овощи', '채소 볶음', '炒蔬菜'), [
@@ -272,8 +272,8 @@ I('Americano (hot / cold)', 'Cà phê Americano (nóng / lạnh)', 'Америк
 I('Coconut milk coffee', 'Cà phê dừa', 'Кофе с кокосовым молоком', '코코넛 밀크 커피', '椰奶咖啡', 50000, 'cf_coconut', n='07', d=L('Aromatic coffee with smooth coconut milk.', 'Cà phê thơm với nước cốt dừa béo mịn.', 'Ароматный кофе с нежным кокосовым молоком.', '부드러운 코코넛 밀크를 더한 향긋한 커피.', '香浓咖啡配顺滑椰奶。')),
 I('Matcha green tea (blended)', 'Matcha đá xay', 'Матча зелёный чай (фраппе)', '말차 프라페', '抹茶冰沙', 55000, 'cf_matcha', n='08', d=L('Refreshing matcha green tea blended with ice and cream.', 'Trà xanh matcha xay đá với kem.', 'Освежающий зелёный чай матча со льдом и сливками.', '얼음과 크림을 갈아 넣은 상쾌한 말차.', '抹茶加冰与奶油打制，清爽。')),
 I('Cacao (hot / iced)', 'Cacao (nóng / đá)', 'Какао (горячее / со льдом)', '카카오 (핫/아이스)', '可可（热/冰）', 50000, 'cf_cacao', n='09', d=L('Rich and chocolatey drink for cacao lovers.', 'Thức uống cacao đậm vị cho người yêu sô cô la.', 'Насыщенный шоколадный вкус для любителей какао.', '카카오 애호가를 위한 진한 초콜릿 음료.', '浓郁巧克力风味，可可爱好者之选。')),
-I('Cacao latte', 'Cacao latte', 'Какао латте', '카카오 라떼', '可可拿铁', 45000, 'cf_cacaolatte', n='10', d=L('Chocolate latte with milk and soft foam.', 'Latte sô cô la với sữa và bọt mịn.', 'Шоколадный латте с молоком и нежной пеной.', '우유와 부드러운 폼의 초콜릿 라떼.', '牛奶与绵密奶泡的巧克力拿铁。')),
-I('Matcha coconut', 'Matcha sữa dừa', 'Матча с кокосовым молоком', '말차 코코넛', '椰奶抹茶', 55000, 'cf_matchacoco', n='11', d=L('Matcha with coconut milk: smooth, tropical and refreshing.', 'Matcha với sữa dừa: êm, nhiệt đới và sảng khoái.', 'Матча с кокосовым молоком: нежно, освежающе, по-вьетнамски.', '코코넛 밀크 말차: 부드럽고 상쾌해요.', '椰奶抹茶：顺滑、热带、清爽。')),
+I('Cacao latte', 'Cacao latte', 'Какао латте', '카카오 라떼', '可可拿铁', 45000, 'cf_cacaolatte', n='010', d=L('Chocolate latte with milk and soft foam.', 'Latte sô cô la với sữa và bọt mịn.', 'Шоколадный латте с молоком и нежной пеной.', '우유와 부드러운 폼의 초콜릿 라떼.', '牛奶与绵密奶泡的巧克力拿铁。')),
+I('Matcha coconut', 'Matcha sữa dừa', 'Матча с кокосовым молоком', '말차 코코넛', '椰奶抹茶', 55000, 'cf_matchacoco', n='011', d=L('Matcha with coconut milk: smooth, tropical and refreshing.', 'Matcha với sữa dừa: êm, nhiệt đới và sảng khoái.', 'Матча с кокосовым молоком: нежно, освежающе, по-вьетнамски.', '코코넛 밀크 말차: 부드럽고 상쾌해요.', '椰奶抹茶：顺滑、热带、清爽。')),
 ], group='drinks')
 
 sec('ss_juice', L('Fresh juice', 'Nước ép tươi', 'Свежие соки', '생과일 주스', '鲜榨果汁'), [
