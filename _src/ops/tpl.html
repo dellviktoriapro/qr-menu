@@ -704,7 +704,7 @@ function seedState(){
   const L2={id:"l2",no:hist.length+2,table:3,lang:"en",items:[{mid:MENU[6].id,qty:2,note:"1 trứng chín kỹ",done:true},{mid:MENU.filter(x=>x.st==="b")[1].id,qty:2,note:"",done:false}],comment:"Khách vội, ra đồ uống trước",wishes:[],status:"cooking",src:"qr",waiter:"lan",createdAt:now-6*60e3,acceptedAt:now-5.5*60e3,sentAt:now-4*60e3,escalated:false};
   hist.push(L1,L2);
   hist.forEach(o=>{if(!o.bill){o.bill="b"+o.id;o.round=1}});const bills={};hist.forEach(o=>{if(!bills[o.bill])bills[o.bill]={id:o.bill,table:o.table,openedAt:o.createdAt,closed:o.status==="served",closedAt:o.servedAt||null,...(o.status==="served"?{pay:pick(["cash","cash","qr","qr","card"])}:{})}});
-  return {v:2,staff:seedStaff(),log:[],joinCode:CAFE.join,device:null,otab:"stats",bills,seq:hist.length,orders:hist,shift:{minh:true,lan:true,huy:false},me:"minh",role:"waiter",split:false,lang:"vi",glang:"en",gtable:7,gcart:{},gwish:{},notify:"esc",ktab:"all",wtab:"new",sound:false,seen:{},theme:"dark"};
+  return {v:2,staff:seedStaff(),log:[],joinCode:CAFE.join,device:null,otab:"stats",bills,seq:hist.length,orders:hist,shift:{minh:true,lan:true,huy:false},me:"minh",role:"waiter",split:false,lang:"vi",glang:"en",gtable:7,gcart:{},gwish:{},notify:"esc",ktab:"all",wtab:"all",sound:false,seen:{},theme:"dark"};
 }
 function load(){try{const s=JSON.parse(ls.get(KEY)||"null");if(s&&s.v===2&&s.bills){if(s.xm)Object.assign(M,s.xm);if(!s.staff){s.staff=seedStaff();s.log=[];s.joinCode=CAFE.join}return s}}catch(e){}return seedState()}
 ST=load();
@@ -808,7 +808,7 @@ function kItem(id,idx){mutate(()=>{const o=ST.orders.find(x=>x.id===id);if(!o||o
 function stationItems(o,scope){return o.items.filter(i=>scope==="all"||(M[i.mid]?.st==="b"?"bar":"kitchen")===scope)}
 function stationReady(o,scope){const items=stationItems(o,scope);return items.length>0&&items.every(i=>i.done)}
 function syncPrep(o){const now=Date.now();o.stationReadyAt=o.stationReadyAt||{};for(const scope of ["bar","kitchen"]){if(stationReady(o,scope)){if(!o.stationReadyAt[scope])o.stationReadyAt[scope]=now}else delete o.stationReadyAt[scope]}if(stationReady(o,"all")){o.status="ready";o.readyAt=now}}
-function prepSummary(o){if(!["cooking","ready"].includes(o.status))return "";return `<div class="prep-status">${["kitchen","bar"].filter(scope=>stationItems(o,scope).length).map(scope=>`<span class="pill ${stationReady(o,scope)?"st-ready":"st-cooking"}">${esc(t(scope==="bar"?"kBar":"kKitchen"))}: ${esc(t(o.stationServedAt?.[scope]?"served":stationReady(o,scope)?"sReady":"sCooking"))}</span>`).join("")}</div>`}
+function prepSummary(o){if(!["cooking","ready"].includes(o.status))return "";return `<div class="prep-status">${["kitchen","bar"].filter(scope=>stationItems(o,scope).length).map(scope=>`<span class="pill ${o.stationServedAt?.[scope]?"st-served":stationReady(o,scope)?"st-ready":"st-cooking"}">${esc(t(scope==="bar"?"kBar":"kKitchen"))}: ${esc(t(o.stationServedAt?.[scope]?"served":stationReady(o,scope)?"sReady":"sCooking"))}</span>`).join("")}</div>`}
 function readyBanner(o){const full=o.status==="ready",label=full?t("readyAlert"):["kitchen","bar"].filter(scope=>stationReady(o,scope)).map(scope=>t(scope==="bar"?"kBar":"kKitchen")+": "+t("sReady")).join(" · ");return `<div class="alert"><span>✓ ${esc(label)} · <b>${esc(t("table"))} ${o.table}</b> #${o.no}${o.waiter!==ST.me?` (${esc(wname(o.waiter))})`:""}</span><span class="sp"></span>${serveActions(o)}</div>`}
 function simulate(more){const langs=["en","ru","ru","ko","zh","en"];const l=langs[Math.floor(Math.random()*langs.length)];
   const n=1+Math.floor(Math.random()*3);const items=[];for(let i=0;i<n;i++){const m=MENU[Math.floor(Math.random()*MENU.length)];items.push({mid:m.id,qty:1,note:"",done:false})}
@@ -835,10 +835,10 @@ setInterval(()=>{const now=Date.now();
 const ROLES=["waiter","kitchen","owner","join"];
 function render(){
   if(ST.role!=="owner")ST.split=false;
-  document.documentElement.lang=ST.lang;document.body.dataset.skin=ST.theme||"dark";
+  document.documentElement.lang=ST.lang;document.body.dataset.skin=ST.theme||"dark";if(typeof staffThemeApply==="function")staffThemeApply();
   {const nx=ST.theme==="light"?t("dark"):t("light");$("skinBtn").title=nx;$("skinBtn").setAttribute("aria-label",nx)}
   $("tSub").textContent=t("sub");
-  const newCnt=live().filter(o=>o.status==="new"&&forMe(o)).length,readyCnt=live().filter(o=>o.status==="ready").length,cookCnt=live().filter(o=>o.status==="cooking").length;
+  const newCnt=live().filter(o=>o.status==="new"&&forMe(o)).length,readyCnt=live().filter(o=>["cooking","ready"].includes(o.status)&&["bar","kitchen"].some(scope=>pendingServe(o,scope))).length,cookCnt=live().filter(o=>o.status==="cooking").length;
   const badge={waiter:newCnt+readyCnt,kitchen:cookCnt,owner:ST.staff.filter(x=>x.status==="pending").length};
   $("roles").innerHTML=ROLES.map(r=>`<button type="button" data-role="${r}" class="${ST.role===r?"on":""}">${esc(t(r))}${badge[r]?`<span class="cnt">${badge[r]}</span>`:""}</button>`).join("");
   $("splitBtn").hidden=ST.role!=="owner";$("splitBtn").textContent=ST.split?t("single"):t("split");$("splitBtn").classList.toggle("on",ST.split);
@@ -891,7 +891,7 @@ function oCard(o,mode){const l=ST.lang;const mineO=o.waiter===ST.me;
   const extra=[o.round>1?t("addMore")+" · "+o.round:"",o.check?t("check")+": "+o.check:""].filter(Boolean).join(" · ");
   const paid=o.status==="served"?(bOpen2?`<span class="pill st-late">${esc(t("billOpenP"))}</span>`:`<span class="pill st-ready">${esc(t("paidP"))}${B&&B.pay?" · "+esc(t("pay_"+B.pay)):""}</span>`):"";
   const live2=o.status!=="served";
-  return `<article style="--tc:var(--t${(((+o.table||1)-1)%8+8)%8+1})" class="oc v2 s-${o.status}${forMe(o)?"":" other"}${o.status==="new"&&Date.now()-o.createdAt>NEW_LATE_MS?" late":""}" ${lateAttr}>
+  return `<article style="--tc:var(--t${(((+o.table||1)-1)%8+8)%8+1})" class="oc v2 s-${o.status}${["bar","kitchen"].some(scope=>pendingServe(o,scope))?" has-ready":""}${forMe(o)?"":" other"}${o.status==="new"&&Date.now()-o.createdAt>NEW_LATE_MS?" late":""}" ${lateAttr}>
     <div class="side"><small>${esc(t("table"))}</small><b>${o.table}</b>${live2?`<em data-mmss="${timeRef}">${mmss(timeRef)}</em>`:`<em>✓</em>`}</div>
     <div class="main">
     <div class="st"><i></i><span class="sl">${esc(stLabel(o.status))}${extra?` <span class="ex">· ${esc(extra)}</span>`:""}</span>${ownPill}${o.status==="new"?`<span class="pill st-late latepill" ${Date.now()-o.createdAt>NEW_LATE_MS?"":"hidden"}>${esc(t("late"))}</span>`:""}${o.escalated&&o.status==="ready"?`<span class="pill st-late">${esc(t("tAll"))}</span>`:""}${paid}<span class="wn">${o.waiter?esc(wname(o.waiter)):""}</span></div>
@@ -902,13 +902,20 @@ function oCard(o,mode){const l=ST.lang;const mineO=o.waiter===ST.me;
 function rWaiter(el){const meS=staffBy(ST.me);if(!meS||meS.status!=="active"){const alt=WAITERS()[0];if(alt&&(!meS||meS.status==="deleted")){ST.me=alt.id}else{el.innerHTML=`<div class="alert red"><span>${esc(t("blockedMsg").replace("{w}",meS?meS.name:""))}</span></div><div class="who"><label for="meSel" class="muted">${esc(t("me"))}</label><select id="meSel"><option></option>${WAITERS().map(w=>`<option value="${w.id}">${esc(w.name)}</option>`).join("")}</select></div>`;el.querySelector("#meSel").onchange=e=>{if(e.target.value){ST.me=e.target.value;save();render()}};return}}
   const on=ST.shift[ST.me];const L=live();
   const myReady=L.filter(o=>(o.status==="ready"||(o.status==="cooking"&&["bar","kitchen"].some(scope=>pendingServe(o,scope))))&&readyTargets(o).includes(ST.me));
-  const tabs=[["new",t("tNew"),L.filter(o=>o.status==="new")],["mine",t("tMine"),L.filter(o=>o.waiter===ST.me&&["accepted","cooking"].includes(o.status))],["ready",t("tReady"),L.filter(o=>o.status==="ready"||(o.status==="cooking"&&["bar","kitchen"].some(scope=>pendingServe(o,scope))))],["done",t("tDone"),L.filter(o=>o.status==="served"&&o.bill&&ST.bills[o.bill]&&!ST.bills[o.bill].closed).reverse()],["paid",t("tPaid"),L.filter(o=>o.status==="served"&&!(o.bill&&ST.bills[o.bill]&&!ST.bills[o.bill].closed)).slice(-20).reverse()],["tables",t("tTables"),Object.values(ST.bills).filter(b=>!b.closed&&billOrders(b.id).some(o=>!o.seed))]];
+  const groups=[["new",ST.lang==="ru"?"Новые":"Mới",L.filter(o=>o.status==="new")],["cooking",ST.lang==="ru"?"Готовятся":"Đang làm",L.filter(o=>["accepted","cooking"].includes(o.status)&&!["bar","kitchen"].some(scope=>pendingServe(o,scope)))],["ready",ST.lang==="ru"?"Можно выносить":"Có thể phục vụ",L.filter(o=>["cooking","ready"].includes(o.status)&&["bar","kitchen"].some(scope=>pendingServe(o,scope)))]];
+  const bills=Object.values(ST.bills).filter(b=>!b.closed&&billOrders(b.id).some(o=>!o.seed));
+  const tabs=[["all",ST.lang==="ru"?"Все":"Tất cả",groups.flatMap(g=>g[2])],...groups,["tables",t("tTables"),bills]];
   const cur=tabs.find(x=>x[0]===ST.wtab)||tabs[0];
+  const cards=rows=>{const shown=ST.mineOnly?rows.filter(o=>o.waiter===ST.me||o.owner===ST.me):rows;return shown.length?`<div class="flow-grid">${shown.map(o=>`<div class="swp">${oCard(o)}</div>`).join("")}</div>`:`<div class="empty">${esc(t("none"))}</div>`};
+  const tablesBody=()=>`<div class="tview"><button type="button" data-tv="map" class="${ST.tview!=="list"?"on":""}">${esc(t("tvMap"))}</button><button type="button" data-tv="list" class="${ST.tview==="list"?"on":""}">${esc(t("tvList"))}</button></div>`+(ST.tview==="list"?(bills.length?`<div class="tgrid">${bills.sort((a,b)=>a.table-b.table).map(tCard).join("")}</div>`:`<div class="empty">${esc(t("noBills"))}</div>`):hallMap());
   el.innerHTML=`<div class="who"><label for="meSel" class="muted">${esc(t("me"))}</label><select id="meSel">${WAITERS().map(w=>`<option value="${w.id}" ${w.id===ST.me?"selected":""}>${esc(w.name)}${ST.shift[w.id]?" ●":""}</option>`).join("")}</select><button type="button" class="btn sm ${meS.tipQr?"ghost":"tipneed"}" id="tipQrBtn" title="${meS.tipQr?"":esc(t("tipMiss"))}">${esc(t("tipQr"))}${meS.tipQr?" ✓":""}</button><span class="sp"></span><button type="button" class="shift ${on?"on":"off"}" id="shiftBtn">${on?"● "+esc(t("onShift"))+" · "+esc(t("endShift")):esc(t("startShift"))}</button></div>
    ${on?"":`<div class="alert red"><span>${esc(t("offNote"))}</span></div>`}
    ${on&&myReady.length?myReady.map(readyBanner).join(""):""}
-   ${Object.values(ST.bills).filter(b=>!b.closed&&b.req).sort((a,b)=>a.req.at-b.req.at).map(b=>`<div class="reqbar"><b>${esc(t("table"))} ${b.table} · ${esc(t("billReq"))}</b><span>${esc(reqTxt(b.req))} · ${vnd(billTotal(b.id))}</span><button class="btn green sm" type="button" data-a="bill" data-id="${b.id}">${esc(t("openBill"))}</button></div>`).join("")}<div class="row"><div class="tabs">${tabs.map(([k,lab,arr])=>`<button type="button" data-wt="${k}" class="${k===cur[0]?"on":""}">${esc(lab)} · ${arr.length}</button>`).join("")}</div></div><button class="fab" type="button" id="manualBtn" ${on?"":"disabled"} aria-label="${esc(t("manual"))}" title="${esc(t("manual"))}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span>${esc(t("fabT"))}</span></button>
-   ${cur[0]==="tables"?`<div class="tview"><button type="button" data-tv="map" class="${ST.tview!=="list"?"on":""}">${esc(t("tvMap"))}</button><button type="button" data-tv="list" class="${ST.tview==="list"?"on":""}">${esc(t("tvList"))}</button></div>`+(ST.tview==="list"?(cur[2].length?`<div class="tgrid">${cur[2].sort((a,b)=>a.table-b.table).map(tCard).join("")}</div>`:`<div class="empty">${esc(t("noBills"))}</div>`):hallMap()):cur[2].length?cur[2].map(o=>`<div class="swp">${oCard(o)}</div>`).join(""):`<div class="empty">${esc(t("none"))}</div>`}`;
+   ${Object.values(ST.bills).filter(b=>!b.closed&&b.req).sort((a,b)=>a.req.at-b.req.at).map(b=>`<div class="reqbar"><b>${esc(t("table"))} ${b.table} · ${esc(t("billReq"))}</b><span>${esc(reqTxt(b.req))} · ${vnd(billTotal(b.id))}</span><button class="btn green sm" type="button" data-a="bill" data-id="${b.id}">${esc(t("openBill"))}</button></div>`).join("")}<div class="row"><div class="tabs">${tabs.map(([k,lab,arr])=>`<button type="button" data-wt="${k}" class="${k===cur[0]?"on":""}">${esc(lab)} <span class="${k==='ready'&&arr.length?'ready-badge':''}">${arr.length}</span></button>`).join("")}</div></div><button class="fab" type="button" id="manualBtn" ${on?"":"disabled"} aria-label="${esc(t("manual"))}" title="${esc(t("manual"))}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span>${esc(t("fabT"))}</span></button>
+   <div class="waiter-secondary"><button type="button" id="mineFilter" aria-pressed="${!!ST.mineOnly}">${ST.lang==="ru"?"Только мои":"Của tôi"}${ST.mineOnly?" ✓":""}</button><button type="button" id="waiterHistory">${ST.lang==="ru"?"Подано и история оплат":"Đã phục vụ & lịch sử thanh toán"}</button></div>
+   ${cur[0]==="tables"?tablesBody():cur[0]==="all"?groups.map(([id,n,rows])=>`<section class="flow-section" data-flow="${id}"><h3>${esc(n)} <span class="${id==='ready'&&rows.length?'ready-badge':''}">${rows.length}</span></h3>${cards(rows)}</section>`).join("")+`<section class="flow-section" data-flow="tables"><h3>${esc(t("tTables"))}</h3>${tablesBody()}</section>`:cards(cur[2])}`;
+  el.querySelector("#mineFilter").onclick=()=>{ST.mineOnly=!ST.mineOnly;save();render()};
+  el.querySelector("#waiterHistory").onclick=()=>{const done=L.filter(o=>o.status==="served"&&o.bill&&ST.bills[o.bill]&&!ST.bills[o.bill].closed).reverse(),paid=L.filter(o=>o.status==="served"&&!(o.bill&&ST.bills[o.bill]&&!ST.bills[o.bill].closed)).slice(-20).reverse();$("sheetIn").innerHTML=`<div class="row"><h2>${ST.lang==="ru"?"Подано и история":"Đã phục vụ & lịch sử"}</h2><span class="sp"></span><button class="btn ghost sm" id="historyClose">${esc(t("cancel"))}</button></div><section class="history-block"><h3>${esc(t("tDone"))}</h3>${done.map(o=>oCard(o)).join("")||`<p>${esc(t("none"))}</p>`}</section><section class="history-block"><h3>${esc(t("tPaid"))}</h3>${paid.map(o=>oCard(o)).join("")||`<p>${esc(t("none"))}</p>`}</section>`;$("sheet").hidden=false;$("historyClose").onclick=closeEditor;bindActions($("sheetIn"))};
   el.querySelectorAll("[data-tv]").forEach(b=>b.onclick=()=>{ST.tview=b.dataset.tv;save();render()});
   el.querySelectorAll("[data-ht]").forEach(b=>b.onclick=()=>{const n=+b.dataset.ht,bl=openBill(n);if(bl)openBillSheet(bl.id);else if(ST.shift[ST.me])openEditor(null,{table:n,lang:"vi",no:null});else toast(t("offNote"),"","r")});
   swipeCards(el);
@@ -927,7 +934,7 @@ function swipeCards(el){el.querySelectorAll(".swp").forEach(w=>{const c=w.queryS
   const end=()=>{if(x0===null)return;x0=null;c.classList.remove("drag");if(lock==="x"&&dx>110){c.style.transform="translateX(110%)";try{navigator.vibrate&&navigator.vibrate(12)}catch(_){}setTimeout(()=>btn.click(),180)}else{c.style.transform="";w.style.setProperty("--sw",0)}};
   c.addEventListener("pointerup",end);c.addEventListener("pointercancel",end)})}
 function bindActions(el){el.querySelectorAll("[data-a]").forEach(b=>b.onclick=()=>{const id=b.dataset.id,a=b.dataset.a;
-  if(a==="accept"){accept(id);ST.wtab="mine";save();render()}
+  if(a==="accept"){accept(id);ST.wtab="cooking";save();render()}
   else if(a==="edit")openEditor(id);
   else if(a==="kitchen")toKitchen(id);
   else if(a==="served")served(id,b.dataset.scope||"all");
@@ -1012,7 +1019,7 @@ function commitED(send){syncED();if(!ED.items.length)return;
     if(ED.id){o=ST.orders.find(x=>x.id===ED.id);o.items=ED.items;o.comment=ED.comment;o.wishes=ED.wishes}
     else{o=newOrder({table:ED.table,lang:ED.lang,items:ED.items,comment:ED.comment,wishes:ED.wishes,src:"waiter",status:"accepted"});o.waiter=ST.me;o.acceptedAt=Date.now();o.lateAccept=false}
     if(send&&o.status==="accepted"){o.status="cooking";o.sentAt=Date.now()}});
-  ST.wtab="mine";save();closeEditor();render()}
+  ST.wtab="cooking";save();closeEditor();render()}
 function closeEditor(){$("sheet").hidden=true;ED=null}
 $("sheet").addEventListener("click",e=>{if(e.target===$("sheet"))closeEditor()});
 
@@ -1044,7 +1051,7 @@ function rKitchen(el){const f=ST.ktab;const L=live();
 function rOwnerWrap(el){const pend=ST.staff.filter(x=>x.status==="pending").length;
   el.innerHTML=`<div class="otabs"><button type="button" data-ot="stats" class="${ST.otab!=="staff"&&ST.otab!=="stop"?"on":""}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>${esc(t("oStats"))}</button><button type="button" data-ot="staff" class="${ST.otab==="staff"?"on":""}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8M18.5 14.8c1.6.8 2.6 2.5 3 5.2"/></svg>${esc(t("oStaff"))}${pend?` <span class="cnt2">${pend}</span>`:""}</button><button type="button" data-ot="stop" class="${ST.otab==="stop"?"on":""}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></svg>${esc(t("kStop"))}${Object.keys(ST.stop||{}).length?` <span class="cnt2">${Object.keys(ST.stop).length}</span>`:""}</button></div>${ST.payQr?"":`<div class="alert red" style="margin-bottom:12px"><span>${esc(t("payQrMiss"))}</span></div>`}<div id="ownIn" style="display:flex;flex-direction:column;gap:12px"></div>`;
   el.querySelectorAll("[data-ot]").forEach(b=>b.onclick=()=>{ST.otab=b.dataset.ot;save();render()});
-  (ST.otab==="staff"?rStaff:ST.otab==="stop"?rStop:rOwner)(el.querySelector("#ownIn"))}
+  (ST.otab==="staff"?rStaff:ST.otab==="stop"?rStop:rOwner)(el.querySelector("#ownIn"));if(typeof staffDesignPicker==="function")staffDesignPicker(el)}
 /* stop list: cook (kitchen screen) and manager/owner (owner screen) take a dish off the guest menu */
 let stopQ="";
 const coName=(d,l)=>l==="ru"?d[1]:d[0];
@@ -1207,7 +1214,7 @@ $("cafeBtn").onclick=()=>{$("sheetIn").innerHTML=`<div class="row"><h2>${esc(t("
   $("sheet").hidden=false;$("cfX").onclick=closeEditor;
   $("sheetIn").querySelectorAll("[data-cafe]").forEach(b=>b.onclick=()=>{if(b.dataset.cafe===CAFE.id){closeEditor();return}try{localStorage.setItem("ops_cafe",b.dataset.cafe)}catch(e){}const cafeUrl=new URL(location.href);cafeUrl.searchParams.set("cafe",b.dataset.cafe);location.href=cafeUrl.href})};
 $("mBtn").onclick=()=>{const o=document.body.classList.toggle("mopen");$("mBtn").setAttribute("aria-expanded",o)};
-$("resetBtn").onclick=()=>{const keep={lang:ST.lang,role:ST.role,split:ST.split,sound:ST.sound,theme:ST.theme,payQr:ST.payQr||"",rev:ST.rev||{}};const tips=Object.fromEntries(ST.staff.filter(x=>x.tipQr).map(x=>[x.id,x.tipQr]));
+$("resetBtn").onclick=()=>{const keep={lang:ST.lang,role:ST.role,split:ST.split,sound:ST.sound,theme:ST.theme,design:ST.design||"atelier",payQr:ST.payQr||"",rev:ST.rev||{}};const tips=Object.fromEntries(ST.staff.filter(x=>x.tipQr).map(x=>[x.id,x.tipQr]));
   /* the guest menu on this site keeps its table session (checks, orders, bill buttons) in the same browser: start it over too */
   ["guest","ck","cart","wish","tbl"].map(k=>CAFE.mk+k).concat([CAFE.inbox]).forEach(k=>{try{localStorage.removeItem(k)}catch(e){}});ST=seedState();Object.assign(ST,keep);ST.staff.forEach(x=>{if(tips[x.id])x.tipQr=tips[x.id]});save();render()};
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("sheet").hidden)closeEditor()});

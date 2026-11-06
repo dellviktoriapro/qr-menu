@@ -43,3 +43,8 @@ button svg{vertical-align:middle}.queue.filtered{display:block}.queue.filtered .
 
 .ticket-foot button+button{margin-top:8px}
 .role-select{color:var(--ink)}
+
+/* One status navigation; the All view flows down the page. */
+.queue.sequential{display:block}.queue.sequential .lane{margin-bottom:32px}.queue.sequential .lane .lane-body{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.queue.sequential .lane .ticket+.ticket{margin-top:0}.queue.sequential .lane-head{background:none!important;color:var(--navBlue);padding:8px 0 14px;margin:0;border-radius:0;justify-content:flex-start;gap:10px;font-size:17px}.queue.sequential [data-group=new] .lane-head,.tabs .new-tab{color:var(--signalText)}.tabs button{color:var(--navBlue)}.tabs button.on{color:var(--ink)}.tabs .new-tab.on{color:var(--signalText)}.ready-count{display:inline-grid;place-items:center;min-width:24px;min-height:24px;padding:2px 6px;border-radius:8px;background:var(--signal);color:#182535!important;font-weight:800;opacity:1!important}.tabs{gap:18px}.tabs button span{margin-left:4px}.table-grid{margin-top:4px}
+@media(max-width:1100px){.queue.sequential .lane .lane-body{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:760px){.queue.sequential .lane .lane-body{grid-template-columns:1fr}.queue.sequential .lane{margin-bottom:26px}.tabs{gap:16px}}
+button,select,a{transition:background-color .16s,color .16s,border-color .16s,box-shadow .16s,transform .16s}button:not(:disabled):active{transform:scale(.98)}@media(hover:hover){button:not(:disabled):hover{transform:translateY(-1px);box-shadow:0 3px 9px #0002}}@media(prefers-reduced-motion:reduce){button,select,a{transition:none!important;transform:none!important}}
