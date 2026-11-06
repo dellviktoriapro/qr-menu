@@ -849,6 +849,7 @@ function render(){
   if(ST.role==="guest")ST.role="waiter";const list=ST.split?["waiter","kitchen"]:[ST.role];
   P.innerHTML=list.map(r=>`<section class="pane ${r}"><div class="ph"><b>${esc(t(r))}</b>${r==="waiter"?`<span class="dim">${esc(wname(ST.me))}</span>`:""}</div><div class="pb" id="pb-${r}"></div></section>`).join("");
   list.forEach(r=>({guest:rGuest,waiter:rWaiter,kitchen:rKitchen,owner:rOwnerWrap,join:rJoin})[r]($("pb-"+r)));
+  window.platformChrome?.syncDemo();
 }
 
 function orderLines(o,opts={}){const l=opts.lang||ST.lang;return `<ul class="lines">`+o.items.map(i=>`<li><span class="q">${i.qty}×</span><span class="n"><b>${esc(nm(i.mid,"vi"))}</b>${i.added?`<span class="badge-new">+</span>`:""}${ST.lang==="ru"?`<span class="tr">${esc(nm(i.mid,"ru"))}</span>`:o.lang!=="vi"?`<span class="tr">${esc(nm(i.mid,"en"))}</span>`:""}${i.note?`<span class="note">${esc(i.note)}</span>`:""}</span><span class="p">${vnd(M[i.mid].p*i.qty)}</span></li>`).join("")+`</ul>`+prepSummary(o)}

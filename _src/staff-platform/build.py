@@ -11,3 +11,6 @@ print('Built app login',out)
 shutil.copyfile(here.parent/'app-design/themes.js',out/'palettes.js')
 shutil.copyfile(here.parent/'app-design/fonts.css',out/'fonts.css')
 shutil.copytree(here.parent/'app-design/fonts',out/'fonts',dirs_exist_ok=True)
+
+shutil.copyfile(here.parent/'app-theme/platform-shell.css',out/'platform-shell.css')
+shutil.copyfile(here.parent/'app-theme/platform-chrome.js',out/'platform-chrome.js')

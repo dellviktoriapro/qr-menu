@@ -386,3 +386,10 @@ User chose Supabase for independent multi-restaurant staff app, owner analytics 
 - Browser QA used only local127.0.0.1 fixture API (two checks, decimals,leading zeros,duplicated96,unnumbered chef dish,customized key). Six languages and390/1280 widths verified; no live table/cart changes. Existing backend and public preview unaffected.
 
 05.11.2026 user clarification overrides poster numbering: ss_pasta|9 shrimp risotto=096, ss_pasta|10 seafood risotto=097, ss_coffee|9 cacao latte=010, ss_coffee|10 coconut matcha=011. Keep ss_tuna|6=96, ss_tuna|7=97, ss_noodles|3=10 and ss_rolls|1=11. Do not strip leading zeros or reapply the older photo transcription. Audit keeps printedNumber plus user-clarification authority. Source catalog and built DATA updated; explicit regression asserts all eight distinctions. Local waiter UI verified all eight, no live carts changed.
+
+
+### 06 Nov 2026 — shared app sidebar design and live staff slice
+- User chose dark direction B (blue/cream/orange), then explicitly required the COMPLETE /demo/ interface as design/function baseline, with left navigation; same style in platform admin.
+- _src/app-theme/platform-chrome.js and platform-shell.css are shared by demo and /app/. Preserve original staff controls, owner sub-tabs, notifications, split checks, QR/tips, stop list and history. Do not replace full demo with the smaller server slice. Mobile drawer must preserve focus/keyboard access and avoid horizontal page overflow.
+- Server operational RPCs are ENABLED with explicit approval: rp_my_cafes, rp_operational_snapshot, rp_operational_command, rp_owner_stats. Anonymous and direct table reads remain closed. Owner golikova_viktori@mail.ru confirmed live access and saved a manual order. Do not reset it. Guest menu orders are NOT connected yet; Sun&Sea stays independent.
+- Current sources/status/remaining staged plan: _src/staff-platform/STATUS.md and SERVER-CONNECTION-PLAN.md. SQL fixtures roll back. Remote migration history remains unreconciled; never db push the manually-applied baseline.
