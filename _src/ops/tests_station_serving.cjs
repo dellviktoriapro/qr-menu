@@ -1,0 +1,17 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const root=require('node:path').resolve(__dirname,'../..')+'/';
+const src=fs.readFileSync(root+'_src/ops/tpl.html','utf8');
+const lines=['served','stationItems','stationReady','syncPrep'].map(n=>src.split('\n').find(l=>l.startsWith('function '+n+'('))).join('\n');
+const ctx=vm.createContext({Date,ST:{me:'waiter',orders:[]},M:{food:{st:'k'},drink:{st:'b'}},mutate:f=>f()});vm.runInContext(lines,ctx);
+const run=s=>vm.runInContext(s,ctx);
+run(`ST.orders=[{id:'mixed',status:'cooking',items:[{mid:'food',done:false},{mid:'drink',done:true}]}];served('mixed','kitchen')`);
+assert.equal(ctx.ST.orders[0].stationServedAt,undefined,'unready kitchen cannot be served');
+run(`served('mixed','bar')`);assert.equal(ctx.ST.orders[0].status,'cooking');assert.ok(ctx.ST.orders[0].stationServedAt.bar);assert.equal(ctx.ST.orders[0].stationServedAt.kitchen,undefined);
+const first=ctx.ST.orders[0].stationServedAt.bar;run(`served('mixed','bar')`);assert.equal(ctx.ST.orders[0].stationServedAt.bar,first);
+run(`ST.orders[0].items[0].done=true;syncPrep(ST.orders[0]);served('mixed','kitchen')`);assert.equal(ctx.ST.orders[0].status,'served');assert.equal(ctx.ST.orders[0].paid,undefined,'service does not record payment');
+run(`ST.orders.push({id:'single',status:'ready',items:[{mid:'food',done:true}]});served('single','bar')`);assert.equal(ctx.ST.orders[1].status,'ready');run(`served('single','kitchen')`);assert.equal(ctx.ST.orders[1].status,'served');
+const design=fs.readFileSync(root+'_src/app-design/screen.js','utf8');const dc=vm.createContext({catalog:{food:{station:'kitchen'},drink:{station:'bar'}}});
+vm.runInContext(design.split('\n').find(l=>l.startsWith('const complete='))+'\n'+design.split('\n').find(l=>l.startsWith('function serveStation(')),dc);
+vm.runInContext(`var o={state:'cooking',items:[{key:'food',done:false},{key:'drink',done:true}]};serveStation(o,'bar')`,dc);assert.equal(dc.o.state,'cooking');assert.ok(dc.o.served.bar);assert.equal(vm.runInContext(`serveStation(o,'kitchen')`,dc),false);vm.runInContext(`o.items[0].done=true;serveStation(o,'kitchen')`,dc);assert.equal(dc.o.state,'served');
+const sig=require(root+'_src/staff-platform/admin-inbox.js');assert.equal(sig.addedDate(null),'Дата не указана');assert.equal(sig.addedDate('bad'),'Дата не указана');assert.match(sig.addedDate('2026-11-06T12:00:00Z'),/06.11.2026/);
+console.log('PASS mixed/single station service, unready rejection, repeat deduplication, full completion only after both served, no payment mutation, design parity, server creation date');

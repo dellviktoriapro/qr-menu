@@ -40,3 +40,5 @@ button svg{vertical-align:middle}.queue.filtered{display:block}.queue.filtered .
 .table:not(.free) span{color:inherit}
 .station-selector button.on{background:var(--block1);color:var(--block1Ink);border-color:transparent}
 @media(max-width:760px){.sidebar{border-radius:0}.topbar{border-radius:16px 16px 0 0}.metrics{gap:10px}.metric,.metric:first-child,.metric:last-child{padding:16px}.cafe-panel .metrics{gap:6px}.cafe-panel .metric,.cafe-panel .metric:first-child,.cafe-panel .metric:last-child{padding:12px 8px}}
+
+.ticket-foot button+button{margin-top:8px}
