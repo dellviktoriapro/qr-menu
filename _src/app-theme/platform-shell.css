@@ -56,3 +56,8 @@ body:has(>main #auth) #email-sent{background:#233247;color:#fff1df;border-color:
 .availability-toggle>span:after{content:"";position:absolute;width:18px;height:18px;left:3px;top:3px;border-radius:50%;background:#fff1df;transition:transform .18s}
 .availability-toggle[aria-checked=true]>span{background:#f4721e;border-color:#f4721e}.availability-toggle[aria-checked=true]>span:after{transform:translateX(18px)}
 .availability-toggle:hover>span{box-shadow:0 0 0 3px #f4721e33}.availability-toggle b{font-weight:600}
+
+#operations-root .app-sidebar-name{font:600 23px/1.3 Lora,Georgia,serif;color:#e9d9ca;padding-block:22px}
+#operations-root .app-sidebar-name small{display:block;margin-top:12px;font:600 13px/1.6 Manrope,system-ui,sans-serif;color:#a6c7ed;opacity:1}
+#operations-root .op-header{justify-content:flex-end;min-height:76px;padding-block:14px}#operations-root .op-header>.op-actions{margin-left:auto}
+@media(max-width:760px){#operations-root .op-header{justify-content:space-between;min-height:64px}}
