@@ -1,0 +1,13 @@
+const assert=require('node:assert/strict'),signals=require('./admin-inbox.js');
+const now=Date.parse('2026-11-06T12:00:00Z');
+const invitation=(id,extra={})=>({id,mode:'manual',expires_at:'2026-11-07T12:00:00Z',request:{id,state:'pending'},...extra});
+const c={id:'a',invites:[invitation('pending'),invitation('approving',{request:{id:'approving',state:'approving'}}),invitation('email',{mode:'email'}),invitation('accepted',{accepted_at:'2026-11-06'}),invitation('revoked',{revoked_at:'2026-11-06'}),invitation('expired',{expires_at:'2026-11-06T12:00:00Z'}),invitation('failed',{request:{id:'failed',state:'failed'}})],stats:{orders:2,order_amount:250000,recorded_payments:100000}};
+assert.deepEqual(signals.pending([c],now).map(x=>x.request.id),['pending','approving']);
+assert.deepEqual(signals.pending([{...c,archived_at:'2026-11-06'}],now),[]);
+assert.deepEqual(signals.pending([c,{...c,id:'b',invites:[invitation('third')]}],now).map(x=>x.cafe.id),['a','a','b']);
+const before=JSON.stringify(c);signals.pending([c],now);assert.equal(JSON.stringify(c),before);
+assert.deepEqual(signals.metrics(c),{orders:2,amount:250000,average:125000,payments:100000});
+assert.equal(signals.metrics({stats:{orders:0,order_amount:0}}).average,null);
+assert.equal(signals.links({slug:'chez-oanh-test'}).preview,'https://dellviktoriapro.github.io/qr-menu/demo/?cafe=co#ru');
+assert.equal(signals.links({slug:'unknown'}),null);
+console.log('PASS: pending/approving; resolved/revoked/expired/archived excluded; per-cafe isolation; actual average and separate payments; empty state');

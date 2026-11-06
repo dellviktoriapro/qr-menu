@@ -583,7 +583,8 @@ const SSD=__SS__;
 const CAFES={
  co:{id:"co",name:"Café Chez Oanh",short:"Chez Oanh",mono:"C",sfx:"",inbox:"co_inbox",pub:"co_pub",mk:"co_",join:"CO-7F3K",file:"chez-oanh",names:null},
  ss:{id:"ss",name:"Sun&Sea Restaurant",short:"Sun&Sea",mono:"S",sfx:"_ss",inbox:"ss_inbox",pub:"ss_pub",mk:"ss_",join:"SS-4M2Q",file:"sun-sea",names:{minh:"Tuấn",lan:"Hoa",huy:"Long",tam:"Bảo",oanh:"Hải",phuc:"Vy"}}};
-const CAFE=CAFES[(()=>{try{return localStorage.getItem("ops_cafe")}catch(e){return null}})()]||CAFES.co;
+const requestedCafe=new URLSearchParams(location.search).get("cafe");
+const CAFE=CAFES[requestedCafe]||CAFES[(()=>{try{return localStorage.getItem("ops_cafe")}catch(e){return null}})()]||CAFES.co;
 const CMENU=CAFE.id==="ss"?SSD:CO;
 const MENU_CO=[
  {id:"k1",st:"k",p:85000,ph:"pho_bo",vi:"Phở bò",en:"Beef pho",ru:"Фо с говядиной"},
@@ -1202,7 +1203,7 @@ document.querySelector(".brand b").textContent=CAFE.name;document.querySelector(
 $("cafeBtn").onclick=()=>{$("sheetIn").innerHTML=`<div class="row"><h2>${esc(t("cafeT"))}</h2><span class="sp"></span><button class="btn ghost sm" type="button" id="cfX">${esc(t("cancel"))}</button></div><p class="muted" style="margin:0">${esc(t("cafeH"))}</p>
    <div class="cafes">${Object.values(CAFES).map(c=>`<button type="button" class="cafe ${c.id===CAFE.id?"on":""}" data-cafe="${c.id}"><span class="mono">${esc(c.mono)}</span><span><b>${esc(c.name)}</b><small>${c.id===CAFE.id?esc(t("cafeNow")):esc(t("cafeGo"))}</small></span></button>`).join("")}</div>`;
   $("sheet").hidden=false;$("cfX").onclick=closeEditor;
-  $("sheetIn").querySelectorAll("[data-cafe]").forEach(b=>b.onclick=()=>{if(b.dataset.cafe===CAFE.id){closeEditor();return}try{localStorage.setItem("ops_cafe",b.dataset.cafe)}catch(e){}location.reload()})};
+  $("sheetIn").querySelectorAll("[data-cafe]").forEach(b=>b.onclick=()=>{if(b.dataset.cafe===CAFE.id){closeEditor();return}try{localStorage.setItem("ops_cafe",b.dataset.cafe)}catch(e){}const cafeUrl=new URL(location.href);cafeUrl.searchParams.set("cafe",b.dataset.cafe);location.href=cafeUrl.href})};
 $("mBtn").onclick=()=>{const o=document.body.classList.toggle("mopen");$("mBtn").setAttribute("aria-expanded",o)};
 $("resetBtn").onclick=()=>{const keep={lang:ST.lang,role:ST.role,split:ST.split,sound:ST.sound,theme:ST.theme,payQr:ST.payQr||"",rev:ST.rev||{}};const tips=Object.fromEntries(ST.staff.filter(x=>x.tipQr).map(x=>[x.id,x.tipQr]));
   /* the guest menu on this site keeps its table session (checks, orders, bill buttons) in the same browser: start it over too */
