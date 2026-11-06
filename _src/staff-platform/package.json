@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "@supabase/supabase-js": "2.119.0",
+    "esbuild": "0.25.12",
+    "supabase": "3.0.0"
+  }
+}
