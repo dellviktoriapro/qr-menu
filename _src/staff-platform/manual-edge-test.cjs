@@ -1,0 +1,25 @@
+const fs=require('fs'),vm=require('vm'),assert=require('node:assert/strict');
+const esbuild=require('esbuild');
+let handler,calls=[],behavior={};
+const svc={rpc:async(a,b)=>{calls.push(['rpc',b.a,b.b]);return behavior.rpc?behavior.rpc(b.a,b.b):{data:null,error:{message:'DENIED'}}},auth:{getUser:async()=>behavior.user||{data:{user:null},error:{message:'invalid'}},admin:{createUser:async x=>{calls.push(['create',x]);return {data:{user:{id:'94000000-0000-4000-8000-000000000002'}},error:null}},updateUserById:async(...x)=>{calls.push(['confirm',...x]);return {error:null}}}}};
+let src=fs.readFileSync(__dirname+'/manual-owner.ts','utf8').replace(/^import .*;\s*/,'const createClient=()=>svc;\n');
+src=esbuild.transformSync(src,{loader:'ts',target:'es2022'}).code;
+vm.runInNewContext(src,{svc,Deno:{env:{get:()=> 'fixture-only'},serve:fn=>handler=fn},Response,Request,TextEncoder,TextDecoder,Uint8Array,JSON,Error});
+const req=(body,headers={})=>new Request('https://fixture.test',{method:'POST',headers:{origin:'https://dellviktoriapro.github.io',...headers},body:JSON.stringify(body)});
+(async()=>{
+ assert.equal((await handler(new Request('https://fixture.test'))).status,405);
+ assert.equal((await handler(req({}, {origin:'https://evil.test'}))).status,403);
+ assert.equal((await handler(req({x:'a'.repeat(9000)}))).status,413);
+ assert.equal((await handler(req({action:'register',password:'fake-password'}))).status,400);
+ const payload={action:'register',token:'d'.repeat(64),request_id:'94000000-0000-4000-8000-000000000006',email:'owner@example.test',password:'fake-test-password'};
+ assert.equal((await handler(req(payload))).status,403);assert.equal(calls.some(c=>c[0]==='create'),false);
+ behavior.rpc=(a)=>({data:a==='reserve'?{email:'owner@example.test'}:{state:'pending',code:'ABCDEF00'},error:null});calls=[];
+ assert.equal((await handler(req(payload))).status,200);assert.equal(calls.find(c=>c[0]==='create')[1].email_confirm,false);
+ assert.equal((await handler(req({action:'approve',request_id:payload.request_id,code:'ABCDEF00'}))).status,401);
+ behavior.user={data:{user:{id:'verified-by-auth'}},error:null};behavior.rpc=()=>({data:null,error:{message:'ADMIN_REQUIRED'}});calls=[];
+ assert.equal((await handler(req({action:'approve',request_id:payload.request_id,code:'ABCDEF00',actor_id:'forged'},{Authorization:'Bearer fixture'}))).status,403);assert.equal(calls.some(c=>c[0]==='confirm'),false);
+ behavior.rpc=(a,b)=>{assert.equal(b.actor_id,'verified-by-auth');return {data:a==='prepare_approval'?{state:'approving',user_id:'target'}:{state:'approved'},error:null}};calls=[];
+ assert.equal((await handler(req({action:'approve',request_id:payload.request_id,code:'ABCDEF00'},{Authorization:'Bearer fixture'}))).status,200);
+ assert.equal(calls.find(c=>c[0]==='confirm')[1],'target');
+ console.log('PASS: methods/origin/body cap; token validation before account creation; no-email registration; verified admin identity; denied admin cannot confirm; exact target approval');
+})().catch(e=>{console.error(e);process.exit(1)});
