@@ -25,3 +25,4 @@ const adminUi=(()=>{
 })();
 
 window.adminUiStart=adminUi.start;
+client.auth.getSession().then(({data,error})=>{if(error)message(error.message);else adminUi.start(data.session)}).catch(e=>message(e.message));
