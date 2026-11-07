@@ -14,3 +14,10 @@ shutil.copytree(here.parent/'app-design/fonts',out/'fonts',dirs_exist_ok=True)
 
 shutil.copyfile(here.parent/'app-theme/platform-shell.css',out/'platform-shell.css')
 shutil.copyfile(here.parent/'app-theme/platform-chrome.js',out/'platform-chrome.js')
+
+# Owner report is compiled from original app renderers, not independently redesigned.
+import runpy
+report_builder=runpy.run_path(str(here/'build-report.py'))
+(here/'report-ui.js').write_text(report_builder['build'](),encoding='utf-8')
+for name in ['report-core.js','report-ui.js','report.css']:
+    shutil.copyfile(here/name,out/name)

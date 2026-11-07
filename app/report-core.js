@@ -1,0 +1,10 @@
+(function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.staffReportCore=api})(typeof window==='object'?window:this,()=>{
+'use strict';
+const DAY=86400000;
+function dayKey(time,timezone){const parts=new Intl.DateTimeFormat('en-CA',{timeZone:timezone,year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date(time));const p=Object.fromEntries(parts.map(x=>[x.type,x.value]));return `${p.year}-${p.month}-${p.day}`}
+function addDay(key,n){return new Date(Date.parse(key+'T12:00:00Z')+n*DAY).toISOString().slice(0,10)}
+function midnight(key,timezone){let target=Date.parse(key+'T00:00:00Z'),time=target;for(let n=0;n<4;n++){const parts=new Intl.DateTimeFormat('en-GB',{timeZone:timezone,year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'}).formatToParts(new Date(time));const p=Object.fromEntries(parts.map(x=>[x.type,x.value]));const shown=Date.UTC(+p.year,+p.month-1,+p.day,+p.hour,+p.minute,+p.second);const shift=target-shown;if(!shift)return new Date(time).toISOString();time+=shift}if(dayKey(time,timezone)!==key)throw Error('INVALID_LOCAL_DAY');return new Date(time).toISOString()}
+function periodKeys(period,timezone,now=Date.now()){const today=dayKey(now,timezone),min=addDay(today,-179);let from=today,to=today;const k=period?.k||'today';if(k==='yest')from=to=addDay(today,-1);else if(['7','30','90'].includes(k))from=addDay(today,1-Number(k));else if(k==='custom'){const a=period.from,b=period.to;for(const v of [a,b])if(!/^\d{4}-\d{2}-\d{2}$/.test(v||'')||new Date(v+'T00:00:00Z').toISOString().slice(0,10)!==v)throw Error('INVALID_PERIOD');from=a<b?a:b;to=a<b?b:a;if(from<min)from=min;if(to>today)to=today;if(from>to)throw Error('INVALID_PERIOD')}return [from,to]}
+function range(period,timezone,now){const [from,to]=periodKeys(period,timezone,now);return {from,to,f:midnight(from,timezone),t:midnight(addDay(to,1),timezone)}}
+return {dayKey,addDay,midnight,periodKeys,range};
+});

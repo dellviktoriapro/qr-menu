@@ -1,0 +1,10 @@
+const assert=require('node:assert/strict'),r=require('./report-core.js');
+assert.equal(r.dayKey('2026-11-05T18:00Z','Asia/Ho_Chi_Minh'),'2026-11-06');
+assert.equal(r.midnight('2026-11-06','Asia/Ho_Chi_Minh'),'2026-11-05T17:00:00.000Z');
+assert.equal(r.midnight('2026-03-29','Europe/Berlin'),'2026-03-28T23:00:00.000Z');
+assert.equal(r.midnight('2026-03-30','Europe/Berlin'),'2026-03-29T22:00:00.000Z');
+const now=Date.parse('2026-11-06T12:00Z');assert.deepEqual(r.range({k:'today'},'Asia/Ho_Chi_Minh',now),{from:'2026-11-06',to:'2026-11-06',f:'2026-11-05T17:00:00.000Z',t:'2026-11-06T17:00:00.000Z'});
+assert.deepEqual(r.periodKeys({k:'custom',from:'2026-11-05',to:'2026-11-01'},'Asia/Ho_Chi_Minh',now),['2026-11-01','2026-11-05']);
+assert.deepEqual(r.periodKeys({k:'7'},'Asia/Ho_Chi_Minh',now),['2026-10-31','2026-11-06']);
+assert.throws(()=>r.periodKeys({k:'custom',from:'2026-02-31',to:'2026-11-01'},'Asia/Ho_Chi_Minh',now));
+console.log('PASS server report periods: timezone boundaries, 23-hour DST day, reversed custom range, seven days, invalid date');
