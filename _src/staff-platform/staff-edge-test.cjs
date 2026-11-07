@@ -1,0 +1,25 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict'),{stripTypeScriptTypes}=require('node:module');
+let handler,behavior={},calls=[];
+const svc={rpc:async(_,p)=>{calls.push(['rpc',p.a,p.b]);return behavior.rpc?behavior.rpc(p.a,p.b):{data:null,error:{message:'denied',code:'P0001'}}},auth:{getUser:async()=>behavior.user||{data:{user:null},error:{message:'not logged in'}},admin:{createUser:async p=>{calls.push(['create',p]);return behavior.createResult||{data:{user:{id:'94000000-0000-4000-8000-000000000002'}},error:null}},updateUserById:async(...p)=>{calls.push(['confirm',...p]);return {error:null}}}},storage:{from:()=>({upload:async(...p)=>{calls.push(['upload',...p]);return {error:null}},createSignedUrl:async p=>({data:{signedUrl:'https://fixture/'+p},error:null})})}};
+let source=fs.readFileSync(__dirname+'/../../supabase/functions/staff-access/index.ts','utf8').replace(/^\uFEFF?import .*;\s*/,'const createClient=()=>svc;\n');
+source=stripTypeScriptTypes(source,{mode:'strip'});
+vm.runInNewContext(source,{svc,Deno:{env:{get:()=> 'fixture'},serve:fn=>handler=fn},Response,Request,TextEncoder,TextDecoder,Uint8Array,JSON,Error,Set,crypto,atob});
+const id='94000000-0000-4000-8000-000000000006',cafe='94000000-0000-4000-8000-000000000007',actor='94000000-0000-4000-8000-000000000008';
+const req=(body,extra={})=>new Request('https://fixture',{method:'POST',headers:{origin:'https://dellviktoriapro.github.io',...extra},body:JSON.stringify(body)});
+(async()=>{
+assert.equal((await handler(new Request('https://fixture'))).status,405);assert.equal((await handler(req({},{origin:'https://evil.test'}))).status,403);assert.equal((await handler(req({x:'x'.repeat(380001)}))).status,413);
+assert.equal((await handler(req({action:'snapshot',cafe_id:cafe}))).status,401);
+const reg={action:'register',token:'d'.repeat(64),request_id:id,email:'staff@example.test',phone:'',password:'fixture-password'};assert.equal((await handler(req(reg))).status,403);assert.equal(calls.some(c=>c[0]==='create'),false);
+behavior.rpc=(a)=>({data:a==='reserve'?{email:'staff@example.test'}:{state:'pending',code:'ABCDEF12'},error:null});calls=[];assert.equal((await handler(req(reg))).status,200);assert.equal(calls.find(c=>c[0]==='create')[1].email_confirm,false);
+assert.equal((await handler(req({action:'approve',cafe_id:cafe,request_id:id,code:'ABCDEF12',role:'waiter'}))).status,401);
+behavior.user={data:{user:{id:actor}},error:null};calls=[];behavior.rpc=()=>({data:{ok:true},error:null});
+assert.equal((await handler(req({action:'command',cafe_id:cafe,command:'member_set',body:{request_id:id,actor_id:'forged',cafe_id:'forged',user_id:actor,role:'owner'}}))).status,200);const payload=calls.find(c=>c[0]==='rpc')[2];assert.equal(payload.actor_id,actor);assert.equal(payload.cafe_id,cafe);
+assert.equal((await handler(req({action:'command',cafe_id:cafe,command:'erase_database',body:{request_id:id}}))).status,400);
+assert.equal((await handler(req({action:'upload',cafe_id:cafe,request_id:id,commit_id:actor,kind:'payment',image:'data:image/svg+xml;base64,AAAA'}))).status,400);
+calls=[];behavior.rpc=()=>({data:null,error:{message:'owner required',code:'42501'}});assert.equal((await handler(req({action:'upload',cafe_id:cafe,request_id:id,commit_id:actor,kind:'payment',image:'data:image/jpeg;base64,/9j/AA=='}))).status,403);assert.equal(calls.some(c=>c[0]==='upload'),false);
+calls=[];behavior.rpc=a=>({data:a==='prepare_approval'?{state:'approving',user_id:actor}:{state:'approved'},error:null});assert.equal((await handler(req({action:'approve',cafe_id:cafe,request_id:id,code:'ABCDEF12',role:'waiter'}))).status,200);assert.equal(calls.find(c=>c[0]==='confirm')[1],actor);assert.equal(calls.filter(c=>c[0]==='rpc').at(-1)[1],'finish_approval');
+calls=[];behavior.rpc=()=>({data:null,error:{message:'network response lost',code:''}});assert.equal((await handler(req({action:'register',...reg}))).status,503);assert.equal(calls.some(c=>c[0]==='create'),false);
+calls=[];behavior.rpc=a=>({data:a==='reserve'?{email:'staff@example.test'}:{},error:null});behavior.createResult={data:{user:null},error:{message:'fetch failed',status:503}};assert.equal((await handler(req(reg))).status,503);assert.equal(calls.some(c=>c[0]==='rpc'&&c[1]==='failed'),false);delete behavior.createResult;
+calls=[];behavior.rpc=a=>({data:a==='asset_prepare'?{path:cafe+'/payment/'+actor+'/'+id}:{ok:true},error:null});assert.equal((await handler(req({action:'upload',cafe_id:cafe,request_id:id,commit_id:actor,kind:'payment',image:'data:image/jpeg;base64,/9j/AA=='}))).status,200);assert.equal(calls.find(c=>c[0]==='upload')[3].upsert,false);assert.equal(calls.filter(c=>c[0]==='rpc').at(-1)[1],'asset_commit');
+console.log('PASS staff Edge: capped body/origin, invite before unconfirmed account, JWT identity, injected actor/cafe blocked, unknown command, image validation, authorization before upload, two-phase approval');
+})().catch(e=>{console.error(e);process.exitCode=1});

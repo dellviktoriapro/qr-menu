@@ -21,3 +21,9 @@ report_builder=runpy.run_path(str(here/'build-report.py'))
 (here/'report-ui.js').write_text(report_builder['build'](),encoding='utf-8')
 for name in ['report-core.js','report-ui.js','report.css']:
     shutil.copyfile(here/name,out/name)
+
+staff_builder=runpy.run_path(str(here/'build-staff.py'))
+(here/'staff-ui.js').write_text(staff_builder['build'](),encoding='utf-8')
+for name in ['staff-client.js','staff-invite.js','staff-ui.js','staff.css']:
+    shutil.copyfile(here/name,out/name)
+shutil.copyfile(here/'vendor/qrcode-1.0.0.min.js',out/'qrcode-1.0.0.min.js')

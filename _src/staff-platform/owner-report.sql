@@ -6,9 +6,10 @@ declare m public.rp_memberships;result jsonb;tz text;first_day date;last_day dat
 begin
  m:=rp_private.require_member(c);
  if m.role not in ('owner','manager') then raise exception 'ROLE_DENIED' using errcode='42501';end if;
- if f is null or t is null or f>=t or t-f>interval '180 days' then raise exception 'INVALID_PERIOD';end if;
+ if f is null or t is null or f>=t or t-f>interval '181 days' then raise exception 'INVALID_PERIOD';end if;
  select timezone into tz from public.rp_cafes where id=c;
  first_day:=(f at time zone tz)::date;last_day:=((t-interval '1 microsecond') at time zone tz)::date;
+ if last_day-first_day>=180 then raise exception 'INVALID_PERIOD';end if;
  history_start:=((first_day-(last_day-first_day+1))::timestamp at time zone tz);
  with
  ob as materialized (

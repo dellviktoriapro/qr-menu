@@ -17,6 +17,7 @@ def build():
  renderer=renderer.replace('${Math.round(mean(A.acc))}', '${A.acc[1]?Math.round(mean(A.acc)):"—"}').replace('${mean(A.cook).toFixed(1)}','${A.cook[1]?mean(A.cook).toFixed(1):"—"}').replace('${p.n?Math.round(p.acc)', '${p.hasAcc?Math.round(p.acc)')
  renderer=renderer.replace('s.role==="waiter"&&s.status', '(s.role==="waiter"||A.w[s.id])&&s.status')
  renderer=renderer.replace('Math.max(1,...Object.values(hrs))','Math.max(1,...Object.values(hrs).map(Math.abs))').replace('Math.max(1,...Object.values(pmS))','Math.max(1,...Object.values(pmS).map(Math.abs))').replace('perDay.map(([,d])=>d.rev)','perDay.map(([,d])=>Math.abs(d.rev))').replace('${d.rev/dMax*100}', '${Math.abs(d.rev)/dMax*100}').replace('${v/hMax*100}', '${Math.abs(v)/hMax*100}').replace('Math.max(4,pmS[k]/pmMax*100)','Math.max(4,Math.abs(pmS[k])/pmMax*100)')
+ renderer=renderer.replace('if(!i.value)return;', 'if(!i.value||!i.checkValidity())return;')
  # Daily chart dates are calendar labels rather than fixed UTC+7 time arithmetic.
  renderer=renderer.replace('new Date(kts(k)+7*3600e3).getUTCDate()','Number(k.slice(8))')
  return '''// Generated from _src/ops/tpl.html by build-report.py. Edit source/template or builder.
@@ -27,7 +28,7 @@ function renderReport(el,options){
 const {cafe,snapshot}=options,timezone=cafe.timezone||'Asia/Ho_Chi_Minh';let report=options.report;const requested=range(cafe);if(report&&(Date.parse(report.from)!==Date.parse(requested.f)||Date.parse(report.to)!==Date.parse(requested.t)))report=null;
 const ST={lang:options.lang||'ru',oper:{...selected(cafe)},bills:Object.fromEntries((snapshot.bills||[]).map(b=>[b.id,{closed:b.status!=='open'}])),staff:(snapshot.staff||[]).map(s=>({id:s.id,name:s.name,role:s.role,status:s.active?'active':'blocked'})),shift:snapshot.shifts||{}};
 for(const [id,name] of Object.entries(report?.staff_names||{}))if(!ST.staff.some(s=>s.id===id))ST.staff.push({id,name,role:'waiter',status:'former'});
-const CAFE={file:cafe.slug||'cafe'},DAY=86400000,HIST_DAYS=179,PAYS=['cash','card','qr'];
+const CAFE={file:cafe.slug||('cafe-'+cafe.id.slice(0,8))},DAY=86400000,HIST_DAYS=179,PAYS=['cash','card','qr'];
 const dkey=ts=>staffReportCore.dayKey(ts,timezone),addD=staffReportCore.addDay,kts=k=>Date.parse(staffReportCore.midnight(k,timezone));
 const periodKeys=()=>staffReportCore.periodKeys(ST.oper,timezone);
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

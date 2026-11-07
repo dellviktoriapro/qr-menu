@@ -7,9 +7,10 @@ declare m public.rp_memberships;result jsonb;tz text;first_day date;last_day dat
 begin
  m:=rp_private.require_member(c);
  if m.role not in ('owner','manager') then raise exception 'ROLE_DENIED' using errcode='42501';end if;
- if f is null or t is null or f>=t or t-f>interval '180 days' then raise exception 'INVALID_PERIOD';end if;
+ if f is null or t is null or f>=t or t-f>interval '181 days' then raise exception 'INVALID_PERIOD';end if;
  select timezone into tz from public.rp_cafes where id=c;
  first_day:=(f at time zone tz)::date;last_day:=((t-interval '1 microsecond') at time zone tz)::date;
+ if last_day-first_day>=180 then raise exception 'INVALID_PERIOD';end if;
  history_start:=((first_day-(last_day-first_day+1))::timestamp at time zone tz);
  with
  ob as materialized (
@@ -58,7 +59,6 @@ begin
   'definitions',jsonb_build_object('revenue','staff_recorded_payments_minus_refunds','orders','created_not_cancelled','waiter_amount','historical_order_amount','acceptance','actual_accept_event_only','cooking','sent_to_all_items_ready')) into result;
  return result;
 end $$;
-
 create function pg_temp.report_assert(ok boolean,msg text) returns void language plpgsql as $$begin if ok is distinct from true then raise exception 'REPORT_TEST_FAILED: %',msg;end if;end$$;
 insert into auth.users(id) values('00000000-0000-4000-8000-000000000011'),('00000000-0000-4000-8000-000000000012');
 insert into public.rp_cafes(id,slug,name) values('10000000-0000-4000-8000-000000000011','report-fixture-a','Report fixture'),('10000000-0000-4000-8000-000000000012','report-fixture-b','Other cafe');
@@ -96,6 +96,11 @@ reset role;
 select set_config('request.jwt.claim.sub','00000000-0000-4000-8000-000000000012',true);
 set local role authenticated;
 do $$begin begin perform public.rp_owner_stats('10000000-0000-4000-8000-000000000011','2026-11-05 17:00Z','2026-11-06 17:00Z');raise exception 'WAITER_REPORT_ALLOWED';exception when insufficient_privilege then null;end;end$$;
+reset role;
+update public.rp_cafes set timezone='Europe/Berlin' where id='10000000-0000-4000-8000-000000000011';
+select set_config('request.jwt.claim.sub','00000000-0000-4000-8000-000000000011',true);
+set local role authenticated;
+select pg_temp.report_assert(public.rp_owner_stats('10000000-0000-4000-8000-000000000011','2026-05-05 22:00Z','2026-11-01 23:00Z')->>'timezone'='Europe/Berlin','180 local days may contain 180 days plus one DST hour');
 reset role;
 rollback;
 select 'PASS report: historical amounts, refund, timezone, periods, breakdowns, owner-only and tenant isolation; fixture rolled back' as result;

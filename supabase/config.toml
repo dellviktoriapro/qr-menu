@@ -423,3 +423,7 @@ enabled = true
 
 [functions.manual-owner]
 verify_jwt = false
+
+# Capability-bound registration/status; all staff actions verify Auth + current cafe role.
+[functions.staff-access]
+verify_jwt = false

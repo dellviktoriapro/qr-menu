@@ -29,7 +29,7 @@
 - [x] Add and test authoritative snapshot adapter full-state.js. No seedState fallback.
 - [x] Build original UI in ISOLATED server integration mode (not activated in /app/): replace storage/importInbox/simulators with bootstrap and explicit action transport. Preserve renderers and CSS.
 - [ ] Complete server contracts for all existing order actions, checks, shifts, settings, staff and QR assets; tests per tenant/role/action.
-- [ ] Owner analytics: daily aggregates/current+previous periods, hourly/language/dish/waiter/payment breakdowns, exact closed-bill revenue and CSV. Preserve original period/chart/table renderers.
+- [x] Owner analytics: daily aggregates/current+previous periods, hourly/language/dish/waiter/payment breakdowns, exact closed-bill revenue and CSV. Preserve original period/chart/table renderers.
 - [ ] Staff joining: cafe-bound expiring/revocable QR, pending request, owner approval, exact account binding; no role from user metadata. Auth delivery limitation must be solved before declaring onboarding complete.
 - [ ] Cafe payment QR, personal tip QR, reviews and notification settings: scoped storage/commands and existing UI.
 - [ ] Guest route: isolated Chez Oanh test table, receipt-backed submit/retry, waiter acceptance and status. No Sun&Sea changes.
@@ -39,3 +39,11 @@
 
 ## Verified first integration build
 `build-full-runtime.py --output <outside app>` compiles the existing demo template; it does not write a second production app. Requires original demo build first. It removes seedState, genDay, load, storage business transport and simulators. Original owner periods/charts/tables/CSV/staff/QR/stop controls render on mapped server-shaped fixtures. Existing supported preparation/service commands use the transport contract. Other original business mutations deliberately throw SERVER_ACTION_NOT_PORTED, so no local success can be confused with persistence. Do not activate until those functions are ported. Analytics fixtures are explicitly test data, not real stats.
+
+
+## Execution ledger — 2026-11-07
+- Detailed original owner report installed and published in 89a19ba; calendar DST refinement installed this session. No grants changed.
+- Staff/QR/settings backend + original renderers are staged; actual Postgres rollback, service-role wrapper and Edge/client tests PASS. Desktop and mobile 390px fixture checked.
+- Security activation confirmation requested via async question; pending. No staff schema/Edge/flag deployment yet.
+- Ruling: keep staff UI gated on server staff_enabled until the reviewed backend is active; do not publish an apparent working invitation before it exists.
+- Guest ordering, original remaining order/check/history actions and cross-device E2E still to implement/verify. Existing test cafe owner/orders preserved. No Sun&Sea changes.

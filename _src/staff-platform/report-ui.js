@@ -6,7 +6,7 @@ function renderReport(el,options){
 const {cafe,snapshot}=options,timezone=cafe.timezone||'Asia/Ho_Chi_Minh';let report=options.report;const requested=range(cafe);if(report&&(Date.parse(report.from)!==Date.parse(requested.f)||Date.parse(report.to)!==Date.parse(requested.t)))report=null;
 const ST={lang:options.lang||'ru',oper:{...selected(cafe)},bills:Object.fromEntries((snapshot.bills||[]).map(b=>[b.id,{closed:b.status!=='open'}])),staff:(snapshot.staff||[]).map(s=>({id:s.id,name:s.name,role:s.role,status:s.active?'active':'blocked'})),shift:snapshot.shifts||{}};
 for(const [id,name] of Object.entries(report?.staff_names||{}))if(!ST.staff.some(s=>s.id===id))ST.staff.push({id,name,role:'waiter',status:'former'});
-const CAFE={file:cafe.slug||'cafe'},DAY=86400000,HIST_DAYS=179,PAYS=['cash','card','qr'];
+const CAFE={file:cafe.slug||('cafe-'+cafe.id.slice(0,8))},DAY=86400000,HIST_DAYS=179,PAYS=['cash','card','qr'];
 const dkey=ts=>staffReportCore.dayKey(ts,timezone),addD=staffReportCore.addDay,kts=k=>Date.parse(staffReportCore.midnight(k,timezone));
 const periodKeys=()=>staffReportCore.periodKeys(ST.oper,timezone);
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -98,7 +98,7 @@ function rOwner(el){const [f,to]=periodKeys();const days=keysIn(f,to);const len=
    <div class="card"><h3>${esc(t("oHours"))}</h3><div class="hours">${Object.entries(hrs).map(([h,v])=>`<div title="${h}:00 · ${vnd(v)}"><i style="height:${Math.abs(v)/hMax*100}%"></i><small>${h}</small></div>`).join("")}</div></div>
    `;
   el.querySelectorAll("[data-per]").forEach(b=>b.onclick=()=>{const k=b.dataset.per;ST.oper=Object.assign({},ST.oper||{},{k});if(k==="custom"&&!ST.oper.from){ST.oper.from=addD(today,-13);ST.oper.to=today}save();render()});
-  ["pF","pT"].forEach(id=>{const i=el.querySelector("#"+id);if(i)i.onchange=()=>{if(!i.value)return;ST.oper=Object.assign({},ST.oper,id==="pF"?{from:i.value}:{to:i.value});save();render()}});
+  ["pF","pT"].forEach(id=>{const i=el.querySelector("#"+id);if(i)i.onchange=()=>{if(!i.value||!i.checkValidity())return;ST.oper=Object.assign({},ST.oper,id==="pF"?{from:i.value}:{to:i.value});save();render()}});
   el.querySelector("#csvBtn").onclick=()=>{const rows=[[t("csvDate"),t("oRev"),t("oBills"),t("oOrders"),t("oAvg"),t("pay_cash"),t("pay_card"),t("pay_qr")]].concat(perDay.map(([k,d])=>[k,d.rev,d.bills,d.orders,d.bills?Math.round(d.rev/d.bills):0,d.pay.cash,d.pay.card,d.pay.qr]));
     const csv="﻿"+rows.map(r=>r.map(v=>/[;"\n]/.test(String(v))?'"'+String(v).replace(/"/g,'""')+'"':v).join(";")).join("\r\n");
     const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));a.download=`${CAFE.file}_${f}_${to}.csv`;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500)};
