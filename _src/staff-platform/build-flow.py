@@ -20,10 +20,10 @@ function renderFlow(el,options){
 const {snapshot,cafe}=options,mapped=staffServerState.mapSnapshot(snapshot),M=mapped.menu;let ST=mapped.state;const pref=preferences.get(cafe.id+':'+ST.me)||{};Object.assign(ST,pref);if(options.lang)ST.lang=options.lang;ST.role=options.screen==='prep'?'kitchen':'waiter';ST.split=options.screen==='workbench';ST.ktab=ST.ktab||'all';ST.shift[ST.me]=snapshot.shifts?.[ST.me]||false;
 let accept,toKitchen,kReady,kItem,served,closeBill;
 const stopMenu=snapshot.menu.filter(i=>['owner','manager','waiter'].includes(snapshot.me.role)||i.station===snapshot.me.role),CMENU=[['menu','Thực đơn','Меню',stopMenu.map(i=>[i.names?.vi||i.names?.ru||'',i.names?.ru||i.names?.vi||''])]];
-const MENU=Object.values(M).filter(m=>m.active&&m.p!==null&&!snapshot.menu.find(i=>i.id===m.id)?.stopped),PH={},NEW_LATE_MS=45000,READY_ESC_MS=40000,REORDER_MS=40000;
+const MENU=Object.values(M).filter(m=>m.active&&m.p!==null&&!snapshot.menu.find(i=>i.id===m.id)?.stopped),PH={},NEW_LATE_MS=45000,READY_ESC_MS=30000,REORDER_MS=40000;
 const WAITERS=()=>ST.staff.filter(x=>x.status==='active'&&(['owner','manager','waiter'].includes(x.role)||x.id===ST.me));
 if(!overlay){overlay=document.createElement('div');overlay.className='original-flow flow-overlay';overlay.innerHTML='<section id="flow-sheet" class="sheet" hidden><div class="sheetin" id="flow-sheetIn"></div></section><div id="flow-toasts"></div>';document.body.append(overlay)}
-const $=id=>overlay.querySelector('#flow-'+id)||el.querySelector('#'+id);
+const $=id=>overlay.querySelector('#flow-'+id)||overlay.querySelector('#'+id)||el.querySelector('#'+id);
 overlay.querySelector('#flow-sheet').onclick=e=>{if(e.target===e.currentTarget){e.currentTarget.hidden=true}};
 const save=()=>preferences.set(cafe.id+':'+ST.me,Object.fromEntries(['lang','wtab','ktab','mineOnly','tview','stopQ'].map(k=>[k,ST[k]]))),render=()=>{save();options.onRender()},toast=(msg,sub)=>options.onNotice(msg+(sub?' · '+sub:''));
 const mutate=()=>{throw Error('LOCAL_BUSINESS_MUTATION_FORBIDDEN')},staffBy=id=>ST.staff.find(x=>x.id===id),readyTargets=o=>['owner','manager'].includes(snapshot.me.role)?[ST.me]:[o.waiter],showsForMe=()=>true;

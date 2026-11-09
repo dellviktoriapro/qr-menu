@@ -11,7 +11,7 @@ def attach(html,out):
  html=html.replace('function loadStop(){let p={};try{p=JSON.parse(ls.get("co_pub")||"{}")||{}}catch(e){}', 'function loadStop(){const p=PUB();')
  html=html if 'let serverIsOut=null;' in html else html.replace('const isOut=key=>', 'let serverIsOut=null;const isOut=key=>serverIsOut?serverIsOut(key):')
  html=re.sub(r'<!-- connected-guest-start -->.*?<!-- connected-guest-end -->','',html,flags=re.S)
- scripts='<!-- connected-guest-start -->'+''.join('<script src="'+n+'?v=20261109-launch1"></script>' for n in ['guest-outbox.js','guest-api.js','guest-service-core.js','guest-line-options.js','guest-server.js'])+'<!-- connected-guest-end -->'
+ scripts='<!-- connected-guest-start -->'+''.join('<script src="'+n+'?v=20261109-fixes2"></script>' for n in ['guest-outbox.js','guest-api.js','guest-service-core.js','guest-line-options.js','guest-server.js'])+'<!-- connected-guest-end -->'
  return html.replace('</body>',scripts+'</body>')
 if __name__=='__main__':
  out=ROOT/'chez-oanh';p=out/'index.html';p.write_text(attach(p.read_text(encoding='utf-8'),out),encoding='utf-8')
