@@ -1,5 +1,6 @@
 'use strict';
 const operationsCore={
+ personalControls(s,lang,qrKnown){const on=!!s.shifts?.[s.me.id],vi=lang==='vi';return {visible:['owner','manager','waiter'].includes(s.me.role),on,shiftLabel:vi?(on?'Kết thúc ca':'Mở ca'):(on?'Завершить смену':'Открыть смену'),qrLabel:vi?'QR tiền boa':'QR для чаевых',qrAttention:qrKnown===false}},
  viewAllowed(role,view){const owner=['owner','manager'].includes(role);return view==='orders'?owner||role==='waiter':view==='prep'?owner||['kitchen','bar'].includes(role):['workbench','report','staff','appearance'].includes(view)?owner:['menu','profile'].includes(view)},
  definitive(e){return /^(?:P0001|42501|22[0-9A-Z]{3}|23[0-9A-Z]{3}|40001)$/.test(String(e?.code||''))},
  name(item){return item.name_snapshot?.ru||item.names?.ru||item.name_snapshot?.vi||item.names?.vi||'Без названия'},

@@ -50,6 +50,7 @@ function renderProfile(el,options){const {data}=options,me=data.members.find(x=>
 '''+tipmarkup+'''
 </div>`;
  el.querySelector('#staff-shift').onclick=()=>options.onAction('shift',{on_shift:!me.on_shift});
+ if(options.headerManaged)el.querySelector('#staff-shift').remove();
  el.querySelector('#tqIn').onchange=e=>options.onUpload('tip',e.target.files[0]);
  const remove=el.querySelector('#tqDel');if(remove)remove.onclick=()=>options.onAction('asset_remove',{kind:'tip'});
 }

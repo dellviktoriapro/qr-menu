@@ -112,6 +112,7 @@ Object.assign(S.ru,{cafeT:"Ваше заведение",cafeH:"Владелец 
    <div class="payqr">${me.tipQr?`<img class="qrimg" src="${me.tipQr}" alt="QR">`:`<div class="qrnone">${esc(t("payQrNo"))}</div>`}<div class="qrt"><p class="muted" style="margin:0">${esc(t("tipQrH"))}</p><div class="row"><label class="btn sm upl">${esc(me.tipQr?t("repQr"):t("upQr"))}<input type="file" accept="image/*" id="tqIn"></label>${me.tipQr?`<button class="btn ghost sm" type="button" id="tqDel">${esc(t("delQr"))}</button>`:""}</div></div></div>
 </div>`;
  el.querySelector('#staff-shift').onclick=()=>options.onAction('shift',{on_shift:!me.on_shift});
+ if(options.headerManaged)el.querySelector('#staff-shift').remove();
  el.querySelector('#tqIn').onchange=e=>options.onUpload('tip',e.target.files[0]);
  const remove=el.querySelector('#tqDel');if(remove)remove.onclick=()=>options.onAction('asset_remove',{kind:'tip'});
 }

@@ -14,3 +14,9 @@ assert.equal(core.viewAllowed('waiter','prep'),false);
 assert.equal(core.viewAllowed('waiter','report'),false);
 assert.equal(core.viewAllowed('owner','workbench'),true);
 assert.equal(core.viewAllowed('bar','menu'),true);
+
+assert.equal(core.personalControls({me:{id:'w',role:'waiter'},shifts:{w:false}},'ru',false).shiftLabel,'Открыть смену');
+assert.equal(core.personalControls({me:{id:'w',role:'waiter'},shifts:{w:true}},'ru',true).shiftLabel,'Завершить смену');
+assert.equal(core.personalControls({me:{id:'w',role:'waiter'},shifts:{}},'ru',false).qrAttention,true);
+assert.equal(core.personalControls({me:{id:'w',role:'waiter'},shifts:{}},'ru',true).qrAttention,false);
+assert.equal(core.personalControls({me:{id:'b',role:'bar'},shifts:{}},'ru',false).visible,false);
