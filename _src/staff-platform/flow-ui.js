@@ -62,7 +62,6 @@ function since(ts){const s=Math.max(0,Math.floor((Date.now()-ts)/1000));return s
 function mmss(ts){const s=Math.max(0,Math.floor((Date.now()-ts)/1000));return Math.floor(s/60)+":"+String(s%60).padStart(2,"0")}
 const live=()=>ST.orders.filter(o=>!o.seed);
 const stLabel=s=>({new:t("sNew"),accepted:t("sAccepted"),cooking:t("sCooking"),ready:t("sReady"),served:t("sServed")})[s];
-
 function reqTxt(r){return t("pay_"+r.pay)+(r.check?" · "+t("check")+" "+r.check:"")+(r.paid?" · "+t("paidQr"):"")}
 function openBill(table){return Object.values(ST.bills).find(b=>!b.closed&&b.table===table)}
 function forMe(o){if(o.status!=="new"||!o.owner)return true;return o.owner===ST.me||!ST.shift[o.owner]||!!o.reEsc}
@@ -96,7 +95,7 @@ function oCard(o,mode){const l=ST.lang;const mineO=o.waiter===ST.me||['owner','m
   const extra=[o.round>1?t("addMore")+" · "+o.round:"",o.check?t("check")+": "+o.check:""].filter(Boolean).join(" · ");
   const paid=o.status==="served"?(bOpen2?`<span class="pill st-late">${esc(t("billOpenP"))}</span>`:`<span class="pill st-ready">${esc(t("paidP"))}${B&&B.pay?" · "+esc(t("pay_"+B.pay)):""}</span>`):"";
   const live2=o.status!=="served";
-  return `<article style="--tc:var(--t${(((+o.table||1)-1)%8+8)%8+1})" class="oc v2 s-${o.status}${["bar","kitchen"].some(scope=>pendingServe(o,scope))?" has-ready":""}${forMe(o)?"":" other"}${o.status==="new"&&Date.now()-o.createdAt>NEW_LATE_MS?" late":""}" ${lateAttr}>
+  return `<article style="--tc:var(--t${(((+o.table||1)-1)%8+8)%8+1});--tc-ink:var(--t${(((+o.table||1)-1)%8+8)%8+1}-ink)" class="oc v2 s-${o.status}${["bar","kitchen"].some(scope=>pendingServe(o,scope))?" has-ready":""}${forMe(o)?"":" other"}${o.status==="new"&&Date.now()-o.createdAt>NEW_LATE_MS?" late":""}" ${lateAttr}>
     <div class="side"><small>${esc(t("table"))}</small><b>${esc(o.table)}</b>${live2?`<em data-mmss="${timeRef}">${mmss(timeRef)}</em>`:`<em>✓</em>`}</div>
     <div class="main">
     <div class="st"><i></i><span class="sl">${esc(stLabel(o.status))}${extra?` <span class="ex">· ${esc(extra)}</span>`:""}</span>${ownPill}${o.status==="new"?`<span class="pill st-late latepill" ${Date.now()-o.createdAt>NEW_LATE_MS?"":"hidden"}>${esc(t("late"))}</span>`:""}${o.escalated&&o.status==="ready"?`<span class="pill st-late">${esc(t("tAll"))}</span>`:""}${paid}<span class="wn">${o.waiter?esc(wname(o.waiter)):""}</span></div>
@@ -114,7 +113,7 @@ function rWaiter(el){const meS=staffBy(ST.me);if(!meS||meS.status!=="active"){co
   const cards=rows=>{const shown=ST.mineOnly?rows.filter(o=>o.waiter===ST.me||o.owner===ST.me):rows;return shown.length?`<div class="flow-grid">${shown.map(o=>`<div class="swp">${oCard(o)}</div>`).join("")}</div>`:`<div class="empty">${esc(t("none"))}</div>`};
   const tablesBody=()=>`<div class="tview"><button type="button" data-tv="map" class="${ST.tview!=="list"?"on":""}">${esc(t("tvMap"))}</button><button type="button" data-tv="list" class="${ST.tview==="list"?"on":""}">${esc(t("tvList"))}</button></div>`+(ST.tview==="list"?(bills.length?`<div class="tgrid">${bills.sort((a,b)=>a.table-b.table).map(tCard).join("")}</div>`:`<div class="empty">${esc(t("noBills"))}</div>`):hallMap());
   el.innerHTML=`<div class="who"><label for="meSel" class="muted">${esc(t("me"))}</label><select id="meSel">${WAITERS().map(w=>`<option value="${w.id}" ${w.id===ST.me?"selected":""}>${esc(w.name)}${ST.shift[w.id]?" ●":""}</option>`).join("")}</select><button type="button" class="btn sm ${meS.tipQr?"ghost":"tipneed"}" id="tipQrBtn" title="${meS.tipQr?"":esc(t("tipMiss"))}">${esc(t("tipQr"))}${meS.tipQr?" ✓":""}</button><span class="sp"></span><button type="button" class="shift ${on?"on":"off"}" id="shiftBtn">${on?"● "+esc(t("onShift"))+" · "+esc(t("endShift")):esc(t("startShift"))}</button></div>
-   
+
    ${on&&myReady.length?myReady.map(readyBanner).join(""):""}
    ${Object.values(ST.bills).filter(b=>!b.closed&&b.req).sort((a,b)=>a.req.at-b.req.at).map(b=>`<div class="reqbar"><b>${esc(t("table"))} ${esc(b.table)} · ${esc(t("billReq"))}</b><span>${esc(reqTxt(b.req))} · ${vnd(billTotal(b.id))}</span><button class="btn green sm" type="button" data-a="bill" data-id="${b.id}">${esc(t("openBill"))}</button></div>`).join("")}<div class="row"><div class="tabs">${tabs.map(([k,lab,arr])=>`<button type="button" data-wt="${k}" class="${k===cur[0]?"on":""} ${["new","ready"].includes(k)&&arr.length?"needs-action":""}">${esc(lab)} <span class="${k==='ready'&&arr.length?'ready-badge':''}">${arr.length}</span></button>`).join("")}</div></div><button class="fab" type="button" id="manualBtn" ${on?"":"disabled"} aria-label="${esc(t("manual"))}" title="${esc(t("manual"))}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span>${esc(t("fabT"))}</span></button>
    <div class="waiter-secondary"><button type="button" id="mineFilter" aria-pressed="${!!ST.mineOnly}">${ST.lang==="ru"?"Только мои":"Của tôi"}${ST.mineOnly?" ✓":""}</button></div>
@@ -152,12 +151,12 @@ function tState(n){const b=openBill(n);if(!b)return ["free",null];const os=billO
   if(os.some(o=>o.status==="accepted"||o.status==="cooking"))return ["cook",b];return ["eat",b]}
 function hallMap(){const extra=Object.values(ST.bills).filter(b=>!b.closed&&b.table>12).map(b=>b.table);const terr=[...TERR,...new Set(extra)].sort((a,b)=>a-b);
   const cell=n=>{const [st,b]=tState(n);const sum=b?billTotal(b.id):0;const w=b?[...billOrders(b.id)].reverse().find(o=>o.waiter)?.waiter:"";
-    return `<button type="button" class="ht ${st}${n%4===3||n%4===0?" sq":""}" data-ht="${n}" style="--tc:var(--t${((n-1)%8+8)%8+1})" aria-label="${esc(t("table"))} ${n}: ${esc(t("hs_"+st))}"><b>${n}</b><small>${esc(t("hs_"+st))}</small>${b?`<em>${short(sum)}${w?" · "+esc(wname(w)):""}</em>`:""}</button>`};
+    return `<button type="button" class="ht ${st}${n%4===3||n%4===0?" sq":""}" data-ht="${n}" style="--tc:var(--t${((n-1)%8+8)%8+1});--tc-ink:var(--t${((n-1)%8+8)%8+1}-ink)" aria-label="${esc(t("table"))} ${n}: ${esc(t("hs_"+st))}"><b>${n}</b><small>${esc(t("hs_"+st))}</small>${b?`<em>${short(sum)}${w?" · "+esc(wname(w)):""}</em>`:""}</button>`};
   const cnt=k=>[...HALL,...terr].filter(n=>tState(n)[0]===k).length;
   return `<div class="hall"><div class="zone"><span class="zl">${esc(t("zHall"))}</span>${HALL.map(cell).join("")}</div><div class="zone ter"><span class="zl">${esc(t("zTerr"))}</span>${terr.map(cell).join("")}</div>
    <div class="hleg">${["new","cook","ready","bill","eat","free"].map(k=>`<span class="${k}"><i></i>${esc(t("hs_"+k))}${k!=="free"?` · ${cnt(k)}`:""}</span>`).join("")}</div></div>`}
 function tCard(b){const os=billOrders(b.id);const sum=billTotal(b.id);const pend=os.filter(o=>o.status!=="served").length;
-  return `<button type="button" style="--tc:var(--t${(((+b.table||1)-1)%8+8)%8+1})" class="tc${b.req?" req":""}" data-a="bill" data-id="${b.id}">${b.req?`<span class="breq">${esc(t("billReq"))} · ${esc(reqTxt(b.req))}</span>`:""}<span class="tn">${esc(t("table"))} ${esc(b.table)}</span><span class="dim">${os.length} ${esc(t("rounds"))} · ${esc(wname(os.find(o=>o.waiter)?.waiter))}</span><span class="tsum">${vnd(sum)}</span><span class="tst">${os.map(o=>`<i class="d-${o.status}" title="#${o.no}"></i>`).join("")}${pend?`<small>${esc(t("unserved"))}: ${pend}</small>`:""}</span></button>`}
+  return `<button type="button" style="--tc:var(--t${(((+b.table||1)-1)%8+8)%8+1});--tc-ink:var(--t${(((+b.table||1)-1)%8+8)%8+1}-ink)" class="tc${b.req?" req":""}" data-a="bill" data-id="${b.id}">${b.req?`<span class="breq">${esc(t("billReq"))} · ${esc(reqTxt(b.req))}</span>`:""}<span class="tn">${esc(t("table"))} ${esc(b.table)}</span><span class="dim">${os.length} ${esc(t("rounds"))} · ${esc(wname(os.find(o=>o.waiter)?.waiter))}</span><span class="tsum">${vnd(sum)}</span><span class="tst">${os.map(o=>`<i class="d-${o.status}" title="#${o.no}"></i>`).join("")}${pend?`<small>${esc(t("unserved"))}: ${pend}</small>`:""}</span></button>`}
 function billLine(i){return `<li><span class="q">${i.qty}×</span><span class="n"><b>${esc(nm(i.mid,ST.lang))}</b>${ST.lang!=="vi"?`<span class="tr">${esc(nm(i.mid,"vi"))}</span>`:""}${i.note?`<span class="note">${esc(i.note)}</span>`:""}</span><span class="p">${vnd(M[i.mid].p*i.qty)}</span></li>`}
 /* guests who asked for separate checks: one block per check name */
 function billChecks(os){if(!os.some(o=>o.check))return "";const g=Object.create(null);os.forEach(o=>{const k=o.check||t("ckCommon");(g[k]=g[k]||[]).push(o)});
@@ -234,7 +233,7 @@ function rKitchen(el){const f=ST.ktab;const L=live();
   const ready=L.filter(o=>["cooking","ready"].includes(o.status)&&stationReady(o,f)&&filt(o));
   const card=o=>{const its=o.items.map((i,k)=>[i,k]).filter(([i])=>f==="all"||M[i.mid].st===(f==="bar"?"b":"k"));
     const done=stationReady(o,f),at=f==="all"?o.readyAt:o.stationReadyAt?.[f]||o.readyAt;
-    return `<article style="--tc:var(--t${(((+o.table||1)-1)%8+8)%8+1})" class="kc ${done?"ready":""}" ${!done?`data-slow="${o.sentAt}"`:""}>
+    return `<article style="--tc:var(--t${(((+o.table||1)-1)%8+8)%8+1});--tc-ink:var(--t${(((+o.table||1)-1)%8+8)%8+1}-ink)" class="kc ${done?"ready":""}" ${!done?`data-slow="${o.sentAt}"`:""}>
     <div class="kh"><span class="tb">${esc(t("table"))} ${esc(o.table)}</span><span>#${o.no}</span><span class="tm" ${!done?`data-mmss="${o.sentAt}"`:""}>${!done?mmss(o.sentAt):"✓"}</span></div>
     <div class="kb">${its.map(([i,k])=>`<button type="button" class="ki ${i.done?"done":""}" data-ki="${o.id}" data-k="${k}" ${done?"disabled":""}><span class="q">${i.qty}×</span><span><b>${esc(nm(i.mid,"vi"))}</b>${f==="all"?`<span class="stn ${M[i.mid].st==="b"?"sb":"sk"}">${esc(M[i.mid].st==="b"?t("bar"):t("kit"))}</span>`:""}${i.added?` <span class="badge-new">+</span>`:""}${i.note?`<span class="note">⚠ ${esc(i.note)}</span>`:""}${ST.lang==="ru"?`<span class="sub">${esc(nm(i.mid,"ru"))}</span>`:""}</span></button>`).join("")}
     ${o.wishes&&o.wishes.length?`<div class="kw">⚠ ${o.wishes.map(k=>{const w=WISH.find(x=>x.k===k);return w?esc(w.vi)+(ST.lang==="ru"?" ("+esc(w.ru)+")":""):""}).join(" · ")}</div>`:""}
@@ -250,7 +249,6 @@ function rKitchen(el){const f=ST.ktab;const L=live();
   el.querySelectorAll("[data-ki]").forEach(b=>b.onclick=()=>kItem(b.dataset.ki,+b.dataset.k));
   el.querySelectorAll("[data-kr]").forEach(b=>b.onclick=()=>kReady(b.dataset.kr,b.dataset.station));
 }
-
 let stopQ=ST.stopQ||"";
 const coName=(d,l)=>l==="ru"?d[1]:d[0];
 function setStop(k,on){mutate(()=>{ST.stop=ST.stop||{};if(on)ST.stop[k]={at:Date.now(),by:ST.role};else delete ST.stop[k]});toast(on?t("stopOk"):t("stopRet"),coDish(k),on?"r":"g")}

@@ -523,3 +523,8 @@
 
 /* Keep labels readable when a station/new-order tab requires attention. */
 #operations-root .original-flow .tabs button.needs-action{color:#152235!important}
+
+.original-flow{--t1-ink:var(--op-t1-ink,#101820);--t2-ink:var(--op-t2-ink,#101820);--t3-ink:var(--op-t3-ink,#101820);--t4-ink:var(--op-t4-ink,#101820);--t5-ink:var(--op-t5-ink,#101820);--t6-ink:var(--op-t6-ink,#101820);--t7-ink:var(--op-t7-ink,#101820);--t8-ink:var(--op-t8-ink,#101820);}
+
+.original-flow .oc.v2 .side{background:var(--tc);color:var(--tc-ink,#fff9f2)}.original-flow .oc.v2 .side small{opacity:1;color:inherit}.original-flow .oc.v2 .side em{background:transparent;color:inherit;border:1px solid color-mix(in srgb,currentColor 30%,transparent)}.original-flow .oc.v2.late .side em{background:#b93128;color:#fff}
+.original-flow .flow-section{display:flex;flex-direction:column;gap:12px;min-width:0}.original-flow .flow-section h3{margin:0}.original-flow .waiter-secondary{display:flex;gap:12px;flex-wrap:wrap}.flow-workbench #flow-waiter-pane,.flow-workbench #flow-prep-pane{display:flex;flex-direction:column;gap:18px;min-width:0}.flow-workbench .flow-grid,.flow-workbench .kgrid{grid-template-columns:1fr}.flow-workbench>section>h2{margin:0}

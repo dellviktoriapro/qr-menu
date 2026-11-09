@@ -20,3 +20,4 @@ assert.equal(core.personalControls({me:{id:'w',role:'waiter'},shifts:{w:true}},'
 assert.equal(core.personalControls({me:{id:'w',role:'waiter'},shifts:{}},'ru',false).qrAttention,true);
 assert.equal(core.personalControls({me:{id:'w',role:'waiter'},shifts:{}},'ru',true).qrAttention,false);
 assert.equal(core.personalControls({me:{id:'b',role:'bar'},shifts:{}},'ru',false).visible,false);
+const swatches=[['#022825','#fff9f2'],['#E9D9CA','#101820'],['#C56A4D','#101820'],['#5D1E33','#fff9f2']];for(const [bg,ink] of swatches)assert.equal(core.tableInk(bg),ink);console.log('PASS readable table labels for dark green, wine, sand and clay');

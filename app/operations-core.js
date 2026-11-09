@@ -1,5 +1,6 @@
 'use strict';
 const operationsCore={
+ tableInk(background){const lum=hex=>{const n=parseInt(hex.slice(1),16),rgb=[n>>16&255,n>>8&255,n&255].map(v=>{v/=255;return v<=.04045?v/12.92:((v+.055)/1.055)**2.4});return .2126*rgb[0]+.7152*rgb[1]+.0722*rgb[2]},b=lum(background),ratio=color=>{const c=lum(color);return (Math.max(c,b)+.05)/(Math.min(c,b)+.05)};return ratio('#fff9f2')>ratio('#101820')?'#fff9f2':'#101820'},
  personalControls(s,lang,qrKnown){const on=!!s.shifts?.[s.me.id],vi=lang==='vi';return {visible:['owner','manager','waiter'].includes(s.me.role),on,shiftLabel:vi?(on?'Kết thúc ca':'Mở ca'):(on?'Завершить смену':'Открыть смену'),qrLabel:vi?'QR tiền boa':'QR для чаевых',qrAttention:qrKnown===false}},
  viewAllowed(role,view){const owner=['owner','manager'].includes(role);return view==='orders'?owner||role==='waiter':view==='prep'?owner||['kitchen','bar'].includes(role):['workbench','report','staff','appearance'].includes(view)?owner:['menu','profile'].includes(view)},
  definitive(e){return /^(?:P0001|42501|22[0-9A-Z]{3}|23[0-9A-Z]{3}|40001)$/.test(String(e?.code||''))},

@@ -19,6 +19,7 @@ def build():
  chunks=[x.replace('...groups,["tables",t("tTables"),bills]];', '...groups,["tables",t("tTables"),bills],["closed",ST.lang==="ru"?"Закрытые":"Đã đóng",L.filter(o=>o.status==="served"&&o.bill&&ST.bills[o.bill]?.closed).reverse()]];') for x in chunks]
  chunks=[__import__('re').sub(r'<button type="button" id="waiterHistory">.*?</button>', '', x) for x in chunks]
  chunks=['\n'.join(line for line in x.splitlines() if 'el.querySelector("#waiterHistory").onclick' not in line) for x in chunks]
+ chunks=[__import__('re').sub(r'--tc:var\(--t(\$\{[^}]+\})\)',r'--tc:var(--t\1);--tc-ink:var(--t\1-ink)',x) for x in chunks]
  return r'''// Generated from the original ops/tpl.html. Do not edit generated UI.
 window.staffFlow=(()=>{const preferences=new Map();let overlay=null;
 function renderFlow(el,options){
@@ -32,7 +33,7 @@ const $=id=>overlay.querySelector('#flow-'+id)||overlay.querySelector('#'+id)||e
 overlay.querySelector('#flow-sheet').onclick=e=>{if(e.target===e.currentTarget){e.currentTarget.hidden=true}};
 const save=()=>preferences.set(cafe.id+':'+ST.me,Object.fromEntries(['lang','wtab','ktab','mineOnly','tview','stopQ'].map(k=>[k,ST[k]]))),render=()=>{save();options.onRender()},toast=(msg,sub)=>options.onNotice(msg+(sub?' · '+sub:''));
 const mutate=()=>{throw Error('LOCAL_BUSINESS_MUTATION_FORBIDDEN')},staffBy=id=>ST.staff.find(x=>x.id===id),readyTargets=o=>['owner','manager'].includes(snapshot.me.role)?[ST.me]:[o.waiter],showsForMe=()=>true;
-'''+'\n'.join(chunks)+r'''
+'''+'\n'.join(x.rstrip() for c in chunks for x in c.splitlines())+r'''
 // Authoritative commands replace all business mutations; preferences remain local.
 setStop=(key,on)=>{const item=stopMenu[Number(key.split('|')[1])];if(item)return options.onCommand('stop',{item_id:item.id,stopped:on})};
 const originalStop=rStop;rStop=host=>{const prior=ST.stop;ST.stop=Object.fromEntries(stopMenu.map((i,n)=>[i,n]).filter(([i])=>i.stopped).map(([i,n])=>['menu|'+n,{at:0}]));originalStop(host);if(snapshot.me.role==='waiter'){host.querySelectorAll('[data-stop]').forEach(b=>b.disabled=true);const text=host.querySelector('p');if(text)text.textContent=ST.lang==='ru'?'Доступность меняет кухня, бар или управляющий.':'Bếp, bar hoặc quản lý cập nhật tình trạng món.'}ST.stop=prior};
