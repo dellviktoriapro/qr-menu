@@ -427,3 +427,7 @@ verify_jwt = false
 # Capability-bound registration/status; all staff actions verify Auth + current cafe role.
 [functions.staff-access]
 verify_jwt = false
+
+# QR capability authentication is enforced inside the guest handler.
+[functions.guest-orders]
+verify_jwt = false

@@ -35,7 +35,7 @@ begin
   return rp_private.guest_submit(secret,(b->>'request_id')::uuid,b->'order');
  elsif a='status' then
   select * into g from rp_private.guest_submissions where visit_id=v.id and request_id=(b->>'request_id')::uuid;if not found then raise exception 'REQUEST_UNAVAILABLE';end if;
-  return g.result||jsonb_build_object('accepted',g.accepted_at is not null,'closed',not exists(select 1 from public.rp_bills where cafe_id=v.cafe_id and id=v.bill_id and status='open'),'states',coalesce((select jsonb_agg(jsonb_build_object('id',o.id,'status',o.status,'stations',(select jsonb_agg(jsonb_build_object('station',i.station,'ready',i.ready_at is not null,'served',i.served_at is not null)) from public.rp_order_items i where i.cafe_id=o.cafe_id and i.order_id=o.id and i.cancelled_at is null))) from public.rp_orders o where o.cafe_id=v.cafe_id and g.order_ids ? o.id::text),'[]'));
+  return g.result||jsonb_build_object('checks',g.items_snapshot,'created_at',g.created_at,'accepted',g.accepted_at is not null,'rejected',g.rejected_at is not null,'closed',not exists(select 1 from public.rp_bills where cafe_id=v.cafe_id and id=v.bill_id and status='open'),'states',coalesce((select jsonb_agg(jsonb_build_object('id',o.id,'number',o.number,'waiter',o.waiter_name_snapshot,'check',(select label from public.rp_checks where id=o.check_id and cafe_id=o.cafe_id),'status',o.status,'stations',(select jsonb_agg(jsonb_build_object('station',i.station,'ready',i.ready_at is not null,'served',i.served_at is not null)) from public.rp_order_items i where i.cafe_id=o.cafe_id and i.order_id=o.id and i.cancelled_at is null))) from public.rp_orders o where o.cafe_id=v.cafe_id and g.order_ids ? o.id::text),'[]'));
  end if;
  raise exception 'UNKNOWN_ACTION';
 end $$;
@@ -43,7 +43,15 @@ create function rp_private.guest_staff(c uuid,r uuid,a text,b jsonb) returns jso
 declare m public.rp_memberships;secret text;t uuid;v rp_private.guest_visits;g rp_private.guest_submissions;rec rp_private.receipts;result jsonb;
 begin
  perform 1 from public.rp_cafes where id=c for update;m:=rp_private.require_member(c);
- if a='pending' and m.role in ('owner','manager','waiter') then return coalesce((select jsonb_agg(jsonb_build_object('id',gs.id,'created_at',gs.created_at,'table',gt.label,'lang',gs.body->>'lang','checks',gs.items_snapshot)) from rp_private.guest_submissions gs join rp_private.guest_visits gv on gv.id=gs.visit_id join public.rp_tables gt on gt.id=gv.table_id and gt.cafe_id=gs.cafe_id where gs.cafe_id=c and gs.accepted_at is null and gv.closed_at is null and gv.expires_at>now() and exists(select 1 from public.rp_bills where id=gv.bill_id and cafe_id=c and status='open')),'[]');end if;
+ if a='pending' and m.role in ('owner','manager','waiter') then return coalesce((select jsonb_agg(jsonb_build_object('id',gs.id,'created_at',gs.created_at,'table',gt.label,'lang',gs.body->>'lang','checks',gs.items_snapshot)) from rp_private.guest_submissions gs join rp_private.guest_visits gv on gv.id=gs.visit_id join public.rp_tables gt on gt.id=gv.table_id and gt.cafe_id=gs.cafe_id where gs.cafe_id=c and gs.accepted_at is null and gs.rejected_at is null and gv.closed_at is null and gv.expires_at>now() and exists(select 1 from public.rp_bills where id=gv.bill_id and cafe_id=c and status='open')),'[]');end if;
+ if a='reject' and m.role in ('owner','manager','waiter') then
+  if r is null then raise exception 'REQUEST_ID_REQUIRED';end if;
+  select * into rec from rp_private.receipts where cafe_id=c and request_id=r;if found then if rec.actor_id<>auth.uid() or rec.action<>'guest:reject' or rec.body<>b then raise exception 'REQUEST_ID_REUSED';end if;return rec.result;end if;
+  select * into g from rp_private.guest_submissions where cafe_id=c and id=(b->>'submission_id')::uuid for update;
+  if not found or g.accepted_at is not null then raise exception 'SUBMISSION_UNAVAILABLE';end if;
+  update rp_private.guest_submissions set rejected_at=coalesce(rejected_at,clock_timestamp()) where id=g.id;
+  result:=jsonb_build_object('ok',true,'request_id',r);insert into rp_private.receipts(cafe_id,request_id,actor_id,action,body,result) values(c,r,auth.uid(),'guest:reject',b,result);return result;
+ end if;
  if a='accept' then
   select s.* into g from rp_private.guest_submissions s where s.id=(b->>'submission_id')::uuid and s.cafe_id=c;
   select * into v from rp_private.guest_visits where id=g.visit_id;
@@ -72,7 +80,7 @@ revoke all on function rp_private.guest_transport(text,jsonb),public.rp_guest_tr
 create function rp_private.guest_bill_guard() returns trigger language plpgsql security definer set search_path='' as $$
 begin
  if old.status='open' and new.status<>'open' then
-  if exists(select 1 from rp_private.guest_submissions g join rp_private.guest_visits v on v.id=g.visit_id where g.cafe_id=new.cafe_id and v.bill_id=new.id and g.accepted_at is null and v.closed_at is null and v.expires_at>now()) then raise exception 'GUEST_ORDERS_PENDING';end if;
+  if exists(select 1 from rp_private.guest_submissions g join rp_private.guest_visits v on v.id=g.visit_id where g.cafe_id=new.cafe_id and v.bill_id=new.id and g.accepted_at is null and g.rejected_at is null and v.closed_at is null and v.expires_at>now()) then raise exception 'GUEST_ORDERS_PENDING';end if;
   update rp_private.guest_visits set closed_at=clock_timestamp() where cafe_id=new.cafe_id and bill_id=new.id and closed_at is null;
  end if;return new;
 end $$;

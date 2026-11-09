@@ -302,3 +302,6 @@ User chose Supabase for independent multi-restaurant staff app, owner analytics 
 
 ### Full original app migration correction (user confirmation 2026-11-06)
 Do NOT expand operations.js as a replacement product. User requires original `_src/ops/tpl.html` screens and all original features connected to Supabase. See `_src/staff-platform/FULL-APP-PARITY.md` + `docs/superpowers/plans/2026-11-06-full-app-server-migration.md`. `full-state.js` + `build-full-runtime.py` are tested internal integration foundations, NOT activated production. Do not publish the QA compiler output or claim staff onboarding/QR/full reports work before server contracts and cross-device tests. Preserve actual cafe data. Cafe/owner identity should appear only in the left sidebar, no duplicate top header.
+
+
+09 Nov 2026: guest backend activated after explicit approval (guest-orders Edge capability auth, private SQL transport, membership-scoped staff RPC). Original incoming card compiled, Chez Oanh real-server menu adapter prepared. No Sun&Sea edits. STATUS.md has exact tests/limits: guest bill requests/payment/tip display still directs to waiter; full original parity and real authenticated-owner + guest QR E2E pending. New migration records source only; remote history remains unreconciled. No real QR issued or real orders reset.

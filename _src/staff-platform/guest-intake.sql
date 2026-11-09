@@ -1,7 +1,7 @@
 -- Staged guest intake. No public execution grants; no live table QR is issued here.
 begin;
 create table rp_private.guest_visits(id uuid primary key default gen_random_uuid(),cafe_id uuid not null references public.rp_cafes(id),table_id uuid not null,token_hash text not null unique,expires_at timestamptz not null default now()+interval '6 hours',closed_at timestamptz,foreign key(cafe_id,table_id) references public.rp_tables(cafe_id,id));
-create table rp_private.guest_submissions(id uuid primary key default gen_random_uuid(),cafe_id uuid not null,visit_id uuid not null references rp_private.guest_visits(id),request_id uuid not null,body jsonb not null,items_snapshot jsonb not null,result jsonb not null,created_at timestamptz not null default now(),accepted_by uuid,accepted_at timestamptz,order_ids jsonb,unique(visit_id,request_id),foreign key(cafe_id,accepted_by) references public.rp_memberships(cafe_id,user_id));
+create table rp_private.guest_submissions(id uuid primary key default gen_random_uuid(),cafe_id uuid not null,visit_id uuid not null references rp_private.guest_visits(id),request_id uuid not null,body jsonb not null,items_snapshot jsonb not null,result jsonb not null,created_at timestamptz not null default now(),accepted_by uuid,accepted_at timestamptz,rejected_at timestamptz,order_ids jsonb,unique(visit_id,request_id),foreign key(cafe_id,accepted_by) references public.rp_memberships(cafe_id,user_id));
 alter table rp_private.guest_visits enable row level security;
 alter table rp_private.guest_submissions enable row level security;
 revoke all on rp_private.guest_visits,rp_private.guest_submissions from public,anon,authenticated;
@@ -37,7 +37,7 @@ begin
  perform 1 from public.rp_cafes where id=c for update;m:=rp_private.require_member(c);if m.role not in ('owner','manager','waiter') then raise exception 'ROLE_DENIED' using errcode='42501';end if;
  if r is null or b is null or jsonb_typeof(b)<>'object' then raise exception 'INVALID_REQUEST';end if;
  select * into rec from rp_private.receipts where cafe_id=c and request_id=r;if found then if rec.actor_id<>auth.uid() or rec.action<>'accept_guest' or rec.body<>b then raise exception 'REQUEST_ID_REUSED';end if;return rec.result;end if;
- select * into g from rp_private.guest_submissions where cafe_id=c and id=(b->>'submission_id')::uuid for update;if not found or g.accepted_at is not null then raise exception 'SUBMISSION_UNAVAILABLE';end if;
+ select * into g from rp_private.guest_submissions where cafe_id=c and id=(b->>'submission_id')::uuid for update;if not found or g.accepted_at is not null or g.rejected_at is not null then raise exception 'SUBMISSION_UNAVAILABLE';end if;
  select * into v from rp_private.guest_visits where id=g.visit_id;
  if v.closed_at is not null or v.expires_at<=now() then raise exception 'VISIT_UNAVAILABLE';end if;
  select t.label into label from public.rp_tables t where t.cafe_id=c and t.id=v.table_id and active;if label is null then raise exception 'TABLE_NOT_FOUND';end if;

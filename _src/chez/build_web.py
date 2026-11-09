@@ -29,5 +29,7 @@ AMB={'lion':webp('amb/lion.jpg',1100,70)}
 h=open('tpl.html').read().replace('__DATA__',json.dumps(D,ensure_ascii=False)).replace('__PH__','{}').replace('__AMB__',json.dumps(AMB)).replace('__GEN__',json.dumps(gen)).replace('__CATPH__',json.dumps({k:v for k,v in CAT.items() if v}))
 h+='<script>(function n(i){if(i>%d)return;var s=document.createElement("script");s.src="ph"+i+".js";s.onload=s.onerror=function(){n(i+1)};document.body.appendChild(s)})(1)</script>'%len(chunks)
 h='<!doctype html>\n<html lang="ru">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">\n</head>\n<body>\n'+h+'</body></html>'
+import runpy
+h=runpy.run_path('attach-guest.py')['attach'](h,OUT)
 open(OUT+'/index.html','w').write(h)
 print('html',len(h.encode())//1024,'KB;',[os.path.getsize(f'{OUT}/ph{n}.js')//1024 for n in range(1,len(chunks)+1)])

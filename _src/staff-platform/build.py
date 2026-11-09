@@ -27,3 +27,8 @@ staff_builder=runpy.run_path(str(here/'build-staff.py'))
 for name in ['staff-client.js','staff-invite.js','staff-ui.js','staff.css']:
     shutil.copyfile(here/name,out/name)
 shutil.copyfile(here/'vendor/qrcode-1.0.0.min.js',out/'qrcode-1.0.0.min.js')
+
+incoming_builder=runpy.run_path(str(here/'build-incoming.py'))
+(here/'incoming-ui.js').write_text(incoming_builder['build'](),encoding='utf-8')
+for name in ['incoming-ui.js','guest-incoming.css']:
+    shutil.copyfile(here/name,out/name)
