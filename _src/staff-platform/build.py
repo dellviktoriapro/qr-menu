@@ -32,3 +32,12 @@ incoming_builder=runpy.run_path(str(here/'build-incoming.py'))
 (here/'incoming-ui.js').write_text(incoming_builder['build'](),encoding='utf-8')
 for name in ['incoming-ui.js','guest-incoming.css']:
     shutil.copyfile(here/name,out/name)
+
+flow_builder=runpy.run_path(str(here/'build-flow.py'))
+(here/'flow-ui.js').write_text(flow_builder['build'](),encoding='utf-8')
+for name in ['full-state.js','flow-contract.js','flow-ui.js','flow.css']:shutil.copyfile(here/name,out/name)
+
+shutil.copyfile(here/'flow-alerts.js',out/'flow-alerts.js')
+
+for name in ['manifest.webmanifest','sw.js','pwa.js']:shutil.copyfile(here/name,out/name)
+shutil.copytree(here/'icons',out/'icons',dirs_exist_ok=True)

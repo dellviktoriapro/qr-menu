@@ -1,0 +1,23 @@
+begin;
+create function pg_temp.idle_assert(ok boolean,msg text) returns void language plpgsql as $$begin if ok is distinct from true then raise exception 'TEST: %',msg;end if;end$$;
+insert into auth.users(id) values('00000000-0000-4000-8000-000000000101');
+insert into public.rp_cafes(id,slug,name) values('10000000-0000-4000-8000-000000000101','idle-visit-fixture','Idle visit fixture');
+insert into public.rp_memberships(cafe_id,user_id,role,display_name) values('10000000-0000-4000-8000-000000000101','00000000-0000-4000-8000-000000000101','owner','Fixture owner');
+insert into public.rp_tables(id,cafe_id,label,seats) values('20000000-0000-4000-8000-000000000101','10000000-0000-4000-8000-000000000101','3',4);
+insert into public.rp_menu_items(cafe_id,external_key,names,station,price_minor) values('10000000-0000-4000-8000-000000000101','chez|coffee|0','{"vi":"Coffee"}','bar',40000);
+select set_config('request.jwt.claim.sub','00000000-0000-4000-8000-000000000101',true);
+do $$declare c uuid:='10000000-0000-4000-8000-000000000101';link jsonb;v jsonb;bill uuid;g uuid;begin
+ link:=rp_private.guest_staff(c,gen_random_uuid(),'table_link','{"table_id":"20000000-0000-4000-8000-000000000101"}');
+ perform rp_private.guest_transport('open',jsonb_build_object('table_token',link->>'table_token','visit_secret',repeat('1',64)));
+ perform rp_private.guest_transport('open',jsonb_build_object('table_token',link->>'table_token','visit_secret',repeat('2',64)));
+ perform pg_temp.idle_assert(not exists(select 1 from public.rp_bills where cafe_id=c),'browsing alone must not create a financial bill');
+ v:=rp_private.guest_service('context',jsonb_build_object('visit_secret',repeat('1',64)));perform pg_temp.idle_assert(v->>'closed'='false' and v->>'total'='0','unbound browsing visit is valid');
+ perform rp_private.guest_transport('submit',jsonb_build_object('visit_secret',repeat('1',64),'request_id',gen_random_uuid(),'order','{"lang":"ru","checks":[{"label":"Anna","items":[{"key":"chez|coffee|0","quantity":1}]}]}'::jsonb));
+ perform pg_temp.idle_assert((select count(*) from public.rp_bills where cafe_id=c)=1 and (select count(distinct bill_id) from rp_private.guest_visits where cafe_id=c)=1,'first order creates exactly one shared bill');
+ select id into g from rp_private.guest_submissions where cafe_id=c;perform rp_private.guest_staff(c,gen_random_uuid(),'accept',jsonb_build_object('submission_id',g));
+ v:=rp_private.guest_service('context',jsonb_build_object('visit_secret',repeat('2',64)));perform pg_temp.idle_assert(v->>'total'='40000','other scanner sees the same table bill');
+ select id into bill from public.rp_bills where cafe_id=c;update public.rp_bills set status='closed',closed_at=now() where id=bill;
+ v:=rp_private.guest_service('context',jsonb_build_object('visit_secret',repeat('2',64)));perform pg_temp.idle_assert(v->>'closed'='true','closing bill closes both scanners');
+end $$;
+rollback;
+select 'PASS idle visit: scanning has no financial effect, first order creates one bill, concurrent visitors share it, closure invalidates both' as result;

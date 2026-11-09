@@ -817,8 +817,8 @@ const moneyLine=sum=>cur==="VND"?"":"≈ "+fmt(sum,cur);
 
 /* stop list from the staff app (cook / manager): "section|index" */
 let STOP=new Set();
-const isOut=key=>STOP.has(key.split("|").slice(0,2).join("|"));
-function loadStop(){let p={};try{p=JSON.parse(ls.get("co_pub")||"{}")||{}}catch(e){}const nx=new Set(p.stop||[]);
+let serverIsOut=null;const isOut=key=>serverIsOut?serverIsOut(key):STOP.has(key.split("|").slice(0,2).join("|"));
+function loadStop(){const p=PUB();const nx=new Set(p.stop||[]);
   const same=nx.size===STOP.size&&[...nx].every(k=>STOP.has(k));STOP=nx;if(same)return false;
   let n=0;allCarts().forEach(([,c])=>Object.keys(c).forEach(k=>{if(isOut(k)){delete c[k];n++}}));if(n){save();setTimeout(()=>toast(T[lang]?T[lang].soldGone:""),50)}return true}
 function ctrl(key,c){if(isOut(key))return `<span class="sold">${esc(T[lang].soldOut)}</span>`;const cc=c==null?cart:(c===CK.act?cart:CK.carts[c]||{}),q=cc[key]||0,dc=c==null?"":` data-c="${esc(c)}"`;
@@ -979,7 +979,7 @@ function billState(){const tb=TABLE();if(!tb)return "";let o={};try{o=JSON.parse
 function guestMark(k,add,nm){let o={};try{o=JSON.parse(ls.get("co_guest")||"{}")}catch(e){}const tb=TABLE();if(o.t!==tb||(o.ord&&Date.now()-o.ord>6*3600e3))o={t:tb};o[k]=Date.now();if(k==="ord"&&!o.ord0)o.ord0=o.ord;if(add){o.sum=(o.sum||0)+add;o.sums=o.sums||{};o.sums[nm||""]=(o.sums[nm||""]||0)+add}ls.set("co_guest",JSON.stringify(o))}
 function guestO(){try{const o=JSON.parse(ls.get("co_guest")||"{}");return o.t===TABLE()?o:{}}catch(e){return {}}}
 function billSum(nm){const o=guestO();return nm==null?o.sum||0:(o.sums||{})[nm]||0}
-const paidChecks=()=>Object.keys(guestO().sums||{}).filter(k=>k);
+let serverPaidChecks=null;const paidChecks=()=>serverPaidChecks?serverPaidChecks():Object.keys(guestO().sums||{}).filter(k=>k);
 function done(h,s){const t=T[lang];$("doneT").textContent=t.tableL+" "+TABLE();$("doneH").textContent=h;$("doneS").textContent=s;$("doneOk").textContent=t.ok;$("done").hidden=false}
 function sendOrder(){const t=T[lang];if(!allTotals().n)return;
   const nm=(l,i,lg)=>{const x=optLabel(l.o,lg);return l.it[i]+(x?" ("+x+")":"")};
@@ -1114,4 +1114,4 @@ function spy(){if(io)io.disconnect();if(!("IntersectionObserver" in window))retu
   if(l&&T[l]){lang=l;cur=(c&&CUR[c])?c:LANGS.find(x=>x.k===l).c;$("cur").value=cur;render()}
   else{lang="ru";cur="RUB";$("cur").value=cur;render();lang=null;openGate();lang="ru"}})();
 </script>
-<script>(function n(i){if(i>5)return;var s=document.createElement("script");s.src="ph"+i+".js";s.onload=s.onerror=function(){n(i+1)};document.body.appendChild(s)})(1)</script><!-- connected-guest-start --><script src="guest-outbox.js?v=20261109-guest1"></script><script src="guest-api.js?v=20261109-guest1"></script><script src="guest-server.js?v=20261109-guest1"></script><!-- connected-guest-end --></body></html>
+<script>(function n(i){if(i>5)return;var s=document.createElement("script");s.src="ph"+i+".js";s.onload=s.onerror=function(){n(i+1)};document.body.appendChild(s)})(1)</script><!-- connected-guest-start --><script src="guest-outbox.js?v=20261109-launch1"></script><script src="guest-api.js?v=20261109-launch1"></script><script src="guest-service-core.js?v=20261109-launch1"></script><script src="guest-line-options.js?v=20261109-launch1"></script><script src="guest-server.js?v=20261109-launch1"></script><!-- connected-guest-end --></body></html>
