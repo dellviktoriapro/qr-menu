@@ -10,6 +10,9 @@ def build():
  line=next(x for x in renderer.splitlines() if 'esc(t("qrTitle"))' in x)
  renderer=renderer.replace(line,'''    <div class="card staff-invite-card"><h3>${esc(t("qrTitle"))}</h3><p>Персональная ссылка для сотрудника. Действует 48 часов; доступ появляется после вашего одобрения.</p><form id="staff-invite-form"><label>Имя сотрудника<input name="name" required maxlength="100" autocomplete="off" value="${esc(currentLink?.name||'')}"></label><button type="submit">${currentLink?'Перевыпустить приглашение':'Создать приглашение'}</button></form>${currentLink?.url?`<div class="qrbox"><div id="qrJoin" class="qr"></div><div class="qrt"><strong>${esc(currentLink.name)}</strong><p>До ${esc(new Date(currentLink.expires_at).toLocaleString('ru-RU'))}</p><button type="button" id="staff-copy-link">Скопировать ссылку</button></div></div>`:''}<div id="staff-invites"></div></div>''')
  renderer=renderer.replace('aria-label="role"','aria-label="Роль: ${esc(x.name)}"')
+ # A flex container belongs inside a cell; applying flex to td breaks table row borders.
+ renderer=renderer.replace('<td class="acts">','<td class="staff-actions-cell"><div class="acts">').replace('</button>`}</td></tr>','</button>`}</div></td></tr>')
+ renderer=renderer.replace('<span class="pill st-ready">${esc(t("onShift"))}</span>','<span class="pill staff-shift-badge">${esc(t("onShift"))}</span>')
  renderer=renderer.replace('src="${ST.payQr}"','src="${esc(ST.payQr)}"')
  tip=s[s.index('function openTipQr()'):s.index('let ED=null;')]
  tipmarkup=tip[tip.index('   <div class="payqr">'):tip.index('`;')]
