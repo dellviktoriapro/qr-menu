@@ -9,11 +9,14 @@ def build():
  renderer=renderer[:renderer.index('  const q=')]+ '\n}\n'
  line=next(x for x in renderer.splitlines() if 'esc(t("qrTitle"))' in x)
  renderer=renderer.replace(line,'''    <div class="card staff-invite-card"><h3>${esc(t("qrTitle"))}</h3><p>Персональная ссылка для сотрудника. Действует 48 часов; доступ появляется после вашего одобрения.</p><form id="staff-invite-form"><label>Имя сотрудника<input name="name" required maxlength="100" autocomplete="off" value="${esc(currentLink?.name||'')}"></label><button type="submit">${currentLink?'Перевыпустить приглашение':'Создать приглашение'}</button></form>${currentLink?.url?`<div class="qrbox"><div id="qrJoin" class="qr"></div><div class="qrt"><strong>${esc(currentLink.name)}</strong><p>До ${esc(new Date(currentLink.expires_at).toLocaleString('ru-RU'))}</p><button type="button" id="staff-copy-link">Скопировать ссылку</button></div></div>`:''}<div id="staff-invites"></div></div>''')
+ settings_markup=renderer[renderer.index('<div class="card"><h3>${esc(t("payQrT"))}'):renderer.index('   <div class="two">')]
+ renderer=renderer.replace(settings_markup,'')
  renderer=renderer.replace('aria-label="role"','aria-label="Роль: ${esc(x.name)}"')
  # A flex container belongs inside a cell; applying flex to td breaks table row borders.
  renderer=renderer.replace('<td class="acts">','<td class="staff-actions-cell"><div class="acts">').replace('</button>`}</td></tr>','</button>`}</div></td></tr>')
  renderer=renderer.replace('<span class="pill st-ready">${esc(t("onShift"))}</span>','<span class="pill staff-shift-badge">${esc(t("onShift"))}</span>')
  renderer=renderer.replace('src="${ST.payQr}"','src="${esc(ST.payQr)}"')
+ settings_markup=settings_markup.replace('src="${ST.payQr}"','src="${esc(ST.payQr)}"')
  tip=s[s.index('function openTipQr()'):s.index('let ED=null;')]
  tipmarkup=tip[tip.index('   <div class="payqr">'):tip.index('`;')]
  return '''// Generated from the original ops/tpl.html staff UI. Edit builder/source.
@@ -31,9 +34,6 @@ function renderStaff(el,options){
  if(currentLink){new QRCode(el.querySelector('#qrJoin'),{text:currentLink.url,width:164,height:164,colorDark:'#152235',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});el.querySelector('#staff-copy-link').onclick=async()=>{try{await navigator.clipboard.writeText(currentLink.url);options.onNotice('Ссылка скопирована. Отправьте её сотруднику.')}catch{options.onNotice('Не удалось скопировать ссылку. Используйте QR.') }}}
  const invites=el.querySelector('#staff-invites');invites.innerHTML=data.invites.filter(i=>!i.revoked_at&&!i.accepted_at&&Date.parse(i.expires_at)>now).map(i=>`<div class="staff-invite-row"><span>${esc(i.name)} · ${esc(i.email.startsWith('staff.')?'Персональная ссылка':i.email)}</span><button type="button" data-revoke="${i.id}">Отменить приглашение</button></div>`).join('');
  invites.querySelectorAll('[data-revoke]').forEach(b=>b.onclick=()=>invoke('invite_revoke',{invite_id:b.dataset.revoke}));
- el.querySelector('#revSave').onclick=()=>invoke('reviews',{google:el.querySelector('#revG').value.trim(),tripadvisor:el.querySelector('#revTa').value.trim()});
- el.querySelector('#payQrIn').onchange=e=>options.onUpload('payment',e.target.files[0]);
- const remove=el.querySelector('#payQrDel');if(remove)remove.onclick=()=>{if(!remove.dataset.arm){remove.dataset.arm='1';remove.textContent='Точно убрать QR?';return}invoke('asset_remove',{kind:'payment'})};
  el.querySelectorAll('[data-ok]').forEach(b=>b.onclick=()=>options.onApprove(b.dataset.ok,el.querySelector(`[data-rrole="${b.dataset.ok}"]`).value));
  el.querySelectorAll('[data-rej]').forEach(b=>b.onclick=()=>invoke('reject',{pending_id:b.dataset.rej}));
  const member=(id,role,active,deleted=false)=>invoke('member_set',{user_id:id,role,active,deleted});
@@ -45,14 +45,15 @@ function renderStaff(el,options){
 }
 function renderProfile(el,options){const {data}=options,me=data.members.find(x=>x.id===data.me);if(!me)return;el.classList.add('original-report','original-staff');const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 '''+strings+'''
- S.ru.tipQrH='Ваш банковский QR для прямых переводов чаевых.';const t=k=>S.ru[k];me.tipQr=me.tip_url||'';
+ S.ru.tipQrH='Ваш банковский QR для прямых переводов чаевых.';const t=k=>S[options.lang||'ru'][k];me.tipQr=me.tip_url||'';const ST={payQr:data.settings.payment_url||'',rev:data.settings.reviews||{}};
  el.innerHTML=`<div class="card"><div class="row"><h2>${esc(me.name)}</h2><button type="button" id="staff-shift">${me.on_shift?'Закончить смену':'Начать смену'}</button></div></div><div class="card"><h3>${esc(t('tipQrT'))}</h3>
 '''+tipmarkup+'''
-</div>`;
+</div>${data.role==='owner'?`'''+settings_markup+'''`:''}`;
  el.querySelector('#staff-shift').onclick=()=>options.onAction('shift',{on_shift:!me.on_shift});
  if(options.headerManaged)el.querySelector('#staff-shift').remove();
  el.querySelector('#tqIn').onchange=e=>options.onUpload('tip',e.target.files[0]);
  const remove=el.querySelector('#tqDel');if(remove)remove.onclick=()=>options.onAction('asset_remove',{kind:'tip'});
+ if(data.role==='owner'){el.querySelector('#revSave').onclick=()=>options.onAction('reviews',{google:el.querySelector('#revG').value.trim(),tripadvisor:el.querySelector('#revTa').value.trim()});el.querySelector('#payQrIn').onchange=e=>options.onUpload('payment',e.target.files[0]);const removePay=el.querySelector('#payQrDel');if(removePay)removePay.onclick=()=>{if(!removePay.dataset.arm){removePay.dataset.arm='1';removePay.textContent='Точно убрать QR?';return}options.onAction('asset_remove',{kind:'payment'})}}
 }
 return {render:renderStaff,profile:renderProfile,acceptInvite(cafe,actor,data){if(data.token)links.set(cafe+':'+actor,{name:data.name,email:data.email,expires_at:data.expires_at,url:'https://dellviktoriapro.github.io/qr-menu/app/#staff='+data.token})},reset(){links.clear()}};})();
 '''
