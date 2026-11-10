@@ -8,6 +8,7 @@ assert.deepEqual(signals.pending([c,{...c,id:'b',invites:[invitation('third')]}]
 const before=JSON.stringify(c);signals.pending([c],now);assert.equal(JSON.stringify(c),before);
 assert.deepEqual(signals.metrics(c),{orders:2,amount:250000,average:125000,payments:100000});
 assert.equal(signals.metrics({stats:{orders:0,order_amount:0}}).average,null);
-assert.equal(signals.links({slug:'chez-oanh-test'}).preview,'https://dellviktoriapro.github.io/qr-menu/demo/?cafe=co#ru');
+assert.equal(signals.links({slug:'chez-oanh-test'}).app,'https://dellviktoriapro.github.io/qr-menu/app/');
+assert.equal(signals.links({slug:'sun-sea'}).app,null);
 assert.equal(signals.links({slug:'unknown'}),null);
 console.log('PASS: pending/approving; resolved/revoked/expired/archived excluded; per-cafe isolation; actual average and separate payments; empty state');

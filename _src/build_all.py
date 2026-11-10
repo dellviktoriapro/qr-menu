@@ -1,7 +1,7 @@
 """Rebuild every published page of the site from _src/.
 Run from the repo root:  python _src/build_all.py
 Needs: Python 3 + Pillow (pip install pillow).
-Writes: demo/index.html, chez-oanh/index.html + ph1..N.js, sun-sea/index.html + ph1..N.js, lam-tong/index.html"""
+Writes: chez-oanh/index.html + ph1..N.js, sun-sea/index.html + ph1..N.js, lam-tong/index.html"""
 import os,subprocess,sys
 ROOT=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC=os.path.join(ROOT,'_src')
@@ -12,7 +12,7 @@ def wrap(src,dst):
     open(dst,'w',encoding='utf-8').write(HEAD+open(src,encoding='utf-8').read()+'</body></html>')
 # 1) staff app: ops/tpl.html (base, Vietnamese UI) -> demo/mk.py (RU strings + auto language) -> demo/build.py (inject icons)
 run('demo','mk.py');run('demo','build.py')
-wrap(os.path.join(SRC,'demo','demo.html'),os.path.join(ROOT,'demo','index.html'))
+# Keep the original demo source as an input to legacy builders; the public demo route is retired.
 # 2) Chez Oanh menu, light web build: text page + photo chunks
 run('chez','build_web.py',os.path.join(ROOT,'chez-oanh'))
 # 2b) Sun&Sea Restaurant (Mui Ne) menu: same engine as Chez Oanh (chez/tpl.html), own data, photos and look
