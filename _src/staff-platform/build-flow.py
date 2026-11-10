@@ -16,7 +16,7 @@ def build():
  chunks[-2]=chunks[-2].replace('$("bClose").onclick=e=>','$("bClose").onclick=async e=>').replace('if(!btn.dataset.arm){btn.dataset.arm="1";btn.textContent=t("closeSure");return}closeBill(bid,{...PM});closeEditor();','if(!window.confirm(t("closeSure")))return;if(!await closeBill(bid,{...PM}))return;closeEditor();')
  # Keep the original order renderers; use the server shell for personal controls.
  chunks=[x.replace('${on?"":`<div class="alert red"><span>${esc(t("offNote"))}</span></div>`}', '') for x in chunks]
- chunks=[x.replace('...groups,["tables",t("tTables"),bills]];', '...groups,["tables",t("tTables"),bills],["closed",ST.lang==="ru"?"Закрытые":"Đã đóng",L.filter(o=>o.status==="served"&&o.bill&&ST.bills[o.bill]?.closed).reverse()]];') for x in chunks]
+ chunks=[x.replace('...groups,["tables",t("tTables"),bills]];', '...groups,["tables",t("tTables"),bills],["closed",ST.lang==="ru"?"Закрытые · 24 часа":"Đã đóng · 24 giờ",L.filter(o=>o.status==="served"&&o.bill&&ST.bills[o.bill]?.closedAt>Date.now()-86400000).sort((a,b)=>ST.bills[b.bill].closedAt-ST.bills[a.bill].closedAt)]];') for x in chunks]
  chunks=[__import__('re').sub(r'<button type="button" id="waiterHistory">.*?</button>', '', x) for x in chunks]
  chunks=['\n'.join(line for line in x.splitlines() if 'el.querySelector("#waiterHistory").onclick' not in line) for x in chunks]
  chunks=[__import__('re').sub(r'const tablesBody=\(\)=>[^\n]+', '  const tablesBody=()=>hallMap();', x) for x in chunks]

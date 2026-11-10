@@ -108,7 +108,7 @@ function rWaiter(el){const meS=staffBy(ST.me);if(!meS||meS.status!=="active"){co
   const myReady=L.filter(o=>(o.status==="ready"||(o.status==="cooking"&&["bar","kitchen"].some(scope=>pendingServe(o,scope))))&&readyTargets(o).includes(ST.me));
   const groups=[["new",ST.lang==="ru"?"Новые":"Mới",L.filter(o=>o.status==="new")],["cooking",ST.lang==="ru"?"Готовятся":"Đang làm",L.filter(o=>["accepted","cooking"].includes(o.status)&&!["bar","kitchen"].some(scope=>pendingServe(o,scope)))],["ready",ST.lang==="ru"?"Можно выносить":"Có thể phục vụ",L.filter(o=>["cooking","ready"].includes(o.status)&&["bar","kitchen"].some(scope=>pendingServe(o,scope)))]];
   const bills=Object.values(ST.bills).filter(b=>!b.closed&&billOrders(b.id).some(o=>!o.seed));
-  const tabs=[["all",ST.lang==="ru"?"Все":"Tất cả",groups.flatMap(g=>g[2])],...groups,["tables",t("tTables"),bills],["closed",ST.lang==="ru"?"Закрытые":"Đã đóng",L.filter(o=>o.status==="served"&&o.bill&&ST.bills[o.bill]?.closed).reverse()]];
+  const tabs=[["all",ST.lang==="ru"?"Все":"Tất cả",groups.flatMap(g=>g[2])],...groups,["tables",t("tTables"),bills],["closed",ST.lang==="ru"?"Закрытые · 24 часа":"Đã đóng · 24 giờ",L.filter(o=>o.status==="served"&&o.bill&&ST.bills[o.bill]?.closedAt>Date.now()-86400000).sort((a,b)=>ST.bills[b.bill].closedAt-ST.bills[a.bill].closedAt)]];
   const cur=tabs.find(x=>x[0]===ST.wtab)||tabs[0];
   const cards=rows=>{const shown=ST.mineOnly?rows.filter(o=>o.waiter===ST.me||o.owner===ST.me):rows;return shown.length?`<div class="flow-grid">${shown.map(o=>`<div class="swp">${oCard(o)}</div>`).join("")}</div>`:`<div class="empty">${esc(t("none"))}</div>`};
     const tablesBody=()=>hallMap();
