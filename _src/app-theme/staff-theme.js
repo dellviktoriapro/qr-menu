@@ -8,7 +8,7 @@ function staffThemeApply(){
  for(const [k,x] of Object.entries(v))document.body.style.setProperty('--design-'+k,x);
  for(const [k,x] of Object.entries(aliases))document.body.style.setProperty('--'+k,v[x]);
  document.body.style.setProperty('--f','Manrope,system-ui,sans-serif');document.body.style.setProperty('--fd','Lora,Georgia,serif');
- document.body.style.setProperty('--grad',v.accent);document.body.style.setProperty('--glow','none');document.body.style.setProperty('--glass',v.frame);document.body.style.setProperty('--new',v.signalText);document.body.style.setProperty('--cook','#A6C7ED');document.body.style.setProperty('--ready','#F4721E');document.body.style.setProperty('--hot','#F4721E');document.body.style.setProperty('--hot-glow','transparent');
+ document.body.style.setProperty('--grad',v.accent);document.body.style.setProperty('--glow','none');document.body.style.setProperty('--glass',v.frame);document.body.style.setProperty('--new',v.signalText);document.body.style.setProperty('--cook',v.navBlue);document.body.style.setProperty('--ready',v.signal);document.body.style.setProperty('--hot',v.signal);document.body.style.setProperty('--hot-glow','transparent');
  document.documentElement.style.background=v.ground;
 }
 function staffDesignPicker(el){
