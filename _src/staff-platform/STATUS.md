@@ -1,3 +1,5 @@
+# Исторический журнал разработки. Текущее состояние: `ARCHITECTURE.md`; старые записи ниже сохраняют дату своего состояния.
+
 # Staff server integration — 2026-11-06
 
 Dedicated app route: `/app/`. `/demo/` remains a browser-local demonstration; Sun&Sea remains independent.
