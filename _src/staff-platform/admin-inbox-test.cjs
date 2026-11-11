@@ -9,6 +9,7 @@ const before=JSON.stringify(c);signals.pending([c],now);assert.equal(JSON.string
 assert.deepEqual(signals.metrics(c),{orders:2,amount:250000,average:125000,payments:100000});
 assert.equal(signals.metrics({stats:{orders:0,order_amount:0}}).average,null);
 assert.equal(signals.links({slug:'chez-oanh-test'}).app,'https://dellviktoriapro.github.io/qr-menu/app/');
-assert.equal(signals.links({slug:'sun-sea'}).app,null);
+assert.equal(signals.links({slug:'sun-sea'}).app,'https://dellviktoriapro.github.io/qr-menu/app/');
+assert.equal(signals.links({slug:'sun-sea'}).menu,'https://dellviktoriapro.github.io/qr-menu/sun-sea/');
 assert.equal(signals.links({slug:'unknown'}),null);
 console.log('PASS: pending/approving; resolved/revoked/expired/archived excluded; per-cafe isolation; actual average and separate payments; empty state');
