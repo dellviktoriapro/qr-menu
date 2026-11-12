@@ -1,5 +1,6 @@
 # Compile original waiter, kitchen, bill and editor functions against server callbacks.
 from pathlib import Path
+import json
 HERE=Path(__file__).resolve().parent
 def build():
  s=(HERE.parent/'ops/tpl.html').read_text(encoding='utf-8')
@@ -20,11 +21,14 @@ def build():
  chunks=[__import__('re').sub(r'<button type="button" id="waiterHistory">.*?</button>', '', x) for x in chunks]
  chunks=['\n'.join(line for line in x.splitlines() if 'el.querySelector("#waiterHistory").onclick' not in line) for x in chunks]
  chunks=[__import__('re').sub(r'const tablesBody=\(\)=>[^\n]+', '  const tablesBody=()=>hallMap();', x) for x in chunks]
+ # Availability is managed from the dedicated Menu screen.
+ chunks=[x.replace('const f=ST.ktab;const L=live();', 'const f=ST.ktab==="stop"?"all":ST.ktab;const L=live();').replace(',["stop",t("kStop")]', '') for x in chunks]
  chunks=[__import__('re').sub(r'--tc:var\(--t(\$\{[^}]+\})\)',r'--tc:var(--t\1);--tc-ink:var(--t\1-ink)',x) for x in chunks]
+ layout=json.loads((HERE.parent/'sunsea/table-layout.json').read_text(encoding='utf-8'))
  return r'''// Generated from the original ops/tpl.html. Do not edit generated UI.
-window.staffFlow=(()=>{const preferences=new Map();let overlay=null;
+window.staffFlow=(()=>{const SUNSEA_LAYOUT='''+json.dumps(layout,ensure_ascii=False,separators=(',',':'))+r''';const preferences=new Map();let overlay=null;
 function renderFlow(el,options){
-const {snapshot,cafe}=options,mapped=staffServerState.mapSnapshot(snapshot),M=mapped.menu;let ST=mapped.state;const pref=preferences.get(cafe.id+':'+ST.me)||{};Object.assign(ST,pref);if(options.lang)ST.lang=options.lang;ST.role=options.screen==='prep'?'kitchen':'waiter';ST.split=options.screen==='workbench';ST.ktab=ST.ktab||'all';ST.shift[ST.me]=snapshot.shifts?.[ST.me]||false;
+const {snapshot,cafe}=options,mapped=staffServerState.mapSnapshot(snapshot),M=mapped.menu;let ST=mapped.state;const pref=preferences.get(cafe.id+':'+ST.me)||{};Object.assign(ST,pref);if(options.lang)ST.lang=options.lang;ST.role=options.screen==='prep'?'kitchen':'waiter';ST.split=options.screen==='workbench';ST.ktab=ST.ktab==='stop'?'all':ST.ktab||'all';ST.shift[ST.me]=snapshot.shifts?.[ST.me]||false;
 let accept,toKitchen,kReady,kItem,served,closeBill;
 const stopMenu=snapshot.menu.filter(i=>['owner','manager','waiter'].includes(snapshot.me.role)||i.station===snapshot.me.role),CMENU=[['menu','Thực đơn','Меню',stopMenu.map(i=>[i.names?.vi||i.names?.ru||'',i.names?.ru||i.names?.vi||''])]];
 const MENU=Object.values(M).filter(m=>m.active&&m.p!==null&&!snapshot.menu.find(i=>i.id===m.id)?.stopped),PH={},NEW_LATE_MS=45000,READY_ESC_MS=30000,REORDER_MS=40000;
@@ -50,7 +54,26 @@ el.querySelectorAll?.('[data-a=accept]');
 // Pending guest submissions retain their exact server ID, quotes, notes and check names.
 for(const g of options.incoming||[]){const items=[];for(const ck of g.checks)for(const [n,i] of ck.items.entries()){const mid='incoming:'+g.id+':'+ck.id+':'+n;M[mid]={...i.names,p:i.price};items.push({mid,qty:i.quantity,note:(g.checks.length>1?'Чек '+ck.label+'. ':'')+(i.note||'')})}ST.orders.push({id:g.id,no:g.id.slice(0,8),status:'new',table:g.table,items,createdAt:Date.parse(g.created_at),check:g.checks.length===1?g.checks[0].label:'',src:'qr',lang:g.lang,wishes:[],seed:false})}
 for(const q of options.services||[]){const b=ST.bills[q.bill_id];if(b){b.req={at:Date.parse(q.created_at),pay:q.method==='qr_transfer'?'qr':q.method,check:q.check,paid:q.paid};(b.reqs||=[]).push(b.req)}}
-hallMap=()=>{const ru=ST.lang==='ru';const cells=snapshot.tables.map(tb=>{const bill=snapshot.bills.find(b=>b.table_id===tb.id&&b.status==='open'),os=bill?ST.orders.filter(o=>o.bill===bill.id):[],waiting=(options.incoming||[]).some(g=>g.table===tb.label),req=bill&&(options.services||[]).some(q=>q.bill_id===bill.id&&!q.done),state=waiting?'waiting':!bill?'free':req?'bill':os.some(o=>o.status==='ready')?'ready':os.some(o=>['accepted','cooking'].includes(o.status))?'cook':os.some(o=>o.status==='new')?'new':'eat',label=(ru?{waiting:'Ожидает заказ',free:'Свободен',bill:'Просит счёт',ready:'Можно выносить',cook:'Готовится',new:'Новый заказ',eat:'Занят'}:{waiting:'Chờ gọi món',free:'Còn trống',bill:'Yêu cầu tính tiền',ready:'Sẵn sàng phục vụ',cook:'Đang chuẩn bị',new:'Đơn mới',eat:'Đang dùng bữa'})[state],sum=os.reduce((n,o)=>n+tot(o),0);return '<div class="hall-table '+state+'"><button type="button" class="hall-table-main" data-ht="'+esc(tb.label)+'" aria-label="Стол '+esc(tb.label)+', '+tb.seats+' мест, '+label+'"><strong>'+esc(tb.label)+'</strong><span>'+tb.seats+(ru?' мест':' chỗ')+'</span><small>'+label+'</small>'+(bill?'<em>'+vnd(sum)+'</em>':'')+'</button>'+(options.onQr?'<button type="button" class="hall-table-qr" data-hall-qr="'+esc(tb.id)+'" aria-label="QR меню стола '+esc(tb.label)+'">QR</button>':'')+'</div>'});return '<div class="server-hall"><div class="server-hall-heading"><h3>'+(ru?'Карта зала':'Sơ đồ bàn')+'</h3><span>'+snapshot.tables.length+(ru?(snapshot.tables.length%10===1&&snapshot.tables.length%100!==11?' стол · ':snapshot.tables.length%10>=2&&snapshot.tables.length%10<=4&&(snapshot.tables.length%100<12||snapshot.tables.length%100>14)?' стола · ':' столов · '):' bàn · ')+snapshot.tables.reduce((n,t)=>n+t.seats,0)+(ru?' мест':' chỗ')+'</span></div><div class="server-hall-grid">'+cells.join('')+'</div><div class="server-hall-legend"><span>○ '+(ru?'Свободен':'Còn trống')+'</span><span>● '+(ru?'Ожидает заказ':'Chờ gọi món')+'</span><span>● '+(ru?'Занят':'Đang dùng bữa')+'</span><span>● '+(ru?'Можно выносить':'Sẵn sàng phục vụ')+'</span></div></div>'};
+hallMap=()=>{
+ const ru=ST.lang==='ru',isSunSea=snapshot.menu.some(item=>String(item.external_key||'').startsWith('sunsea|'));
+ const byLabel=new Map(snapshot.tables.map(tb=>[String(tb.label),tb]));
+ const capacity=slot=>slot.min===slot.max?String(slot.max):slot.min+'–'+slot.max;
+ const card=(tb,slot)=>{
+  const bill=snapshot.bills.find(b=>b.table_id===tb.id&&b.status==='open'),os=bill?ST.orders.filter(o=>o.bill===bill.id):[];
+  const waiting=(options.incoming||[]).some(g=>g.table===tb.label),req=bill&&(options.services||[]).some(q=>q.bill_id===bill.id&&!q.done);
+  const state=waiting?'waiting':!bill?'free':req?'bill':os.some(o=>o.status==='ready')?'ready':os.some(o=>['accepted','cooking'].includes(o.status))?'cook':os.some(o=>o.status==='new')?'new':'eat';
+  const label=(ru?{waiting:'Ожидает заказ',free:'Свободен',bill:'Просит счёт',ready:'Можно выносить',cook:'Готовится',new:'Новый заказ',eat:'Занят'}:{waiting:'Chờ gọi món',free:'Còn trống',bill:'Yêu cầu tính tiền',ready:'Sẵn sàng phục vụ',cook:'Đang chuẩn bị',new:'Đơn mới',eat:'Đang dùng bữa'})[state];
+  const sum=os.reduce((n,o)=>n+tot(o),0),seats=slot?capacity(slot):tb.seats;
+  const position=slot?' style="left:'+slot.x/6+'%;top:'+slot.y/9+'%;width:'+slot.w/6+'%;height:'+slot.h/9+'%"':'';
+  return '<div class="hall-table '+state+(slot?' hall-plan-table'+(slot.kind==='booth'?' is-booth':'')+(slot.group?' in-room':''):'')+'"'+position+'><button type="button" class="hall-table-main" data-ht="'+esc(tb.label)+'" aria-label="'+(ru?'Стол ':'Bàn ')+esc(tb.label)+', '+seats+(ru?' мест, ':' chỗ, ')+label+'"><strong>'+esc(tb.label)+'</strong><span>'+seats+(ru?' мест':' chỗ')+'</span><small>'+label+'</small>'+(bill?'<em>'+vnd(sum)+'</em>':'')+'</button>'+(options.onQr?'<button type="button" class="hall-table-qr" data-hall-qr="'+esc(tb.id)+'" aria-label="QR меню стола '+esc(tb.label)+'">QR</button>':'')+'</div>';
+ };
+ const planned=isSunSea?SUNSEA_LAYOUT.tables.filter(slot=>byLabel.has(String(slot.id))):[];
+ const seen=new Set(planned.map(slot=>String(slot.id)));
+ const extras=snapshot.tables.filter(tb=>!seen.has(String(tb.label)));
+ const floor='<div class="server-hall-plan-scroll" tabindex="0" aria-label="'+(ru?'План зала Sun&Sea, можно прокрутить горизонтально':'Sơ đồ Sun&Sea, có thể cuộn ngang')+'"><div class="server-hall-plan"><div class="hall-plan-door" aria-hidden="true">⌄<span>'+(ru?'Вход':'Lối vào')+'</span></div><div class="hall-plan-aisle" aria-hidden="true">'+(ru?'ПРОХОД':'LỐI ĐI')+'</div><div class="hall-plan-room" aria-hidden="true"><span>'+(ru?'Зал · 30 мест':'Phòng · 30 chỗ')+'</span></div>'+planned.map(slot=>card(byLabel.get(String(slot.id)),slot)).join('')+'</div></div>';
+ const cells=isSunSea?floor+(extras.length?'<div class="server-hall-grid">'+extras.map(tb=>card(tb)).join('')+'</div>':''):'<div class="server-hall-grid">'+snapshot.tables.map(tb=>card(tb)).join('')+'</div>';
+ return '<div class="server-hall"><div class="server-hall-heading"><h3>'+(ru?'Карта зала':'Sơ đồ bàn')+'</h3><span>'+snapshot.tables.length+(ru?' столов · ':' bàn · ')+snapshot.tables.reduce((n,t)=>n+t.seats,0)+(ru?' мест':' chỗ')+'</span></div>'+cells+'<div class="server-hall-legend"><span>○ '+(ru?'Свободен':'Còn trống')+'</span><span>● '+(ru?'Ожидает заказ':'Chờ gọi món')+'</span><span>● '+(ru?'Занят':'Đang dùng bữa')+'</span><span>● '+(ru?'Можно выносить':'Sẵn sàng phục vụ')+'</span></div></div>';
+};
 el.classList.add('original-flow');
 if(options.screen==='menu'){rStop(el)}else if(options.screen==='workbench'){el.innerHTML='<section><h2>'+esc(ST.lang==='ru'?'Заказы':'Đơn hàng')+'</h2><div id=\"flow-waiter-pane\"></div></section><section><h2>'+esc(ST.lang==='ru'?'Кухня и бар':'Bếp & Bar')+'</h2><div id=\"flow-prep-pane\"></div></section>';el.classList.add('flow-workbench');rWaiter(el.querySelector('#flow-waiter-pane'));rKitchen(el.querySelector('#flow-prep-pane'))}else if(options.screen==='prep'){if(['bar','kitchen'].includes(snapshot.me.role)&&ST.ktab!=='stop')ST.ktab=snapshot.me.role;rKitchen(el);if(['bar','kitchen'].includes(snapshot.me.role))el.querySelectorAll('[data-kt]').forEach(b=>{if(![snapshot.me.role,'stop'].includes(b.dataset.kt))b.remove()})}
 else rWaiter(el);
