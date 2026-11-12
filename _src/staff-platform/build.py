@@ -37,6 +37,12 @@ flow_builder=runpy.run_path(str(here/'build-flow.py'))
 (here/'flow-ui.js').write_text(flow_builder['build'](),encoding='utf-8')
 for name in ['full-state.js','flow-contract.js','flow-ui.js','flow.css']:shutil.copyfile(here/name,out/name)
 
+# Printed Sun&Sea numbers are display metadata for the staff app, not order IDs.
+import json
+audit=json.loads((here.parent/'sunsea/printed-number-audit.json').read_text(encoding='utf-8'))
+numbers={key:row['number'] for key,row in audit['items'].items() if row['number'] is not None}
+(out/'sunsea-numbers.js').write_text('window.sunSeaPrintedNumbers='+json.dumps(numbers,ensure_ascii=False,separators=(',',':'))+';\n',encoding='utf-8')
+
 shutil.copyfile(here/'flow-alerts.js',out/'flow-alerts.js')
 
 for name in ['manifest.webmanifest','sw.js','pwa.js']:shutil.copyfile(here/name,out/name)
