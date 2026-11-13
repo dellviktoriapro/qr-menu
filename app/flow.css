@@ -554,3 +554,11 @@
 .original-flow .hall-plan-table.in-room .hall-table-main small{display:none}
 .original-flow .hall-plan-table .hall-table-qr{top:3px;right:3px;min-width:23px;min-height:22px!important;padding:1px 2px!important;font-size:9px!important}
 @media(max-width:800px){.original-flow .server-hall-plan-scroll{padding:12px}.original-flow .server-hall-plan{width:720px}.original-flow .hall-plan-table .hall-table-main strong{font-size:25px}}
+
+/* Final palette-aware bookmark colors; keep these after legacy flow rules. */
+#operations-root .original-flow .tabs button{background:var(--design-block1)!important;color:var(--design-block1Ink)!important;border-color:var(--design-block1)!important;box-shadow:inset 0 1px color-mix(in srgb,white 18%,transparent)!important}
+#operations-root .original-flow .tabs button.on{background:var(--design-block3)!important;color:var(--design-block3Ink)!important;box-shadow:inset 0 3px var(--design-block2)!important}
+#operations-root .original-flow .tabs button:hover{background:color-mix(in srgb,var(--design-block1) 70%,var(--design-block3))!important;color:var(--design-block1Ink)!important;transform:translateY(-2px)}
+#operations-root .original-flow .tabs button.needs-action,#operations-root .original-flow .tabs button.needs-action.on{background:var(--design-signal)!important;color:var(--design-signalInk)!important;border-color:var(--design-signal)!important;box-shadow:inset 0 3px color-mix(in srgb,white 45%,transparent)!important}
+#operations-root .original-flow .tabs button.needs-action:hover{background:color-mix(in srgb,var(--design-signal) 85%,white)!important;color:var(--design-signalInk)!important}
+@media(prefers-reduced-motion:reduce){#operations-root .original-flow .tabs button:hover{transform:none}}
