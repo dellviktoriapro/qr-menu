@@ -1,0 +1,163 @@
+/* Restaurant Platform — editorial service desk, palette-aware across all five themes. */
+#operations-root {
+  --atelier-edge: color-mix(in srgb, var(--design-frame) 52%, transparent);
+  --atelier-glow: color-mix(in srgb, var(--design-block3) 13%, transparent);
+}
+#operations-root .app-sidebar {
+  background:
+    radial-gradient(ellipse 115% 48% at -42% -18%, color-mix(in srgb,var(--design-block2) 20%,transparent),transparent 72%),
+    linear-gradient(168deg,var(--design-frame) 0%,color-mix(in srgb,var(--design-frame) 84%,var(--design-block1)) 100%);
+  border-right:1px solid color-mix(in srgb,var(--design-block1) 36%,transparent);
+}
+#operations-root .app-cafe-brand,
+#operations-root .app-sidebar-name {
+  color:var(--design-block2);
+  font-family:Lora,Georgia,serif;
+  font-weight:600;
+  letter-spacing:-.035em;
+}
+#operations-root .app-cafe-brand svg {color:var(--design-block2)}
+#operations-root .app-sidebar-user,
+#operations-root .app-sidebar-name small {color:var(--design-frameInk);opacity:.8}
+#operations-root #op-tabs button[aria-current=page],
+#operations-root .app-side-nav button.on {
+  position:relative;
+  background:linear-gradient(110deg,var(--design-block1),color-mix(in srgb,var(--design-block1) 77%,var(--design-block4)));
+  color:var(--design-block1Ink);
+  box-shadow:0 8px 18px color-mix(in srgb,var(--design-frame) 34%,transparent),inset 0 1px color-mix(in srgb,#fff 24%,transparent);
+}
+#operations-root #op-tabs button[aria-current=page]::before,
+#operations-root .app-side-nav button.on::before {
+  content:"";position:absolute;left:0;top:8px;bottom:8px;width:3px;border-radius:0 3px 3px 0;background:var(--design-block2);
+}
+#operations-root .app-workspace {
+  background:
+    radial-gradient(circle at 100% 3%,var(--atelier-glow),transparent 28%),
+    var(--design-surface);
+  box-shadow:0 24px 60px color-mix(in srgb,var(--design-frame) 32%,transparent);
+}
+#operations-root .op-header {
+  position:relative;
+  background:
+    radial-gradient(circle at 83% -75%,color-mix(in srgb,var(--design-block2) 17%,transparent),transparent 48%),
+    linear-gradient(108deg,var(--design-block3),color-mix(in srgb,var(--design-block3) 82%,var(--design-block1)));
+  border-bottom:0;
+  box-shadow:0 9px 24px color-mix(in srgb,var(--design-frame) 16%,transparent),inset 0 1px color-mix(in srgb,#fff 35%,transparent);
+}
+#operations-root .op-header::after {
+  content:"";position:absolute;left:0;right:0;bottom:0;height:5px;
+  background:linear-gradient(90deg,var(--design-block1) 0 28%,var(--design-block2) 28% 53%,var(--design-block4) 53% 76%,var(--design-frame) 76% 100%);
+  opacity:.94;
+}
+#operations-root .op-header button {
+  background:color-mix(in srgb,var(--design-block3) 80%,#fff);
+  color:var(--design-block3Ink);
+  border:1px solid color-mix(in srgb,var(--design-block3Ink) 25%,transparent);
+  box-shadow:0 2px 0 color-mix(in srgb,var(--design-block3Ink) 12%,transparent),inset 0 1px #fff8;
+}
+#operations-root .app-content {padding-top:29px}
+#operations-root #operations-status {letter-spacing:.04em;text-transform:uppercase;font-size:10px;opacity:.76}
+#operations-root .op-title h2,
+#operations-root .original-flow .page-title,
+#operations-root .original-flow h1,
+#operations-root .original-report h2 {font-family:Lora,Georgia,serif;letter-spacing:-.035em}
+#operations-root .original-flow .tabs,
+#operations-root .op-order-tabs,
+#operations-root .op-prep-tabs {
+  border-color:color-mix(in srgb,var(--design-block1) 55%,var(--design-line));
+}
+#operations-root .original-flow .tabs button,
+#operations-root .op-order-tabs button,
+#operations-root .op-prep-tabs button {
+  box-shadow:0 3px 0 color-mix(in srgb,var(--design-frame) 17%,transparent),inset 0 1px #fff3!important;
+}
+#operations-root .original-flow .tabs button.on,
+#operations-root .op-order-tabs button[aria-current=page],
+#operations-root .op-prep-tabs button[aria-pressed=true] {
+  box-shadow:0 3px 0 color-mix(in srgb,var(--design-frame) 18%,transparent),inset 0 4px var(--design-block2)!important;
+}
+#operations-root .original-flow .oc.v2 {
+  overflow:hidden;
+  background:linear-gradient(154deg,color-mix(in srgb,var(--design-block3) 11%,var(--design-surface)),var(--design-surface) 68%)!important;
+  border:1px solid color-mix(in srgb,var(--design-block1) 52%,var(--design-line));
+  border-radius:17px;
+  box-shadow:0 12px 28px color-mix(in srgb,var(--design-frame) 23%,transparent),inset 0 1px color-mix(in srgb,#fff 13%,transparent);
+}
+#operations-root .original-flow .oc.v2 .side {
+  position:relative;
+  background:var(--design-block3);
+  color:var(--design-block3Ink);
+  border-right:1px dashed color-mix(in srgb,var(--design-block3Ink) 38%,transparent);
+  box-shadow:inset -3px 0 color-mix(in srgb,var(--design-block3Ink) 9%,transparent);
+}
+#operations-root .original-flow .oc.v2.s-new .side,
+#operations-root .original-flow .oc.v2.s-ready .side {
+  background:var(--design-signal);color:var(--design-signalInk);
+}
+#operations-root .original-flow .oc.v2.s-cooking .side {
+  background:var(--design-block1);color:var(--design-block1Ink);
+}
+#operations-root .original-flow .oc.v2 .side b {font-size:47px;text-shadow:0 1px color-mix(in srgb,#fff 20%,transparent)}
+#operations-root .original-flow .oc.v2 .side em {
+  background:color-mix(in srgb,var(--design-frame) 18%,transparent);
+  color:inherit;
+  box-shadow:inset 0 1px color-mix(in srgb,#fff 18%,transparent);
+}
+#operations-root .original-flow .oc.v2 .main {padding:18px 20px;gap:11px}
+#operations-root .original-flow .oc.v2 .of {border-top:1px solid color-mix(in srgb,var(--design-block1) 42%,var(--design-line));padding-top:12px}
+#operations-root .original-flow .oc.v2 .of .tot {font-family:Lora,Georgia,serif;font-size:25px}
+#operations-root .original-flow .kc {
+  border-radius:17px;overflow:hidden;
+  background:linear-gradient(155deg,color-mix(in srgb,var(--design-block1) 13%,var(--design-raised)),var(--design-surface))!important;
+  box-shadow:0 12px 28px color-mix(in srgb,var(--design-frame) 22%,transparent);
+}
+#operations-root .original-flow .kc .kh {
+  background:linear-gradient(105deg,color-mix(in srgb,var(--design-block3) 64%,var(--design-raised)),color-mix(in srgb,var(--design-block1) 20%,var(--design-raised)))!important;
+  color:var(--design-ink);
+  border-bottom:2px solid var(--design-block2);
+}
+#operations-root .original-flow .kc.ready .kh {border-bottom-color:var(--design-signal)}
+#operations-root .original-flow .server-hall-plan-scroll,
+#operations-root .original-flow .server-hall-grid {
+  background:
+    radial-gradient(circle at 78% 4%,color-mix(in srgb,var(--design-block2) 10%,transparent),transparent 35%),
+    color-mix(in srgb,var(--design-block1) 10%,var(--design-surface));
+  box-shadow:inset 0 1px color-mix(in srgb,#fff 12%,transparent),0 14px 28px color-mix(in srgb,var(--design-frame) 16%,transparent);
+}
+#operations-root .original-flow .hall-table {
+  border:1px solid color-mix(in srgb,var(--design-block1) 55%,var(--design-line));
+  box-shadow:inset 0 1px color-mix(in srgb,#fff 25%,transparent),0 8px 0 color-mix(in srgb,var(--design-frame) 18%,transparent),0 12px 18px color-mix(in srgb,var(--design-frame) 13%,transparent);
+}
+#operations-root .original-report .kpi {
+  position:relative;overflow:hidden;border:0;border-radius:17px;
+  box-shadow:0 11px 24px color-mix(in srgb,var(--design-frame) 18%,transparent),inset 0 1px color-mix(in srgb,#fff 27%,transparent);
+}
+#operations-root .original-report .kpi::after {
+  content:"";position:absolute;right:-26px;bottom:-53px;width:116px;height:116px;border-radius:50%;
+  border:19px solid currentColor;opacity:.075;pointer-events:none;
+}
+#operations-root .original-report .kpi:nth-child(4) {background:var(--design-block4);color:var(--design-block4Ink);border:0}
+#operations-root .original-report .kpi:nth-child(5) {background:color-mix(in srgb,var(--design-block3) 70%,var(--design-block1));color:var(--design-block3Ink);border:0}
+#operations-root .original-report .kpi b {font-family:Lora,Georgia,serif;font-weight:650;letter-spacing:-.04em;font-variant-numeric:lining-nums tabular-nums}
+#operations-root .original-report .card,
+#operations-root .original-staff .card {
+  box-shadow:0 12px 28px color-mix(in srgb,var(--design-frame) 19%,transparent),inset 0 1px color-mix(in srgb,#fff 11%,transparent);
+}
+#operations-root .original-staff .card::before {height:5px;width:84px}
+#operations-root .original-staff .two>.card:first-child {border-top:3px solid var(--design-block1)}
+#operations-root .original-staff .two>.card:nth-child(2) {border-top:3px solid var(--design-block2)}
+#operations-root .original-staff .card h3 {font-size:22px}
+#operations-root .op-palettes button {
+  border-radius:16px;padding:17px;text-align:left;
+  box-shadow:0 9px 21px color-mix(in srgb,var(--design-frame) 17%,transparent),inset 0 1px color-mix(in srgb,#fff 18%,transparent);
+}
+#operations-root .op-palettes button span {display:flex;gap:3px;overflow:hidden;border-radius:7px}
+#operations-root .op-palettes button span i {flex:1;min-width:0;height:23px}
+@media(max-width:760px){
+  #operations-root .app-content{padding-top:20px}
+  #operations-root .op-header::after{height:4px}
+  #operations-root .original-flow .oc.v2{grid-template-columns:66px minmax(0,1fr)}
+  #operations-root .original-flow .oc.v2 .side b{font-size:39px}
+  #operations-root .original-flow .oc.v2 .main{padding:14px;gap:9px}
+}
+@media(prefers-reduced-motion:reduce){#operations-root .original-flow .oc.v2,#operations-root .original-flow .kc{transition:none}}
