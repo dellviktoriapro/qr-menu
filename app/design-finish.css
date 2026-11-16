@@ -263,7 +263,11 @@
   color:var(--design-block3Ink)!important;
   box-shadow:0 5px 12px color-mix(in srgb,var(--design-frame) 20%,transparent),inset 0 3px var(--design-signal)!important;
 }
-#operations-root .original-flow .tabs button:nth-child(3n):not(.on) {color:var(--design-signalText)!important}
+#operations-root .original-flow .tabs button.needs-action {
+  background:linear-gradient(135deg,var(--design-signal),color-mix(in srgb,var(--design-signal) 72%,var(--design-block2)))!important;
+  color:var(--design-signalInk)!important;
+  box-shadow:0 5px 12px color-mix(in srgb,var(--design-frame) 20%,transparent),inset 0 1px color-mix(in srgb,#fff 30%,transparent)!important;
+}
 #operations-root .original-flow .oc.v2,
 #operations-root .original-flow .kc,
 #operations-root .original-report .card,
