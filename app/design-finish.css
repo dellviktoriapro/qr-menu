@@ -167,17 +167,14 @@
 #operations-root {
   --atelier-shadow: color-mix(in srgb, var(--design-frame) 30%, transparent);
   --atelier-hairline: color-mix(in srgb, var(--design-block1) 44%, var(--design-line));
+  --atelier-action-ink: color-mix(in srgb, var(--design-frame) 88%, #000);
 }
 #operations-root .app-sidebar {
   isolation:isolate;
   box-shadow:18px 0 42px color-mix(in srgb,var(--design-frame) 18%,transparent);
 }
 #operations-root .app-sidebar::before {
-  content:""; position:absolute; inset:0 0 auto; height:148px; pointer-events:none; z-index:-1;
-  background:
-    radial-gradient(circle at 22% 18%, color-mix(in srgb,var(--design-block2) 30%,transparent) 0 3px, transparent 4px),
-    radial-gradient(circle at 70% 12%, color-mix(in srgb,var(--design-block1) 24%,transparent) 0 44px, transparent 45px),
-    linear-gradient(145deg, color-mix(in srgb,var(--design-block2) 15%,transparent), transparent 65%);
+  display:none;
 }
 #operations-root .app-cafe-brand {
   padding:18px 10px 22px;
@@ -210,22 +207,17 @@
 }
 #operations-root .app-workspace {
   position:relative;
-  background:
-    radial-gradient(circle at 92% 0%, color-mix(in srgb,var(--design-block1) 14%,transparent), transparent 30%),
-    radial-gradient(circle at 0 78%, color-mix(in srgb,var(--design-block4) 13%,transparent), transparent 32%),
-    var(--design-surface);
+  background:var(--design-surface);
 }
 #operations-root .op-header {
   min-height:104px; padding-block:19px;
-  background:
-    radial-gradient(circle at 12% 14%,color-mix(in srgb,var(--design-block2) 27%,transparent) 0 2px,transparent 3px),
-    radial-gradient(circle at 17% 45%,color-mix(in srgb,var(--design-block2) 16%,transparent) 0 38px,transparent 39px),
-    linear-gradient(100deg,var(--design-block3),color-mix(in srgb,var(--design-block3) 78%,var(--design-block1)) 62%,color-mix(in srgb,var(--design-block3) 68%,var(--design-block4)));
+  background:var(--design-block3);
+  border-bottom:4px solid var(--design-block2);
 }
 #operations-root .op-header::before {
-  content:""; position:absolute; right:9%; top:0; width:132px; height:100%; pointer-events:none; opacity:.5;
-  background:linear-gradient(135deg,transparent 18%,color-mix(in srgb,var(--design-block2) 46%,transparent) 18% 22%,transparent 22% 49%,color-mix(in srgb,var(--design-block1) 60%,transparent) 49% 53%,transparent 53% 78%,color-mix(in srgb,var(--design-block4) 45%,transparent) 78% 82%,transparent 82%);
+  display:none;
 }
+#operations-root .op-header::after {display:none}
 #operations-root .op-header > * {position:relative;z-index:1}
 #operations-root .op-header button,
 #operations-root .original-flow button:not(.hall-table-main) {
@@ -265,8 +257,14 @@
 }
 #operations-root .original-flow .tabs button.needs-action {
   background:linear-gradient(135deg,var(--design-signal),color-mix(in srgb,var(--design-signal) 72%,var(--design-block2)))!important;
-  color:var(--design-signalInk)!important;
+  color:var(--atelier-action-ink)!important;
+  -webkit-text-fill-color:var(--atelier-action-ink)!important;
   box-shadow:0 5px 12px color-mix(in srgb,var(--design-frame) 20%,transparent),inset 0 1px color-mix(in srgb,#fff 30%,transparent)!important;
+}
+#operations-root .original-flow .tabs button.needs-action .station-tab-label {
+  color:var(--atelier-action-ink)!important;
+  -webkit-text-fill-color:var(--atelier-action-ink)!important;
+  opacity:1!important;
 }
 #operations-root .original-flow .oc.v2,
 #operations-root .original-flow .kc,
@@ -281,7 +279,7 @@
     linear-gradient(150deg,color-mix(in srgb,var(--design-block3) 10%,var(--design-surface)),var(--design-surface) 70%)!important;
 }
 #operations-root .original-flow .oc.v2::after {
-  content:"";position:absolute;right:-50px;top:-56px;width:138px;height:138px;border:20px solid color-mix(in srgb,var(--design-block1) 11%,transparent);border-radius:50%;pointer-events:none;
+  display:none;
 }
 #operations-root .original-flow .oc.v2 .side {
   background:linear-gradient(180deg,var(--design-block3),color-mix(in srgb,var(--design-block3) 82%,var(--design-block1)));
@@ -312,7 +310,7 @@
   position:relative; overflow:hidden; padding-top:15px; padding-bottom:15px;
   background:linear-gradient(102deg,color-mix(in srgb,var(--design-block3) 78%,var(--design-raised)),color-mix(in srgb,var(--design-block1) 43%,var(--design-raised)))!important;
 }
-#operations-root .original-flow .kc .kh::after {content:"";position:absolute;right:19px;top:9px;width:35px;height:35px;border-radius:50%;border:7px solid color-mix(in srgb,var(--design-block2) 45%,transparent)}
+#operations-root .original-flow .kc .kh::after {display:none}
 #operations-root .original-flow .empty {
   background:linear-gradient(135deg,color-mix(in srgb,var(--design-block1) 11%,transparent),color-mix(in srgb,var(--design-block3) 8%,transparent));
   border-color:color-mix(in srgb,var(--design-block1) 42%,var(--design-line)); box-shadow:inset 0 1px color-mix(in srgb,#fff 10%,transparent);
