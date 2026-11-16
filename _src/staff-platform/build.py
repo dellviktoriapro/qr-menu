@@ -2,13 +2,12 @@
 from pathlib import Path
 import shutil
 import hashlib
+import re
 here=Path(__file__).resolve().parent
 out=here.parents[1]/'app'
 out.mkdir(exist_ok=True)
 for src,dest in [('login.html','index.html'),('login.js','login.js'),('admin.js','admin.js'),('admin-inbox.js','admin-inbox.js'),('manual-ui.js','manual-ui.js'),('admin.css','admin.css'),('operations.js','operations.js'),('operations-core.js','operations-core.js'),('operations.css','operations.css'),('supabase-client.js','supabase-client.js')]:
     shutil.copyfile(here/src,out/dest)
-design_version=hashlib.sha256((here/'design-finish.css').read_bytes()).hexdigest()[:12]
-(out/'index.html').write_text((out/'index.html').read_text(encoding='utf-8').replace('design-finish.css?v=20261113-editorial',f'design-finish.css?v={design_version}'),encoding='utf-8')
 print('Built app login',out)
 
 shutil.copyfile(here.parent/'app-design/themes.js',out/'palettes.js')
@@ -52,3 +51,17 @@ shutil.copyfile(here/'flow-alerts.js',out/'flow-alerts.js')
 
 for name in ['manifest.webmanifest','sw.js','pwa.js']:shutil.copyfile(here/name,out/name)
 shutil.copytree(here/'icons',out/'icons',dirs_exist_ok=True)
+
+# Every published script and stylesheet gets its content hash. Browser caches
+# must not keep an older waiter screen when the app's HTML changes.
+def versioned(match):
+    name=match.group('name')
+    asset=out/name
+    if not asset.is_file():
+        raise FileNotFoundError(asset)
+    digest=hashlib.sha256(asset.read_bytes()).hexdigest()[:12]
+    return f'{match.group("prefix")}{name}?v={digest}"'
+
+html=(out/'index.html').read_text(encoding='utf-8')
+html=re.sub(r'(?P<prefix>(?:src|href)=")(?P<name>[a-z0-9-]+\.(?:js|css))(?:\?[^\"]*)?"',versioned,html)
+(out/'index.html').write_text(html,encoding='utf-8')
