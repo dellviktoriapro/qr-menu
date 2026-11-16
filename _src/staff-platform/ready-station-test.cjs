@@ -28,6 +28,6 @@ const order = {id: 'order-1', status: 'cooking', lang: 'vi', stationServedAt: {}
 const html = context.lines(order);
 assert.match(html, /is-cooking[\s\S]*Кухня[\s\S]*Готовится[\s\S]*Bánh pie bắp cải/);
 assert.match(html, /is-ready[\s\S]*Бар[\s\S]*Можно вынести[\s\S]*Sài Gòn Special/);
-assert.match(context.actions(order), /data-scope="bar"[\s\S]*Бар: отметить вынос/);
+assert.match(context.actions(order), /data-scope="bar"[\s\S]*Бар: вынесено/);
 assert.doesNotMatch(context.actions(order), /data-scope="kitchen"/);
 console.log('PASS ready bar items are separated from cooking kitchen items');

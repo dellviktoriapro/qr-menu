@@ -67,7 +67,7 @@ function openBill(table){return Object.values(ST.bills).find(b=>!b.closed&&b.tab
 function forMe(o){if(o.status!=="new"||!o.owner)return true;return o.owner===ST.me||!ST.shift[o.owner]||!!o.reEsc}
 function billOrders(bid){return ST.orders.filter(o=>o.bill===bid)}
 function billTotal(bid){return billOrders(bid).reduce((s,o)=>s+tot(o),0)}
-function serveActions(o){return ["kitchen","bar"].filter(scope=>stationReady(o,scope)&&!o.stationServedAt?.[scope]).map(scope=>`<button class="btn green sm" type="button" data-a="served" data-id="${o.id}" data-scope="${scope}">${ST.lang==="ru"?`${scope==="bar"?"Бар":"Кухня"}: отметить вынос`:`${scope==="bar"?"Bar":"Bếp"}: đã phục vụ`}</button>`).join("")}
+function serveActions(o){return ["kitchen","bar"].filter(scope=>stationReady(o,scope)&&!o.stationServedAt?.[scope]).map(scope=>`<button class="btn green sm" type="button" data-a="served" data-id="${o.id}" data-scope="${scope}">${ST.lang==="ru"?`${scope==="bar"?"Бар":"Кухня"}: вынесено`:`${scope==="bar"?"Bar":"Bếp"}: đã phục vụ`}</button>`).join("")}
 function pendingServe(o,scope){return stationReady(o,scope)&&!o.stationServedAt?.[scope]}
 function stationItems(o,scope){return o.items.filter(i=>scope==="all"||(M[i.mid]?.st==="b"?"bar":"kitchen")===scope)}
 function stationReady(o,scope){const items=stationItems(o,scope);return items.length>0&&items.every(i=>i.done)}
