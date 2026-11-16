@@ -177,10 +177,8 @@
   display:none;
 }
 #operations-root .app-cafe-brand {
-  padding:18px 10px 22px;
-  border-radius:16px;
-  background:linear-gradient(135deg,color-mix(in srgb,var(--design-frame) 22%,var(--design-block4)),transparent 73%);
-  box-shadow:inset 0 1px color-mix(in srgb,#fff 14%,transparent);
+  padding:12px 10px 16px;
+  border-left:2px solid var(--design-block2);
 }
 #operations-root .app-cafe-brand strong {font-size:26px;line-height:1.16}
 #operations-root .app-sidebar-name {
@@ -202,8 +200,8 @@
 }
 #operations-root .app-side-nav button.on,
 #operations-root #op-tabs button[aria-current=page] {
-  background:linear-gradient(102deg,var(--design-block1),color-mix(in srgb,var(--design-block1) 68%,var(--design-block4)));
-  box-shadow:0 10px 22px color-mix(in srgb,var(--design-frame) 35%,transparent),inset 0 1px color-mix(in srgb,#fff 28%,transparent);
+  background:var(--design-block1);
+  box-shadow:0 7px 17px color-mix(in srgb,var(--design-frame) 28%,transparent),inset 3px 0 var(--design-block2);
 }
 #operations-root .app-workspace {
   position:relative;
@@ -274,19 +272,17 @@
   box-shadow:0 14px 30px var(--atelier-shadow),inset 0 1px color-mix(in srgb,#fff 15%,transparent);
 }
 #operations-root .original-flow .oc.v2 {
-  background:
-    linear-gradient(100deg,color-mix(in srgb,var(--design-block4) 14%,transparent),transparent 33%),
-    linear-gradient(150deg,color-mix(in srgb,var(--design-block3) 10%,var(--design-surface)),var(--design-surface) 70%)!important;
+  background:var(--design-surface)!important;
 }
 #operations-root .original-flow .oc.v2::after {
   display:none;
 }
 #operations-root .original-flow .oc.v2 .side {
-  background:linear-gradient(180deg,var(--design-block3),color-mix(in srgb,var(--design-block3) 82%,var(--design-block1)));
+  background:var(--design-block3);
 }
-#operations-root .original-flow .oc.v2.s-cooking .side {background:linear-gradient(180deg,var(--design-block1),color-mix(in srgb,var(--design-block1) 74%,var(--design-block4)))}
+#operations-root .original-flow .oc.v2.s-cooking .side {background:var(--design-block1)}
 #operations-root .original-flow .oc.v2.s-new .side,
-#operations-root .original-flow .oc.v2.s-ready .side {background:linear-gradient(180deg,var(--design-signal),color-mix(in srgb,var(--design-signal) 68%,var(--design-block2)))}
+#operations-root .original-flow .oc.v2.s-ready .side {background:var(--design-signal)}
 #operations-root .original-flow .oc.v2 .st,
 #operations-root .original-flow .oc.v2 .of {position:relative;z-index:1}
 #operations-root .original-flow .oc.v2 .of {
@@ -305,10 +301,10 @@
   background:linear-gradient(135deg,var(--design-signal),color-mix(in srgb,var(--design-signal) 76%,var(--design-block2)))!important;
   color:var(--design-signalInk)!important;
 }
-#operations-root .original-flow .kc {background:linear-gradient(150deg,color-mix(in srgb,var(--design-block1) 16%,var(--design-raised)),var(--design-surface))!important}
+#operations-root .original-flow .kc {background:var(--design-surface)!important}
 #operations-root .original-flow .kc .kh {
   position:relative; overflow:hidden; padding-top:15px; padding-bottom:15px;
-  background:linear-gradient(102deg,color-mix(in srgb,var(--design-block3) 78%,var(--design-raised)),color-mix(in srgb,var(--design-block1) 43%,var(--design-raised)))!important;
+  background:color-mix(in srgb,var(--design-block3) 76%,var(--design-raised))!important;
 }
 #operations-root .original-flow .kc .kh::after {display:none}
 #operations-root .original-flow .empty {
@@ -347,7 +343,7 @@
   background:var(--design-block3)!important; color:var(--design-block3Ink)!important;
   border-color:var(--design-block3)!important; box-shadow:inset 0 3px var(--design-block2),0 5px 13px var(--atelier-shadow)!important;
 }
-#operations-root .original-report .kpis {gap:14px}
+#operations-root .original-report .kpis {grid-template-columns:minmax(220px,1.45fr) repeat(4,minmax(140px,1fr));gap:14px}
 #operations-root .original-report .kpi {
   min-height:148px; padding:19px 20px 17px; border:1px solid color-mix(in srgb,currentColor 20%,var(--atelier-hairline));
   border-radius:18px; box-shadow:0 12px 26px var(--atelier-shadow),inset 0 1px color-mix(in srgb,#fff 21%,transparent);
@@ -357,6 +353,7 @@
   min-height:20px; padding:0; font:700 11px/1.35 Manrope,system-ui; letter-spacing:.02em; text-transform:none; opacity:.78;
 }
 #operations-root .original-report .kpi b {font-size:clamp(28px,2.25vw,39px);line-height:1.05;margin-top:auto}
+#operations-root .original-report .kpi:first-child b {font-size:clamp(34px,2.8vw,47px)}
 #operations-root .original-report .kpi span,
 #operations-root .original-report .kpi em {
   min-height:21px; padding-top:9px; border-top:1px solid color-mix(in srgb,currentColor 20%,transparent); opacity:.78;
@@ -380,5 +377,7 @@
   #operations-root .original-flow .tabs button,#operations-root .op-order-tabs button,#operations-root .op-prep-tabs button{padding-inline:12px!important}
   #operations-root .original-flow .server-hall-grid{padding:12px}
   #operations-root .original-report .pbar{padding-bottom:14px}
+  #operations-root .original-report .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #operations-root .original-report .kpi:first-child{grid-column:1/-1}
   #operations-root .original-report .kpi{min-height:132px;padding:16px}
 }
