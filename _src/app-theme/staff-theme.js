@@ -1,7 +1,7 @@
 // Shared palette engine: visual settings only, never order or payment state.
 function staffThemeApply(){
- if(!ST.design){ST.design="atelier";ST.theme="dark";save()}document.body.dataset.skin=ST.theme||"dark";
- const selected=THEMES.find(t=>t.id===(ST.design||'atelier'))||THEMES.find(t=>t.id==='atelier'),v={...selected.vars};
+ if(!ST.design){ST.design="pine";ST.theme="dark";save()}document.body.dataset.skin=ST.theme||"dark";
+ const selected=THEMES.find(t=>t.id===(ST.design||'pine'))||THEMES.find(t=>t.id==='pine'),v={...selected.vars};
  if(ST.theme==='light'){v.ground=v.block3;v.surface='#FFF9F2';v.raised='#E9E2D6';v.ink=v.block3Ink;v.muted=v.block3Ink;v.line='#A9ADAF';v.soft='#DDE3E8';v.navBlue='#4D6080';v.signalText='#A44308'}
  document.body.dataset.design=selected.id;
  const aliases={bg:'ground',bg2:'surface',card:'surface',card2:'raised',ink:'ink',muted:'muted',dim:'muted',line:'line',line2:'line',acc:'accent',acc2:'secondary','acc-ink':'accentInk',paper:'surface',paper2:'raised','paper-ink':'ink','paper-dim':'muted','paper-line':'line'};
@@ -12,6 +12,6 @@ function staffThemeApply(){
  document.documentElement.style.background=v.ground;
 }
 function staffDesignPicker(el){
- const host=document.createElement('section');host.className='card palette-settings';host.innerHTML=`<h3>${ST.lang==='ru'?'Оформление приложения':'Giao diện ứng dụng'}</h3><p class="muted">${ST.lang==='ru'?'Меняется только палитра. Функции, навигация и статусы одинаковые. В демо выбор хранится в этом браузере.':'Chỉ thay đổi màu sắc. Chức năng và trạng thái giữ nguyên. Bản demo lưu lựa chọn trên trình duyệt này.'}</p><div class="palette-options">${THEMES.map(t=>`<button type="button" data-design="${t.id}" aria-pressed="${(ST.design||'atelier')===t.id}"><strong>${esc(t.letter+' · '+t.name)}</strong><span aria-hidden="true">${t.colors.map(c=>`<i style="background:${c}"></i>`).join('')}</span></button>`).join('')}</div>`;
+ const host=document.createElement('section');host.className='card palette-settings';host.innerHTML=`<h3>${ST.lang==='ru'?'Оформление приложения':'Giao diện ứng dụng'}</h3><p class="muted">${ST.lang==='ru'?'Три направления меняют палитру и характер рабочего пространства.':'Ba phong cách thay đổi bảng màu và không khí làm việc.'}</p><div class="palette-options">${THEMES.map(t=>`<button type="button" data-design="${t.id}" aria-pressed="${(ST.design||'pine')===t.id}"><strong>${esc(t.letter+' · '+t.name)}</strong><span aria-hidden="true">${t.colors.map(c=>`<i style="background:${c}"></i>`).join('')}</span></button>`).join('')}</div>`;
  el.prepend(host);host.querySelectorAll('[data-design]').forEach(b=>b.onclick=()=>mutate(()=>{ST.design=b.dataset.design;ST.theme='dark'}));
 }

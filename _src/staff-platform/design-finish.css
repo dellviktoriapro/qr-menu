@@ -381,3 +381,173 @@
   #operations-root .original-report .kpi:first-child{grid-column:1/-1}
   #operations-root .original-report .kpi{min-height:132px;padding:16px}
 }
+
+/* Three chosen art directions.  Their distinction comes from the whole work
+   surface and the material of a panel, never from random decorative objects. */
+#operations-root[data-palette="atelier"] {
+  --scene-ground:linear-gradient(148deg,#C9DCE0 0%,#DCE9E8 42%,#F0DFCC 100%);
+  --scene-panel:rgba(255,252,246,.76); --scene-panel-strong:rgba(255,252,246,.9);
+  --scene-sidebar:linear-gradient(180deg,#243A4D,#304E62); --scene-header:rgba(240,223,204,.9);
+  --scene-border:rgba(36,58,77,.19); --scene-shadow:rgba(36,58,77,.15);
+}
+#operations-root[data-palette="pine"] {
+  --scene-ground:linear-gradient(155deg,#101A17 0%,#182D25 48%,#293B30 100%);
+  --scene-panel:rgba(28,45,37,.78); --scene-panel-strong:rgba(34,54,44,.93);
+  --scene-sidebar:linear-gradient(180deg,#0D1713,#17271F); --scene-header:rgba(39,56,47,.91);
+  --scene-border:rgba(194,217,196,.18); --scene-shadow:rgba(0,0,0,.28);
+}
+#operations-root[data-palette="wine"] {
+  --scene-ground:linear-gradient(150deg,#241720 0%,#35202D 53%,#513142 100%);
+  --scene-panel:rgba(53,32,43,.79); --scene-panel-strong:rgba(67,42,57,.94);
+  --scene-sidebar:linear-gradient(180deg,#281822,#3A2030); --scene-header:rgba(185,212,230,.88);
+  --scene-border:rgba(249,232,222,.17); --scene-shadow:rgba(18,8,13,.32);
+}
+#operations-root .app-shell,
+#operations-root .app-workspace {
+  background:var(--scene-ground)!important;
+}
+#operations-root .app-sidebar {
+  background:var(--scene-sidebar)!important;
+  border-right:1px solid var(--scene-border)!important;
+  box-shadow:16px 0 38px var(--scene-shadow)!important;
+}
+#operations-root .app-sidebar::before,
+#operations-root .app-sidebar-name::after,
+#operations-root .op-header::before,
+#operations-root .op-header::after {display:none!important}
+#operations-root .app-cafe-brand {border-left:0!important}
+#operations-root .app-cafe-brand strong {font-family:Lora,Georgia,serif;letter-spacing:-.035em}
+#operations-root .app-side-nav button,
+#operations-root #op-tabs button {border-radius:9px!important}
+#operations-root .app-side-nav button:hover,
+#operations-root #op-tabs button:hover {background:rgba(255,255,255,.09)!important;box-shadow:none!important}
+#operations-root .app-side-nav button.on,
+#operations-root #op-tabs button[aria-current=page] {
+  background:rgba(255,255,255,.16)!important;
+  box-shadow:inset 2px 0 var(--design-signal)!important;
+}
+#operations-root .op-header {
+  min-height:88px!important;
+  background:var(--scene-header)!important;
+  border-bottom:1px solid var(--scene-border)!important;
+  box-shadow:0 8px 24px var(--scene-shadow)!important;
+  backdrop-filter:blur(16px);
+}
+#operations-root .op-header button {
+  background:rgba(255,255,255,.44)!important;
+  border-color:color-mix(in srgb,var(--design-frame) 27%,transparent)!important;
+  box-shadow:0 3px 0 rgba(0,0,0,.09)!important;
+}
+#operations-root[data-palette="pine"] .op-header button,
+#operations-root[data-palette="wine"] .op-header button {
+  background:rgba(255,255,255,.09)!important;
+  color:var(--design-ink)!important;
+  border-color:var(--scene-border)!important;
+}
+#operations-root #operations-status {
+  background:var(--scene-panel)!important;
+  border-color:var(--scene-border)!important;
+  letter-spacing:0!important;
+  text-transform:none!important;
+}
+#operations-root #operations-status::before {box-shadow:none!important}
+#operations-root .original-flow .tabs,
+#operations-root .op-order-tabs,
+#operations-root .op-prep-tabs {
+  background:var(--scene-panel)!important;
+  border-color:var(--scene-border)!important;
+  box-shadow:0 8px 24px var(--scene-shadow)!important;
+  backdrop-filter:blur(14px);
+}
+#operations-root .original-flow .tabs button.on,
+#operations-root .op-order-tabs button[aria-current=page],
+#operations-root .op-prep-tabs button[aria-pressed=true] {
+  background:var(--scene-panel-strong)!important;
+  color:var(--design-ink)!important;
+  box-shadow:inset 0 3px var(--design-signal),0 4px 10px var(--scene-shadow)!important;
+}
+#operations-root .original-flow .tabs button.needs-action {
+  background:var(--design-signal)!important;
+  color:var(--design-signalInk)!important;
+  box-shadow:0 4px 11px var(--scene-shadow)!important;
+}
+#operations-root .original-flow .tabs button.needs-action .station-tab-label {
+  color:var(--design-signalInk)!important;
+  -webkit-text-fill-color:var(--design-signalInk)!important;
+}
+#operations-root .original-flow .oc.v2,
+#operations-root .original-flow .kc,
+#operations-root .original-report .card,
+#operations-root .original-staff .card,
+#operations-root .original-flow .server-hall-grid,
+#operations-root .original-flow .server-hall-plan-scroll {
+  background:var(--scene-panel)!important;
+  border-color:var(--scene-border)!important;
+  box-shadow:0 12px 28px var(--scene-shadow),inset 0 1px rgba(255,255,255,.13)!important;
+  backdrop-filter:blur(14px);
+}
+#operations-root .original-flow .kc .kh {
+  background:rgba(255,255,255,.1)!important;
+  border-bottom:1px solid var(--scene-border)!important;
+}
+#operations-root .original-flow .oc.v2 .side {box-shadow:none!important}
+#operations-root .original-flow .oc.v2 .of button,
+#operations-root .original-flow .kc .kf button {
+  background:var(--design-block1)!important;
+  color:var(--design-block1Ink)!important;
+  box-shadow:0 4px 10px var(--scene-shadow)!important;
+}
+#operations-root .original-flow .oc.v2 .of button[data-command=accept],
+#operations-root .original-flow .oc.v2 .of button[data-command=send],
+#operations-root .original-flow .kc.ready .kf button {
+  background:var(--design-signal)!important;
+  color:var(--design-signalInk)!important;
+}
+#operations-root .original-flow .empty {
+  background:var(--scene-panel)!important;
+  border-color:var(--scene-border)!important;
+  box-shadow:none!important;
+}
+#operations-root .original-flow .hall-table,
+#operations-root .original-flow .hall-table:nth-child(3n+2),
+#operations-root .original-flow .hall-table:nth-child(3n) {
+  background:var(--scene-panel-strong)!important;
+  border-color:var(--scene-border)!important;
+  box-shadow:0 7px 16px var(--scene-shadow),inset 0 1px rgba(255,255,255,.16)!important;
+}
+#operations-root .original-report .kpi {
+  background:var(--scene-panel)!important;
+  color:var(--design-ink)!important;
+  border:1px solid var(--scene-border)!important;
+  box-shadow:0 10px 23px var(--scene-shadow)!important;
+}
+#operations-root .original-report .kpi:nth-child(4),
+#operations-root .original-report .kpi:nth-child(5) {background:var(--scene-panel)!important;color:var(--design-ink)!important}
+#operations-root .original-report .kpi::after {display:none!important}
+#operations-root .original-report .card {border-radius:14px!important}
+#operations-root .op-palettes {
+  display:grid!important; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px!important; max-width:1180px;
+}
+#operations-root .op-palettes button {
+  min-height:216px; display:flex; flex-direction:column; align-items:stretch; gap:12px;
+  background:var(--scene-panel)!important; border:1px solid var(--scene-border)!important;
+  box-shadow:0 12px 25px var(--scene-shadow)!important; backdrop-filter:blur(14px);
+}
+#operations-root .op-palettes button strong {font:600 20px/1.15 Lora,Georgia,serif;color:var(--design-ink)}
+#operations-root .op-palettes button::after {font-size:13px;line-height:1.5;text-align:left;color:var(--op-muted);min-height:39px}
+#operations-root .op-palettes button:nth-child(1)::after {content:"Молочный камень, пыльный синий и терракота."}
+#operations-root .op-palettes button:nth-child(2)::after {content:"Глубокая зелень, нефрит и тёплая шампань."}
+#operations-root .op-palettes button:nth-child(3)::after {content:"Винный фон, пудровая роза и ледяной голубой."}
+#operations-root .op-palettes button[aria-pressed=true] {
+  border-color:var(--design-signal)!important;
+  box-shadow:inset 0 3px var(--design-signal),0 14px 28px var(--scene-shadow)!important;
+}
+#operations-root .op-palettes button span {margin-top:auto!important}
+@media(max-width:900px){#operations-root .op-palettes{grid-template-columns:1fr!important;max-width:650px}#operations-root .op-palettes button{min-height:168px}}
+@media(max-width:760px){
+  #operations-root .op-header{min-height:0!important;backdrop-filter:none}
+  #operations-root .original-flow .oc.v2,
+  #operations-root .original-flow .kc,
+  #operations-root .original-report .card,
+  #operations-root .original-staff .card{backdrop-filter:none}
+}
