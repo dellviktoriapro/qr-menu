@@ -15,7 +15,7 @@ begin
    if not exists(select 1 from public.rp_menu_items where cafe_id=c and id=(x->>'id')::uuid and active and not stopped and price_minor=(x->>'price')::bigint) then raise exception 'ITEM_OR_PRICE_CHANGED';end if;
    lines:=lines||jsonb_build_array(jsonb_build_object('id',x->>'id','quantity',x->'quantity','note',x->>'note'));
   end loop;
-  one:=rp_private.command(c,gen_random_uuid(),'order_create',jsonb_build_object('table',label,'check',ck->>'label','lang',g.body->>'lang','items',lines));
+  one:=rp_private.command(c,gen_random_uuid(),'order_create',jsonb_build_object('table',label,'check',ck->>'label','lang',g.body->>'lang','items',lines,'send',true));
   update public.rp_orders set created_at=g.created_at where cafe_id=c and id=(one->>'order_id')::uuid;
   insert into public.rp_order_events(cafe_id,order_id,actor_id,event_type,payload,request_id) values(c,(one->>'order_id')::uuid,auth.uid(),'accept',jsonb_build_object('submission_id',g.id),gen_random_uuid());ids:=ids||jsonb_build_array(one->>'order_id');
  end loop;
@@ -128,11 +128,8 @@ do $$declare b jsonb:='{"lang":"ru","checks":[{"label":"Anna","items":[{"key":"f
  perform pg_temp.guest_assert(v=rp_private.accept_guest('10000000-0000-4000-8000-000000000051','60000000-0000-4000-8000-000000000051',payload),'acceptance retry exact receipt');
  perform pg_temp.guest_assert((select count(*) from public.rp_orders where cafe_id='10000000-0000-4000-8000-000000000051')=2,'one order per named check');
  perform pg_temp.guest_assert((select sum(i.quantity*i.unit_price_minor) from public.rp_order_items i where cafe_id='10000000-0000-4000-8000-000000000051')=510000,'server prices and quantities');
- -- Full existing station/service/payment commands, using accepted orders only.
- perform pg_temp.guest_assert((select count(*) from public.rp_orders where cafe_id='10000000-0000-4000-8000-000000000051' and status='accepted')=2,'accepted drafts not sent before waiter');
- for g in select id from public.rp_orders where cafe_id='10000000-0000-4000-8000-000000000051' loop
-  perform rp_private.operational_command('10000000-0000-4000-8000-000000000051',gen_random_uuid(),'send',jsonb_build_object('order_id',g,'version',(select version from public.rp_orders where id=g)));
- end loop;
+ -- Full station/service/payment commands after acceptance sends orders to prep.
+ perform pg_temp.guest_assert((select count(*) from public.rp_orders where cafe_id='10000000-0000-4000-8000-000000000051' and status='cooking')=2,'accepted orders sent straight to prep');
  select order_id into g from public.rp_order_items where cafe_id='10000000-0000-4000-8000-000000000051' and station='bar';
  perform rp_private.operational_command('10000000-0000-4000-8000-000000000051',gen_random_uuid(),'station_ready',jsonb_build_object('order_id',g,'station','bar','version',(select version from public.rp_orders where id=g)));
  perform pg_temp.guest_assert((select status from public.rp_orders where id=g)='cooking','bar ready does not finish kitchen');
