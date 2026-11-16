@@ -17,6 +17,7 @@ shutil.copytree(here.parent/'app-design/fonts',out/'fonts',dirs_exist_ok=True)
 
 shutil.copyfile(here.parent/'app-theme/platform-shell.css',out/'platform-shell.css')
 shutil.copyfile(here/'design-finish.css',out/'design-finish.css')
+shutil.copytree(here/'assets',out/'assets',dirs_exist_ok=True)
 shutil.copyfile(here.parent/'app-theme/platform-chrome.js',out/'platform-chrome.js')
 
 # Owner report is compiled from original app renderers, not independently redesigned.

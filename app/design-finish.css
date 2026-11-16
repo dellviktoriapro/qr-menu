@@ -12,6 +12,8 @@
   --scene-quiet: rgba(36,58,77,.065);
   --scene-button: #243A4D;
   --scene-button-ink: #FFF8EF;
+  --scene-wallpaper:url("assets/azure-terrace.png");
+  --scene-overlay:linear-gradient(180deg,rgba(255,249,240,.28) 0%,rgba(235,241,236,.5) 47%,rgba(242,229,215,.84) 100%);
   --scene-font: Manrope,system-ui,sans-serif;
   --scene-display: Lora,Georgia,serif;
 }
@@ -21,6 +23,8 @@
   --scene-top:rgba(255,248,239,.84); --scene-side:#243A4D;
   --scene-line:rgba(36,58,77,.16); --scene-shadow:rgba(36,58,77,.16);
   --scene-quiet:rgba(36,58,77,.065); --scene-button:#243A4D; --scene-button-ink:#FFF8EF;
+  --scene-wallpaper:url("assets/azure-terrace.png");
+  --scene-overlay:linear-gradient(180deg,rgba(255,249,240,.24) 0%,rgba(235,241,236,.48) 47%,rgba(242,229,215,.86) 100%);
 }
 #operations-root[data-palette="pine"] {
   --scene-ground:linear-gradient(135deg,#101A17 0%,#1C3027 50%,#34443A 100%);
@@ -28,6 +32,8 @@
   --scene-top:rgba(28,44,35,.82); --scene-side:#0E1713;
   --scene-line:rgba(244,232,216,.15); --scene-shadow:rgba(0,0,0,.34);
   --scene-quiet:rgba(244,232,216,.07); --scene-button:#D3B47A; --scene-button-ink:#211B15;
+  --scene-wallpaper:url("assets/night-orchard.png");
+  --scene-overlay:linear-gradient(180deg,rgba(7,17,13,.18) 0%,rgba(9,24,18,.42) 48%,rgba(13,25,20,.9) 100%);
 }
 #operations-root[data-palette="wine"] {
   --scene-ground:linear-gradient(135deg,#291A23 0%,#3A2431 48%,#5B394B 100%);
@@ -35,6 +41,8 @@
   --scene-top:rgba(185,212,230,.87); --scene-side:#281822;
   --scene-line:rgba(249,232,222,.17); --scene-shadow:rgba(19,8,14,.36);
   --scene-quiet:rgba(249,232,222,.075); --scene-button:#DB8798; --scene-button-ink:#351E2A;
+  --scene-wallpaper:url("assets/velvet-bordeaux.png");
+  --scene-overlay:linear-gradient(180deg,rgba(36,15,28,.13) 0%,rgba(47,19,33,.48) 48%,rgba(41,18,29,.92) 100%);
 }
 
 /* Room and navigation */
@@ -84,27 +92,23 @@ body.operations-mode {background:var(--operations-bg,#152235)!important}
 /* A framed, editorial workspace — not a flat recolour of the old app. */
 #operations-root .app-workspace {
   position:relative; margin:12px 12px 12px 0!important; min-height:calc(100svh - 24px);
-  overflow:hidden!important; background:var(--scene-ground)!important; border-radius:24px!important;
+  overflow:hidden!important; background:var(--scene-overlay),var(--scene-wallpaper)!important;
+  background-position:center top!important; background-size:cover!important; background-attachment:scroll!important;
+  border-radius:24px!important;
   box-shadow:0 24px 58px var(--scene-shadow)!important;
 }
 #operations-root .app-workspace::before {
   content:""; position:absolute; inset:0; pointer-events:none;
-  background:linear-gradient(180deg,rgba(255,255,255,.14),transparent 28%); z-index:0;
+  background:linear-gradient(180deg,rgba(255,255,255,.12),transparent 30%); z-index:0;
 }
 #operations-root[data-palette="atelier"] .app-workspace::before {
-  background:
-    linear-gradient(180deg,rgba(255,255,255,.48) 0%,rgba(255,255,255,0) 30%),
-    linear-gradient(102deg,transparent 0 57%,rgba(134,167,184,.23) 57% 73%,transparent 73%);
+  background:linear-gradient(180deg,rgba(255,255,255,.5) 0%,rgba(255,255,255,0) 28%);
 }
 #operations-root[data-palette="pine"] .app-workspace::before {
-  background:
-    linear-gradient(180deg,rgba(244,232,216,.08) 0%,transparent 29%),
-    linear-gradient(102deg,transparent 0 55%,rgba(109,141,123,.2) 55% 73%,transparent 73%);
+  background:linear-gradient(180deg,rgba(244,232,216,.1) 0%,transparent 30%);
 }
 #operations-root[data-palette="wine"] .app-workspace::before {
-  background:
-    linear-gradient(180deg,rgba(185,212,230,.16) 0%,transparent 30%),
-    linear-gradient(102deg,transparent 0 55%,rgba(219,135,152,.22) 55% 73%,transparent 73%);
+  background:linear-gradient(180deg,rgba(185,212,230,.18) 0%,transparent 30%);
 }
 #operations-root .op-header,
 #operations-root .app-content {position:relative;z-index:1}
