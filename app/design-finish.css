@@ -411,6 +411,28 @@ body.admin-mode {background:#14231E!important;color:#F4E8D8!important}
   border:1px solid color-mix(in srgb,var(--design-block1) 38%,transparent);
   color:var(--design-ink);line-height:1.5;
 }
+#operations-root .original-flow .order-stations {display:grid;gap:10px;margin:4px 0 8px}
+#operations-root .original-flow .order-station {
+  padding:11px 14px;border-radius:12px;border:1px solid var(--scene-line);
+  background:color-mix(in srgb,var(--design-surface) 76%,transparent);
+}
+#operations-root .original-flow .order-station.is-ready {
+  border-color:color-mix(in srgb,var(--design-block2) 62%,var(--scene-line));
+  background:color-mix(in srgb,var(--design-block2) 19%,var(--scene-panel));
+  box-shadow:inset 3px 0 var(--design-block2),0 5px 14px var(--scene-shadow);
+}
+#operations-root .original-flow .order-station-head {display:flex;align-items:center;gap:9px;margin-bottom:8px}
+#operations-root .original-flow .order-station-head strong {font-size:13px;color:var(--design-ink)}
+#operations-root .original-flow .order-station-state {
+  padding:4px 9px;border-radius:7px;border:1px solid var(--scene-line);
+  color:var(--design-ink);font-size:11px;font-weight:700;
+}
+#operations-root .original-flow .order-station.is-ready .order-station-state {
+  background:var(--scene-action-gradient);color:var(--design-signalInk);border-color:transparent;
+}
+#operations-root .original-flow .order-station .lines {margin:0;padding:0;border:0}
+#operations-root .original-flow .order-station .lines li+li {margin-top:8px}
+#operations-root .original-flow .item-ready {display:inline-block;margin-top:3px;padding:2px 6px;border-radius:6px;background:var(--scene-soft-gradient);color:var(--design-ink);font-size:11px;font-weight:700}
 @media(max-width:760px){
   #admin-root .admin-shell.app-workspace{margin:8px!important;border-radius:18px!important}
   #admin-root .admin-header{backdrop-filter:none}

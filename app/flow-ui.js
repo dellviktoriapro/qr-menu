@@ -67,7 +67,7 @@ function openBill(table){return Object.values(ST.bills).find(b=>!b.closed&&b.tab
 function forMe(o){if(o.status!=="new"||!o.owner)return true;return o.owner===ST.me||!ST.shift[o.owner]||!!o.reEsc}
 function billOrders(bid){return ST.orders.filter(o=>o.bill===bid)}
 function billTotal(bid){return billOrders(bid).reduce((s,o)=>s+tot(o),0)}
-function serveActions(o){return ["kitchen","bar"].filter(scope=>stationReady(o,scope)&&!o.stationServedAt?.[scope]).map(scope=>`<button class="btn green sm" type="button" data-a="served" data-id="${o.id}" data-scope="${scope}">${esc(t(scope==="bar"?"kBar":"kKitchen"))} · ${esc(t("served"))}</button>`).join("")}
+function serveActions(o){return ["kitchen","bar"].filter(scope=>stationReady(o,scope)&&!o.stationServedAt?.[scope]).map(scope=>`<button class="btn green sm" type="button" data-a="served" data-id="${o.id}" data-scope="${scope}">${ST.lang==="ru"?`${scope==="bar"?"Бар":"Кухня"}: отметить вынос`:`${scope==="bar"?"Bar":"Bếp"}: đã phục vụ`}</button>`).join("")}
 function pendingServe(o,scope){return stationReady(o,scope)&&!o.stationServedAt?.[scope]}
 function stationItems(o,scope){return o.items.filter(i=>scope==="all"||(M[i.mid]?.st==="b"?"bar":"kitchen")===scope)}
 function stationReady(o,scope){const items=stationItems(o,scope);return items.length>0&&items.every(i=>i.done)}
@@ -262,6 +262,13 @@ function rStop(el){const stop=ST.stop||{};const ks=Object.keys(stop).sort((a,b)=
     all.querySelectorAll("h4").forEach(h=>h.hidden=!shown[h.dataset.sec])};
   const qi=el.querySelector("#stopQ");qi.oninput=()=>{stopQ=qi.value;ST.stopQ=stopQ;save();flt()};flt();
   el.querySelectorAll("[data-stop]").forEach(b=>b.onclick=()=>setStop(b.dataset.stop,b.dataset.on==="1"))}
+// Operational cards separate each station's items and readiness.
+orderLines=(o,opts={})=>`<div class="order-stations">${["kitchen","bar"].map(scope=>{
+ const items=stationItems(o,scope);if(!items.length)return "";
+ const state=o.status==="served"||o.stationServedAt?.[scope]?"served":stationReady(o,scope)?"ready":["new","accepted"].includes(o.status)?"waiting":"cooking";
+ const label=ST.lang==="ru"?{served:"Вынесено",ready:"Можно вынести",waiting:"Ожидает передачи",cooking:"Готовится"}[state]:{served:"Đã phục vụ",ready:"Có thể phục vụ",waiting:"Chờ chuyển",cooking:"Đang chuẩn bị"}[state];
+ return `<section class="order-station is-${state}"><div class="order-station-head"><strong>${esc(t(scope==="bar"?"kBar":"kKitchen"))}</strong><span class="order-station-state">${label}</span></div><ul class="lines">${items.map(i=>`<li><span class="q">${i.qty}×</span><span class="n"><b>${esc(nm(i.mid,"vi"))}</b>${i.added?`<span class="badge-new">+</span>`:""}${ST.lang==="ru"?`<span class="tr">${esc(nm(i.mid,"ru"))}</span>`:o.lang!=="vi"?`<span class="tr">${esc(nm(i.mid,"en"))}</span>`:""}${i.note?`<span class="note">${esc(i.note)}</span>`:""}${i.done&&state==="cooking"?`<span class="item-ready">${ST.lang==="ru"?"Готово":"Đã xong"}</span>`:""}</span><span class="p">${vnd(M[i.mid].p*i.qty)}</span></li>`).join("")}</ul></section>`;
+ }).join("")}</div>`;
 // Authoritative commands replace all business mutations; preferences remain local.
 setStop=(key,on)=>{const item=stopMenu[Number(key.split('|')[1])];if(item)return options.onCommand('stop',{item_id:item.id,stopped:on})};
 const originalStop=rStop;rStop=host=>{const prior=ST.stop;ST.stop=Object.fromEntries(stopMenu.map((i,n)=>[i,n]).filter(([i])=>i.stopped).map(([i,n])=>['menu|'+n,{at:0}]));originalStop(host);if(snapshot.me.role==='waiter'){host.querySelectorAll('[data-stop]').forEach(b=>b.disabled=true);const text=host.querySelector('p');if(text)text.textContent=ST.lang==='ru'?'Доступность меняет кухня, бар или управляющий.':'Bếp, bar hoặc quản lý cập nhật tình trạng món.'}ST.stop=prior};

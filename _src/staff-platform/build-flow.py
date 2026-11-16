@@ -40,6 +40,13 @@ overlay.querySelector('#flow-sheet').onclick=e=>{if(e.target===e.currentTarget){
 const save=()=>preferences.set(cafe.id+':'+ST.me,Object.fromEntries(['lang','wtab','ktab','mineOnly','tview','stopQ'].map(k=>[k,ST[k]]))),render=()=>{save();options.onRender()},toast=(msg,sub)=>options.onNotice(msg+(sub?' · '+sub:''));
 const mutate=()=>{throw Error('LOCAL_BUSINESS_MUTATION_FORBIDDEN')},staffBy=id=>ST.staff.find(x=>x.id===id),readyTargets=o=>['owner','manager'].includes(snapshot.me.role)?[ST.me]:[o.waiter],showsForMe=()=>true;
 '''+'\n'.join(x.rstrip() for c in chunks for x in c.splitlines())+r'''
+// Operational cards separate each station's items and readiness.
+orderLines=(o,opts={})=>`<div class="order-stations">${["kitchen","bar"].map(scope=>{
+ const items=stationItems(o,scope);if(!items.length)return "";
+ const state=o.status==="served"||o.stationServedAt?.[scope]?"served":stationReady(o,scope)?"ready":["new","accepted"].includes(o.status)?"waiting":"cooking";
+ const label=ST.lang==="ru"?{served:"Вынесено",ready:"Можно вынести",waiting:"Ожидает передачи",cooking:"Готовится"}[state]:{served:"Đã phục vụ",ready:"Có thể phục vụ",waiting:"Chờ chuyển",cooking:"Đang chuẩn bị"}[state];
+ return `<section class="order-station is-${state}"><div class="order-station-head"><strong>${esc(t(scope==="bar"?"kBar":"kKitchen"))}</strong><span class="order-station-state">${label}</span></div><ul class="lines">${items.map(i=>`<li><span class="q">${i.qty}×</span><span class="n"><b>${esc(nm(i.mid,"vi"))}</b>${i.added?`<span class="badge-new">+</span>`:""}${ST.lang==="ru"?`<span class="tr">${esc(nm(i.mid,"ru"))}</span>`:o.lang!=="vi"?`<span class="tr">${esc(nm(i.mid,"en"))}</span>`:""}${i.note?`<span class="note">${esc(i.note)}</span>`:""}${i.done&&state==="cooking"?`<span class="item-ready">${ST.lang==="ru"?"Готово":"Đã xong"}</span>`:""}</span><span class="p">${vnd(M[i.mid].p*i.qty)}</span></li>`).join("")}</ul></section>`;
+ }).join("")}</div>`;
 // Authoritative commands replace all business mutations; preferences remain local.
 setStop=(key,on)=>{const item=stopMenu[Number(key.split('|')[1])];if(item)return options.onCommand('stop',{item_id:item.id,stopped:on})};
 const originalStop=rStop;rStop=host=>{const prior=ST.stop;ST.stop=Object.fromEntries(stopMenu.map((i,n)=>[i,n]).filter(([i])=>i.stopped).map(([i,n])=>['menu|'+n,{at:0}]));originalStop(host);if(snapshot.me.role==='waiter'){host.querySelectorAll('[data-stop]').forEach(b=>b.disabled=true);const text=host.querySelector('p');if(text)text.textContent=ST.lang==='ru'?'Доступность меняет кухня, бар или управляющий.':'Bếp, bar hoặc quản lý cập nhật tình trạng món.'}ST.stop=prior};
