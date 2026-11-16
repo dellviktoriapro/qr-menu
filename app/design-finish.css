@@ -317,10 +317,7 @@
 }
 #operations-root .original-flow .server-hall-grid {
   padding:22px; border-radius:22px; border-color:var(--atelier-hairline);
-  background:
-    linear-gradient(90deg,color-mix(in srgb,var(--design-block1) 7%,transparent) 1px,transparent 1px) 0 0/28px 28px,
-    linear-gradient(color-mix(in srgb,var(--design-block1) 7%,transparent) 1px,transparent 1px) 0 0/28px 28px,
-    color-mix(in srgb,var(--design-block1) 8%,var(--design-surface));
+  background:color-mix(in srgb,var(--design-block1) 8%,var(--design-surface));
 }
 #operations-root .original-flow .hall-table {
   background:linear-gradient(145deg,var(--design-raised),color-mix(in srgb,var(--design-raised) 72%,var(--design-block1)));
@@ -334,6 +331,37 @@
 #operations-root .original-report .card:nth-child(3n+2) {border-top:4px solid var(--design-signal)}
 #operations-root .original-report .kpi:nth-child(4n+3),
 #operations-root .original-report .card:nth-child(3n) {border-top:4px solid var(--design-block4)}
+#operations-root .original-report {gap:28px}
+#operations-root .original-report .pbar {
+  padding-bottom:18px; border-bottom:1px solid var(--atelier-hairline);
+}
+#operations-root .original-report .tabs {
+  gap:8px; padding:0; border:0; border-radius:0; background:transparent; box-shadow:none;
+}
+#operations-root .original-report .tabs button {
+  min-height:42px; padding:9px 14px!important; border:1px solid color-mix(in srgb,var(--design-block1) 44%,transparent)!important;
+  border-radius:10px!important; background:transparent!important; color:var(--design-ink)!important;
+  box-shadow:none!important;
+}
+#operations-root .original-report .tabs button.on {
+  background:var(--design-block3)!important; color:var(--design-block3Ink)!important;
+  border-color:var(--design-block3)!important; box-shadow:inset 0 3px var(--design-block2),0 5px 13px var(--atelier-shadow)!important;
+}
+#operations-root .original-report .kpis {gap:14px}
+#operations-root .original-report .kpi {
+  min-height:148px; padding:19px 20px 17px; border:1px solid color-mix(in srgb,currentColor 20%,var(--atelier-hairline));
+  border-radius:18px; box-shadow:0 12px 26px var(--atelier-shadow),inset 0 1px color-mix(in srgb,#fff 21%,transparent);
+}
+#operations-root .original-report .kpi::after {display:none}
+#operations-root .original-report .kpi small {
+  min-height:20px; padding:0; font:700 11px/1.35 Manrope,system-ui; letter-spacing:.02em; text-transform:none; opacity:.78;
+}
+#operations-root .original-report .kpi b {font-size:clamp(28px,2.25vw,39px);line-height:1.05;margin-top:auto}
+#operations-root .original-report .kpi span,
+#operations-root .original-report .kpi em {
+  min-height:21px; padding-top:9px; border-top:1px solid color-mix(in srgb,currentColor 20%,transparent); opacity:.78;
+}
+#operations-root .original-report .card {border-radius:18px; padding:24px; box-shadow:0 12px 28px var(--atelier-shadow),inset 0 1px color-mix(in srgb,#fff 12%,transparent)}
 #operations-root .original-report .bar i,
 #operations-root .original-report .hours i {box-shadow:0 5px 12px color-mix(in srgb,var(--design-frame) 22%,transparent)}
 #operations-root .original-report .bar:nth-child(3n) i,
@@ -346,9 +374,11 @@
   outline:0; border-color:var(--design-signal); box-shadow:0 0 0 2px color-mix(in srgb,var(--design-signal) 34%,transparent),0 13px 25px var(--atelier-shadow),inset 0 1px #fff4;
 }
 @media(max-width:760px){
-  #operations-root .op-header{min-height:unset;background:linear-gradient(130deg,var(--design-block3),color-mix(in srgb,var(--design-block3) 76%,var(--design-block1)))}
+  #operations-root .op-header{min-height:unset;background:var(--design-block3)}
   #operations-root .op-header::before{display:none}
   #operations-root .original-flow .tabs,#operations-root .op-order-tabs,#operations-root .op-prep-tabs{border-radius:13px;padding:5px;gap:4px}
   #operations-root .original-flow .tabs button,#operations-root .op-order-tabs button,#operations-root .op-prep-tabs button{padding-inline:12px!important}
   #operations-root .original-flow .server-hall-grid{padding:12px}
+  #operations-root .original-report .pbar{padding-bottom:14px}
+  #operations-root .original-report .kpi{min-height:132px;padding:16px}
 }
