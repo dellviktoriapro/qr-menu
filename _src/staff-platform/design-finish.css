@@ -161,3 +161,192 @@
   #operations-root .original-flow .oc.v2 .main{padding:14px;gap:9px}
 }
 @media(prefers-reduced-motion:reduce){#operations-root .original-flow .oc.v2,#operations-root .original-flow .kc{transition:none}}
+
+/* Expressive theme system: every palette has a visible role in the workspace,
+   while live orders stay the highest-contrast element on the page. */
+#operations-root {
+  --atelier-shadow: color-mix(in srgb, var(--design-frame) 30%, transparent);
+  --atelier-hairline: color-mix(in srgb, var(--design-block1) 44%, var(--design-line));
+}
+#operations-root .app-sidebar {
+  isolation:isolate;
+  box-shadow:18px 0 42px color-mix(in srgb,var(--design-frame) 18%,transparent);
+}
+#operations-root .app-sidebar::before {
+  content:""; position:absolute; inset:0 0 auto; height:148px; pointer-events:none; z-index:-1;
+  background:
+    radial-gradient(circle at 22% 18%, color-mix(in srgb,var(--design-block2) 30%,transparent) 0 3px, transparent 4px),
+    radial-gradient(circle at 70% 12%, color-mix(in srgb,var(--design-block1) 24%,transparent) 0 44px, transparent 45px),
+    linear-gradient(145deg, color-mix(in srgb,var(--design-block2) 15%,transparent), transparent 65%);
+}
+#operations-root .app-cafe-brand {
+  padding:18px 10px 22px;
+  border-radius:16px;
+  background:linear-gradient(135deg,color-mix(in srgb,var(--design-frame) 22%,var(--design-block4)),transparent 73%);
+  box-shadow:inset 0 1px color-mix(in srgb,#fff 14%,transparent);
+}
+#operations-root .app-cafe-brand strong {font-size:26px;line-height:1.16}
+#operations-root .app-sidebar-name {
+  position:relative; padding:19px 10px 18px; border-block-color:color-mix(in srgb,var(--design-block3) 28%,transparent);
+}
+#operations-root .app-sidebar-name::after {
+  content:""; position:absolute; left:10px; bottom:-1px; width:48px; height:2px;
+  background:linear-gradient(90deg,var(--design-block2),var(--design-block1)); border-radius:99px;
+}
+#operations-root .app-side-nav {gap:8px}
+#operations-root .app-side-nav button,
+#operations-root #op-tabs button {
+  border-radius:12px; min-height:48px; padding:12px 13px;
+}
+#operations-root .app-side-nav button:hover,
+#operations-root #op-tabs button:hover {
+  background:color-mix(in srgb,var(--design-block3) 13%,transparent);
+  box-shadow:inset 0 1px color-mix(in srgb,#fff 11%,transparent);
+}
+#operations-root .app-side-nav button.on,
+#operations-root #op-tabs button[aria-current=page] {
+  background:linear-gradient(102deg,var(--design-block1),color-mix(in srgb,var(--design-block1) 68%,var(--design-block4)));
+  box-shadow:0 10px 22px color-mix(in srgb,var(--design-frame) 35%,transparent),inset 0 1px color-mix(in srgb,#fff 28%,transparent);
+}
+#operations-root .app-workspace {
+  position:relative;
+  background:
+    radial-gradient(circle at 92% 0%, color-mix(in srgb,var(--design-block1) 14%,transparent), transparent 30%),
+    radial-gradient(circle at 0 78%, color-mix(in srgb,var(--design-block4) 13%,transparent), transparent 32%),
+    var(--design-surface);
+}
+#operations-root .op-header {
+  min-height:104px; padding-block:19px;
+  background:
+    radial-gradient(circle at 12% 14%,color-mix(in srgb,var(--design-block2) 27%,transparent) 0 2px,transparent 3px),
+    radial-gradient(circle at 17% 45%,color-mix(in srgb,var(--design-block2) 16%,transparent) 0 38px,transparent 39px),
+    linear-gradient(100deg,var(--design-block3),color-mix(in srgb,var(--design-block3) 78%,var(--design-block1)) 62%,color-mix(in srgb,var(--design-block3) 68%,var(--design-block4)));
+}
+#operations-root .op-header::before {
+  content:""; position:absolute; right:9%; top:0; width:132px; height:100%; pointer-events:none; opacity:.5;
+  background:linear-gradient(135deg,transparent 18%,color-mix(in srgb,var(--design-block2) 46%,transparent) 18% 22%,transparent 22% 49%,color-mix(in srgb,var(--design-block1) 60%,transparent) 49% 53%,transparent 53% 78%,color-mix(in srgb,var(--design-block4) 45%,transparent) 78% 82%,transparent 82%);
+}
+#operations-root .op-header > * {position:relative;z-index:1}
+#operations-root .op-header button,
+#operations-root .original-flow button:not(.hall-table-main) {
+  border-radius:12px;
+}
+#operations-root .op-header button {
+  box-shadow:0 5px 0 color-mix(in srgb,var(--design-block3Ink) 13%,transparent),inset 0 1px #fff9;
+}
+#operations-root .app-content {padding-bottom:46px}
+#operations-root #operations-status {
+  display:inline-flex; align-items:center; gap:8px; margin-bottom:10px;
+  padding:7px 11px; border-radius:999px;
+  background:color-mix(in srgb,var(--design-block1) 12%,transparent);
+  border:1px solid color-mix(in srgb,var(--design-block1) 25%,transparent);
+}
+#operations-root #operations-status::before {content:"";width:6px;height:6px;border-radius:50%;background:var(--design-signal);box-shadow:0 0 0 3px color-mix(in srgb,var(--design-signal) 18%,transparent)}
+#operations-root .original-flow .tabs,
+#operations-root .op-order-tabs,
+#operations-root .op-prep-tabs {
+  gap:8px; padding:7px; border:1px solid var(--atelier-hairline); border-radius:16px;
+  background:color-mix(in srgb,var(--design-frame) 11%,var(--design-raised));
+  box-shadow:inset 0 1px color-mix(in srgb,#fff 10%,transparent),0 7px 18px color-mix(in srgb,var(--design-frame) 10%,transparent);
+}
+#operations-root .original-flow .tabs button,
+#operations-root .op-order-tabs button,
+#operations-root .op-prep-tabs button {
+  border-radius:10px!important; border:0!important; min-height:42px; padding-inline:15px!important;
+  background:transparent!important; color:var(--op-muted)!important;
+  box-shadow:none!important;
+}
+#operations-root .original-flow .tabs button.on,
+#operations-root .op-order-tabs button[aria-current=page],
+#operations-root .op-prep-tabs button[aria-pressed=true] {
+  background:linear-gradient(135deg,var(--design-block3),color-mix(in srgb,var(--design-block3) 79%,var(--design-block1)))!important;
+  color:var(--design-block3Ink)!important;
+  box-shadow:0 5px 12px color-mix(in srgb,var(--design-frame) 20%,transparent),inset 0 3px var(--design-signal)!important;
+}
+#operations-root .original-flow .tabs button:nth-child(3n):not(.on) {color:var(--design-signalText)!important}
+#operations-root .original-flow .oc.v2,
+#operations-root .original-flow .kc,
+#operations-root .original-report .card,
+#operations-root .original-staff .card {
+  border-color:var(--atelier-hairline);
+  box-shadow:0 14px 30px var(--atelier-shadow),inset 0 1px color-mix(in srgb,#fff 15%,transparent);
+}
+#operations-root .original-flow .oc.v2 {
+  background:
+    linear-gradient(100deg,color-mix(in srgb,var(--design-block4) 14%,transparent),transparent 33%),
+    linear-gradient(150deg,color-mix(in srgb,var(--design-block3) 10%,var(--design-surface)),var(--design-surface) 70%)!important;
+}
+#operations-root .original-flow .oc.v2::after {
+  content:"";position:absolute;right:-50px;top:-56px;width:138px;height:138px;border:20px solid color-mix(in srgb,var(--design-block1) 11%,transparent);border-radius:50%;pointer-events:none;
+}
+#operations-root .original-flow .oc.v2 .side {
+  background:linear-gradient(180deg,var(--design-block3),color-mix(in srgb,var(--design-block3) 82%,var(--design-block1)));
+}
+#operations-root .original-flow .oc.v2.s-cooking .side {background:linear-gradient(180deg,var(--design-block1),color-mix(in srgb,var(--design-block1) 74%,var(--design-block4)))}
+#operations-root .original-flow .oc.v2.s-new .side,
+#operations-root .original-flow .oc.v2.s-ready .side {background:linear-gradient(180deg,var(--design-signal),color-mix(in srgb,var(--design-signal) 68%,var(--design-block2)))}
+#operations-root .original-flow .oc.v2 .st,
+#operations-root .original-flow .oc.v2 .of {position:relative;z-index:1}
+#operations-root .original-flow .oc.v2 .of {
+  border-radius:12px; padding:12px 0 0;
+}
+#operations-root .original-flow .oc.v2 .of button,
+#operations-root .original-flow .kc .kf button {
+  background:linear-gradient(135deg,var(--design-block1),color-mix(in srgb,var(--design-block1) 72%,var(--design-block4)))!important;
+  color:var(--design-block1Ink)!important;
+  border-color:transparent!important;
+  box-shadow:0 5px 12px color-mix(in srgb,var(--design-frame) 24%,transparent),inset 0 1px color-mix(in srgb,#fff 23%,transparent);
+}
+#operations-root .original-flow .oc.v2 .of button[data-command=accept],
+#operations-root .original-flow .oc.v2 .of button[data-command=send],
+#operations-root .original-flow .kc.ready .kf button {
+  background:linear-gradient(135deg,var(--design-signal),color-mix(in srgb,var(--design-signal) 76%,var(--design-block2)))!important;
+  color:var(--design-signalInk)!important;
+}
+#operations-root .original-flow .kc {background:linear-gradient(150deg,color-mix(in srgb,var(--design-block1) 16%,var(--design-raised)),var(--design-surface))!important}
+#operations-root .original-flow .kc .kh {
+  position:relative; overflow:hidden; padding-top:15px; padding-bottom:15px;
+  background:linear-gradient(102deg,color-mix(in srgb,var(--design-block3) 78%,var(--design-raised)),color-mix(in srgb,var(--design-block1) 43%,var(--design-raised)))!important;
+}
+#operations-root .original-flow .kc .kh::after {content:"";position:absolute;right:19px;top:9px;width:35px;height:35px;border-radius:50%;border:7px solid color-mix(in srgb,var(--design-block2) 45%,transparent)}
+#operations-root .original-flow .empty {
+  background:linear-gradient(135deg,color-mix(in srgb,var(--design-block1) 11%,transparent),color-mix(in srgb,var(--design-block3) 8%,transparent));
+  border-color:color-mix(in srgb,var(--design-block1) 42%,var(--design-line)); box-shadow:inset 0 1px color-mix(in srgb,#fff 10%,transparent);
+}
+#operations-root .original-flow .server-hall-grid {
+  padding:22px; border-radius:22px; border-color:var(--atelier-hairline);
+  background:
+    linear-gradient(90deg,color-mix(in srgb,var(--design-block1) 7%,transparent) 1px,transparent 1px) 0 0/28px 28px,
+    linear-gradient(color-mix(in srgb,var(--design-block1) 7%,transparent) 1px,transparent 1px) 0 0/28px 28px,
+    color-mix(in srgb,var(--design-block1) 8%,var(--design-surface));
+}
+#operations-root .original-flow .hall-table {
+  background:linear-gradient(145deg,var(--design-raised),color-mix(in srgb,var(--design-raised) 72%,var(--design-block1)));
+  border-color:var(--atelier-hairline);
+}
+#operations-root .original-flow .hall-table:nth-child(3n+2) {background:linear-gradient(145deg,color-mix(in srgb,var(--design-block3) 36%,var(--design-raised)),var(--design-raised))}
+#operations-root .original-flow .hall-table:nth-child(3n) {background:linear-gradient(145deg,color-mix(in srgb,var(--design-block4) 35%,var(--design-raised)),var(--design-raised))}
+#operations-root .original-report .kpi:nth-child(4n+1),
+#operations-root .original-report .card:nth-child(3n+1) {border-top:4px solid var(--design-block1)}
+#operations-root .original-report .kpi:nth-child(4n+2),
+#operations-root .original-report .card:nth-child(3n+2) {border-top:4px solid var(--design-signal)}
+#operations-root .original-report .kpi:nth-child(4n+3),
+#operations-root .original-report .card:nth-child(3n) {border-top:4px solid var(--design-block4)}
+#operations-root .original-report .bar i,
+#operations-root .original-report .hours i {box-shadow:0 5px 12px color-mix(in srgb,var(--design-frame) 22%,transparent)}
+#operations-root .original-report .bar:nth-child(3n) i,
+#operations-root .original-report .hours>div:nth-child(4n) i {background:var(--design-block4)}
+#operations-root .op-palettes button {
+  background:linear-gradient(145deg,color-mix(in srgb,var(--design-block3) 12%,var(--design-raised)),var(--design-raised));
+  border-color:var(--atelier-hairline);
+}
+#operations-root .op-palettes button[aria-pressed=true] {
+  outline:0; border-color:var(--design-signal); box-shadow:0 0 0 2px color-mix(in srgb,var(--design-signal) 34%,transparent),0 13px 25px var(--atelier-shadow),inset 0 1px #fff4;
+}
+@media(max-width:760px){
+  #operations-root .op-header{min-height:unset;background:linear-gradient(130deg,var(--design-block3),color-mix(in srgb,var(--design-block3) 76%,var(--design-block1)))}
+  #operations-root .op-header::before{display:none}
+  #operations-root .original-flow .tabs,#operations-root .op-order-tabs,#operations-root .op-prep-tabs{border-radius:13px;padding:5px;gap:4px}
+  #operations-root .original-flow .tabs button,#operations-root .op-order-tabs button,#operations-root .op-prep-tabs button{padding-inline:12px!important}
+  #operations-root .original-flow .server-hall-grid{padding:12px}
+}
