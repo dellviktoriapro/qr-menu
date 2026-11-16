@@ -405,6 +405,12 @@ body.admin-mode {background:#14231E!important;color:#F4E8D8!important}
 }
 #operation-dialog::backdrop,
 #admin-dialog::backdrop {background:rgba(6,17,16,.42);backdrop-filter:blur(5px)}
+.flow-overlay .flow-bill-pending {
+  margin:12px 0 18px;padding:12px 15px;border-radius:12px;
+  background:color-mix(in srgb,var(--design-block1) 18%,transparent);
+  border:1px solid color-mix(in srgb,var(--design-block1) 38%,transparent);
+  color:var(--design-ink);line-height:1.5;
+}
 @media(max-width:760px){
   #admin-root .admin-shell.app-workspace{margin:8px!important;border-radius:18px!important}
   #admin-root .admin-header{backdrop-filter:none}

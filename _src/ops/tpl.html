@@ -884,8 +884,8 @@ function oCard(o,mode){const l=ST.lang;const mineO=o.waiter===ST.me;
   else if(["cooking","ready"].includes(o.status))actions=serveActions(o);
   /* served is not paid: the table's bill stays open for re-orders until the waiter takes the money and closes it */
   const bOpen=o.bill&&ST.bills[o.bill]&&!ST.bills[o.bill].closed;
-  if(o.status==="served"&&bOpen)actions=`<button class="btn ghost sm" type="button" data-a="more" data-id="${o.id}">+ ${esc(t("addMore"))}</button><button class="btn sm" type="button" data-a="bill" data-id="${o.bill}">${esc(t("bill"))}</button>`;
-  if(["cooking","ready"].includes(o.status)&&o.bill&&ST.bills[o.bill]&&!ST.bills[o.bill].closed)actions=`<button class="btn ghost sm" type="button" data-a="bill" data-id="${o.bill}">${esc(t("bill"))}</button>`+actions;
+  if(o.status==="served"&&bOpen)actions=`<button class="btn ghost sm" type="button" data-a="more" data-id="${o.id}">+ ${esc(t("addMore"))}</button><button class="btn sm" type="button" data-a="bill" data-id="${o.bill}">${ST.lang==="ru"?"Выставить счёт":"Tính tiền"}</button>`;
+  if(["accepted","cooking","ready"].includes(o.status)&&bOpen)actions=`<button class="btn sm bill-action" type="button" data-a="bill" data-id="${o.bill}">${ST.lang==="ru"?"Выставить счёт":"Tính tiền"}</button>`+actions;
   const lateAttr=o.status==="new"?`data-late="${o.createdAt}"`:"";
   const timeRef=o.status==="new"?o.createdAt:o.status==="accepted"?o.acceptedAt:o.status==="cooking"?o.sentAt:o.status==="ready"?o.readyAt:o.servedAt;
   const bOpen2=o.bill&&ST.bills[o.bill]&&!ST.bills[o.bill].closed;const B=o.bill&&ST.bills[o.bill];
