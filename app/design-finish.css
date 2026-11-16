@@ -12,6 +12,9 @@
   --scene-quiet: rgba(36,58,77,.065);
   --scene-button: #243A4D;
   --scene-button-ink: #FFF8EF;
+  --scene-button-gradient:linear-gradient(135deg,#48687A,#243A4D);
+  --scene-action-gradient:linear-gradient(135deg,#A74C37,#813B30);
+  --scene-soft-gradient:linear-gradient(135deg,rgba(255,255,255,.9),rgba(230,239,237,.84));
   --scene-wallpaper:url("assets/azure-terrace.png");
   --scene-overlay:linear-gradient(180deg,rgba(255,249,240,.28) 0%,rgba(235,241,236,.5) 47%,rgba(242,229,215,.84) 100%);
   --scene-font: Manrope,system-ui,sans-serif;
@@ -23,6 +26,9 @@
   --scene-top:rgba(255,248,239,.84); --scene-side:#243A4D;
   --scene-line:rgba(36,58,77,.16); --scene-shadow:rgba(36,58,77,.16);
   --scene-quiet:rgba(36,58,77,.065); --scene-button:#243A4D; --scene-button-ink:#FFF8EF;
+  --scene-button-gradient:linear-gradient(135deg,#48687A,#243A4D);
+  --scene-action-gradient:linear-gradient(135deg,#A74C37,#813B30);
+  --scene-soft-gradient:linear-gradient(135deg,rgba(255,255,255,.9),rgba(230,239,237,.84));
   --scene-wallpaper:url("assets/azure-terrace.png");
   --scene-overlay:linear-gradient(180deg,rgba(255,249,240,.24) 0%,rgba(235,241,236,.48) 47%,rgba(242,229,215,.86) 100%);
 }
@@ -32,6 +38,9 @@
   --scene-top:rgba(28,44,35,.82); --scene-side:#0E1713;
   --scene-line:rgba(244,232,216,.15); --scene-shadow:rgba(0,0,0,.34);
   --scene-quiet:rgba(244,232,216,.07); --scene-button:#D3B47A; --scene-button-ink:#211B15;
+  --scene-button-gradient:linear-gradient(135deg,#F0D9A7,#C19B61);
+  --scene-action-gradient:linear-gradient(135deg,#F2DCA8,#C39361);
+  --scene-soft-gradient:linear-gradient(135deg,rgba(109,141,123,.3),rgba(34,56,44,.65));
   --scene-wallpaper:url("assets/night-orchard.png");
   --scene-overlay:linear-gradient(180deg,rgba(7,17,13,.18) 0%,rgba(9,24,18,.42) 48%,rgba(13,25,20,.9) 100%);
 }
@@ -41,6 +50,9 @@
   --scene-top:rgba(185,212,230,.87); --scene-side:#281822;
   --scene-line:rgba(249,232,222,.17); --scene-shadow:rgba(19,8,14,.36);
   --scene-quiet:rgba(249,232,222,.075); --scene-button:#DB8798; --scene-button-ink:#351E2A;
+  --scene-button-gradient:linear-gradient(135deg,#F0B9C2,#CB7189);
+  --scene-action-gradient:linear-gradient(135deg,#F0B9C2,#CB7189);
+  --scene-soft-gradient:linear-gradient(135deg,rgba(185,212,230,.25),rgba(100,44,71,.48));
   --scene-wallpaper:url("assets/velvet-bordeaux.png");
   --scene-overlay:linear-gradient(180deg,rgba(36,15,28,.13) 0%,rgba(47,19,33,.48) 48%,rgba(41,18,29,.92) 100%);
 }
@@ -85,8 +97,11 @@ body.operations-mode {background:var(--operations-bg,#152235)!important}
 }
 #operations-root .app-sidebar-meta {opacity:.72!important}
 #operations-root .app-sidebar-meta button {
-  border-radius:10px!important; background:rgba(255,255,255,.09)!important;
+  border-radius:10px!important; background:var(--scene-soft-gradient)!important;
   color:var(--design-frameInk)!important; border-color:rgba(255,255,255,.34)!important;
+}
+#operations-root[data-palette="atelier"] .app-sidebar-meta button {
+  background:linear-gradient(135deg,#48687A,#30495C)!important;
 }
 
 /* A framed, editorial workspace — not a flat recolour of the old app. */
@@ -121,10 +136,10 @@ body.operations-mode {background:var(--operations-bg,#152235)!important}
 #operations-root .op-header button,
 #operations-root .op-header select {
   min-height:42px!important; border-radius:10px!important;
-  background:var(--scene-panel)!important; color:var(--design-ink)!important;
+  background:var(--scene-soft-gradient)!important; color:var(--design-ink)!important;
   border-color:var(--scene-line)!important; box-shadow:0 3px 0 var(--scene-shadow)!important;
 }
-#operations-root .op-header #op-cafe {background:var(--scene-button)!important;color:var(--scene-button-ink)!important}
+#operations-root .op-header #op-cafe {background:var(--scene-button-gradient)!important;color:var(--scene-button-ink)!important}
 #operations-root .app-content {padding:23px 26px 46px!important;background:transparent!important}
 #operations-root #operations-status {
   display:inline-flex; min-height:auto!important; margin:0 0 16px!important; padding:7px 11px!important;
@@ -161,15 +176,36 @@ body.operations-mode {background:var(--operations-bg,#152235)!important}
 #operations-root .original-flow .tabs button.on,
 #operations-root .op-order-tabs button[aria-current=page],
 #operations-root .op-prep-tabs button[aria-pressed=true] {
-  background:var(--scene-panel-solid)!important; color:var(--design-ink)!important;
+  background:var(--scene-soft-gradient)!important; color:var(--design-ink)!important;
   box-shadow:inset 0 3px var(--design-signal),0 3px 8px var(--scene-shadow)!important;
 }
 #operations-root .original-flow .tabs button.needs-action {
-  background:var(--design-signal)!important; color:var(--design-signalInk)!important;
+  background:var(--scene-action-gradient)!important; color:var(--design-signalInk)!important;
   box-shadow:0 4px 10px var(--scene-shadow)!important;
 }
 #operations-root .original-flow .tabs button.needs-action .station-tab-label {
   color:var(--design-signalInk)!important; -webkit-text-fill-color:var(--design-signalInk)!important;
+}
+#operations-root .original-flow .btn.green,
+#operations-root .original-flow [data-a=accept],
+#operations-root .original-flow #bClose,
+#operations-root #op-create {
+  background:var(--scene-action-gradient)!important;
+  color:var(--design-signalInk)!important;
+  border-color:transparent!important;
+  box-shadow:0 5px 12px var(--scene-shadow),inset 0 1px rgba(255,255,255,.22)!important;
+}
+#operations-root .original-flow .btn:not(.green):not(.ghost):not(.blue):not(.danger):not(.outb),
+#operations-root .original-staff .card button:not(:disabled),
+#operations-root .op-menu button:not(:disabled) {
+  background:var(--scene-button-gradient)!important;
+  color:var(--scene-button-ink)!important;
+  border-color:transparent!important;
+  box-shadow:0 5px 12px var(--scene-shadow),inset 0 1px rgba(255,255,255,.22)!important;
+}
+#operations-root .original-staff .staff-invite-card button[type=submit] {
+  background:var(--scene-action-gradient)!important;
+  color:var(--design-signalInk)!important;
 }
 
 /* Tickets and kitchen cards retain their purpose while gaining depth. */
@@ -191,13 +227,13 @@ body.operations-mode {background:var(--operations-bg,#152235)!important}
 #operations-root .original-flow .oc.v2 .of .tot {font-family:var(--scene-display)!important;letter-spacing:-.035em}
 #operations-root .original-flow .oc.v2 .of button,
 #operations-root .original-flow .kc .kf button {
-  border:0!important; border-radius:9px!important; background:var(--scene-button)!important;
+  border:0!important; border-radius:9px!important; background:var(--scene-button-gradient)!important;
   color:var(--scene-button-ink)!important; box-shadow:0 5px 11px var(--scene-shadow)!important;
 }
 #operations-root .original-flow .oc.v2 .of button[data-command=accept],
 #operations-root .original-flow .oc.v2 .of button[data-command=send],
 #operations-root .original-flow .kc.ready .kf button {
-  background:var(--design-signal)!important;color:var(--design-signalInk)!important;
+  background:var(--scene-action-gradient)!important;color:var(--design-signalInk)!important;
 }
 #operations-root .original-flow .kc {border-radius:18px!important;overflow:hidden!important}
 #operations-root .original-flow .kc .kh {background:var(--scene-quiet)!important;border-bottom:1px solid var(--scene-line)!important}
@@ -219,7 +255,7 @@ body.operations-mode {background:var(--operations-bg,#152235)!important}
 #operations-root .original-report .pbar {padding-bottom:18px!important;border-bottom:1px solid var(--scene-line)!important}
 #operations-root .original-report .tabs {background:transparent!important;box-shadow:none!important;border:0!important;padding:0!important}
 #operations-root .original-report .tabs button {border:1px solid var(--scene-line)!important;border-radius:9px!important;color:var(--design-ink)!important}
-#operations-root .original-report .tabs button.on {background:var(--scene-button)!important;color:var(--scene-button-ink)!important;border-color:var(--scene-button)!important}
+#operations-root .original-report .tabs button.on {background:var(--scene-button-gradient)!important;color:var(--scene-button-ink)!important;border-color:var(--scene-button)!important}
 #operations-root .original-report .kpis {grid-template-columns:minmax(220px,1.35fr) repeat(4,minmax(145px,1fr))!important;gap:14px!important}
 #operations-root .original-report .kpi {
   min-height:146px!important; padding:18px 20px!important; border:1px solid var(--scene-line)!important;
