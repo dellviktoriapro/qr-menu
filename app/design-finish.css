@@ -298,3 +298,91 @@ body.operations-mode {background:var(--operations-bg,#152235)!important}
   #operations-root .original-flow .server-hall-grid,#operations-root .original-flow .server-hall-plan-scroll{padding:12px!important}
   #operations-root .original-report .kpi{min-height:126px!important;padding:15px!important}
 }
+
+/* Sign in and platform administration share the illustrated design language. */
+body:not(.admin-mode):not(.operations-mode):has(>main #auth) {
+  min-height:100svh;
+  background:linear-gradient(105deg,rgba(15,28,30,.76),rgba(29,45,48,.33)),url("assets/azure-terrace.png") center/cover fixed!important;
+  color:#243A4D; color-scheme:light;
+}
+body>main:has(#auth) {
+  width:min(100%,480px); padding:36px;
+  background:rgba(255,251,245,.91)!important;
+  border:1px solid rgba(255,255,255,.8)!important;
+  box-shadow:0 28px 72px rgba(17,37,45,.37),inset 0 1px rgba(255,255,255,.7)!important;
+  backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px);
+}
+body>main:has(#auth) h1 {font:600 clamp(30px,4vw,38px)/1.13 Lora,Georgia,serif;letter-spacing:-.045em;color:#243A4D}
+body>main:has(#auth) p,body>main:has(#auth) small {color:#455D67}
+body>main:has(#auth) label {color:#243A4D}
+body>main:has(#auth) input {
+  background:rgba(255,255,255,.78)!important;color:#243A4D!important;
+  border:1px solid #B4C5C6!important;box-shadow:inset 0 2px 5px rgba(36,58,77,.06);
+}
+body>main:has(#auth) .primary,
+body:has(>main #auth) #email-sent .primary {
+  background:linear-gradient(135deg,#48687A,#243A4D)!important;color:#FFF8EF!important;
+  box-shadow:0 8px 18px rgba(36,58,77,.24),inset 0 1px rgba(255,255,255,.25);
+}
+body>main:has(#auth) .quiet {background:linear-gradient(135deg,#FFFDF9,#E5EFEB)!important;color:#243A4D!important;border-color:#B4C5C6!important}
+body>main:has(#auth) .password-toggle {background:transparent!important;color:#455D67!important;box-shadow:none!important}
+body>main:has(#auth) .notice {background:rgba(232,240,237,.84)!important;color:#243A4D!important;border-color:#B4C5C6!important}
+body:has(>main #auth) #email-sent {background:#FFF9F1!important;color:#243A4D!important;border-color:#B4C5C6!important}
+body:has(>main #auth) #email-sent p {color:#455D67!important}
+
+body.admin-mode {background:#14231E!important;color:#F4E8D8!important}
+#admin-root.app-shell {max-width:1760px!important;background:#14231E!important}
+#admin-root .app-sidebar {background:linear-gradient(180deg,#0E1713,#1D3026)!important;border-right:1px solid rgba(244,232,216,.16)}
+#admin-root .app-sidebar-name {color:#F4E8D8!important;font-family:Lora,Georgia,serif!important}
+#admin-root .app-side-nav button[aria-current=page] {background:linear-gradient(135deg,#597866,#304B3B)!important;color:#FFF8EA!important;box-shadow:inset 3px 0 #D3B47A}
+#admin-root .admin-shell.app-workspace {
+  background:linear-gradient(180deg,rgba(13,29,21,.4) 0%,rgba(15,30,22,.76) 42%,rgba(13,25,20,.94) 100%),url("assets/night-orchard.png") center top/cover!important;
+  margin:12px 12px 12px 0!important;border-radius:24px!important;
+  box-shadow:0 22px 55px rgba(0,0,0,.35)!important;
+}
+#admin-root .admin-header {
+  background:rgba(22,39,29,.78)!important;color:#F4E8D8!important;
+  border-bottom:1px solid rgba(244,232,216,.16)!important;
+  box-shadow:0 10px 24px rgba(0,0,0,.23)!important;
+  backdrop-filter:blur(18px);
+}
+#admin-root .admin-header h1 {font-family:Lora,Georgia,serif!important;font-weight:600!important;letter-spacing:-.04em}
+#admin-root .admin-header .muted {color:#D5DCCF!important}
+#admin-root .app-content {background:transparent!important}
+#admin-root .admin-summary article,
+#admin-root .cafe-card,
+#admin-root .admin-inbox {
+  background:rgba(29,47,36,.87)!important;color:#F4E8D8!important;
+  border:1px solid rgba(244,232,216,.18)!important;
+  box-shadow:0 12px 28px rgba(0,0,0,.28),inset 0 1px rgba(255,255,255,.1)!important;
+  backdrop-filter:blur(14px);
+}
+#admin-root .admin-summary article:nth-child(2) {background:linear-gradient(135deg,rgba(109,141,123,.92),rgba(53,82,62,.92))!important}
+#admin-root .admin-summary article:nth-child(3) {background:linear-gradient(135deg,rgba(211,180,122,.94),rgba(173,136,82,.94))!important;color:#211B15!important}
+#admin-root .cafe-card h2 {font-family:Lora,Georgia,serif!important;letter-spacing:-.035em}
+#admin-root .admin-header button,
+#admin-root .cafe-links a,
+#admin-root .cafe-card button,
+#admin-root .admin-inbox button,
+#admin-root #admin-sidebar-exit-slot .quiet {
+  background:linear-gradient(135deg,#486952,#2E4D3A)!important;color:#FFF8EA!important;
+  border:1px solid rgba(244,232,216,.22)!important;
+  box-shadow:0 5px 12px rgba(0,0,0,.2)!important;
+}
+#admin-root .admin-header .primary,
+#admin-root .admin-inbox .inbox-message button,
+#admin-root .admin-header .has-pending {
+  background:linear-gradient(135deg,#F0D9A7,#C19B61)!important;color:#211B15!important;
+  border-color:transparent!important;
+}
+#admin-root input,#admin-root select,#admin-root textarea {background:rgba(25,43,33,.94)!important;color:#F4E8D8!important;border-color:rgba(244,232,216,.26)!important}
+#admin-root label,#admin-root .muted {color:#CDD9CC!important}
+#admin-root .admin-summary article:nth-child(3) .muted {color:#403527!important}
+#admin-root .cafe-card [data-detail] {background:linear-gradient(135deg,#F0D9A7,#C19B61)!important;color:#211B15!important}
+.admin-mode #admin-dialog {background:#1C3025!important;color:#F4E8D8!important;border:1px solid rgba(244,232,216,.2)!important;box-shadow:0 25px 75px rgba(0,0,0,.5)}
+.admin-mode #admin-dialog .primary {background:linear-gradient(135deg,#F0D9A7,#C19B61)!important;color:#211B15!important}
+@media(max-width:760px){
+  #admin-root .admin-shell.app-workspace{margin:8px!important;border-radius:18px!important}
+  #admin-root .admin-header{backdrop-filter:none}
+  body>main:has(#auth){padding:26px;backdrop-filter:blur(14px)}
+}
