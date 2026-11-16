@@ -76,17 +76,35 @@ body.operations-mode {background:var(--operations-bg,#152235)!important}
   box-shadow:inset 3px 0 var(--design-signal)!important;
 }
 #operations-root .app-sidebar-meta {opacity:.72!important}
-#operations-root .app-sidebar-meta button {border-radius:10px!important;background:rgba(255,255,255,.09)!important}
+#operations-root .app-sidebar-meta button {
+  border-radius:10px!important; background:rgba(255,255,255,.09)!important;
+  color:var(--design-frameInk)!important; border-color:rgba(255,255,255,.34)!important;
+}
 
 /* A framed, editorial workspace — not a flat recolour of the old app. */
 #operations-root .app-workspace {
   position:relative; margin:12px 12px 12px 0!important; min-height:calc(100svh - 24px);
-  overflow:hidden!important; background:transparent!important; border-radius:24px!important;
+  overflow:hidden!important; background:var(--scene-ground)!important; border-radius:24px!important;
   box-shadow:0 24px 58px var(--scene-shadow)!important;
 }
 #operations-root .app-workspace::before {
   content:""; position:absolute; inset:0; pointer-events:none;
-  background:linear-gradient(180deg,rgba(255,255,255,.1),transparent 25%); z-index:0;
+  background:linear-gradient(180deg,rgba(255,255,255,.14),transparent 28%); z-index:0;
+}
+#operations-root[data-palette="atelier"] .app-workspace::before {
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.48) 0%,rgba(255,255,255,0) 30%),
+    linear-gradient(102deg,transparent 0 57%,rgba(134,167,184,.23) 57% 73%,transparent 73%);
+}
+#operations-root[data-palette="pine"] .app-workspace::before {
+  background:
+    linear-gradient(180deg,rgba(244,232,216,.08) 0%,transparent 29%),
+    linear-gradient(102deg,transparent 0 55%,rgba(109,141,123,.2) 55% 73%,transparent 73%);
+}
+#operations-root[data-palette="wine"] .app-workspace::before {
+  background:
+    linear-gradient(180deg,rgba(185,212,230,.16) 0%,transparent 30%),
+    linear-gradient(102deg,transparent 0 55%,rgba(219,135,152,.22) 55% 73%,transparent 73%);
 }
 #operations-root .op-header,
 #operations-root .app-content {position:relative;z-index:1}
