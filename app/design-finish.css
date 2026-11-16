@@ -18,7 +18,7 @@
   --scene-button-gradient:linear-gradient(135deg,#48687A,#243A4D);
   --scene-action-gradient:linear-gradient(135deg,#A74C37,#813B30);
   --scene-soft-gradient:linear-gradient(135deg,rgba(255,255,255,.9),rgba(230,239,237,.84));
-  --scene-wallpaper:url("assets/azure-terrace.png");
+  --scene-wallpaper:url("assets/azure-mist.png");
   --scene-overlay:linear-gradient(180deg,rgba(255,249,240,.28) 0%,rgba(235,241,236,.5) 47%,rgba(242,229,215,.84) 100%);
   --scene-font: Manrope,system-ui,sans-serif;
   --scene-display: Lora,Georgia,serif;
@@ -35,7 +35,7 @@
   --scene-button-gradient:linear-gradient(135deg,#48687A,#243A4D);
   --scene-action-gradient:linear-gradient(135deg,#A74C37,#813B30);
   --scene-soft-gradient:linear-gradient(135deg,rgba(255,255,255,.9),rgba(230,239,237,.84));
-  --scene-wallpaper:url("assets/azure-terrace.png");
+  --scene-wallpaper:url("assets/azure-mist.png");
   --scene-overlay:linear-gradient(180deg,rgba(255,249,240,.24) 0%,rgba(235,241,236,.48) 47%,rgba(242,229,215,.86) 100%);
 }
 #operations-root[data-palette="pine"] {
@@ -50,7 +50,7 @@
   --scene-button-gradient:linear-gradient(135deg,#F0D9A7,#C19B61);
   --scene-action-gradient:linear-gradient(135deg,#F2DCA8,#C39361);
   --scene-soft-gradient:linear-gradient(135deg,rgba(109,141,123,.3),rgba(34,56,44,.65));
-  --scene-wallpaper:url("assets/night-orchard.png");
+  --scene-wallpaper:url("assets/orchard-mist.png");
   --scene-overlay:linear-gradient(180deg,rgba(7,17,13,.18) 0%,rgba(9,24,18,.42) 48%,rgba(13,25,20,.9) 100%);
 }
 #operations-root[data-palette="wine"] {
@@ -65,7 +65,7 @@
   --scene-button-gradient:linear-gradient(135deg,#F0B9C2,#CB7189);
   --scene-action-gradient:linear-gradient(135deg,#F0B9C2,#CB7189);
   --scene-soft-gradient:linear-gradient(135deg,rgba(185,212,230,.25),rgba(100,44,71,.48));
-  --scene-wallpaper:url("assets/velvet-bordeaux.png");
+  --scene-wallpaper:url("assets/bordeaux-mist.png");
   --scene-overlay:linear-gradient(180deg,rgba(36,15,28,.13) 0%,rgba(47,19,33,.48) 48%,rgba(41,18,29,.92) 100%);
 }
 
@@ -339,7 +339,7 @@ body:has(>main #auth) #email-sent .primary {
 body>main:has(#auth) .quiet {background:linear-gradient(135deg,#FFFDF8,#DAE8D8)!important;color:#173A29!important;border-color:#AAC2AC!important}
 body>main:has(#auth) .password-toggle {background:transparent!important;color:#496452!important;box-shadow:none!important}
 body>main:has(#auth) .notice {background:#E4EEE2!important;color:#173A29!important;border-color:#AAC2AC!important}
-body:has(>main #auth) #email-sent {background:#F4F1E6!important;color:#173A29!important;border-color:#AAC2AC!important}
+body:has(>main #auth) #email-sent {background:rgba(244,241,230,.76)!important;color:#173A29!important;border-color:rgba(170,194,172,.8)!important;backdrop-filter:blur(20px) saturate(1.12);box-shadow:0 25px 65px rgba(5,20,12,.32)!important}
 body:has(>main #auth) #email-sent p {color:#496452!important}
 
 body.admin-mode {background:#14231E!important;color:#F4E8D8!important}
@@ -348,7 +348,7 @@ body.admin-mode {background:#14231E!important;color:#F4E8D8!important}
 #admin-root .app-sidebar-name {color:#F4E8D8!important;font-family:Lora,Georgia,serif!important}
 #admin-root .app-side-nav button[aria-current=page] {background:linear-gradient(135deg,#597866,#304B3B)!important;color:#FFF8EA!important;box-shadow:inset 3px 0 #D3B47A}
 #admin-root .admin-shell.app-workspace {
-  background:linear-gradient(180deg,rgba(13,29,21,.4) 0%,rgba(15,30,22,.76) 42%,rgba(13,25,20,.94) 100%),url("assets/night-orchard.png") center top/cover!important;
+  background:linear-gradient(180deg,rgba(13,29,21,.4) 0%,rgba(15,30,22,.76) 42%,rgba(13,25,20,.94) 100%),url("assets/orchard-mist.png") center top/cover!important;
   margin:12px 12px 12px 0!important;border-radius:24px!important;
   box-shadow:0 22px 55px rgba(0,0,0,.35)!important;
 }
@@ -391,8 +391,20 @@ body.admin-mode {background:#14231E!important;color:#F4E8D8!important}
 #admin-root label,#admin-root .muted {color:#CDD9CC!important}
 #admin-root .admin-summary article:nth-child(3) .muted {color:#403527!important}
 #admin-root .cafe-card [data-detail] {background:linear-gradient(135deg,#F0D9A7,#C19B61)!important;color:#211B15!important}
-.admin-mode #admin-dialog {background:#1C3025!important;color:#F4E8D8!important;border:1px solid rgba(244,232,216,.2)!important;box-shadow:0 25px 75px rgba(0,0,0,.5)}
+.admin-mode #admin-dialog {background:rgba(28,48,37,.7)!important;color:#F4E8D8!important;border:1px solid rgba(244,232,216,.3)!important;box-shadow:0 25px 75px rgba(0,0,0,.5),inset 0 1px rgba(255,255,255,.11)!important;backdrop-filter:blur(22px) saturate(1.18)}
 .admin-mode #admin-dialog .primary {background:linear-gradient(135deg,#F0D9A7,#C19B61)!important;color:#211B15!important}
+/* The landscape remains visible through dialogs; controls keep their own contrast. */
+.flow-overlay .sheet {background:rgba(6,17,16,.42)!important;backdrop-filter:blur(5px)}
+.flow-overlay .sheetin,
+#operation-dialog {
+  background:color-mix(in srgb,var(--design-surface) 72%,transparent)!important;
+  color:var(--design-ink)!important;
+  border:1px solid color-mix(in srgb,var(--design-ink) 25%,transparent)!important;
+  box-shadow:0 26px 65px rgba(0,0,0,.32),inset 0 1px rgba(255,255,255,.16)!important;
+  backdrop-filter:blur(22px) saturate(1.16);
+}
+#operation-dialog::backdrop,
+#admin-dialog::backdrop {background:rgba(6,17,16,.42);backdrop-filter:blur(5px)}
 @media(max-width:760px){
   #admin-root .admin-shell.app-workspace{margin:8px!important;border-radius:18px!important}
   #admin-root .admin-header{backdrop-filter:none}
