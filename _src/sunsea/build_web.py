@@ -17,6 +17,21 @@ OUT = sys.argv[1] if len(sys.argv) > 1 else '../../sun-sea'
 shutil.rmtree(OUT, ignore_errors=True); os.makedirs(OUT)
 
 def save_webp(src, maxw, quality, name, fingerprint=False):
+    asset_source = os.environ.get('SUNSEA_ASSET_SOURCE')
+    if asset_source:
+        wanted = os.path.join(asset_source, name)
+        if fingerprint:
+            stem, ext = os.path.splitext(wanted)
+            matches = list(__import__('pathlib').Path(os.path.dirname(wanted)).glob(os.path.basename(stem) + '-*' + ext))
+            if len(matches) != 1:
+                raise FileNotFoundError('Expected one published Sun&Sea asset for ' + name)
+            wanted = str(matches[0])
+        if not os.path.isfile(wanted):
+            raise FileNotFoundError(wanted)
+        target = os.path.join(OUT, os.path.relpath(wanted, asset_source))
+        os.makedirs(os.path.dirname(target), exist_ok=True)
+        shutil.copyfile(wanted, target)
+        return os.path.relpath(target, OUT).replace('\\', '/')
     cache_root = os.environ.get('SUNSEA_WEBP_CACHE')
     cache_key = hashlib.sha256(open(src, 'rb').read() + f'|{maxw}|{quality}|webp6'.encode()).hexdigest()
     cache_file = os.path.join(cache_root, cache_key + '.webp') if cache_root else None
@@ -84,6 +99,14 @@ shutil.copyfile('amb/squid.svg', os.path.join(OUT, 'squid.svg'))
 shutil.copytree('fonts', os.path.join(OUT, 'fonts'))
 COAST={}
 for asset in ['coast-right','botanical-edge']:
+    asset_source=os.environ.get('SUNSEA_ASSET_SOURCE')
+    if asset_source:
+        matches=list(__import__('pathlib').Path(asset_source).glob(asset+'-*.webp'))
+        if len(matches)!=1:raise FileNotFoundError('Expected one published Sun&Sea asset for '+asset)
+        name=matches[0].name
+        shutil.copyfile(matches[0],os.path.join(OUT,name))
+        COAST[asset+'.webp']=name
+        continue
     source='amb/' + asset + '.png'
     key=hashlib.sha256(open(source,'rb').read()+b'|coast640q80webp6').hexdigest()
     cache_root=os.environ.get('SUNSEA_WEBP_CACHE')

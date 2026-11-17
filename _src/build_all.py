@@ -17,6 +17,7 @@ run('demo','mk.py');run('demo','build.py')
 run('chez','build_web.py',os.path.join(ROOT,'chez-oanh'))
 # 2b) Sun&Sea Restaurant (Mui Ne) menu: same engine as Chez Oanh (chez/tpl.html), own data, photos and look
 run('sunsea','build_web.py',os.path.join(ROOT,'sun-sea'))
+run('sunsea','build_connected_test.py')
 # 3) Lam Tong menu (single file)
 run('lam-tong','build.py')
 wrap(os.path.join(SRC,'lam-tong','lam-tong-menu.html'),os.path.join(ROOT,'lam-tong','index.html'))

@@ -1,0 +1,6 @@
+(function(root,f){const a=f();if(typeof module==='object'&&module.exports)module.exports=a;else root.guestLineOptions=a})(typeof window==='object'?window:this,()=>{'use strict';
+const all=[{k:'nohot',g:'spice',vi:'Không cay',ru:'Не остро',en:'Not spicy'},{k:'hot',g:'spice',vi:'Cay',ru:'Остро',en:'Spicy'},{k:'veryhot',g:'spice',vi:'Rất cay',ru:'Очень остро',en:'Very spicy'},{k:'noonion',vi:'Không hành',ru:'Без лука',en:'No onion'},{k:'nocoriander',vi:'Không rau mùi',ru:'Без кинзы',en:'No coriander'},{k:'ice',g:'ice',vi:'Có đá',ru:'Со льдом',en:'With ice'},{k:'noice',g:'ice',vi:'Không đá',ru:'Без льда',en:'No ice'},{k:'nosugar',vi:'Không đường',ru:'Без сахара',en:'No sugar'},{k:'nomilk',vi:'Không sữa',ru:'Без молока',en:'No milk'}];
+const options=group=>all.filter(o=>group==='drinks'?['ice','noice','nosugar','nomilk'].includes(o.k):['nohot','hot','veryhot','noonion','nocoriander'].includes(o.k));
+function toggle(flags,k){const o=all.find(o=>o.k===k);if(!o)return flags;return flags.includes(k)?flags.filter(x=>x!==k):flags.filter(x=>!o.g||all.find(a=>a.k===x)?.g!==o.g).concat(k)}
+function note(value={}){const tags=(value.flags||[]).map(k=>all.find(o=>o.k===k)?.vi).filter(Boolean);return tags.concat(String(value.text||'').trim()).filter(Boolean).join('; ').slice(0,300)}
+return {options,toggle,note};});
