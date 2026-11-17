@@ -48,6 +48,11 @@ html, preview_count = re.subn(
 assert preview_count == 1
 original = HERE.parent / 'chez' / 'guest-server.js'
 adapter = original.read_text(encoding='utf-8')
+adapter = adapter.replace(
+    '/* Real server adapter for Chez Oanh only. Sun&Sea has its own independent cart. */',
+    '/* Server-connected Sun&Sea guest orders; table QR and separate test entry QR. */',
+    1,
+)
 assert "'chez|'+" in adapter and "ls.get('co_ck')" in adapter
 adapter = adapter.replace('rp_chez_', 'rp_sunsea_test_')
 adapter = adapter.replace("'chez|'+", "'sunsea|'+")
@@ -57,19 +62,29 @@ adapter = adapter.replace(
     'STOP.has(key)||STOP.has(key.split(\'|\').slice(0,2).join(\'|\'))',
     "STOP.has('sunsea|'+key)||STOP.has('sunsea|'+key.split('|').slice(0,2).join('|'))",
 )
-adapter, pick_count = re.subn(
-    r'openPick=\(\)=>\{[^\n]*\};\n',
-    'openPick=()=>show(ui().scan);\n',
-    adapter,
-    count=1,
+adapter = adapter.replace("incoming=hash.get('table')", "incoming=hash.get('table'),entryIncoming=hash.get('entry')")
+adapter = adapter.replace("allowNewVisit=valid(incoming);", "allowNewVisit=valid(incoming)||valid(entryIncoming);")
+adapter = adapter.replace(
+    "let token=valid(incoming)?incoming:sessionStorage.getItem('rp_sunsea_test_table'),testTable=!valid(incoming)&&!valid(sessionStorage.getItem('rp_sunsea_test_table'))?sessionStorage.getItem('rp_sunsea_test_test_table')||'':'',context=null,outbox=null,working=false;",
+    "let token=valid(entryIncoming)?null:valid(incoming)?incoming:sessionStorage.getItem('rp_sunsea_test_table'),entryToken=valid(incoming)?null:valid(entryIncoming)?entryIncoming:sessionStorage.getItem('rp_sunsea_test_entry'),testTable=!valid(token)&&!valid(entryIncoming)?sessionStorage.getItem('rp_sunsea_test_test_table')||'':'',context=null,outbox=null,working=false;",
 )
-assert pick_count == 1
+adapter = adapter.replace(
+    "if(valid(incoming)){sessionStorage.setItem('rp_sunsea_test_table',incoming);history.replaceState(null,'',location.pathname+location.search)}",
+    "if(valid(incoming)){sessionStorage.removeItem('rp_sunsea_test_entry');sessionStorage.setItem('rp_sunsea_test_table',incoming);history.replaceState(null,'',location.pathname+location.search)}if(valid(entryIncoming)){sessionStorage.removeItem('rp_sunsea_test_table');sessionStorage.removeItem('rp_sunsea_test_test_table');sessionStorage.setItem('rp_sunsea_test_entry',entryIncoming);history.replaceState(null,'',location.pathname+location.search)}",
+)
+adapter = adapter.replace(
+    "if(!valid(token)&&!/^[1-9][0-9]{0,2}$/.test(testTable))throw Error('TEST_TABLE_UNAVAILABLE');const storageKey='rp_sunsea_test_visit:'+(valid(token)?token:'test:'+testTable);",
+    "if(!valid(token)&&(!valid(entryToken)||!/^[1-9][0-9]{0,2}$/.test(testTable)))throw Error('TEST_TABLE_UNAVAILABLE');const storageKey='rp_sunsea_test_visit:'+(valid(token)?token:'test:'+entryToken+':'+testTable);",
+)
+adapter = adapter.replace("const open=()=>valid(token)?api.open(token,secret):api.testOpen(testTable,secret);", "const open=()=>valid(token)?api.open(token,secret):api.testOpen(testTable,secret,entryToken);")
 adapter = adapter.replace(
     "if(!valid(token)&&!/^[1-9][0-9]{0,2}$/.test(testTable)){openPick();return}",
-    "if(!valid(token)){openPick();return}",
+    "if(!valid(token)&&!valid(entryToken)){show(ui().scan);return}if(!valid(token)&&!/^[1-9][0-9]{0,2}$/.test(testTable)){openPick();return}",
 )
-assert "if(!valid(token)){openPick();return}" in adapter
-assert "'sunsea|'+" in adapter and 'rp_sunsea_test_table' in adapter
+adapter = adapter.replace("if(valid(token)||testTable)connect()", "if(valid(token)||valid(entryToken)&&testTable)connect()")
+adapter = adapter.replace("openPick=()=>{const labels=", "openPick=()=>{if(!valid(entryToken)){show(ui().scan);return}const labels=")
+assert "entryToken=valid(incoming)?null:valid(entryIncoming)" in adapter and "api.testOpen(testTable,secret,entryToken)" in adapter
+assert "'sunsea|'+" in adapter and 'rp_sunsea_test_entry' in adapter
 (PUBLIC / 'guest-server-test.js').write_text(adapter, encoding='utf-8')
 
 html = html.replace('const paidChecks=()=>', 'let serverPaidChecks=null;const paidChecks=()=>serverPaidChecks?serverPaidChecks():')
@@ -84,6 +99,14 @@ assets = [
 ]
 for source, name in assets:
     shutil.copyfile(source, PUBLIC / name)
+api_path = PUBLIC / 'guest-api.js'
+api_text = api_path.read_text(encoding='utf-8')
+api_text = api_text.replace(
+    "testOpen:(table_number,visit_secret)=>call('test_open',{table_number,visit_secret})",
+    "testOpen:(table_number,visit_secret,entry_token)=>call('test_open',{table_number,visit_secret,entry_token})",
+)
+assert "entry_token)=>call('test_open'" in api_text
+api_path.write_text(api_text, encoding='utf-8')
 scripts = ''.join(
     '<script src="' + name + '?v=' + hashlib.sha256((PUBLIC / name).read_bytes()).hexdigest()[:12] + '"></script>'
     for _, name in assets
