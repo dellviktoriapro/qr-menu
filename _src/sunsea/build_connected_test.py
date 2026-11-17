@@ -46,6 +46,12 @@ html, preview_count = re.subn(
     flags=re.S,
 )
 assert preview_count == 1
+# This route has its own table selection. The public menu may remember a table
+# from a previous visit in localStorage; never show that stale number here.
+legacy_table = 'function TABLE(){try{const x=JSON.parse(ls.get("ss_tbl")||"null");if(x&&x.t&&Date.now()-x.at<5*3600e3)return x.t}catch(e){}return 0}'
+entry_table = '''function TABLE(){try{const scanned=new URLSearchParams(location.hash.slice(1)).get('entry');if(/^[a-f0-9]{64}$/.test(scanned||''))return 0;const saved=sessionStorage.getItem('rp_sunsea_test_entry');if(/^[a-f0-9]{64}$/.test(saved||'')){const n=sessionStorage.getItem('rp_sunsea_test_test_table');return /^[1-9][0-9]{0,2}$/.test(n||'')?+n:0}}catch(e){}try{const x=JSON.parse(ls.get("ss_tbl")||"null");if(x&&x.t&&Date.now()-x.at<5*3600e3)return x.t}catch(e){}return 0}'''
+assert html.count(legacy_table) == 1
+html = html.replace(legacy_table, entry_table, 1)
 original = HERE.parent / 'chez' / 'guest-server.js'
 adapter = original.read_text(encoding='utf-8')
 adapter = adapter.replace(
@@ -83,6 +89,10 @@ adapter = adapter.replace(
 )
 adapter = adapter.replace("if(valid(token)||testTable)connect()", "if(valid(token)||valid(entryToken)&&testTable)connect()")
 adapter = adapter.replace("openPick=()=>{const labels=", "openPick=()=>{if(!valid(entryToken)){show(ui().scan);return}const labels=")
+adapter = adapter.replace(
+    "sessionStorage.setItem('rp_sunsea_test_test_table',number);$('tpick').hidden=true;sendOrder()",
+    "sessionStorage.setItem('rp_sunsea_test_test_table',number);$('tChip').hidden=false;$('tChip').textContent=T[lang].tableL+' '+number;$('tpick').hidden=true;sendOrder()",
+)
 assert "entryToken=valid(incoming)?null:valid(entryIncoming)" in adapter and "api.testOpen(testTable,secret,entryToken)" in adapter
 assert "'sunsea|'+" in adapter and 'rp_sunsea_test_entry' in adapter
 (PUBLIC / 'guest-server-test.js').write_text(adapter, encoding='utf-8')
