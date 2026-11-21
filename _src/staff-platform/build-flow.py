@@ -20,6 +20,13 @@ def build():
  # Keep the original order renderers; use the server shell for personal controls.
  chunks=[x.replace('${on?"":`<div class="alert red"><span>${esc(t("offNote"))}</span></div>`}', '') for x in chunks]
  chunks=[x.replace('...groups,["tables",t("tTables"),bills]];', '...groups,["tables",t("tTables"),bills],["closed",ST.lang==="ru"?"Закрытые · 24 часа":"Đã đóng · 24 giờ",Object.values(ST.bills).filter(b=>b.closed&&b.closedAt>Date.now()-86400000&&billOrders(b.id).length).sort((a,b)=>b.closedAt-a.closedAt)]];') for x in chunks]
+ # Keep the selected queue visible after an action. Mobile exposes the four live queues;
+ # paid receipts remain available from the tables screen.
+ chunks=[x.replace('if(a==="accept"){accept(id);ST.wtab="cooking";save();render()}', 'if(a==="accept"){accept(id)}')
+          .replace('ST.wtab="cooking";save();closeEditor();render()', 'save();closeEditor();render()') for x in chunks]
+ chunks=[x.replace('const cur=tabs.find(x=>x[0]===ST.wtab)||tabs[0];', 'const visibleTabs=matchMedia("(max-width:760px)").matches?tabs.filter(x=>!["all","closed"].includes(x[0])):tabs;const cur=visibleTabs.find(x=>x[0]===ST.wtab)||visibleTabs[0];')
+          .replace('${tabs.map(([k,lab,arr])=>', '${visibleTabs.map(([k,lab,arr])=>')
+          .replace('const tablesBody=()=>hallMap();', '''const tablesBody=()=>{const closed=Object.values(ST.bills).filter(b=>b.closed&&b.closedAt>Date.now()-86400000&&billOrders(b.id).length).sort((a,b)=>b.closedAt-a.closedAt);return `<div class="table-view-switch"><button type="button" data-tv="map" class="${ST.tview!=="closed"?"on":""}">${ST.lang==="ru"?"Карта столов":"Sơ đồ bàn"}</button><button type="button" data-tv="closed" class="${ST.tview==="closed"?"on":""}">${ST.lang==="ru"?"Закрытые чеки":"Hóa đơn đã đóng"} · ${closed.length}</button></div>${ST.tview==="closed"?`<div class="flow-grid">${closed.length?closed.map(closedBillCard).join(""):`<p class="empty">${ST.lang==="ru"?"За последние 24 часа закрытых счетов нет":"Không có hóa đơn đã đóng trong 24 giờ qua"}</p>`}</div>`:hallMap()}`};''') for x in chunks]
  chunks=[x.replace('cur[0]==="all"?groups.map', 'cur[0]==="closed"?`<div class="flow-grid">${cur[2].length?cur[2].map(closedBillCard).join(""):`<p class="empty">${ST.lang==="ru"?"За последние 24 часа закрытых счетов нет":"Không có hóa đơn đã đóng trong 24 giờ qua"}</p>`}</div>`:cur[0]==="all"?groups.map') for x in chunks]
  chunks=[__import__('re').sub(r'<button type="button" id="waiterHistory">.*?</button>', '', x) for x in chunks]
  chunks=['\n'.join(line for line in x.splitlines() if 'el.querySelector("#waiterHistory").onclick' not in line) for x in chunks]
@@ -32,6 +39,7 @@ def build():
 window.staffFlow=(()=>{const SUNSEA_LAYOUT='''+json.dumps(layout,ensure_ascii=False,separators=(',',':'))+r''';const CATALOG_CATEGORIES='''+json.dumps(categories,ensure_ascii=False,separators=(',',':'))+r''';const preferences=new Map();let overlay=null;
 function renderFlow(el,options){
 const {snapshot,cafe}=options,mapped=staffServerState.mapSnapshot(snapshot),M=mapped.menu;let ST=mapped.state;const pref=preferences.get(cafe.id+':'+ST.me)||{};Object.assign(ST,pref);if(options.lang)ST.lang=options.lang;ST.role=options.screen==='prep'?'kitchen':'waiter';ST.split=options.screen==='workbench';ST.ktab=ST.ktab==='stop'?'all':ST.ktab||'all';ST.shift[ST.me]=snapshot.shifts?.[ST.me]||false;
+if(matchMedia('(max-width:760px)').matches&&['all','closed'].includes(ST.wtab))ST.wtab=ST.wtab==='closed'?'tables':'new';
 let accept,toKitchen,kReady,kItem,served,closeBill;
 const stopMenu=snapshot.menu.filter(i=>['owner','manager','waiter'].includes(snapshot.me.role)||i.station===snapshot.me.role),CMENU=[['menu','Thực đơn','Меню',stopMenu.map(i=>[i.names?.vi||i.names?.ru||'',i.names?.ru||i.names?.vi||''])]];
 const MENU=Object.values(M).filter(m=>m.active&&m.p!==null&&!snapshot.menu.find(i=>i.id===m.id)?.stopped),PH={},NEW_LATE_MS=45000,READY_ESC_MS=30000,REORDER_MS=40000;
@@ -60,7 +68,7 @@ kItem=(id,index)=>{const i=ST.orders.find(o=>o.id===id)?.items[index];if(i)retur
 served=(id,station)=>command('serve',staffServerState.orderCommand(ST,'serve',id,{station}).b);
 closeBill=async(id,pays)=>{const bill=snapshot.bills.find(b=>b.id===id);if(!bill||bill.status!=='open'){options.onNotice(ST.lang==='ru'?'Этот счёт уже закрыт. Данные обновляются.':'Hóa đơn đã đóng. Đang cập nhật.');return false}return !!await command('bill_close',staffFlowContract.closeBody(snapshot,id,pays));};
 openTipQr=()=>options.onProfile();
-commitED=async send=>{syncED();const draft=structuredClone(ED);if(!draft.items.length)return;draft.items=draft.items.map(i=>({...i,serverId:M[i.mid]?.serverId}));const request=staffFlowContract.editBody(snapshot,draft,send);if(await command(request.a,request.b)){closeEditor();ST.wtab='cooking';save();options.onRender()}};
+commitED=async send=>{syncED();const draft=structuredClone(ED);if(!draft.items.length)return;draft.items=draft.items.map(i=>({...i,serverId:M[i.mid]?.serverId}));const request=staffFlowContract.editBody(snapshot,draft,send);if(await command(request.a,request.b)){closeEditor();save();options.onRender()}};
 el.querySelectorAll?.('[data-a=accept]');
 // Pending guest submissions retain their exact server ID, quotes, notes and check names.
 for(const g of options.incoming||[]){const items=[];for(const ck of g.checks)for(const [n,i] of ck.items.entries()){const mid='incoming:'+g.id+':'+ck.id+':'+n;M[mid]={...i.names,p:i.price};items.push({mid,qty:i.quantity,note:(g.checks.length>1?'Чек '+ck.label+'. ':'')+(i.note||'')})}ST.orders.push({id:g.id,no:g.id.slice(0,8),status:'new',table:g.table,items,createdAt:Date.parse(g.created_at),check:g.checks.length===1?g.checks[0].label:'',src:'qr',lang:g.lang,wishes:[],seed:false})}
@@ -72,7 +80,7 @@ hallMap=()=>{
  const card=(tb,slot)=>{
   const bill=snapshot.bills.find(b=>b.table_id===tb.id&&b.status==='open'),os=bill?ST.orders.filter(o=>o.bill===bill.id):[];
   const waiting=(options.incoming||[]).some(g=>g.table===tb.label),req=bill&&(options.services||[]).some(q=>q.bill_id===bill.id&&!q.done);
-  const state=waiting?'waiting':!bill?'free':req?'bill':os.some(o=>o.status==='ready')?'ready':os.some(o=>['accepted','cooking'].includes(o.status))?'cook':os.some(o=>o.status==='new')?'new':'eat';
+  const state=waiting?'waiting':!bill?'free':req?'bill':os.some(o=>o.status==='ready'||['bar','kitchen'].some(scope=>pendingServe(o,scope)))?'ready':os.some(o=>['accepted','cooking'].includes(o.status))?'cook':os.some(o=>o.status==='new')?'new':'eat';
   const label=(ru?{waiting:'Ожидает заказ',free:'Свободен',bill:'Просит счёт',ready:'Можно выносить',cook:'Готовится',new:'Новый заказ',eat:'Занят'}:{waiting:'Chờ gọi món',free:'Còn trống',bill:'Yêu cầu tính tiền',ready:'Sẵn sàng phục vụ',cook:'Đang chuẩn bị',new:'Đơn mới',eat:'Đang dùng bữa'})[state];
   const sum=os.reduce((n,o)=>n+tot(o),0),seats=slot?capacity(slot):tb.seats;
   const position=slot?' style="left:'+slot.x/6+'%;top:'+slot.y/9+'%;width:'+slot.w/6+'%;height:'+slot.h/9+'%"':'';
@@ -90,7 +98,7 @@ if(options.screen==='menu'){rStop(el)}else if(options.screen==='workbench'){el.i
 else rWaiter(el);
 el.querySelectorAll('[data-a=accept]').forEach(b=>{const decline=document.createElement('button');decline.type='button';decline.className='btn ghost sm';decline.textContent=ST.lang==='ru'?'Отклонить':'Từ chối';decline.onclick=()=>{if(confirm(ST.lang==='ru'?'Отклонить этот заказ?':'Từ chối đơn này?'))options.onCommand('guest_reject',{submission_id:b.dataset.id})};b.after(decline);
   // A shift controls notifications, not the server permission to accept an order.
-  b.disabled=false;b.onclick=async()=>{const label=b.textContent;b.disabled=true;b.textContent=ST.lang==='ru'?'Принимаем…':'Đang nhận…';try{const saved=await accept(b.dataset.id);if(saved){ST.wtab='cooking';save();options.onRender()}}finally{if(b.isConnected){b.disabled=false;b.textContent=label}}};
+  b.disabled=false;b.onclick=async()=>{const label=b.textContent;b.disabled=true;b.textContent=ST.lang==='ru'?'Принимаем…':'Đang nhận…';try{const saved=await accept(b.dataset.id);if(saved)options.onRender()}finally{if(b.isConnected){b.disabled=false;b.textContent=label}}};
 });
 if(options.headerManaged)el.querySelector('.who')?.remove();
 const select=el.querySelector('#meSel');if(select){select.value=ST.me;select.disabled=true;select.setAttribute('aria-label',ST.lang==='ru'?'Ваш аккаунт':'Tài khoản của bạn')}
