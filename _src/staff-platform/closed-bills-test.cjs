@@ -31,4 +31,6 @@ assert.match(context.tablesBody(),/Закрытые чеки · 1/);
 context.ST.tview='closed';
 assert.match(context.tablesBody(),/Итоговый счёт/);
 assert.doesNotMatch(context.tablesBody(),/Стол 2/);
+context.matchMedia=()=>({matches:false});
+assert.equal(context.tablesBody(),'<div>hall</div>','desktop tables keep the original map');
 console.log('PASS closed bills: additions grouped into one final bill, 24-hour filter, total and lines');

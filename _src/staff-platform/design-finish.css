@@ -258,6 +258,7 @@ body.operations-mode {background:var(--operations-bg,#152235)!important}
   background:var(--scene-panel-solid)!important; border:1px solid var(--scene-line)!important;
   box-shadow:0 7px 0 color-mix(in srgb,var(--scene-shadow) 55%,transparent),0 13px 20px var(--scene-shadow)!important;
 }
+@media(max-width:760px){
 #operations-root .original-flow .hall-table:not(.free) {
   background:linear-gradient(145deg,color-mix(in srgb,var(--design-signal) 19%,var(--scene-panel-solid)),color-mix(in srgb,var(--design-secondary) 14%,var(--scene-panel-solid)))!important;
   border:2px solid color-mix(in srgb,var(--design-signal) 72%,var(--scene-line))!important;
@@ -266,6 +267,7 @@ body.operations-mode {background:var(--operations-bg,#152235)!important}
 #operations-root .original-flow .hall-table:not(.free) .hall-table-main small {color:var(--design-ink)!important;font-weight:700}
 #operations-root .original-flow .hall-table:not(.free) .hall-table-main em {color:var(--design-ink)!important}
 #operations-root .original-flow .hall-table.free {opacity:.7}
+}
 #operations-root .original-flow .table-view-switch {display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
 #operations-root .original-flow .table-view-switch button {flex:none;border:1px solid var(--scene-line);background:var(--scene-panel);color:var(--design-ink);padding:10px 14px;border-radius:10px;min-height:42px}
 #operations-root .original-flow .table-view-switch button.on {background:var(--scene-button-gradient);color:var(--scene-button-ink);box-shadow:0 4px 10px var(--scene-shadow)}
