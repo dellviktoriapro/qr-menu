@@ -271,6 +271,10 @@ body.operations-mode {background:var(--operations-bg,#152235)!important}
 #operations-root .original-flow .table-view-switch {display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
 #operations-root .original-flow .table-view-switch button {flex:none;border:1px solid var(--scene-line);background:var(--scene-panel);color:var(--design-ink);padding:10px 14px;border-radius:10px;min-height:42px}
 #operations-root .original-flow .table-view-switch button.on {background:var(--scene-button-gradient);color:var(--scene-button-ink);box-shadow:0 4px 10px var(--scene-shadow)}
+#operations-root .original-flow .server-hall-open {display:grid;gap:9px;padding:12px 14px;border:1px solid color-mix(in srgb,var(--design-signal) 65%,var(--scene-line));border-radius:13px;background:var(--scene-panel);box-shadow:0 6px 18px var(--scene-shadow)}
+#operations-root .original-flow .server-hall-open strong {color:var(--design-ink);font-size:13px}
+#operations-root .original-flow .server-hall-open>div {display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
+#operations-root .original-flow .server-hall-open button {flex:none;min-height:40px;padding:8px 14px;border:1px solid var(--design-signal);border-radius:10px;background:var(--scene-action-gradient);color:var(--design-signalInk);font-weight:700;box-shadow:0 3px 9px var(--scene-shadow)}
 #operations-root .op-personal-mobile,#operations-root .op-mobile-tools {display:none}
 
 /* Reporting uses a compact set of contained metrics, no decorative rings. */
