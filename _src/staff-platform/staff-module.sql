@@ -1,6 +1,6 @@
 -- Staff/QR commands are server-only. No anonymous/authenticated table or gateway grants.
 begin;
-create table rp_private.staff_invites(id uuid primary key default gen_random_uuid(),cafe_id uuid not null references public.rp_cafes(id),email text not null,name text not null,token_hash text not null unique,created_by uuid not null references auth.users(id),created_at timestamptz not null default now(),expires_at timestamptz not null default now()+interval '48 hours',revoked_at timestamptz,accepted_at timestamptz);
+create table rp_private.staff_invites(id uuid primary key default gen_random_uuid(),cafe_id uuid not null references public.rp_cafes(id),email text not null,name text not null,assigned_role text check(assigned_role in ('manager','waiter','kitchen','bar')),token_hash text not null unique,created_by uuid not null references auth.users(id),created_at timestamptz not null default now(),expires_at timestamptz not null default now()+interval '48 hours',revoked_at timestamptz,accepted_at timestamptz);
 create index staff_invites_cafe on rp_private.staff_invites(cafe_id,created_at desc);
 create table rp_private.staff_requests(id uuid primary key,invite_id uuid not null unique references rp_private.staff_invites(id),user_id uuid references auth.users(id),state text not null default 'reserved' check(state in ('reserved','pending','approving','approved','failed','rejected')),code text not null default upper(substr(replace(gen_random_uuid()::text,'-',''),1,8)),phone text not null default '',reused_account boolean not null default false,approved_by uuid references auth.users(id),approved_role text check(approved_role in ('manager','waiter','kitchen','bar')),created_at timestamptz not null default now());
 create table rp_private.member_profiles(cafe_id uuid not null,user_id uuid not null,phone text not null default '',tip_path text,on_shift boolean not null default false,deleted_at timestamptz,primary key(cafe_id,user_id),foreign key(cafe_id,user_id) references public.rp_memberships(cafe_id,user_id));
@@ -79,7 +79,7 @@ begin
   return jsonb_build_object('cafe_id',c,'role',m.role,'me',actor,
    'settings',coalesce((select to_jsonb(s)-'cafe_id' from rp_private.cafe_settings s where cafe_id=c),'{"notify":"esc","reviews":{}}'),
    'members',coalesce((select jsonb_agg(jsonb_build_object('id',x.user_id,'name',x.display_name,'role',x.role,'active',x.active,'phone',case when m.role in ('owner','manager') or x.user_id=actor then coalesce(p.phone,'') else '' end,'tip_path',case when m.role in ('owner','manager') or x.user_id=actor then p.tip_path end,'on_shift',coalesce(p.on_shift,false),'deleted_at',p.deleted_at)) from public.rp_memberships x left join rp_private.member_profiles p on p.cafe_id=x.cafe_id and p.user_id=x.user_id where x.cafe_id=c),'[]'),
-   'invites',case when m.role='owner' then coalesce((select jsonb_agg(jsonb_build_object('id',i.id,'email',i.email,'name',i.name,'expires_at',i.expires_at,'revoked_at',i.revoked_at,'accepted_at',i.accepted_at,'request_id',r.id,'request_at',r.created_at,'state',r.state,'phone',r.phone) order by i.created_at desc) from rp_private.staff_invites i left join rp_private.staff_requests r on r.invite_id=i.id where i.cafe_id=c and i.created_at>now()-interval '30 days'),'[]') else '[]'::jsonb end,
+   'invites',case when m.role='owner' then coalesce((select jsonb_agg(jsonb_build_object('id',i.id,'email',i.email,'name',i.name,'assigned_role',i.assigned_role,'expires_at',i.expires_at,'revoked_at',i.revoked_at,'accepted_at',i.accepted_at,'request_id',r.id,'request_at',r.created_at,'state',r.state,'phone',r.phone) order by i.created_at desc) from rp_private.staff_invites i left join rp_private.staff_requests r on r.invite_id=i.id where i.cafe_id=c and i.created_at>now()-interval '30 days'),'[]') else '[]'::jsonb end,
    'events',case when m.role='owner' then coalesce((select jsonb_agg(to_jsonb(e)) from (select * from rp_private.staff_events where cafe_id=c order by created_at desc limit 40) e),'[]') else '[]'::jsonb end);
  end if;
  if a in ('prepare_approval','finish_approval','reject') then
@@ -92,6 +92,7 @@ begin
   if q.code is distinct from upper(b->>'code') or q.user_id is null then raise exception 'CODE_MISMATCH';end if;
   if q.state='approved' then return jsonb_build_object('state','approved','user_id',q.user_id);end if;
   rr:=b->>'role';
+  if inv.assigned_role is not null and rr is distinct from inv.assigned_role then raise exception 'INVITE_ROLE_MISMATCH';end if;
   if rr is null or rr not in ('manager','waiter','kitchen','bar') or q.state not in ('pending','approving') or inv.revoked_at is not null or inv.accepted_at is not null or inv.expires_at<=now() then raise exception 'INVITE_UNAVAILABLE';end if;
   if exists(select 1 from public.rp_memberships where cafe_id=c and user_id=q.user_id and role='owner') then raise exception 'OWNER_IMMUTABLE';end if;
   if a='prepare_approval' then
@@ -112,11 +113,12 @@ begin
  if a in ('invite_create','invite_revoke','member_set') and m.role<>'owner' then raise exception 'OWNER_REQUIRED' using errcode='42501';end if;
  if a='invite_create' then
   em:=lower(trim(b->>'email'));
+  if b ? 'role' and b->>'role' not in ('manager','waiter','kitchen','bar') then raise exception 'ROLE_DENIED';end if;
   if em is null or length(em)>254 or em!~'^[^[:space:]@]+@[^[:space:]@]+\.[^[:space:]@]+$' or length(trim(coalesce(b->>'name',''))) not between 1 and 100 then raise exception 'INVALID_INVITE';end if;
   if (select count(*) from rp_private.staff_invites where cafe_id=c and created_at>now()-interval '1 hour')>=30 then raise exception 'RATE_LIMIT';end if;
   update rp_private.staff_invites set revoked_at=now() where cafe_id=c and email=em and accepted_at is null and revoked_at is null;
   token:=replace(gen_random_uuid()::text,'-','')||replace(gen_random_uuid()::text,'-','');
-  insert into rp_private.staff_invites(cafe_id,email,name,token_hash,created_by) values(c,em,trim(b->>'name'),encode(sha256(convert_to(token,'UTF8')),'hex'),actor) returning * into inv;
+  insert into rp_private.staff_invites(cafe_id,email,name,assigned_role,token_hash,created_by) values(c,em,trim(b->>'name'),b->>'role',encode(sha256(convert_to(token,'UTF8')),'hex'),actor) returning * into inv;
   result:=jsonb_build_object('id',inv.id,'token',token,'expires_at',inv.expires_at,'email',em);
  elsif a='invite_revoke' then
   update rp_private.staff_invites set revoked_at=now() where cafe_id=c and id=(b->>'invite_id')::uuid and accepted_at is null;
