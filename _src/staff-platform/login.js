@@ -68,7 +68,7 @@ $('auth').addEventListener('submit',async e=>{
   if(window.staffInvite?.active()){await window.staffInvite.submit({email:identity,password});$('password').value='';passwordVisible(false);return}
   if(signup&&window.manualOwner?.mode()){await window.manualOwner.register(identity,password);$('password').value='';passwordVisible(false);return}
   let email=identity;
-  if(!$('email').hidden&&!adminMode&&!oldOwnerInvite()){
+  if(!$('email').hidden&&(window.manualOwner?.phoneMode()||(!adminMode&&!oldOwnerInvite()))){
    const phone=phoneNumber(identity);if(!/^\+[1-9][0-9]{7,14}$/.test(phone))throw Error('INVALID_PHONE');
    const result=await staffAccess.call('resolve_phone',{phone});email=result.alias;
   }

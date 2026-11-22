@@ -23,6 +23,16 @@ create table if not exists rp_private.login_phones(
 alter table rp_private.login_phones enable row level security;
 revoke all on rp_private.login_phones from public,anon,authenticated;
 
+-- Approved link accounts created before this migration already supplied a phone.
+insert into rp_private.login_phones(phone,user_id,alias_email)
+select regexp_replace(q.phone,'[ ()-]','','g'),q.user_id,lower(u.email)
+from rp_private.staff_requests q
+join auth.users u on u.id=q.user_id and u.deleted_at is null
+where q.state='approved' and regexp_replace(q.phone,'[ ()-]','','g') ~ '^\+[1-9][0-9]{7,14}$'
+  and lower(u.email) ~ '^staff\.[a-f0-9-]{36}@accounts\.invalid$'
+  and exists(select 1 from public.rp_memberships m where m.user_id=q.user_id and m.active)
+on conflict do nothing;
+
 create or replace function rp_private.phone_login_alias(p text) returns jsonb
 language plpgsql security definer set search_path='' as $$
 declare n text; alias text;
