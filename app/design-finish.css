@@ -435,6 +435,14 @@ body.admin-mode {background:#14231E!important;color:#F4E8D8!important}
 #admin-root .cafe-card [data-detail] {background:linear-gradient(135deg,#F0D9A7,#C19B61)!important;color:#211B15!important}
 .admin-mode #admin-dialog {background:rgba(28,48,37,.7)!important;color:#F4E8D8!important;border:1px solid rgba(244,232,216,.3)!important;box-shadow:0 25px 75px rgba(0,0,0,.5),inset 0 1px rgba(255,255,255,.11)!important;backdrop-filter:blur(22px) saturate(1.18)}
 .admin-mode #admin-dialog .primary {background:linear-gradient(135deg,#F0D9A7,#C19B61)!important;color:#211B15!important}
+.admin-mode #admin-dialog .cafe-links a,
+.admin-mode #admin-dialog .cafe-links a:visited {
+  background:linear-gradient(135deg,#486952,#2E4D3A)!important;
+  color:#FFF8EA!important;
+  border-color:rgba(244,232,216,.32)!important;
+  box-shadow:0 5px 12px rgba(0,0,0,.2)!important;
+}
+.admin-mode #admin-dialog .cafe-links a:focus-visible {outline:3px solid #F0D9A7;outline-offset:3px}
 /* The landscape remains visible through dialogs; controls keep their own contrast. */
 .flow-overlay .sheet {background:rgba(6,17,16,.42)!important;backdrop-filter:blur(5px)}
 .flow-overlay .sheetin,
