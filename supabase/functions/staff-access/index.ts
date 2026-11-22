@@ -15,8 +15,14 @@ Deno.serve(async req=>{
  const rpc=async(a:string,p:unknown)=>{const {data,error}=await svc.rpc('rp_staff_gateway',{a,b:p});if(error){const e=new Error(error.message);(e as any).transient=!error.code||error.code==='PGRST000';throw e}return data};
  try{
   if(b.action==='describe'){if(!token(b.token))return reply({error:'INVALID_REQUEST'},400);return reply(await rpc('describe',{token:b.token}))}
+  if(b.action==='resolve_phone'){
+   if(typeof b.phone!=='string'||b.phone.length>25||!/^\+[1-9][0-9]{7,14}$/.test(b.phone))return reply({error:'INVALID_PHONE'},400);
+   const {data,error}=await svc.rpc('rp_phone_login_alias',{p:b.phone});
+   if(error)throw error;
+   return reply(data);
+  }
   if(b.action==='register'){
-   if(!token(b.token)||!uuid(b.request_id)||typeof b.email!=='string'||b.email.length>254||typeof b.password!=='string'||b.password.length<10||b.password.length>128||typeof b.phone!=='string'||b.phone.length>40)return reply({error:'INVALID_REQUEST'},400);
+   if(!token(b.token)||!uuid(b.request_id)||typeof b.email!=='string'||b.email.length>254||typeof b.password!=='string'||b.password.length<10||b.password.length>128||typeof b.phone!=='string'||!/^\+[1-9][0-9]{7,14}$/.test(b.phone))return reply({error:'INVALID_REQUEST'},400);
    let reserved;try{reserved=await rpc('reserve',{token:b.token,request_id:b.request_id,email:b.email,phone:b.phone})}catch(e){if((e as any)?.transient)return reply({error:'SERVER_RETRY_REQUIRED'},503);return reply({error:'INVITE_UNAVAILABLE'},403)}
    if(reserved.reuse_user_id)return reply({state:'pending',code:reserved.code,existing_account:true});
    const {data,error}=await svc.auth.admin.createUser({email:reserved.email,password:b.password,email_confirm:false,app_metadata:{staff_request_id:b.request_id}});

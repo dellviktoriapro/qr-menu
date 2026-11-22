@@ -9,7 +9,7 @@ const req=(body,extra={})=>new Request('https://fixture',{method:'POST',headers:
 (async()=>{
 assert.equal((await handler(new Request('https://fixture'))).status,405);assert.equal((await handler(req({},{origin:'https://evil.test'}))).status,403);assert.equal((await handler(req({x:'x'.repeat(380001)}))).status,413);
 assert.equal((await handler(req({action:'snapshot',cafe_id:cafe}))).status,401);
-const reg={action:'register',token:'d'.repeat(64),request_id:id,email:'staff@example.test',phone:'',password:'fixture-password'};assert.equal((await handler(req(reg))).status,403);assert.equal(calls.some(c=>c[0]==='create'),false);
+const reg={action:'register',token:'d'.repeat(64),request_id:id,email:'staff@example.test',phone:'+84901234567',password:'fixture-password'};assert.equal((await handler(req(reg))).status,403);assert.equal(calls.some(c=>c[0]==='create'),false);
 behavior.rpc=(a)=>({data:a==='reserve'?{email:'staff@example.test'}:{state:'pending',code:'ABCDEF12'},error:null});calls=[];assert.equal((await handler(req(reg))).status,200);assert.equal(calls.find(c=>c[0]==='create')[1].email_confirm,false);
 assert.equal((await handler(req({action:'approve',cafe_id:cafe,request_id:id,code:'ABCDEF12',role:'waiter'}))).status,401);
 behavior.user={data:{user:{id:actor}},error:null};calls=[];behavior.rpc=()=>({data:{ok:true},error:null});

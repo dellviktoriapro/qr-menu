@@ -18,8 +18,8 @@ Deno.serve(async req => {
  const rpc=async(a:string,body:unknown)=>{const {data,error}=await svc.rpc('rp_manual_gateway',{a,b:body});if(error)throw Error(error.message);return data};
  try {
   if(b.action==='register'){
-   if(!validToken(b.token)||!validId(b.request_id)||typeof b.email!=='string'||b.email.length>254||typeof b.password!=='string'||b.password.length<10||b.password.length>128)return reply({error:'INVALID_REQUEST'},400);
-   const reserve=await rpc('reserve',{token:b.token,email:b.email,request_id:b.request_id});
+   if(!validToken(b.token)||!validId(b.request_id)||typeof b.password!=='string'||b.password.length<10||b.password.length>128||!(typeof b.email==='string'&&b.email.length<=254||typeof b.phone==='string'&&/^\+[1-9][0-9]{7,14}$/.test(b.phone)))return reply({error:'INVALID_REQUEST'},400);
+   const reserve=await rpc('reserve',{token:b.token,email:b.email,phone:b.phone,request_id:b.request_id});
    // Creates an unconfirmed account without sending email. It cannot sign in yet.
    const {data,error}=await svc.auth.admin.createUser({email:reserve.email,password:b.password,email_confirm:false});
    if(error||!data.user){await rpc('failed',{request_id:b.request_id});return reply({error:'ACCOUNT_CREATION_FAILED_USE_NEW_INVITE'},409)}
