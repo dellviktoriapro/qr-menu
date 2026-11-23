@@ -1,6 +1,9 @@
 'use strict';
 // Everyone enters an E.164 phone. The private server resolves it to the
 // existing Auth account; the administrator keeps the same account and password.
+// Preserve an open session when upgrading from the former tab-only storage.
+const authStorageKey='sb-vppgtrbewgqigfinknex-auth-token';
+try{if(!localStorage.getItem(authStorageKey)){const previous=sessionStorage.getItem(authStorageKey);if(previous){localStorage.setItem(authStorageKey,previous);sessionStorage.removeItem(authStorageKey)}}}catch{}
 const client=window.createRestaurantClient('https://vppgtrbewgqigfinknex.supabase.co','sb_publishable_02aoSyGU3H5SXUbsqwzeow_TyaxYKtq',{auth:{persistSession:true,storage:localStorage,autoRefreshToken:true,detectSessionInUrl:true}});
 const $=id=>document.getElementById(id);
 let signup=false,busy=false,lastAuthUser=undefined;
