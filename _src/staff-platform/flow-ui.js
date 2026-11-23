@@ -106,7 +106,7 @@ function oCard(o,mode){const l=ST.lang;const mineO=o.waiter===ST.me||['owner','m
     <div class="more">${esc(LANGNAME[o.lang]||o.lang)} · #${o.no}${o.src==="waiter"?" · ✎":""}${o.bill&&bOpen2&&billOrders(o.bill).length>1?` · ${esc(t("billTotal"))}: <b>${vnd(billTotal(o.bill))}</b>`:""} · <span data-since="${timeRef}">${since(timeRef)}</span></div>
     </div></article>`}
 function rWaiter(el){const meS=staffBy(ST.me);if(!meS||meS.status!=="active"){const alt=WAITERS()[0];if(alt&&(!meS||meS.status==="deleted")){ST.me=alt.id}else{el.innerHTML=`<div class="alert red"><span>${esc(t("blockedMsg").replace("{w}",meS?meS.name:""))}</span></div><div class="who"><label for="meSel" class="muted">${esc(t("me"))}</label><select id="meSel"><option></option>${WAITERS().map(w=>`<option value="${w.id}">${esc(w.name)}</option>`).join("")}</select></div>`;el.querySelector("#meSel").onchange=e=>{if(e.target.value){ST.me=e.target.value;save();render()}};return}}
-  const on=ST.shift[ST.me];const L=live();
+  const on=ST.shift[ST.me];const L=live().filter(o=>!o.bill||!ST.bills[o.bill]?.closed);
   const myReady=L.filter(o=>(o.status==="ready"||(o.status==="cooking"&&["bar","kitchen"].some(scope=>pendingServe(o,scope))))&&readyTargets(o).includes(ST.me));
   const groups=[["new",ST.lang==="ru"?"Новые":"Mới",L.filter(o=>o.status==="new")],["cooking",ST.lang==="ru"?"Готовятся":"Đang làm",L.filter(o=>["accepted","cooking"].includes(o.status)&&!["bar","kitchen"].some(scope=>pendingServe(o,scope)))],["ready",ST.lang==="ru"?"Можно выносить":"Có thể phục vụ",L.filter(o=>["cooking","ready"].includes(o.status)&&["bar","kitchen"].some(scope=>pendingServe(o,scope)))]];
   const bills=Object.values(ST.bills).filter(b=>!b.closed);

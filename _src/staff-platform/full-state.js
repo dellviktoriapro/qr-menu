@@ -27,7 +27,7 @@ function mapSnapshot(snapshot,previous={}){
  }
  const staff=(snapshot.staff||[]).map(x=>({id:x.id,name:x.name,phone:x.phone||'',role:x.role,status:x.active?'active':'blocked',tipQr:x.tip_qr||''}));
  const role=['owner','manager'].includes(snapshot.me.role)?'owner':['kitchen','bar'].includes(snapshot.me.role)?'kitchen':'waiter';
- return {state:{v:2,cafeId:snapshot.cafe.id,orders,bills,staff,log:snapshot.staff_log||[],stop:stopped,shift:snapshot.shifts||{},me:snapshot.me.id,role,serverRole:snapshot.me.role,split:false,lang:'ru',theme:'dark',sound:false,wtab:'all',ktab:snapshot.me.role==='bar'?'bar':'all',otab:'stats',oper:{k:'today'},seen:{},notify:snapshot.settings?.notify||'esc',payQr:snapshot.settings?.pay_qr||'',rev:snapshot.settings?.reviews||{},design:snapshot.cafe.design||'atelier',serverAt:ms(snapshot.server_at),...prefs},menu,tables:snapshot.tables||[],capabilities:snapshot.capabilities||{}};
+ return {state:{v:2,cafeId:snapshot.cafe.id,orders,bills,staff,log:snapshot.staff_log||[],stop:stopped,shift:snapshot.shifts||{},me:snapshot.me.id,role,serverRole:snapshot.me.role,split:false,lang:'ru',theme:'dark',sound:false,wtab:'new',ktab:snapshot.me.role==='bar'?'bar':'all',otab:'stats',oper:{k:'today'},seen:{},notify:snapshot.settings?.notify||'esc',payQr:snapshot.settings?.pay_qr||'',rev:snapshot.settings?.reviews||{},design:snapshot.cafe.design||'atelier',serverAt:ms(snapshot.server_at),...prefs},menu,tables:snapshot.tables||[],capabilities:snapshot.capabilities||{}};
 }
 function orderCommand(state,action,id,extra={}){
  const o=state.orders.find(o=>o.id===id);if(!o)throw Error('ORDER_NOT_FOUND');

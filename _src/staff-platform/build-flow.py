@@ -40,6 +40,7 @@ def build():
  chunks=['\n'.join(line for line in x.splitlines() if 'el.querySelector("#waiterHistory").onclick' not in line) for x in chunks]
  table_body='''const tablesBody=()=>{if(!matchMedia("(max-width:760px)").matches)return hallMap();const closed=Object.values(ST.bills).filter(b=>b.closed&&!b.reviewedAt&&billOrders(b.id).length).sort((a,b)=>b.closedAt-a.closedAt);return `<div class="table-view-switch"><button type="button" data-tv="map" class="${ST.tview!=="closed"?"on":""}">${ST.lang==="ru"?"Карта столов":"Sơ đồ bàn"}</button><button type="button" data-tv="closed" class="${ST.tview==="closed"?"on":""}">${ST.lang==="ru"?"Закрытые чеки":"Hóa đơn đã đóng"} · ${closed.length}</button></div>${ST.tview==="closed"?`<div class="flow-grid">${closed.length?closed.map(closedBillCard).join(""):`<p class="empty">${ST.lang==="ru"?"Непроверенных чеков нет":"Không có hóa đơn chờ kiểm tra"}</p>`}</div>`:hallMap()}`};'''
  chunks=[__import__('re').sub(r'const tablesBody=\(\)=>[^\n]+', table_body, x) for x in chunks]
+ chunks=[x.replace('const on=ST.shift[ST.me];const L=live();','const on=ST.shift[ST.me];const L=live().filter(o=>!o.bill||!ST.bills[o.bill]?.closed);') for x in chunks]
  # Availability is managed from the dedicated Menu screen.
  chunks=[x.replace('const f=ST.ktab;const L=live();', 'const f=ST.ktab==="stop"?"all":ST.ktab;const L=live();').replace(',["stop",t("kStop")]', '') for x in chunks]
  chunks=[__import__('re').sub(r'--tc:var\(--t(\$\{[^}]+\})\)',r'--tc:var(--t\1);--tc-ink:var(--t\1-ink)',x) for x in chunks]
