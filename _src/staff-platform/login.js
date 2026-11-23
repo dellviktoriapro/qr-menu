@@ -1,12 +1,10 @@
 'use strict';
-// Only the platform administrator uses email. Staff and owners enter an E.164 phone;
-// the private server maps an approved phone to its non-deliverable Auth alias.
-const client=window.createRestaurantClient('https://vppgtrbewgqigfinknex.supabase.co','sb_publishable_02aoSyGU3H5SXUbsqwzeow_TyaxYKtq',{auth:{persistSession:true,storage:sessionStorage,autoRefreshToken:true,detectSessionInUrl:true}});
+// Everyone enters an E.164 phone. The private server resolves it to the
+// existing Auth account; the administrator keeps the same account and password.
+const client=window.createRestaurantClient('https://vppgtrbewgqigfinknex.supabase.co','sb_publishable_02aoSyGU3H5SXUbsqwzeow_TyaxYKtq',{auth:{persistSession:true,storage:localStorage,autoRefreshToken:true,detectSessionInUrl:true}});
 const $=id=>document.getElementById(id);
 let signup=false,busy=false,lastAuthUser=undefined;
-let adminMode=sessionStorage.getItem('rp_admin_email_login')==='1';
 const staffLogin=()=>/^[a-f0-9-]{36}$/.test(new URLSearchParams(location.hash.slice(1)).get('staffLogin')||'');
-const oldOwnerInvite=()=>Boolean(new URLSearchParams(location.hash.slice(1)).get('invite'))&&!new URLSearchParams(location.hash.slice(1)).get('mode');
 const phoneNumber=value=>String(value||'').replace(/[ ()-]/g,'');
 function passwordVisible(show){$('password').type=show?'text':'password';$('password-toggle').setAttribute('aria-pressed',String(show));$('password-toggle').setAttribute('aria-label',show?'Скрыть пароль':'Показать пароль')}
 $('password-toggle').addEventListener('click',()=>passwordVisible($('password').type==='password'));
@@ -14,16 +12,11 @@ $('email-sent-close').addEventListener('click',()=>$('email-sent').close());
 function message(text,failed=false){const el=$('message');el.textContent=text;el.classList.toggle('auth-error',failed);el.setAttribute('role',failed?'alert':'status');el.setAttribute('aria-live',failed?'assertive':'polite');if(failed){el.focus();el.scrollIntoView({block:'nearest'})}}
 function lock(value){busy=value;for(const e of document.querySelectorAll('button,input'))e.disabled=value}
 function showIdentity(){
- if(window.staffInvite?.active()||staffLogin()){$('admin-login').hidden=true;return}
- const ownerMode=window.manualOwner?.mode();
- const phoneOwner=window.manualOwner?.phoneMode();
- const email=ownerMode?!phoneOwner:adminMode||oldOwnerInvite();
+ if(window.staffInvite?.active()||staffLogin())return;
  const input=$('email'),label=document.querySelector('label[for=email]');
- input.type=email?'email':'tel';input.autocomplete=email?'username':'tel';input.maxLength=email?254:25;
- input.placeholder=email?'':'+84 90 123 45 67';
- if(label)label.textContent=email?(ownerMode?'Email владельца':'Email администратора'):'Номер телефона';
- $('admin-login').hidden=Boolean(ownerMode||oldOwnerInvite());
- $('admin-login').textContent=adminMode?'Вход по номеру телефона':'Вход администратора по email';
+ input.type='tel';input.autocomplete='tel';input.maxLength=25;
+ input.placeholder='+84 90 123 45 67';
+ if(label)label.textContent='Номер телефона';
 }
 window.refreshLoginIdentity=showIdentity;
 function errorText(error){
@@ -44,13 +37,12 @@ function authenticated(session){
  const identity=session?.user.id||null;if(identity===lastAuthUser)return;lastAuthUser=identity;
  setTimeout(()=>window.adminUiStart?.(session),0);
  const active=Boolean(session);if(!active)document.body?.classList.remove('app-booting');
- $('auth').hidden=active;$('mode').hidden=true;$('admin-login').hidden=active;$('logout').hidden=!active;
+ $('auth').hidden=active;$('mode').hidden=true;$('logout').hidden=!active;
  if(active){$('password').value='';passwordVisible(false);$('heading').textContent='Аккаунт подключён';$('intro').textContent='Проверяем доступ к вашему кабинету…';message('Проверяем доступ к вашему кабинету…');return}
  showIdentity();
  $('heading').textContent=signup&&window.manualOwner?.mode()?'Регистрация владельца':staffLogin()?'Вход сотрудника':'Вход в приложение';
  $('intro').textContent=signup&&window.manualOwner?.mode()?'Укажите номер телефона и задайте пароль. Доступ появится после одобрения.':staffLogin()?'Для этого старого приглашения введите пароль. Последующие входы будут по номеру телефона.':'Вход по номеру телефона и паролю. Первый доступ выдаётся по персональной ссылке.';
 }
-$('admin-login').addEventListener('click',()=>{if(busy)return;adminMode=!adminMode;sessionStorage.setItem('rp_admin_email_login',adminMode?'1':'0');$('email').value='';showIdentity();message('');$('email').focus()});
 $('mode').addEventListener('click',()=>{
  if(busy)return;
  if(window.staffInvite?.active()){window.staffInvite.toggleMode();return}
@@ -68,7 +60,7 @@ $('auth').addEventListener('submit',async e=>{
   if(window.staffInvite?.active()){await window.staffInvite.submit({email:identity,password});$('password').value='';passwordVisible(false);return}
   if(signup&&window.manualOwner?.mode()){await window.manualOwner.register(identity,password);$('password').value='';passwordVisible(false);return}
   let email=identity;
-  if(!$('email').hidden&&(window.manualOwner?.phoneMode()||(!adminMode&&!oldOwnerInvite()))){
+  if(!$('email').hidden){
    const phone=phoneNumber(identity);if(!/^\+[1-9][0-9]{7,14}$/.test(phone))throw Error('INVALID_PHONE');
    const result=await staffAccess.call('resolve_phone',{phone});email=result.alias;
   }
@@ -84,7 +76,7 @@ if(staffLogin()){
  const id=new URLSearchParams(location.hash.slice(1)).get('staffLogin');
  sessionStorage.removeItem('staff_invite_token');sessionStorage.removeItem('staff_invite_request');
  $('email').value='staff.'+id+'@accounts.invalid';$('email').hidden=true;$('email').required=false;
- document.querySelector('label[for=email]')?.setAttribute('hidden','');$('admin-login').hidden=true;
+ document.querySelector('label[for=email]')?.setAttribute('hidden','');
  $('heading').textContent='Вход сотрудника';$('intro').textContent='Введите пароль. После входа используйте свой номер телефона.';
 }
 showIdentity();

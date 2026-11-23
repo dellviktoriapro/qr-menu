@@ -11,6 +11,10 @@ def build():
  chunks[-1]=chunks[-1].replace('class="btn sm ${out?"":"outb"}" type="button" data-stop=', 'class="btn sm availability-toggle ${out?"":"outb"}" type="button" role="switch" aria-checked="${!out}" aria-label="${esc((l==="ru"?"Доступность: ":"Tình trạng: ")+coName(d,l))}" data-stop=').replace('${esc(out?t("stopBack"):t("stopOut"))}', '<span aria-hidden="true"></span><b>${esc(out?(l==="ru"?"Выключено":"Đã tắt"):(l==="ru"?"Доступно":"Có món"))}</b>')
  chunks[-1]=chunks[-1].replace('let stopQ="";', 'let stopQ=ST.stopQ||"";').replace('stopQ=qi.value;flt()', 'stopQ=qi.value;ST.stopQ=stopQ;save();flt()')
  chunks=[x.replace('const g={};','const g=Object.create(null);').replace('const r={};','const r=Object.create(null);').replace('hour:"2-digit",minute:"2-digit"','timeZone:snapshot.cafe.timezone||"Asia/Ho_Chi_Minh",hour:"2-digit",minute:"2-digit"').replace('const mineO=o.waiter===ST.me;', "const mineO=o.waiter===ST.me||['owner','manager'].includes(snapshot.me.role);").replace('${o.table}', '${esc(o.table)}').replace('${b.table}', '${esc(b.table)}') for x in chunks]
+ # The waiter sends a new order directly to work; the server records acceptance
+ # and cooking in one idempotent guest command.
+ chunks=[x.replace('${esc(t("accept"))}', '${ST.lang==="ru"?"Готовить":"Bắt đầu làm"}')
+          .replace('if(o.status==="served"&&bOpen)actions=', 'if(o.status==="served"&&bOpen)actions=') for x in chunks]
  chunks[-2]=chunks[-2].replace('const timeRef=o.status===', 'const timeRef=(o.status===').replace('o.servedAt;', 'o.servedAt)||o.createdAt;')
  chunks[-2]=chunks[-2].replace('const filt=o=>f==="all"||o.items.some(i=>M[i.mid].st===(f==="bar"?"b":"k"));', 'const filt=o=>(f==="all"||o.items.some(i=>M[i.mid].st===(f==="bar"?"b":"k")))&&!(f!=="all"&&o.stationServedAt?.[f]);')
  # Original bill close used synchronous local mutation. Wait for the actual receipt instead.
@@ -20,27 +24,33 @@ def build():
  # Keep the original order renderers; use the server shell for personal controls.
  chunks=[x.replace('${on?"":`<div class="alert red"><span>${esc(t("offNote"))}</span></div>`}', '') for x in chunks]
  chunks=[x.replace('...groups,["tables",t("tTables"),bills]];', '...groups,["tables",t("tTables"),bills],["closed",ST.lang==="ru"?"Закрытые · 24 часа":"Đã đóng · 24 giờ",Object.values(ST.bills).filter(b=>b.closed&&b.closedAt>Date.now()-86400000&&billOrders(b.id).length).sort((a,b)=>b.closedAt-a.closedAt)]];') for x in chunks]
+ chunks=[x.replace('const tabs=[["all",ST.lang==="ru"?"Все":"Tất cả",groups.flatMap(g=>g[2])],...groups,', 'const tabs=[["new",ST.lang==="ru"?"Новые":"Mới",groups[0][2]],["all",ST.lang==="ru"?"Все заказы":"Tất cả đơn",groups.slice(1).flatMap(g=>g[2]).concat(L.filter(o=>o.status==="served"))],') for x in chunks]
  # Keep the selected queue visible after an action. Mobile exposes the four live queues;
  # paid receipts remain available from the tables screen.
  chunks=[x.replace('if(a==="accept"){accept(id);ST.wtab="cooking";save();render()}', 'if(a==="accept"){accept(id)}')
           .replace('ST.wtab="cooking";save();closeEditor();render()', 'save();closeEditor();render()') for x in chunks]
- chunks=[x.replace('const cur=tabs.find(x=>x[0]===ST.wtab)||tabs[0];', 'const visibleTabs=matchMedia("(max-width:760px)").matches?tabs.filter(x=>!["all","closed"].includes(x[0])):tabs;const cur=visibleTabs.find(x=>x[0]===ST.wtab)||visibleTabs[0];')
+ chunks=[x.replace('const cur=tabs.find(x=>x[0]===ST.wtab)||tabs[0];', 'const visibleTabs=tabs;const cur=visibleTabs.find(x=>x[0]===ST.wtab)||visibleTabs[0];')
           .replace('${tabs.map(([k,lab,arr])=>', '${visibleTabs.map(([k,lab,arr])=>')
           .replace('const bills=Object.values(ST.bills).filter(b=>!b.closed&&billOrders(b.id).some(o=>!o.seed));', 'const bills=Object.values(ST.bills).filter(b=>!b.closed);') for x in chunks]
+ chunks=[x.replace('b.closed&&b.closedAt>Date.now()-86400000&&billOrders(b.id).length','b.closed&&!b.reviewedAt&&billOrders(b.id).length') for x in chunks]
  chunks=[x.replace('cur[0]==="all"?groups.map', 'cur[0]==="closed"?`<div class="flow-grid">${cur[2].length?cur[2].map(closedBillCard).join(""):`<p class="empty">${ST.lang==="ru"?"За последние 24 часа закрытых счетов нет":"Không có hóa đơn đã đóng trong 24 giờ qua"}</p>`}</div>`:cur[0]==="all"?groups.map') for x in chunks]
+ chunks=[x.replace('cur[0]==="all"?groups.map(([id,n,rows])=>`<section class="flow-section" data-flow="${id}" data-count="${rows.length}"><h3>${esc(n)} <span class="${id===\'ready\'&&rows.length?\'ready-badge\':\'\'}">${rows.length}</span></h3>${cards(rows)}</section>`).join("")', 'cur[0]==="all"?cards(cur[2])') for x in chunks]
  chunks=[__import__('re').sub(r'<button type="button" id="waiterHistory">.*?</button>', '', x) for x in chunks]
  chunks=['\n'.join(line for line in x.splitlines() if 'el.querySelector("#waiterHistory").onclick' not in line) for x in chunks]
- table_body='''const tablesBody=()=>{if(!matchMedia("(max-width:760px)").matches)return hallMap();const closed=Object.values(ST.bills).filter(b=>b.closed&&b.closedAt>Date.now()-86400000&&billOrders(b.id).length).sort((a,b)=>b.closedAt-a.closedAt);return `<div class="table-view-switch"><button type="button" data-tv="map" class="${ST.tview!=="closed"?"on":""}">${ST.lang==="ru"?"Карта столов":"Sơ đồ bàn"}</button><button type="button" data-tv="closed" class="${ST.tview==="closed"?"on":""}">${ST.lang==="ru"?"Закрытые чеки":"Hóa đơn đã đóng"} · ${closed.length}</button></div>${ST.tview==="closed"?`<div class="flow-grid">${closed.length?closed.map(closedBillCard).join(""):`<p class="empty">${ST.lang==="ru"?"За последние 24 часа закрытых счетов нет":"Không có hóa đơn đã đóng trong 24 giờ qua"}</p>`}</div>`:hallMap()}`};'''
+ table_body='''const tablesBody=()=>{if(!matchMedia("(max-width:760px)").matches)return hallMap();const closed=Object.values(ST.bills).filter(b=>b.closed&&!b.reviewedAt&&billOrders(b.id).length).sort((a,b)=>b.closedAt-a.closedAt);return `<div class="table-view-switch"><button type="button" data-tv="map" class="${ST.tview!=="closed"?"on":""}">${ST.lang==="ru"?"Карта столов":"Sơ đồ bàn"}</button><button type="button" data-tv="closed" class="${ST.tview==="closed"?"on":""}">${ST.lang==="ru"?"Закрытые чеки":"Hóa đơn đã đóng"} · ${closed.length}</button></div>${ST.tview==="closed"?`<div class="flow-grid">${closed.length?closed.map(closedBillCard).join(""):`<p class="empty">${ST.lang==="ru"?"Непроверенных чеков нет":"Không có hóa đơn chờ kiểm tra"}</p>`}</div>`:hallMap()}`};'''
  chunks=[__import__('re').sub(r'const tablesBody=\(\)=>[^\n]+', table_body, x) for x in chunks]
  # Availability is managed from the dedicated Menu screen.
  chunks=[x.replace('const f=ST.ktab;const L=live();', 'const f=ST.ktab==="stop"?"all":ST.ktab;const L=live();').replace(',["stop",t("kStop")]', '') for x in chunks]
  chunks=[__import__('re').sub(r'--tc:var\(--t(\$\{[^}]+\})\)',r'--tc:var(--t\1);--tc-ink:var(--t\1-ink)',x) for x in chunks]
+ chunks=[x.replace('if(o.status==="served"&&bOpen)actions=', 'if(o.status==="served"&&bOpen)actions=')
+          .replace('<button class="btn ghost sm" type="button" data-a="more" data-id="${o.id}">+ ${esc(t("addMore"))}</button><button class="btn sm"', '<button class="btn sm"')
+          .replace('  const lateAttr=o.status==="new"?', '  if(bOpen&&o.status!=="new")actions=`<button class="btn ghost sm" type="button" data-a="more" data-id="${o.id}">${ST.lang==="ru"?"Дозаказ":"Gọi thêm"}</button><button class="btn ghost sm" type="button" data-print-bill="${o.bill}">${ST.lang==="ru"?"Распечатать чек":"In hóa đơn"}</button>`+actions;\n  const lateAttr=o.status==="new"?') for x in chunks]
  layout=json.loads((HERE.parent/'sunsea/table-layout.json').read_text(encoding='utf-8'))
  return r'''// Generated from the original ops/tpl.html. Do not edit generated UI.
 window.staffFlow=(()=>{const SUNSEA_LAYOUT='''+json.dumps(layout,ensure_ascii=False,separators=(',',':'))+r''';const CATALOG_CATEGORIES='''+json.dumps(categories,ensure_ascii=False,separators=(',',':'))+r''';const preferences=new Map();let overlay=null;
 function renderFlow(el,options){
 const {snapshot,cafe}=options,mapped=staffServerState.mapSnapshot(snapshot),M=mapped.menu;let ST=mapped.state;const pref=preferences.get(cafe.id+':'+ST.me)||{};Object.assign(ST,pref);if(options.lang)ST.lang=options.lang;ST.role=options.screen==='prep'?'kitchen':'waiter';ST.split=options.screen==='workbench';ST.ktab=ST.ktab==='stop'?'all':ST.ktab||'all';ST.shift[ST.me]=snapshot.shifts?.[ST.me]||false;
-if(matchMedia('(max-width:760px)').matches&&['all','closed'].includes(ST.wtab))ST.wtab=ST.wtab==='closed'?'tables':'new';
+if(!['new','all','tables','closed'].includes(ST.wtab))ST.wtab='new';
 let accept,toKitchen,kReady,kItem,served,closeBill;
 const stopMenu=snapshot.menu.filter(i=>['owner','manager','waiter'].includes(snapshot.me.role)||i.station===snapshot.me.role),CMENU=[['menu','Thực đơn','Меню',stopMenu.map(i=>[i.names?.vi||i.names?.ru||'',i.names?.ru||i.names?.vi||''])]];
 const MENU=Object.values(M).filter(m=>m.active&&m.p!==null&&!snapshot.menu.find(i=>i.id===m.id)?.stopped),PH={},NEW_LATE_MS=45000,READY_ESC_MS=30000,REORDER_MS=40000;
@@ -62,7 +72,7 @@ orderLines=(o,opts={})=>`<div class="order-stations">${["kitchen","bar"].map(sco
 setStop=(key,on)=>{const item=stopMenu[Number(key.split('|')[1])];if(item)return options.onCommand('stop',{item_id:item.id,stopped:on})};
 const originalStop=rStop;rStop=host=>{const prior=ST.stop;ST.stop=Object.fromEntries(stopMenu.map((i,n)=>[i,n]).filter(([i])=>i.stopped).map(([i,n])=>['menu|'+n,{at:0}]));originalStop(host);if(snapshot.me.role==='waiter'){host.querySelectorAll('[data-stop]').forEach(b=>b.disabled=true);const text=host.querySelector('p');if(text)text.textContent=ST.lang==='ru'?'Доступность меняет кухня, бар или управляющий.':'Bếp, bar hoặc quản lý cập nhật tình trạng món.'}ST.stop=prior};
 const command=async(a,b)=>options.onCommand(a,b);
- const closedBillCard=b=>{const os=billOrders(b.id),sum=billTotal(b.id),ru=ST.lang==='ru';return `<article class="closed-bill"><div class="closed-bill-head"><span>${ru?'Стол':'Bàn'} ${esc(b.table)}</span><span>${ru?'Оплачено':'Đã thanh toán'}</span></div><h3>${ru?'Итоговый счёт':'Hóa đơn cuối cùng'}</h3><p>${os.length} ${ru?'заказ(а) в одном счёте':'lượt gọi món trong một hóa đơn'} · ${new Date(b.closedAt).toLocaleString(ru?'ru-RU':'vi-VN')}</p>${billChecks(os)||`<ul class="lines bill">${aggItems(os).map(billLine).join('')}</ul>`}<div class="closed-bill-total"><span>${ru?'Итого по счёту':'Tổng hóa đơn'}</span><strong>${vnd(sum)}</strong></div><button type="button" class="btn ghost sm" data-a="bill" data-id="${b.id}">${ru?'Посмотреть счёт':'Xem hóa đơn'}</button></article>`};
+ const closedBillCard=b=>{const os=billOrders(b.id),sum=billTotal(b.id),ru=ST.lang==='ru';return `<article class="closed-bill"><div class="closed-bill-head"><span>${ru?'Стол':'Bàn'} ${esc(b.table)}</span><span>${ru?'Оплачено':'Đã thanh toán'}</span></div><h3>${ru?'Итоговый счёт':'Hóa đơn cuối cùng'}</h3><p>${os.length} ${ru?'заказ(а) в одном счёте':'lượt gọi món trong một hóa đơn'} · ${new Date(b.closedAt).toLocaleString(ru?'ru-RU':'vi-VN')}</p>${billChecks(os)||`<ul class="lines bill">${aggItems(os).map(billLine).join('')}</ul>`}<div class="closed-bill-total"><span>${ru?'Итого по счёту':'Tổng hóa đơn'}</span><strong>${vnd(sum)}</strong></div><button type="button" class="btn ghost sm" data-a="bill" data-id="${b.id}">${ru?'Посмотреть счёт':'Xem hóa đơn'}</button>${snapshot.me.role==='owner'?`<button type="button" class="btn sm" data-review-bill="${b.id}">${ru?'Проверено · закрыть':'Đã kiểm tra · đóng'}</button>`:''}</article>`};
 accept=id=>command('guest_accept',{submission_id:id});toKitchen=id=>command('send',staffServerState.orderCommand(ST,'send',id).b);
 kReady=(id,station)=>command('station_ready',staffServerState.orderCommand(ST,'station_ready',id,{station}).b);
 kItem=(id,index)=>{const i=ST.orders.find(o=>o.id===id)?.items[index];if(i)return command('item_ready',staffServerState.orderCommand(ST,'item_ready',id,{item_id:i.id,ready:!i.done}).b)};
@@ -101,12 +111,20 @@ if(options.screen==='menu'){rStop(el)}else if(options.screen==='workbench'){el.i
 else rWaiter(el);
 el.querySelectorAll('[data-a=accept]').forEach(b=>{const decline=document.createElement('button');decline.type='button';decline.className='btn ghost sm';decline.textContent=ST.lang==='ru'?'Отклонить':'Từ chối';decline.onclick=()=>{if(confirm(ST.lang==='ru'?'Отклонить этот заказ?':'Từ chối đơn này?'))options.onCommand('guest_reject',{submission_id:b.dataset.id})};b.after(decline);
   // A shift controls notifications, not the server permission to accept an order.
-  b.disabled=false;b.onclick=async()=>{const label=b.textContent;b.disabled=true;b.textContent=ST.lang==='ru'?'Принимаем…':'Đang nhận…';try{const saved=await accept(b.dataset.id);if(saved)options.onRender()}finally{if(b.isConnected){b.disabled=false;b.textContent=label}}};
+  b.disabled=false;b.onclick=async()=>{const label=b.textContent;b.disabled=true;b.textContent=ST.lang==='ru'?'Отправляем в работу…':'Đang chuyển việc…';try{const saved=await accept(b.dataset.id);if(saved)options.onRender()}finally{if(b.isConnected){b.disabled=false;b.textContent=label}}};
 });
+el.querySelectorAll('[data-print-bill]').forEach(button=>button.onclick=()=>{
+ const bill=ST.bills[button.dataset.printBill];if(!bill)return;
+ const orders=billOrders(bill.id),rows=aggItems(orders),sum=billTotal(bill.id);
+ const frame=document.createElement('iframe');frame.title='Чек для печати';frame.style.cssText='position:fixed;left:-10000px;top:0;width:80mm;height:100mm;border:0;opacity:0';document.body.append(frame);
+ const doc=frame.contentDocument;doc.open();doc.write('<!doctype html><html lang="ru"><meta charset="utf-8"><title>Чек</title><style>body{font:14px Arial,sans-serif;width:72mm;margin:0;padding:4mm;color:#111}h1{font-size:18px}li{display:flex;justify-content:space-between;gap:8px;padding:5px 0;border-bottom:1px dashed #999}strong{display:block;text-align:right;font-size:20px;margin-top:12px}@page{size:80mm auto;margin:0}</style><h1>'+esc(cafe.name)+'</h1><p>Стол '+esc(bill.table)+' · '+new Date().toLocaleString('ru-RU')+'</p><ul>'+rows.map(billLine).join('')+'</ul><strong>'+vnd(sum)+'</strong></html>');doc.close();
+ frame.contentWindow.focus();frame.contentWindow.print();setTimeout(()=>frame.remove(),60000);
+});
+el.querySelectorAll('[data-review-bill]').forEach(button=>button.onclick=()=>options.onReview?.(button.dataset.reviewBill));
 if(options.headerManaged)el.querySelector('.who')?.remove();
 const select=el.querySelector('#meSel');if(select){select.value=ST.me;select.disabled=true;select.setAttribute('aria-label',ST.lang==='ru'?'Ваш аккаунт':'Tài khoản của bạn')}
 const shift=el.querySelector('#shiftBtn');if(shift)shift.onclick=()=>options.onShift(!ST.shift[ST.me]);
-const manual=el.querySelector('#manualBtn');if(manual)manual.disabled=snapshot.me.role==='waiter'&&!ST.shift[ST.me];
+  const manual=el.querySelector('#manualBtn');if(manual)manual.remove();
 // Only authenticated assignment may edit a draft; others can view status.
 el.querySelectorAll('[data-a=edit],[data-a=kitchen],[data-a=served]').forEach(b=>{const o=ST.orders.find(o=>o.id===b.dataset.id);if(snapshot.me.role==='waiter'&&o?.waiter!==ST.me)b.disabled=true});
 el.querySelectorAll('[data-a=edit]').forEach(b=>{const o=ST.orders.find(o=>o.id===b.dataset.id);if(o?.status!=='accepted')b.remove()});

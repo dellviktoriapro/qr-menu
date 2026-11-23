@@ -567,3 +567,8 @@
 #operations-root .original-flow button[data-a="accept"]:disabled{opacity:.62;cursor:wait}
 @media(prefers-reduced-motion:reduce){#operations-root .original-flow button[data-a="accept"]{transition:none}#operations-root .original-flow button[data-a="accept"]:not(:disabled):hover{transform:none}}
 @media(prefers-reduced-motion:reduce){#operations-root .original-flow .tabs button:hover{transform:none}}
+@media(max-width:760px){
+ #operations-root .original-flow .tabs{display:flex;flex-wrap:nowrap;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x proximity;scrollbar-width:none;max-width:100%;white-space:nowrap}
+ #operations-root .original-flow .tabs::-webkit-scrollbar{display:none}
+ #operations-root .original-flow .tabs button{flex:0 0 auto;scroll-snap-align:start;white-space:nowrap}
+}
