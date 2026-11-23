@@ -5,8 +5,8 @@ const cardLine=source.split('\n').find(s=>s.trim().startsWith('const closedBillC
 assert.ok(tabLine&&cardLine);
 const now=Date.now(),old=now-25*3600000;
 const orders=[{bill:'one',items:[{qty:1,mid:'a'}]},{bill:'one',items:[{qty:2,mid:'b'}]},{bill:'old',items:[{qty:1,mid:'c'}]}];
-const bills={one:{id:'one',table:'1',closed:true,closedAt:now-60000},old:{id:'old',table:'2',closed:true,closedAt:old},open:{id:'open',table:'3',closed:false,closedAt:null}};
-const context={ST:{lang:'ru',bills},bills:[],groups:[['new','Новые',[]],['cooking','Готовятся',[]],['ready','Можно выносить',[]]],L:orders,t:()=>'',Date,Math,Object,
+const bills={one:{id:'one',table:'1',closed:true,closedAt:now-60000},old:{id:'old',table:'2',closed:true,closedAt:old,reviewedAt:now},open:{id:'open',table:'3',closed:false,closedAt:null}};
+const context={snapshot:{me:{role:'owner'}},ST:{lang:'ru',bills},bills:[],groups:[['new','Новые',[]],['cooking','Готовятся',[]],['ready','Можно выносить',[]]],L:orders,t:()=>'',Date,Math,Object,
  billOrders:id=>orders.filter(o=>o.bill===id),billTotal:id=>orders.filter(o=>o.bill===id).reduce((s,o)=>s+o.items.reduce((v,i)=>v+i.qty*(i.mid==='a'?70000:i.mid==='b'?75000:10000),0),0),
  billChecks:()=>'',aggItems:os=>os.flatMap(o=>o.items),billLine:i=>'<li>'+i.qty+'× '+i.mid+'</li>',vnd:n=>n.toLocaleString('ru-RU')+' ₫',esc:x=>String(x)};
 vm.createContext(context);vm.runInContext(tabLine+';this.tabs=tabs',context);
@@ -21,7 +21,7 @@ const visibleLine=source.split('\n').find(s=>s.trim().startsWith('const visibleT
 assert.ok(visibleLine,'mobile order tabs are compiled');
 context.matchMedia=()=>({matches:true});context.ST.wtab='new';
 vm.runInContext(visibleLine+';this.visibleTabs=visibleTabs;this.cur=cur',context);
-assert.equal(Array.from(context.visibleTabs,x=>x[0]).join(','),'new,cooking,ready,tables');
+assert.equal(Array.from(context.visibleTabs,x=>x[0]).join(','),'new,all,tables,closed');
 const tableBodyLine=source.split('\n').find(s=>s.trim().startsWith('const tablesBody='));
 assert.ok(tableBodyLine,'tables screen includes closed receipts');
 context.hallMap=()=>'<div>hall</div>';context.ST.tview='map';
@@ -33,4 +33,5 @@ assert.match(context.tablesBody(),/Итоговый счёт/);
 assert.doesNotMatch(context.tablesBody(),/Стол 2/);
 context.matchMedia=()=>({matches:false});
 assert.equal(context.tablesBody(),'<div>hall</div>','desktop tables keep the original map');
-console.log('PASS closed bills: additions grouped into one final bill, 24-hour filter, total and lines');
+bills.old.reviewedAt=null;vm.runInContext('{'+tabLine+';this.tabs=tabs}',context);assert.equal(context.tabs.find(x=>x[0]==='closed')[2].length,2,'unreviewed bills older than 24 hours remain in the review queue');
+console.log('PASS closed bills: one final bill per table, reviewed bills hidden, older unreviewed bills retained');

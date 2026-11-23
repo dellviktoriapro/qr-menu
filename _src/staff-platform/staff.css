@@ -21,3 +21,7 @@
 #operations-root .original-staff .card table th,#operations-root .original-staff .card table td{padding-inline:14px}
 #operations-root .original-staff .card .staff-shift-badge{background:var(--design-signal);color:var(--design-signalInk)}
 @media(max-width:760px){#operations-root .original-staff .card{padding:18px}#operations-root .original-staff .card::before{left:18px}}
+.original-staff .staff-role-options,.original-staff #staff-invite-form fieldset{display:flex;flex-wrap:wrap;gap:12px;padding:14px;border:1px solid var(--op-line);border-radius:12px}
+.original-staff .staff-role-options label,.original-staff #staff-invite-form fieldset label{display:flex;align-items:center;gap:8px}
+.original-staff .staff-role-options input[type=checkbox],.original-staff #staff-invite-form fieldset input[type=checkbox]{width:20px!important;min-height:20px!important;height:20px;margin:0}
+.original-staff [data-member-roles]{padding:18px 0;border-top:1px solid var(--op-line);display:grid;gap:12px}

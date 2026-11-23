@@ -65,3 +65,16 @@ def versioned(match):
 html=(out/'index.html').read_text(encoding='utf-8')
 html=re.sub(r'(?P<prefix>(?:src|href)=")(?P<name>[a-z0-9-]+\.(?:js|css))(?:\?[^\"]*)?"',versioned,html)
 (out/'index.html').write_text(html,encoding='utf-8')
+
+# Standalone web order route; the public menu remains the catalog source.
+shutil.copyfile(here/'web-order.html',here.parents[1]/'sun-sea/order.html')
+shutil.copyfile(here/'web-order.js',here.parents[1]/'sun-sea/web-order.js')
+
+categories={row['id']:row['n'] for row in runpy.run_path(str(here.parent/'sunsea/data.py'))['S']}
+(here.parents[1]/'sun-sea/order-categories.js').write_text('window.sunSeaOrderCategories='+json.dumps(categories,ensure_ascii=False)+';',encoding='utf-8')
+shutil.copyfile(here/'web-order-entry.js',here.parents[1]/'sun-sea/web-order-entry.js')
+public_menu=here.parents[1]/'sun-sea/index.html'
+html=public_menu.read_text(encoding='utf-8')
+entry='<script src="web-order-entry.js"></script>'
+if entry not in html:
+    public_menu.write_text(html.replace('</body>',entry+'</body>'),encoding='utf-8')
