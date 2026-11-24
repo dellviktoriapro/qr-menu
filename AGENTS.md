@@ -434,3 +434,7 @@ SW navigation now revalidates HTML with cache:no-cache and registration updateVi
 
 ## 2026-11-24 — Occupied hall tables
 Live QA found design-finish.css overrode the occupied-table colour on desktop. Added final-shell is-occupied overrides at every viewport, keyed to an open bill rather than preparation state. Fully served unpaid tables remain highlighted; free tables remain quiet. Verified real open SunSea table23 and local independent bar/kitchen serve, full opacity after service, and bill preview with OK/Cancel and no payment selector. Printer hardware API still pending.
+
+
+## 2026-11-24 — One bill preview from orders and hall
+User confirmed hall map must not expose payment method selection. Both order Issue bill and hall openBillSheet now use showBillPreview: all bill rounds, total, OK prints and Cancel closes. No payment/closing command is sent by this preview. Existing financial records and RPCs unchanged. Regression bill-preview-test.cjs verifies combined rounds, cancel, print and no payment controls.

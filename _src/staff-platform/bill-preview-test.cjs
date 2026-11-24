@@ -1,0 +1,11 @@
+const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
+const source=fs.readFileSync(__dirname+'/flow-ui.js','utf8');
+const declaration=source.split('\n').find(s=>s.startsWith('const showBillPreview='));
+const actions={};let printed=[],closed=0;
+const sheet={hidden:true},panel={classList:{remove(){}},innerHTML:'',querySelector:s=>actions[s]??=( {})};
+const ctx={ST:{lang:'ru',bills:{b:{id:'b',table:'23'}}},$:id=>id==='sheet'?sheet:panel,billOrders:()=>[{id:'round1'},{id:'round2'}],billChecks:os=>'<ul>'+os.map(o=>'<li>'+o.id+'</li>').join('')+'</ul>',billTotal:()=>245000,vnd:n=>String(n),esc:String,printReceipt:id=>printed.push(id),closeEditor:()=>{closed++;sheet.hidden=true}};
+vm.createContext(ctx);vm.runInContext(declaration+'\nopenBillSheet=showBillPreview;',ctx);
+ctx.openBillSheet('b');assert.equal(sheet.hidden,false);assert.match(panel.innerHTML,/round1/);assert.match(panel.innerHTML,/round2/);assert.match(panel.innerHTML,/245000/);assert.doesNotMatch(panel.innerHTML,/pmbox|bClose|Наличные|Карта|Оплачено/);
+actions['#issue-bill-cancel'].onclick();assert.deepEqual(printed,[]);assert.equal(closed,1);
+ctx.openBillSheet('b');actions['#issue-bill-ok'].onclick();assert.deepEqual(printed,['b']);assert.equal(closed,2);
+console.log('PASS hall bill preview: all rounds, no payment methods, cancel safe, OK prints');
