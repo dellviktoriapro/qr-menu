@@ -9,4 +9,3 @@ vm.createContext(ctx);vm.runInContext(declaration+'\nopenBillSheet=showBillPrevi
 actions['#issue-bill-cancel'].onclick();assert.deepEqual(printed,[]);assert.equal(closed,1);
 ctx.openBillSheet('b');await actions['#issue-bill-ok'].onclick();assert.deepEqual(printed,['closed','b']);assert.equal(closed,2);
 console.log('PASS bill preview: cancel safe, OK closes on server before printing, no payment selector');})().catch(e=>{console.error(e);process.exitCode=1});
-
