@@ -6,7 +6,7 @@ assert.ok(tabLine&&cardLine);
 const now=Date.now(),old=now-25*3600000;
 const orders=[{bill:'one',items:[{qty:1,mid:'a'}]},{bill:'one',items:[{qty:2,mid:'b'}]},{bill:'old',items:[{qty:1,mid:'c'}]}];
 const bills={one:{id:'one',table:'1',closed:true,closedAt:now-60000},old:{id:'old',table:'2',closed:true,closedAt:old,reviewedAt:now},open:{id:'open',table:'3',closed:false,closedAt:null}};
-const context={snapshot:{me:{role:'owner',can_review_bills:true}},ST:{lang:'ru',bills},bills:[],groups:[['new','Новые',[]],['cooking','Готовятся',[]],['ready','Можно выносить',[]]],L:orders,t:()=>'',Date,Math,Object,
+const context={options:{},snapshot:{me:{role:'owner',can_review_bills:true}},ST:{lang:'ru',bills},bills:[],groups:[['new','Новые',[]],['cooking','Готовятся',[]],['ready','Можно выносить',[]]],L:orders,t:()=>'',Date,Math,Object,
  billOrders:id=>orders.filter(o=>o.bill===id),billTotal:id=>orders.filter(o=>o.bill===id).reduce((s,o)=>s+o.items.reduce((v,i)=>v+i.qty*(i.mid==='a'?70000:i.mid==='b'?75000:10000),0),0),
  billChecks:()=>'',aggItems:os=>os.flatMap(o=>o.items),billLine:i=>'<li>'+i.qty+'× '+i.mid+'</li>',vnd:n=>n.toLocaleString('ru-RU')+' ₫',esc:x=>String(x)};
 vm.createContext(context);vm.runInContext(tabLine+';this.tabs=tabs',context);
@@ -24,6 +24,7 @@ assert.ok(visibleLine,'mobile order tabs are compiled');
 context.matchMedia=()=>({matches:true});context.ST.wtab='new';
 vm.runInContext(visibleLine+';this.visibleTabs=visibleTabs;this.cur=cur',context);
 assert.equal(Array.from(context.visibleTabs,x=>x[0]).join(','),'new,all,tables,closed');
+vm.runInContext(source.split('\n').find(s=>s.trim().startsWith('const closedPanel='))+';this.closedPanel=closedPanel;',context);
 const tableBodyLine=source.split('\n').find(s=>s.trim().startsWith('const tablesBody='));
 assert.ok(tableBodyLine,'tables screen includes closed receipts');
 context.hallMap=()=>'<div>hall</div>';context.ST.tview='map';
@@ -37,4 +38,7 @@ context.matchMedia=()=>({matches:false});
 assert.equal(context.tablesBody(),'<div>hall</div>','desktop tables keep the original map');
 bills.old.reviewedAt=null;vm.runInContext('{'+tabLine+';this.tabs=tabs}',context);assert.equal(context.tabs.find(x=>x[0]==='closed')[2].length,2,'unreviewed bills older than 24 hours remain in the review queue');
 bills.one.deletedAt=now;assert.match(context.closedBillCard(bills.one),/data-restore-bill/);assert.doesNotMatch(context.closedBillCard(bills.one),/data-review-bill|data-delete-bill/);assert.match(context.reviewAllButton([]),/Удалённые счета/);vm.runInContext('{'+tabLine+';this.tabs=tabs}',context);assert.equal(context.tabs.find(x=>x[0]==='closed')[2].length,1,'deleted bill is removed from queue');
-console.log('PASS closed bills: one final bill per table, reviewed bills hidden, older unreviewed bills retained');
+bills.old.reviewedAt=now;context.ST.closedView='history';context.options.history={day:'2026-11-06',days:[{day:'2026-11-06',count:1}],bills:[{id:'old'},{id:'one',deleted_at:now}]};
+const historyHtml=context.closedPanel([]);assert.match(historyHtml,/data-history-day value="2026-11-06"/);assert.match(historyHtml,/Проверено/);assert.match(historyHtml,/Стол 2/);assert.doesNotMatch(historyHtml,/Стол 1/);assert.doesNotMatch(historyHtml,/data-review-bill/);
+context.snapshot.me.can_review_bills=false;assert.doesNotMatch(context.closedPanel([]),/data-history-day|История по датам/);
+console.log('PASS closed bills: final bill rounds, reviewed history by date, deleted excluded, server capability enforced, old unreviewed retained');
