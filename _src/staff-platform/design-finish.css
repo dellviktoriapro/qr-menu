@@ -258,14 +258,17 @@ body.operations-mode {background:var(--operations-bg,#152235)!important}
   background:var(--scene-panel-solid)!important; border:1px solid var(--scene-line)!important;
   box-shadow:0 7px 0 color-mix(in srgb,var(--scene-shadow) 55%,transparent),0 13px 20px var(--scene-shadow)!important;
 }
-@media(max-width:760px){
-#operations-root .original-flow .hall-table:not(.free) {
-  background:linear-gradient(145deg,color-mix(in srgb,var(--design-signal) 19%,var(--scene-panel-solid)),color-mix(in srgb,var(--design-secondary) 14%,var(--scene-panel-solid)))!important;
-  border:2px solid color-mix(in srgb,var(--design-signal) 72%,var(--scene-line))!important;
-  box-shadow:0 0 0 3px color-mix(in srgb,var(--design-signal) 13%,transparent),0 11px 24px var(--scene-shadow)!important;
+/* Open bills stay prominent at every viewport, including fully served rounds. */
+#operations-root .original-flow .hall-table.is-occupied {
+  background:linear-gradient(135deg,var(--design-signal),color-mix(in srgb,var(--design-signal) 76%,var(--scene-panel-solid)))!important;
+  border:3px solid var(--design-signal)!important;
+  box-shadow:0 0 0 4px color-mix(in srgb,var(--design-signal) 25%,transparent),0 10px 24px var(--scene-shadow)!important;
 }
-#operations-root .original-flow .hall-table:not(.free) .hall-table-main small {color:var(--design-ink)!important;font-weight:700}
-#operations-root .original-flow .hall-table:not(.free) .hall-table-main em {color:var(--design-ink)!important}
+#operations-root .original-flow .hall-table.is-occupied .hall-table-main,
+#operations-root .original-flow .hall-table.is-occupied .hall-table-main :is(strong,span,small,em) {
+  color:var(--design-signalInk,#152235)!important;font-weight:750;
+}
+@media(max-width:760px){
 #operations-root .original-flow .hall-table.free {opacity:.7}
 }
 #operations-root .original-flow .table-view-switch {display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
