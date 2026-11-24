@@ -371,3 +371,5 @@ Published3d12b9c / Pages45404311758 success. Live UI verified dated Reviewed rec
 
 ## 2026-11-24 — Compact invitation roles
 Staff invitations now have one checkbox dropdown matching existing member-role picker; no separate primary select/Additional roles block. Existing role/roles payload and server permissions unchanged. Draft name/roles survive rerender, empty choice blocked, saved/reissued link retains all roles. Local browser fixture PASS waiter+bar payload, rerender persistence, empty validation, desktop/mobile and palette checks. Publishing/live QA follows.
+
+Published1643323 / Pages45437560261 success. Live SunSea checkbox invitation dropdown verified waiter+bar selection/save/quick reopen; old Extra roles absent. Actual mobile no overflow417/417 and240px popup fits; override reset. No real invites/member roles changed. Local fixture/server cleaned.
