@@ -591,3 +591,5 @@
 .original-flow .bill-review-all{display:flex;justify-content:flex-end;margin:0 0 16px}
 
 .original-flow .deleted-bills{margin:0 0 20px}.original-flow .deleted-bills summary{cursor:pointer;padding:12px;color:var(--op-ink)}
+
+.original-flow .incoming-table-field{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700}.original-flow .incoming-table-field input{width:130px!important;min-height:44px;padding:8px;border-radius:10px;border:1px solid var(--op-line);background:var(--op-raised);color:var(--op-ink)}.incoming-menu-picker{padding:12px;border:1px solid var(--op-line);border-radius:12px;margin:12px 0}.incoming-menu-picker summary{cursor:pointer;font-weight:750}.incoming-menu-picker label{margin-top:10px;display:grid;gap:6px}

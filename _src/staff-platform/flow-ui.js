@@ -61,7 +61,7 @@ const nm=(mid,l)=>M[mid][l]||M[mid].vi;
 const wname=id=>((ST&&ST.staff||[]).find(w=>w.id===id)||{name:"—"}).name;
 function since(ts){const s=Math.max(0,Math.floor((Date.now()-ts)/1000));return s<60?s+" "+t("sec"):Math.floor(s/60)+" "+t("min")+" "+String(s%60).padStart(2,"0")}
 function mmss(ts){const s=Math.max(0,Math.floor((Date.now()-ts)/1000));return Math.floor(s/60)+":"+String(s%60).padStart(2,"0")}
-const live=()=>ST.orders.filter(o=>!o.seed);
+const live=()=>ST.orders.filter(o=>!o.seed&&(!o.bill||!ST.bills[o.bill]?.closed));
 const stLabel=s=>({new:t("sNew"),accepted:t("sAccepted"),cooking:t("sCooking"),ready:t("sReady"),served:t("sServed")})[s];
 function reqTxt(r){return t("pay_"+r.pay)+(r.check?" · "+t("check")+" "+r.check:"")+(r.paid?" · "+t("paidQr"):"")}
 function openBill(table){return Object.values(ST.bills).find(b=>!b.closed&&b.table===table)}
@@ -83,14 +83,14 @@ function stepsHTML(o){const idx={new:0,accepted:1,cooking:2,ready:3,served:4}[o.
 function oCard(o,mode){const l=ST.lang;const mineO=o.waiter===ST.me||['owner','manager'].includes(snapshot.me.role);
   let actions="";
   const ownPill=o.status==="new"&&o.owner?(o.owner===ST.me?`<span class="pill own">${esc(t("yourTable"))}</span>`:o.reEsc?`<span class="pill st-late">${esc(t("toAll"))}</span>`:`<span class="pill">${esc(wname(o.owner))}</span>`):"";
-  if(o.status==="new")actions=forMe(o)?`<button class="btn sm" type="button" data-a="accept" data-id="${o.id}" ${ST.shift[ST.me]?"":"disabled"}>${ST.lang==="ru"?"Готовить":"Bắt đầu làm"}</button>`:`<span class="wait">${esc(t("waitFor").replace("{w}",wname(o.owner)))} · <span data-left="${o.createdAt+REORDER_MS}">0:40</span></span>`;
+  if(o.status==="new")actions=forMe(o)?`<button class="btn sm" type="button" data-a="accept" data-id="${o.id}" ${ST.shift[ST.me]?"":"disabled"}>${ST.lang==="ru"?"Принять":"Nhận đơn"}</button>`:`<span class="wait">${esc(t("waitFor").replace("{w}",wname(o.owner)))} · <span data-left="${o.createdAt+REORDER_MS}">0:40</span></span>`;
   else if(o.status==="accepted"&&mineO)actions=`<button class="btn ghost sm" type="button" data-a="edit" data-id="${o.id}">${esc(t("edit"))}</button><button class="btn sm" type="button" data-a="kitchen" data-id="${o.id}">${esc(t("toKitchen"))}</button>`;
   else if(["cooking","ready"].includes(o.status))actions="";
   /* served is not paid: the table's bill stays open for re-orders until the waiter takes the money and closes it */
   const bOpen=o.bill&&ST.bills[o.bill]&&!ST.bills[o.bill].closed;
   if(o.status==="served"&&bOpen)actions=`<button class="btn sm" type="button" data-a="bill" data-id="${o.bill}">${ST.lang==="ru"?"Выставить счёт":"Tính tiền"}</button>`;
   if(["accepted","cooking","ready"].includes(o.status)&&bOpen)actions=`<button class="btn sm bill-action" type="button" data-a="bill" data-id="${o.bill}">${ST.lang==="ru"?"Выставить счёт":"Tính tiền"}</button>`+actions;
-  if(bOpen&&o.status!=="new")actions=`<button class="btn ghost sm" type="button" data-a="more" data-id="${o.id}">${ST.lang==="ru"?"Дозаказ":"Gọi thêm"}</button><button class="btn ghost sm" type="button" data-print-bill="${o.bill}">${ST.lang==="ru"?"Распечатать чек":"In hóa đơn"}</button>`+actions;
+  if(bOpen&&o.status!=="new")actions=`<button class="btn ghost sm" type="button" data-a="more" data-id="${o.id}">${ST.lang==="ru"?"Дозаказ":"Gọi thêm"}</button>`+actions;
   const lateAttr=o.status==="new"?`data-late="${o.createdAt}"`:"";
   const timeRef=(o.status==="new"?o.createdAt:o.status==="accepted"?o.acceptedAt:o.status==="cooking"?o.sentAt:o.status==="ready"?o.readyAt:o.servedAt)||o.createdAt;
   const bOpen2=o.bill&&ST.bills[o.bill]&&!ST.bills[o.bill].closed;const B=o.bill&&ST.bills[o.bill];
@@ -264,7 +264,7 @@ function rStop(el){const stop=ST.stop||{};const ks=Object.keys(stop).sort((a,b)=
     all.querySelectorAll("h4").forEach(h=>h.hidden=!shown[h.dataset.sec])};
   const qi=el.querySelector("#stopQ");qi.oninput=()=>{stopQ=qi.value;ST.stopQ=stopQ;save();flt()};flt();
   el.querySelectorAll("[data-stop]").forEach(b=>b.onclick=()=>setStop(b.dataset.stop,b.dataset.on==="1"))}
-WISH.push({k:'spicy',ru:'Остро',vi:'Cay',en:'Spicy'});
+WISH.push({k:'drinksfirst',ru:'Сначала напитки',vi:'Đồ uống trước',en:'Drinks first'});WISH.push({k:'spicy',ru:'Остро',vi:'Cay',en:'Spicy'});
 // Operational cards separate each station's items and readiness.
 orderLines=(o,opts={})=>`<div class="order-stations">${["kitchen","bar"].map(scope=>{
  const items=stationItems(o,scope);if(!items.length)return "";
@@ -287,7 +287,7 @@ openTipQr=()=>options.onProfile();
 commitED=async send=>{syncED();const draft=structuredClone(ED);if(!draft.items.length)return;draft.items=draft.items.map(i=>({...i,serverId:M[i.mid]?.serverId}));const request=staffFlowContract.editBody(snapshot,draft,send);if(await command(request.a,request.b)){closeEditor();save();options.onRender()}};
 el.querySelectorAll?.('[data-a=accept]');
 // Pending guest submissions retain their exact server ID, quotes, notes and check names.
-for(const g of options.incoming||[]){const items=[];for(const ck of g.checks)for(const [n,i] of ck.items.entries()){const mid='incoming:'+g.id+':'+ck.id+':'+n;M[mid]={...i.names,p:i.price,st:(snapshot.menu.find(m=>m.id===i.id)?.station||i.station)==="bar"?"b":"k"};items.push({mid,qty:i.quantity,note:(g.checks.length>1?'Чек '+ck.label+'. ':'')+(i.note||'')})}ST.orders.push({id:g.id,no:g.id.slice(0,8),status:'new',table:g.table,items,createdAt:Date.parse(g.created_at),check:g.checks.length===1?g.checks[0].label:'',src:'qr',lang:g.lang,wishes:[],comment:g.channel?(g.channel==='online'?'ОНЛАЙН ЗАКАЗ':'ЗАКАЗ ПО QR')+(g.phone?' · '+g.phone:''):'',seed:false})}
+for(const g of options.incoming||[]){const items=[];for(const ck of g.checks)for(const [n,i] of ck.items.entries()){const mid='incoming:'+g.id+':'+ck.id+':'+n;M[mid]={...i.names,p:i.price,st:(snapshot.menu.find(m=>m.id===i.id)?.station||i.station)==="bar"?"b":"k"};items.push({mid,qty:i.quantity,note:(g.checks.length>1?'Чек '+ck.label+'. ':'')+(i.note||'')})}ST.orders.push({id:g.id,no:g.id.slice(0,8),status:'new',table:g.table,items,createdAt:Date.parse(g.created_at),check:g.checks.length===1?g.checks[0].label:'',src:'qr',lang:g.lang,wishes:g.wishes||[],comment:g.channel?(g.channel==='online'?'ОНЛАЙН ЗАКАЗ':'ЗАКАЗ ПО QR')+(g.phone?' · '+g.phone:'')+(g.comment?' · '+g.comment:''):(g.comment||''),seed:false})}
 for(const q of options.services||[]){const b=ST.bills[q.bill_id];if(b){b.req={at:Date.parse(q.created_at),pay:q.method==='qr_transfer'?'qr':q.method,check:q.check,paid:q.paid};(b.reqs||=[]).push(b.req)}}
 hallMap=()=>{
  const ru=ST.lang==='ru',isSunSea=snapshot.menu.some(item=>String(item.external_key||'').startsWith('sunsea|'));
@@ -314,7 +314,7 @@ hallMap=()=>{
 el.classList.add('original-flow');
 if(options.screen==='menu'){rStop(el)}else if(options.screen==='workbench'){el.innerHTML='<section><h2>'+esc(ST.lang==='ru'?'Заказы':'Đơn hàng')+'</h2><div id=\"flow-waiter-pane\"></div></section><section><h2>'+esc(ST.lang==='ru'?'Кухня и бар':'Bếp & Bar')+'</h2><div id=\"flow-prep-pane\"></div></section>';el.classList.add('flow-workbench');rWaiter(el.querySelector('#flow-waiter-pane'));rKitchen(el.querySelector('#flow-prep-pane'))}else if(options.screen==='prep'){if(['bar','kitchen'].includes(snapshot.me.role)&&ST.ktab!=='stop')ST.ktab=snapshot.me.role;rKitchen(el);if(['bar','kitchen'].includes(snapshot.me.role))el.querySelectorAll('[data-kt]').forEach(b=>{if(![snapshot.me.role,'stop'].includes(b.dataset.kt))b.remove()})}
 else rWaiter(el);
-el.querySelectorAll('[data-a=accept]').forEach(b=>{const decline=document.createElement('button');decline.type='button';decline.className='btn ghost sm';decline.textContent=ST.lang==='ru'?'Отклонить':'Từ chối';decline.onclick=()=>{if(confirm(ST.lang==='ru'?'Отклонить этот заказ?':'Từ chối đơn này?'))((options.incoming||[]).find(g=>g.id===b.dataset.id)?.channel?options.onWebReject?.(b.dataset.id):options.onCommand('guest_reject',{submission_id:b.dataset.id}))};b.after(decline);
+el.querySelectorAll('[data-a=accept]').forEach(b=>{const edit=document.createElement('button');edit.type='button';edit.className='btn ghost sm';edit.textContent=ST.lang==='ru'?'Редактировать':'Chỉnh sửa';edit.onclick=()=>options.onIncomingEdit?.(b.dataset.id);b.before(edit);const field=document.createElement('label');field.className='incoming-table-field';field.textContent='Номер стола';const input=document.createElement('input');input.type='text';input.inputMode='numeric';input.maxLength=40;input.placeholder='Введите номер';input.dataset.incomingTable=b.dataset.id;input.value=options.incomingDraft?.(b.dataset.id)?.table||'';input.oninput=()=>options.onIncomingTable?.(b.dataset.id,input.value);field.append(input);edit.before(field);const decline=document.createElement('button');decline.type='button';decline.className='btn ghost sm';decline.textContent=ST.lang==='ru'?'Отклонить':'Từ chối';decline.onclick=()=>{if(confirm(ST.lang==='ru'?'Отклонить этот заказ?':'Từ chối đơn này?'))((options.incoming||[]).find(g=>g.id===b.dataset.id)?.channel?options.onWebReject?.(b.dataset.id):options.onCommand('guest_reject',{submission_id:b.dataset.id}))};b.after(decline);
   // A shift controls notifications, not the server permission to accept an order.
   b.disabled=false;b.onclick=async()=>{const label=b.textContent;b.disabled=true;b.textContent=ST.lang==='ru'?'Отправляем в работу…':'Đang chuyển việc…';try{const saved=await accept(b.dataset.id);if(saved)options.onRender()}finally{if(b.isConnected){b.disabled=false;b.textContent=label}}};
 });
@@ -326,7 +326,7 @@ const printReceipt=id=>{
  frame.contentWindow.focus();frame.contentWindow.print();setTimeout(()=>frame.remove(),60000);
 };
 el.querySelectorAll('[data-print-bill]').forEach(button=>button.onclick=()=>printReceipt(button.dataset.printBill));
-const showBillPreview=id=>{const bill=ST.bills[id];if(!bill)return;const os=billOrders(bill.id);$('sheetIn').classList.remove('ed-editor');$('sheetIn').innerHTML='<h2>'+esc(ST.lang==='ru'?'Счёт · стол '+bill.table:'Hóa đơn · bàn '+bill.table)+'</h2>'+billChecks(os)+'<div class="btot"><strong>'+vnd(billTotal(bill.id))+'</strong></div><div class="bill-issue-actions"><button type="button" id="issue-bill-ok">ОК</button><button type="button" id="issue-bill-cancel">'+(ST.lang==='ru'?'Отменить':'Hủy')+'</button></div>';$('sheet').hidden=false;$('sheetIn').querySelector('#issue-bill-cancel').onclick=closeEditor;$('sheetIn').querySelector('#issue-bill-ok').onclick=()=>{printReceipt(bill.id);closeEditor()}};
+const showBillPreview=id=>{const bill=ST.bills[id];if(!bill)return;const os=billOrders(bill.id);$('sheetIn').classList.remove('ed-editor');$('sheetIn').innerHTML='<h2>'+esc(ST.lang==='ru'?'Счёт · стол '+bill.table:'Hóa đơn · bàn '+bill.table)+'</h2>'+billChecks(os)+'<div class="btot"><strong>'+vnd(billTotal(bill.id))+'</strong></div><div class="bill-issue-actions"><button type="button" id="issue-bill-ok">ОК</button><button type="button" id="issue-bill-cancel">'+(ST.lang==='ru'?'Отменить':'Hủy')+'</button></div>';$('sheet').hidden=false;$('sheetIn').querySelector('#issue-bill-cancel').onclick=closeEditor;$('sheetIn').querySelector('#issue-bill-ok').onclick=async()=>{const button=$('sheetIn').querySelector('#issue-bill-ok');button.disabled=true;const r=button.dataset.request||(button.dataset.request=crypto.randomUUID());try{if(!bill.closed&&options.onIssueBill&&!await options.onIssueBill({bill_id:bill.id,version:bill.version},r))return;printReceipt(bill.id);closeEditor();options.onRender()}finally{button.disabled=false}}};
 el.querySelectorAll('.oc [data-a="bill"]').forEach(button=>button.onclick=()=>showBillPreview(button.dataset.id));
 
 el.querySelectorAll('[data-waiter-serve]').forEach(button=>button.onclick=()=>{const o=ST.orders.find(o=>o.id===button.dataset.waiterServe);options.onServe?.(o.id,o.version,button.dataset.station)});

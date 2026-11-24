@@ -27,3 +27,11 @@
 .original-staff [data-member-roles]{padding:18px 0;border-top:1px solid var(--op-line);display:grid;gap:12px}
 
 .original-staff .staff-role-picker{min-width:145px;max-width:250px}.original-staff .staff-role-picker summary{cursor:pointer;padding:8px 12px;border:1px solid var(--op-line);border-radius:10px;font-weight:600}.original-staff .staff-role-picker form{padding-top:10px;display:grid;gap:8px}.original-staff .staff-role-picker fieldset{margin:0;padding:8px;border:0;display:grid;gap:8px}.original-staff .staff-role-picker label{display:flex;align-items:center;gap:8px;white-space:nowrap}.original-staff .staff-role-picker input[type=checkbox]{width:18px!important;min-height:18px!important;height:18px;margin:0}.original-staff .staff-role-picker button{padding:8px 12px;min-height:38px}
+
+#operations-root .original-staff .staff-role-picker form[popover]{position:fixed;inset:auto;margin:0;width:240px;max-width:calc(100vw - 16px);box-sizing:border-box;padding:12px;border:1px solid var(--op-line);border-radius:12px;background:var(--op-raised,#20382b);color:var(--op-ink,#f5ebd9);box-shadow:0 12px 36px #0005;gap:8px;z-index:1000}
+#operations-root .original-staff .staff-role-picker form[popover]:not(:popover-open){display:none!important}
+#operations-root .original-staff .staff-role-picker form[popover]:popover-open{display:grid!important}
+#operations-root .original-staff .staff-role-picker form fieldset{padding:0;border:0;display:grid!important;gap:3px}
+#operations-root .original-staff .staff-role-picker form legend{display:none}
+#operations-root .original-staff .staff-role-picker form label{display:flex!important;flex-direction:row!important;justify-content:flex-start!important;align-items:center!important;gap:10px!important;padding:7px 8px!important;margin:0!important;font-size:14px!important}
+#operations-root .original-staff .staff-role-picker form input[type=checkbox]{flex:0 0 18px;width:18px!important;height:18px!important;min-height:18px!important;margin:0!important}

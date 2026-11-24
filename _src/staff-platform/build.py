@@ -8,6 +8,9 @@ out=here.parents[1]/'app'
 out.mkdir(exist_ok=True)
 for src,dest in [('login.html','index.html'),('login.js','login.js'),('admin.js','admin.js'),('admin-inbox.js','admin-inbox.js'),('manual-ui.js','manual-ui.js'),('admin.css','admin.css'),('incoming-editor.js','incoming-editor.js'),('operations.js','operations.js'),('operations-core.js','operations-core.js'),('operations.css','operations.css'),('supabase-client.js','supabase-client.js')]:
     shutil.copyfile(here/src,out/dest)
+import json, runpy
+categories={section['id']:{k:section['n'][k] for k in ('ru','vi')} for venue in ('chez','sunsea') for section in runpy.run_path(str(here.parent/venue/'data.py'))['S']}
+(out/'incoming-editor.js').write_text('window.incomingCategories='+json.dumps(categories,ensure_ascii=False)+';\n'+(here/'incoming-editor.js').read_text(encoding='utf-8'),encoding='utf-8')
 print('Built app login',out)
 
 shutil.copyfile(here.parent/'app-design/themes.js',out/'palettes.js')
