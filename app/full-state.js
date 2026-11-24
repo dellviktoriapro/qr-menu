@@ -11,7 +11,7 @@ function mapSnapshot(snapshot,previous={}){
  for(const i of snapshot.menu||[]){menu[i.id]={id:i.id,serverId:i.id,externalKey:i.external_key,vi:i.names?.vi||i.names?.ru||'',ru:i.names?.ru||i.names?.vi||'',en:i.names?.en||i.names?.vi||'',p:i.price_minor,st:i.station==='bar'?'b':'k',active:i.active,ph:i.photo_key||''};if(i.stopped)stopped[i.id]={at:ms(snapshot.server_at),by:'server'}}
  const checks=Object.fromEntries((snapshot.checks||[]).map(x=>[x.id,x]));
  const bills={};
- for(const b of snapshot.bills||[]){const table=tableById[b.table_id];if(!table)throw Error('TABLE_NOT_IN_SNAPSHOT');bills[b.id]={id:b.id,table:table.label,tableId:b.table_id,openedAt:ms(b.opened_at),closed:b.status!=='open',closedAt:ms(b.closed_at),reviewedAt:ms(b.reviewed_at),version:b.version,pays:{}}}
+ for(const b of snapshot.bills||[]){const table=tableById[b.table_id];if(!table)throw Error('TABLE_NOT_IN_SNAPSHOT');bills[b.id]={id:b.id,table:table.label,tableId:b.table_id,openedAt:ms(b.opened_at),closed:b.status!=='open',closedAt:ms(b.closed_at),reviewedAt:ms(b.reviewed_at),deletedAt:ms(b.deleted_at),version:b.version,pays:{}}}
  const orders=[];
  for(const o of snapshot.orders||[]){if(o.status==='cancelled')continue;if(!bills[o.bill_id])throw Error('BILL_NOT_IN_SNAPSHOT');
   const check=checks[o.check_id];if(!check||check.bill_id!==o.bill_id)throw Error('CHECK_NOT_IN_SNAPSHOT');
