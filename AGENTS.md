@@ -446,3 +446,5 @@ User now explicitly allows platform admin AND actual cafe owner to review/delete
 
 ## 2026-11-24 — Closed-bill management server enabled
 Chrome connection recovered after ChatGPT extension restart. User gave action-time approval. Migration 20261124045602 applied successfully via SQL Editor to vppgtrbewgqigfinknex. Live transaction test PASS admin/owner bulk review, reversible deletion/restoration, outsider denial, unchanged orders; rollback preserved actual review/deletion flags. Prior pending-release note superseded. Publishing UI and visual verification follow.
+
+Live release 458b766 Pages succeeded. Verified actual SunSea Closed tab: global Checked all(2), two per-card Checked buttons replacing Paid, two Delete buttons. Mobile 390px override: document client/scroll width417/417, all controls present; override reset. No live receipts reviewed/deleted by UI QA. Screenshot closed-bills-controls-live.jpg in task workspace.
