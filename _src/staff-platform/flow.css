@@ -81,7 +81,17 @@
 .original-flow .oc.s-cooking::before{background:var(--cook)}
 .original-flow .oc.s-ready::before{background:var(--grad);box-shadow:0 0 12px var(--hot-glow)}
 .original-flow .oc.s-ready{border-color:color-mix(in srgb,var(--hot) 40%,var(--line))}
-.original-flow .oc.s-served{opacity:.7}
+.original-flow .oc.s-served{opacity:1}
+.original-flow .hall-table.is-occupied{background:linear-gradient(135deg,var(--design-signal),color-mix(in srgb,var(--design-signal) 76%,var(--op-raised)))!important;border:3px solid var(--design-signal)!important;box-shadow:0 0 0 4px color-mix(in srgb,var(--design-signal) 22%,transparent),0 8px 20px #0003!important}
+.original-flow .hall-table.is-occupied .hall-table-main,.original-flow .hall-table.is-occupied .hall-table-main span,.original-flow .hall-table.is-occupied .hall-table-main small{color:var(--design-signalInk,#152235)!important;font-weight:750}
+.original-flow .hall-table.is-occupied .hall-table-main small::before{content:'● ';font-size:10px}
+.incoming-note-line{padding:14px 0;border-top:1px solid var(--op-line)}
+.incoming-note-tags,.incoming-wishes{display:flex;gap:8px;flex-wrap:wrap}
+#operation-dialog .incoming-note-tags button{width:auto;min-height:36px;font-size:13px;padding:6px 10px;margin:0}
+#operation-dialog .incoming-wishes label{display:flex;gap:8px;align-items:center;margin:6px 0}
+#operation-dialog .incoming-wishes input{width:20px;min-height:20px;margin:0}
+#operation-dialog fieldset{border:1px solid var(--op-line);border-radius:12px;margin:16px 0;padding:14px}
+.bill-issue-actions{display:flex;gap:12px}.bill-issue-actions button{flex:1}
 .original-flow .oc.late{border-color:var(--late)}
 @media (prefers-reduced-motion:no-preference){.original-flow .oc.late{animation:pulse 1.4s ease-in-out infinite}
 @keyframes pulse{50%{box-shadow:0 0 0 3px color-mix(in srgb,var(--late) 25%,transparent)}}}
@@ -574,3 +584,6 @@
  #operations-root .original-flow .tabs::-webkit-scrollbar{display:none}
  #operations-root .original-flow .tabs button{flex:0 0 auto;scroll-snap-align:start;white-space:nowrap}
 }
+
+#operations-root .order-station-head>strong{font-size:19px;font-weight:850;letter-spacing:.06em;text-transform:uppercase;color:var(--op-ink);line-height:1.3}
+#operations-root .order-station-head{gap:12px;flex-wrap:wrap;padding-bottom:10px;border-bottom:1px solid var(--op-line);margin-bottom:10px}

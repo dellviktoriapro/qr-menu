@@ -49,7 +49,7 @@ assert preview_count == 1
 # This route has its own table selection. The public menu may remember a table
 # from a previous visit in localStorage; never show that stale number here.
 legacy_table = 'function TABLE(){try{const x=JSON.parse(ls.get("ss_tbl")||"null");if(x&&x.t&&Date.now()-x.at<5*3600e3)return x.t}catch(e){}return 0}'
-entry_table = '''function TABLE(){try{const scanned=new URLSearchParams(location.hash.slice(1)).get('entry');if(/^[a-f0-9]{64}$/.test(scanned||''))return 0;const saved=sessionStorage.getItem('rp_sunsea_test_entry');if(/^[a-f0-9]{64}$/.test(saved||'')){const n=sessionStorage.getItem('rp_sunsea_test_test_table');return /^[1-9][0-9]{0,2}$/.test(n||'')?+n:0}}catch(e){}try{const x=JSON.parse(ls.get("ss_tbl")||"null");if(x&&x.t&&Date.now()-x.at<5*3600e3)return x.t}catch(e){}return 0}'''
+entry_table = '''function TABLE(){try{const scanned=new URLSearchParams(location.hash.slice(1)).get('entry');if(/^[a-f0-9]{64}$/.test(scanned||''))return 0;const saved=sessionStorage.getItem('rp_sunsea_test_entry');if(/^[a-f0-9]{64}$/.test(saved||'')){return 0}}catch(e){}try{const x=JSON.parse(ls.get("ss_tbl")||"null");if(x&&x.t&&Date.now()-x.at<5*3600e3)return x.t}catch(e){}return 0}'''
 assert html.count(legacy_table) == 1
 html = html.replace(legacy_table, entry_table, 1)
 original = HERE.parent / 'chez' / 'guest-server.js'
@@ -95,6 +95,8 @@ adapter = adapter.replace(
 )
 assert "entryToken=valid(incoming)?null:valid(entryIncoming)" in adapter and "api.testOpen(testTable,secret,entryToken)" in adapter
 assert "'sunsea|'+" in adapter and 'rp_sunsea_test_entry' in adapter
+guard="if(!valid(incoming)&&(valid(entryIncoming)||valid(sessionStorage.getItem('rp_sunsea_test_entry'))))return;"
+adapter=adapter.replace("let visitSecret=null",guard+"\nlet visitSecret=null",1)
 (PUBLIC / 'guest-server-test.js').write_text(adapter, encoding='utf-8')
 
 html = html.replace('const paidChecks=()=>', 'let serverPaidChecks=null;const paidChecks=()=>serverPaidChecks?serverPaidChecks():')
@@ -123,6 +125,8 @@ scripts = ''.join(
 )
 name = 'guest-server-test.js'
 scripts += '<script src="' + name + '?v=' + hashlib.sha256((PUBLIC / name).read_bytes()).hexdigest()[:12] + '"></script>'
+shutil.copyfile(HERE/'test-unassigned.js',PUBLIC/'test-unassigned.js')
+scripts+='<script src="test-unassigned.js?v='+hashlib.sha256((PUBLIC/'test-unassigned.js').read_bytes()).hexdigest()[:12]+'"></script>'
 html = html.replace('</body>', '<!-- connected-test-guest -->' + scripts + '</body>')
 (PUBLIC / 'test-order.html').write_text(html, encoding='utf-8')
 

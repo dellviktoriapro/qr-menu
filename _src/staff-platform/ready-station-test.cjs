@@ -6,7 +6,7 @@ const source = fs.readFileSync(__dirname + '/flow-ui.js', 'utf8');
 const pick = name => source.split('\n').find(line => line.startsWith(`function ${name}(`));
 const grouped = source.slice(source.indexOf('orderLines=(o,opts={})=>'), source.indexOf('// Authoritative commands'));
 const context = {
-  options: {onReady(){}},snapshot:{me:{role:'waiter'}},
+  options: {onServe(){}},snapshot:{me:{role:'waiter'}},
   ST: {lang: 'ru'},
   M: {food: {st: 'k', p: 95000}, drink: {st: 'b', p: 35000}},
   t: key => ({kKitchen: 'Кухня', kBar: 'Бар'})[key],
@@ -32,7 +32,7 @@ assert.match(html, /is-ready[\s\S]*Бар[\s\S]*Можно вынести[\s\S]*
 assert.match(context.actions(order), /data-scope="bar"[\s\S]*Бар: вынесено/);
 assert.doesNotMatch(context.actions(order), /data-scope="kitchen"/);
 context.ST.me='me';
-assert.match(context.lines(order),/data-waiter-ready="order-1" data-station="kitchen"/);
-assert.doesNotMatch(context.lines(order),/data-waiter-ready="order-1" data-station="bar"/);
-context.ST.me='other';assert.doesNotMatch(context.lines(order),/data-waiter-ready/);
+assert.match(context.lines(order),/data-waiter-serve="order-1" data-station="kitchen"/);
+assert.match(context.lines(order),/data-waiter-serve="order-1" data-station="bar"/);assert.match(context.lines(order),/Вынес/);assert.doesNotMatch(context.lines(order),/Кухня: готово|Бар: готово/);
+context.ST.me='other';assert.doesNotMatch(context.lines(order),/data-waiter-serve/);
 console.log('PASS ready bar items are separated from cooking kitchen items');

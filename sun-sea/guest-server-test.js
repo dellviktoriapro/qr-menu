@@ -1,6 +1,7 @@
 /* Server-connected Sun&Sea guest orders; table QR and separate test entry QR. */
 (()=>{'use strict';
 const hash=new URLSearchParams(location.hash.slice(1)),incoming=hash.get('table'),entryIncoming=hash.get('entry'),valid=x=>/^[a-f0-9]{64}$/.test(x||'');
+if(!valid(incoming)&&(valid(entryIncoming)||valid(sessionStorage.getItem('rp_sunsea_test_entry'))))return;
 let visitSecret=null,serverRows=[],hasLive=false,serverQuotes=[],polling=false,serviceQueue=null,serviceContext=null,publicData={},lastContext=0,serviceSending=false,allowNewVisit=valid(incoming)||valid(entryIncoming);
 let token=valid(entryIncoming)?null:valid(incoming)?incoming:sessionStorage.getItem('rp_sunsea_test_table'),entryToken=valid(incoming)?null:valid(entryIncoming)?entryIncoming:sessionStorage.getItem('rp_sunsea_test_entry'),testTable=!valid(token)&&!valid(entryIncoming)?sessionStorage.getItem('rp_sunsea_test_test_table')||'':'',context=null,outbox=null,working=false;
 if(testTable)allowNewVisit=true;
