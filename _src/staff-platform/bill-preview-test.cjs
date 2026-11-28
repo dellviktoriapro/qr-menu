@@ -8,4 +8,7 @@ vm.createContext(ctx);vm.runInContext(declaration+'\nopenBillSheet=showBillPrevi
 (async()=>{ctx.openBillSheet('b');assert.equal(sheet.hidden,false);assert.match(panel.innerHTML,/round1/);assert.match(panel.innerHTML,/round2/);assert.match(panel.innerHTML,/245000/);assert.match(panel.innerHTML,/Распечатать чек/);assert.doesNotMatch(panel.innerHTML,/pmbox|bClose|Наличные|Карта|Оплачено/);
 actions['#issue-bill-cancel'].onclick();assert.deepEqual(printed,[]);assert.equal(closed,1);
 ctx.openBillSheet('b');await actions['#issue-bill-ok'].onclick();assert.deepEqual(printed,['closed','b']);assert.equal(closed,2);
+ctx.options.onPrintReceipt=async()=>{printed.push('queued-bar');return 'bridge'};
+ctx.openBillSheet('b');await actions['#issue-bill-ok'].onclick();assert.deepEqual(printed,['closed','b','closed','queued-bar'],'bridge receipt must not also open browser print');assert.equal(closed,3);
+ctx.options.onPrintReceipt=async()=>false;ctx.openBillSheet('b');await actions['#issue-bill-ok'].onclick();assert.equal(closed,3,'print error keeps preview available for retry');
 console.log('PASS bill preview: cancel safe, Print receipt closes on server before printing, no payment selector');})().catch(e=>{console.error(e);process.exitCode=1});

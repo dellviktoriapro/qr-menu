@@ -6,7 +6,7 @@ import re
 here=Path(__file__).resolve().parent
 out=here.parents[1]/'app'
 out.mkdir(exist_ok=True)
-for src,dest in [('login.html','index.html'),('login.js','login.js'),('admin.js','admin.js'),('admin-inbox.js','admin-inbox.js'),('manual-ui.js','manual-ui.js'),('admin.css','admin.css'),('incoming-editor.js','incoming-editor.js'),('operations.js','operations.js'),('operations-core.js','operations-core.js'),('operations.css','operations.css'),('supabase-client.js','supabase-client.js')]:
+for src,dest in [('login.html','index.html'),('login.js','login.js'),('admin.js','admin.js'),('admin-inbox.js','admin-inbox.js'),('manual-ui.js','manual-ui.js'),('admin.css','admin.css'),('incoming-editor.js','incoming-editor.js'),('printer-ui.js','printer-ui.js'),('push-ui.js','push-ui.js'),('operations.js','operations.js'),('operations-core.js','operations-core.js'),('operations.css','operations.css'),('supabase-client.js','supabase-client.js')]:
     shutil.copyfile(here/src,out/dest)
 import json, runpy
 categories={section['id']:{k:section['n'][k] for k in ('ru','vi')} for venue in ('chez','sunsea') for section in runpy.run_path(str(here.parent/venue/'data.py'))['S']}
@@ -81,3 +81,9 @@ html=public_menu.read_text(encoding='utf-8')
 entry='<script src="web-order-entry.js"></script>'
 if entry not in html:
     public_menu.write_text(html.replace('</body>',entry+'</body>'),encoding='utf-8')
+
+# Source-only bridge bundle: no pairing tokens or local configuration.
+import zipfile
+with zipfile.ZipFile(out/'print-bridge.zip','w',zipfile.ZIP_DEFLATED) as bundle:
+    for filename in ['package.json','package-lock.json','START-WINDOWS.cmd','bridge.cjs','receipt.cjs','numbers.json','config.example.json','README.txt']:
+        bundle.write(here/'printer-bridge'/filename,filename)

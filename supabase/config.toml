@@ -431,3 +431,6 @@ verify_jwt = false
 # QR capability authentication is enforced inside the guest handler.
 [functions.guest-orders]
 verify_jwt = false
+
+[functions.order-push]
+verify_jwt = false # Custom worker key or verified platform-admin JWT inside function

@@ -12,3 +12,5 @@ button,select,a,[role=button]{transition:transform .16s,background-color .16s,co
 #operations-root[data-palette=atelier] .op-header{background:#e9d9ca;color:#28374a}#operations-root[data-palette=atelier] #op-shift.on-shift,#operations-root[data-palette=atelier] #op-alerts{background:#152235;color:#ffbb82!important;border-color:#152235}#operations-root[data-palette=atelier] #op-tip.qr-missing{background:#fff1dfb8;border-color:#fff1df;color:#152235;box-shadow:0 0 0 3px #fff1df20}
 
 #operations-root #op-admin-back{white-space:nowrap;background:var(--op-block3);color:var(--op-block3-ink);border-color:var(--op-line)}#operations-root #op-admin-back:hover{filter:brightness(1.08);transform:translateY(-1px)}
+
+#operation-dialog fieldset[data-printer]{min-width:0;border:1px solid var(--op-line);border-radius:12px;display:grid;gap:12px;padding:16px}#operation-dialog [data-printer] input[type=checkbox]{width:auto}.printer-test-actions{display:grid;gap:10px;margin-top:18px}.push-settings{margin-bottom:20px}.push-settings button{margin:4px 8px 4px 0}

@@ -71,7 +71,7 @@ $('auth').addEventListener('submit',async e=>{
   $('password').value='';if(result.data.session)authenticated(result.data.session);
  }catch(error){message(errorText(error),true)}finally{lock(false)}
 });
-$('logout').addEventListener('click',async()=>{lock(true);try{const {error}=await client.auth.signOut({scope:'local'});if(error)throw error;authenticated(null);message('Вы вышли из аккаунта.')}catch(e){message(errorText(e),true)}finally{lock(false)}});
+$('logout').addEventListener('click',async()=>{lock(true);try{await window.orderPush?.disableAll().catch(()=>{});const {error}=await client.auth.signOut({scope:'local'});if(error)throw error;authenticated(null);message('Вы вышли из аккаунта.')}catch(e){message(errorText(e),true)}finally{lock(false)}});
 client.auth.onAuthStateChange((_event,session)=>authenticated(session));
 client.auth.getSession().then(({data,error})=>{if(error)message(errorText(error),true);else authenticated(data.session)}).catch(e=>message(errorText(e),true));
 window.staffInvite?.init();
