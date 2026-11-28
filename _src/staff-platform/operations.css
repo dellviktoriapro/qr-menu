@@ -14,3 +14,5 @@ button,select,a,[role=button]{transition:transform .16s,background-color .16s,co
 #operations-root #op-admin-back{white-space:nowrap;background:var(--op-block3);color:var(--op-block3-ink);border-color:var(--op-line)}#operations-root #op-admin-back:hover{filter:brightness(1.08);transform:translateY(-1px)}
 
 #operation-dialog fieldset[data-printer]{min-width:0;border:1px solid var(--op-line);border-radius:12px;display:grid;gap:12px;padding:16px}#operation-dialog [data-printer] input[type=checkbox]{width:auto}.printer-test-actions{display:grid;gap:10px;margin-top:18px}.push-settings{margin-bottom:20px}.push-settings button{margin:4px 8px 4px 0}
+
+#operation-dialog fieldset[data-printer] label{margin:0!important;display:grid;gap:6px}#operation-dialog fieldset[data-printer] label:has(input[type=checkbox]){display:flex;align-items:center;gap:10px}
