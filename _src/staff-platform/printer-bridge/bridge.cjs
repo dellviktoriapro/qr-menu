@@ -2,7 +2,7 @@
 // Token belongs only on the cafe LAN computer. No inbound port or router forwarding.
 const fs=require('node:fs'),net=require('node:net'),path=require('node:path');const {raster}=require('./receipt.cjs');
 const publicKey='sb_publishable_02aoSyGU3H5SXUbsqwzeow_TyaxYKtq',base='https://vppgtrbewgqigfinknex.supabase.co/rest/v1/rpc/';
-function localHost(host){const p=String(host).split('.').map(Number);return p.length===4&&p.every(n=>Number.isInteger(n)&&n>=0&&n<=255)&&(p[0]===10||p[0]===192&&p[1]===168||p[0]===172&&p[1]>=16&&p[1]<=31)}
+function localHost(host){if(!/^[0-9]{1,3}(\.[0-9]{1,3}){3}$/.test(String(host)))return false;const p=String(host).split('.').map(Number);return p.length===4&&p.every(n=>Number.isInteger(n)&&n>=0&&n<=255)&&(p[0]===10||p[0]===192&&p[1]===168||p[0]===172&&p[1]>=16&&p[1]<=31)}
 async function writePrinter(job,bytes){
  if(!localHost(job.printer.host)||!Number.isInteger(job.printer.port)||job.printer.port<1||job.printer.port>65535)throw Error('INVALID_LAN_TARGET');
  return new Promise(resolve=>{let began=false,settled=false;const finish=s=>{if(settled)return;settled=true;socket.destroy();resolve(s)};const socket=net.createConnection({host:job.printer.host,port:job.printer.port});socket.setTimeout(10000);socket.on('connect',()=>{began=true;socket.end(bytes,()=>finish('sent'))});socket.on('timeout',()=>finish(began?'uncertain':'failed'));socket.on('error',()=>finish(began?'uncertain':'failed'))});

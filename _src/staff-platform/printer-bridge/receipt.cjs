@@ -4,7 +4,7 @@ const title=n=>typeof n==='string'?n:n?.vi||n?.ru||n?.en||'—';
 function lines(job){
  const p=job.payload;if(job.is_test)return ['ТЕСТ ПЕЧАТИ — НЕ ЗАКАЗ',p.destination||'',...p.lines.slice(1),'TEST PRINT — NOT AN ORDER'];
  const result=[p.title,p.cafe||'',`Стол / Ban: ${p.table||'—'}`];if(p.order_number)result.push(`Заказ / Order: ${p.order_number}`);
- if(p.comment)result.push(p.comment);if(p.wishes?.length)result.push(p.wishes.join('; '));let total=0;
+ if(p.comment)result.push(p.comment);if(p.wishes?.length){const tags={kid:'С ребёнком / Co tre em',together:'Подать вместе / Cung luc',drinksfirst:'Сначала напитки / Do uong truoc',nospicy:'Не остро / Khong cay',spicy:'Остро / Cay'};result.push(p.wishes.map(x=>tags[x]||x).join('; '));}let total=0;
  for(const i of p.items||[]){const key=String(i.key||'').split('|').slice(1).join('|'),num=numbers[key],name=title(i.name);result.push(`${i.qty} x ${num&&!name.startsWith('№ ')?'№ '+num+' · ':''}${name}`);if(i.name?.ru&&i.name?.ru!==name)result.push(i.name.ru);if(i.note)result.push('  '+i.note);if(job.purpose==='receipt'){const sum=i.qty*i.price;total+=sum;result.push(sum.toLocaleString('vi-VN')+' '+(p.currency||'VND'))}}
  if(job.purpose==='receipt')result.push('------------------------','ИТОГО / TONG: '+total.toLocaleString('vi-VN')+' '+(p.currency||'VND'));
  return result.filter(Boolean);
